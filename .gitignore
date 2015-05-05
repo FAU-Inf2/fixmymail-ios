@@ -31,3 +31,5 @@ DerivedData
 # Carthage/Checkouts
 Carthage
 Carthage/Build
+MailCore.framework
+SwiftyJSON.framework
