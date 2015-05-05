@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E3E4A825-682A-4433-824D-BC068CAD6F11</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FixMyMail</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C46C5D5C98208F5CBB962BBB62CACCAA94EDCE11</key>
+		<string>https://github.com/weiss19ja/FixMyMail_iOS_Carthage.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FixMyMail/FixMyMail.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C46C5D5C98208F5CBB962BBB62CACCAA94EDCE11</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/weiss19ja/FixMyMail_iOS_Carthage.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C46C5D5C98208F5CBB962BBB62CACCAA94EDCE11</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C46C5D5C98208F5CBB962BBB62CACCAA94EDCE11</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FixMyMail_iOS_Carthage</string>
+		</dict>
+	</array>
+</dict>
+</plist>
