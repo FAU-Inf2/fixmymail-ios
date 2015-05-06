@@ -2,4 +2,4 @@
 github "MailCore/mailcore2"
 
 #SwiftyJSON
-github "SwiftyJSON/SwiftyJSON" >= 2.2
+github "FAU-Inf2/SwiftyJSON" == 2.1.4
