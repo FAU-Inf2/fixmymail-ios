@@ -3,7 +3,7 @@ osx_image: xcode62
 before_install:
         - brew update
         - brew install carthage
-        - carthage bootstrap
+        - carthage bootstrap || cat /var/folders/gw/*/*/carthage-xcodebuild*log
 xcode_project: FixMyMail.xcodeproj
 xcode_scheme: FixMyMailTests
 script:
