@@ -5,6 +5,7 @@ machine:
     LC_CTYPE: en_US.UTF-8
 dependencies:
   override:
+    - uname
     - brew update
     - brew install carthage
     - carthage bootstrap
