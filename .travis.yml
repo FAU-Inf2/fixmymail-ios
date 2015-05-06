@@ -2,7 +2,7 @@ language: objective-c
 osx_image: xcode63
 before_install:
         - brew update
-        - brew outdated carthage || brew upgrade carthage
+        - brew install carthage
         - carthage update
 xcode_project: FixMyMail.xcodeproj
 xcode_scheme: FixMyMailTests
