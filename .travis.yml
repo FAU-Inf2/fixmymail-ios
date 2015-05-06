@@ -6,3 +6,6 @@ before_install:
         - carthage update
 xcode_project: FixMyMail.xcodeproj
 xcode_scheme: FixMyMailTests
+script:
+        - xctool clean build -project FixMyMail.xcodeproj -scheme FixMyMailRelease
+        - xctool test -project FixMyMail.xcodeproj -scheme FixMyMailTests
