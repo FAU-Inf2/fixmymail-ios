@@ -10,4 +10,5 @@ dependencies:
     - uname -a
     - brew update
     - brew install carthage
-    - carthage bootstrap --verbose || cat /var/folders/*/*/*/carthage-xcodebuild.*.log
+    - carthage checkout
+    - carthage build --verbose --platform iOS || cat /var/folders/*/*/*/carthage-xcodebuild.*.log
