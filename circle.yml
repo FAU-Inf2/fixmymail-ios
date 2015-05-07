@@ -13,4 +13,5 @@ dependencies:
     - mkdir -p Carthage/Checkouts
     - git clone https://github.com/MailCore/mailcore2 Carthage/Checkouts/mailcore2
     - git clone https://github.com/SwiftyJSON/SwiftyJSON.git Carthage/Checkouts/SwiftyJSON
+    - cd Carthage/Checkouts/SwiftyJSON && git checkout tags/2.2.0 && cd ../../..
     - carthage build --verbose --platform iOS || cat /var/folders/*/*/*/carthage-xcodebuild.*.log
