@@ -7,7 +7,7 @@ machine:
     XCODE_PROJECT: FixMyMail.xcodeproj
 dependencies:
   override:
-    - uname
+    - uname -a
     - brew update
     - brew install carthage
-    - carthage bootstrap
+    - carthage bootstrap || cat /var/folders/*/*/*/carthage-xcodebuild.*.log
