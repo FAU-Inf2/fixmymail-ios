@@ -5,6 +5,9 @@ machine:
     LC_CTYPE: en_US.UTF-8
     XCODE_SCHEME: FixMyMail
     XCODE_PROJECT: FixMyMail.xcodeproj
+    DEVELOPER_NAME: 'iPhone Developer: Mobile Application Development (VNDLKSAU2T)'
+    APPNAME: CircleCI-Sample
+    PROFILE_UUID: cf6e9333-673e-4ec5-8813-fa4272594487
 dependencies:
   override:
     - uname -a
