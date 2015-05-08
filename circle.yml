@@ -9,8 +9,6 @@ machine:
     APPNAME: CircleCI-Sample
     PROFILE_UUID: cf6e9333-673e-4ec5-8813-fa4272594487
 
-checkout:
-
 dependencies:
   override:
     - uname -a
