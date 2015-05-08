@@ -8,6 +8,9 @@ machine:
     DEVELOPER_NAME: 'iPhone Developer: Mobile Application Development (VNDLKSAU2T)'
     APPNAME: CircleCI-Sample
     PROFILE_UUID: cf6e9333-673e-4ec5-8813-fa4272594487
+
+checkout:
+
 dependencies:
   override:
     - uname -a
@@ -18,5 +21,5 @@ dependencies:
     - git clone https://github.com/MailCore/mailcore2 Carthage/Checkouts/mailcore2
     - git clone https://github.com/SwiftyJSON/SwiftyJSON.git Carthage/Checkouts/SwiftyJSON
     - cd Carthage/Checkouts/SwiftyJSON && git checkout tags/2.2.0 && cd ../../..
-    - carthage build --verbose --platform iOS --configuration Debug
+    - carthage build --platform iOS --configuration Release
     - ./scripts/remove-key.sh
