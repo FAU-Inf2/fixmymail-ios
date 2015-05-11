@@ -9,6 +9,13 @@
 import UIKit
 import SwiftyJSON
 
+@objc
+protocol SideBarControllerDelegate {
+    optional func toggleLeftPanel()
+    optional func toggleRightPanel()
+    optional func collapseSidePanels()
+}
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
