@@ -17,6 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //WARNING: This is method is only for adding dummy entries to CoreData!!!
+        initCoreDataTestEntries()
+        
         return true
     }
 
@@ -106,6 +110,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
+    //WARNING: This is method is only for adding dummy entries to CoreData!!!
+    private func initCoreDataTestEntries() {
+        let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if(!defaults.boolForKey("TestEntriesInserted")) {
+            var dummyEmailAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            dummyEmailAccount.username = "TestUser"
+            dummyEmailAccount.password = "testTEST"
+            
+            for i in 1...3 {
+                var dummyEmail1: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
+                dummyEmail1.sender = "test\(i)@test.de"
+                dummyEmail1.title = "Testmail \(i)"
+                dummyEmail1.smime = false
+                dummyEmail1.pgp = false
+                dummyEmail1.message = "This is dummy mail \(i)!"
+                dummyEmail1.toAccount = dummyEmailAccount
+            }
+            
+            var error: NSError?
+            self.managedObjectContext!.save(&error)
+            if error != nil {
+                NSLog("%@", error!.description)
+            } else {
+                defaults.setBool(true, forKey: "TestEntriesInserted")
+            }
+        }
+    }
 }
 
