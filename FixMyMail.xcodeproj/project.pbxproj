@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37FFA81B01DBC200388F81 /* ContentViewController.swift */; };
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
 		3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */; };
-		3D8D90E61B00DCC100D5135D /* SideBarControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E51B00DCC100D5135D /* SideBarControllerProtocol.swift */; };
 		3D9027541AF96D0D000D3E72 /* MailCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9027521AF96D0D000D3E72 /* MailCore.framework */; };
 		3D9027551AF96D0D000D3E72 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */; };
 		3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D90275D1AF97167000D3E72 /* CoreData.framework */; };
@@ -35,9 +35,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
-		3D8D90E51B00DCC100D5135D /* SideBarControllerProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarControllerProtocol.swift; sourceTree = "<group>"; };
 		3D9027521AF96D0D000D3E72 /* MailCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MailCore.framework; path = Carthage/Build/iOS/MailCore.framework; sourceTree = "<group>"; };
 		3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D90275D1AF97167000D3E72 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -83,7 +83,7 @@
 			children = (
 				3DF253B11AF7611D00B99BC8 /* ViewController.swift */,
 				3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */,
-				3D8D90E51B00DCC100D5135D /* SideBarControllerProtocol.swift */,
+				3D37FFA81B01DBC200388F81 /* ContentViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -279,7 +279,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n/usr/local/bin/carthage copy-frameworks";
+			shellScript = "#/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n#/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -290,8 +290,8 @@
 			files = (
 				3DF253B21AF7611D00B99BC8 /* ViewController.swift in Sources */,
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
-				3D8D90E61B00DCC100D5135D /* SideBarControllerProtocol.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
+				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,

@@ -28,7 +28,7 @@ class SidebarTableViewController: UITableViewController {
         if let appDelegate = appDel {
             managedObjectContext = appDelegate.managedObjectContext
             var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-//            var error?
+//            var error: NSError?
             let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: nil) as? [EmailAccount]
             if let account = acc {
                 for emailAcc: EmailAccount in account {

@@ -10,6 +10,9 @@ import UIKit
 
 class SideBarTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var menuImg: UIImageView!
+    @IBOutlet weak var menuLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
