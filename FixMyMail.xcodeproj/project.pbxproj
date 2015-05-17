@@ -22,6 +22,7 @@
 		ADE075281B0788D3002C577F /* KeyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE075271B0788D3002C577F /* KeyItem.swift */; };
 		ADE0752A1B078C48002C577F /* KeyChainListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */; };
 		ADE0752C1B07930E002C577F /* SharedClassExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */; };
+		ADE0752E1B08C427002C577F /* KeyItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE0752D1B08C427002C577F /* KeyItemTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		ADE075271B0788D3002C577F /* KeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItem.swift; sourceTree = "<group>"; };
 		ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
 		ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedClassExtensions.swift; sourceTree = "<group>"; };
+		ADE0752D1B08C427002C577F /* KeyItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItemTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				3DF253B31AF7611D00B99BC8 /* Main.storyboard */,
 				ADE075271B0788D3002C577F /* KeyItem.swift */,
 				ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */,
+				ADE0752D1B08C427002C577F /* KeyItemTableViewCell.swift */,
 				ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */,
 				3DF253B61AF7611D00B99BC8 /* Images.xcassets */,
 				3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */,
@@ -278,6 +281,7 @@
 				ADE0752C1B07930E002C577F /* SharedClassExtensions.swift in Sources */,
 				ADE0752A1B078C48002C577F /* KeyChainListTableViewController.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
+				ADE0752E1B08C427002C577F /* KeyItemTableViewCell.swift in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
 			);

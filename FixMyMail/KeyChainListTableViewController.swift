@@ -40,27 +40,49 @@ class KeyChainListTableViewController: UITableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
 		
         // Return the number of sections.
-        return 0//1
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return 0//self.keyItemList.count
+        return self.keyItemList.count
     }
 
-/*
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ListPrototypCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("ListPrototypCell", forIndexPath: indexPath) as! KeyItemTableViewCell
 
         // Configure the cell...
 		
+		var keyItem = self.keyItemList[indexPath.row]
 		
+		cell.nameTextField.text = keyItem.keyOwner
+		cell.mailTextField.text = keyItem.mailAddress
+		cell.keyIdTextField.text = keyItem.keyID
+		
+		switch keyItem.keyType {
+			case "SMIME":
+				cell.pgpTextField.text = ""
+			case "PGP":
+				cell.smimeTextField.text = ""
+			default:
+				cell.pgpTextField.text = ""
+				cell.smimeTextField.text = ""
+		}
+		
+		if !keyItem.isSecretKey {
+			cell.secretKeyTextField.text = ""
+		}
+		
+		if !keyItem.isPublicKey {
+			cell.publicKeyTextField.text = ""
+		}
 
         return cell
     }
     
-*/
+
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

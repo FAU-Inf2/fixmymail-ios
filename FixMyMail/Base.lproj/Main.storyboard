@@ -19,7 +19,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ListPrototypCell" rowHeight="122" id="r4Y-Md-VYm">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ListPrototypCell" rowHeight="122" id="r4Y-Md-VYm" customClass="KeyItemTableViewCell" customModule="FixMyMail" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="r4Y-Md-VYm" id="atj-d3-UsT">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -30,7 +30,7 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <segue destination="BYZ-38-t0r" kind="show" id="Kgx-mA-kUQ"/>
+                                                <segue destination="Y6c-5l-wV4" kind="show" id="Kgx-mA-kUQ"/>
                                             </connections>
                                         </button>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UFd-Eb-Oxa" userLabel="Name Key Owner">
@@ -113,6 +113,15 @@
                                         <constraint firstItem="kLN-Sr-Hbx" firstAttribute="leading" secondItem="bSw-xo-Uig" secondAttribute="trailing" constant="9" id="y7C-qU-1Hs"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="keyIdTextField" destination="uMj-mf-1Rc" id="ISf-Zn-o5w"/>
+                                    <outlet property="mailTextField" destination="rye-jK-p7o" id="VO8-Fi-hbb"/>
+                                    <outlet property="nameTextField" destination="UFd-Eb-Oxa" id="E8B-Ya-1Ae"/>
+                                    <outlet property="pgpTextField" destination="YWE-Cc-yAE" id="mY9-jD-7XO"/>
+                                    <outlet property="publicKeyTextField" destination="bSw-xo-Uig" id="c0E-PB-sMU"/>
+                                    <outlet property="secretKeyTextField" destination="OtS-dI-Vs7" id="Yse-X2-CvK"/>
+                                    <outlet property="smimeTextField" destination="kLN-Sr-Hbx" id="O3f-fd-ojZ"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -144,10 +153,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="ClJ-9c-nrU"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1188" y="429"/>
+            <point key="canvasLocation" x="2000" y="429"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="EjK-KJ-HLq">
@@ -166,6 +176,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yyS-QU-vMt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-348" y="429"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="JtX-uQ-brb">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Y6c-5l-wV4" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="nNy-W3-eNv">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="eQK-jb-rbj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QjJ-vz-xrU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1188" y="429"/>
         </scene>
     </scenes>
 </document>
