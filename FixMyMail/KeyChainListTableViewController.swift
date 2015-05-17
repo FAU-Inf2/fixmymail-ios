@@ -57,11 +57,11 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		var keyItem = self.keyItemList[indexPath.row]
 		
-		cell.nameTextField.text = keyItem.keyOwner
-		cell.mailTextField.text = keyItem.mailAddress
-		cell.keyIdTextField.text = keyItem.keyID
+		cell.LabelKeyOwner.text = keyItem.keyOwner
+		cell.LabelMailAddress.text = keyItem.mailAddress
+		cell.LabelKeyID.text = keyItem.keyID
 		
-		switch keyItem.keyType {
+	/*	switch keyItem.keyType {
 			case "SMIME":
 				cell.pgpTextField.text = ""
 			case "PGP":
@@ -78,7 +78,7 @@ class KeyChainListTableViewController: UITableViewController {
 		if !keyItem.isPublicKey {
 			cell.publicKeyTextField.text = ""
 		}
-
+    */
         return cell
     }
     

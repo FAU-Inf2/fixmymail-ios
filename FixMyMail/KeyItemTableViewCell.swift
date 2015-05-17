@@ -11,26 +11,22 @@ import UIKit
 class KeyItemTableViewCell: UITableViewCell {
 	
 	
-	@IBOutlet weak var nameTextField: UITextField!
+	@IBOutlet weak var LabelKeyOwner: UILabel!
+	@IBOutlet weak var LabelMailAddress: UILabel!
+	@IBOutlet weak var LabelSecretKey: UILabel!
+	@IBOutlet weak var LabelPublicKey: UILabel!
+	@IBOutlet weak var LabelSMIME: UILabel!
+	@IBOutlet weak var LabelPGP: UILabel!
+	@IBOutlet weak var LabelKeyID: UILabel!
+	@IBOutlet weak var LabelValidThru: UILabel!
+	@IBOutlet weak var LabelValid1: UILabel!
+	@IBOutlet weak var LabelValid2: UILabel!
+	@IBOutlet weak var LabelValid3: UILabel!
+	@IBOutlet weak var LabelValid4: UILabel!
+	@IBOutlet weak var LabelValid5: UILabel!
+	
+	
 
-	@IBOutlet weak var mailTextField: UITextField!
-	
-	@IBOutlet weak var secretKeyTextField: UITextField!
-	
-	@IBOutlet weak var publicKeyTextField: UITextField!
-	
-	@IBOutlet weak var smimeTextField: UITextField!
-	
-	@IBOutlet weak var pgpTextField: UITextField!
-	
-	@IBOutlet weak var keyIdTextField: UITextField!
-	
-	
-	
-	
-	
-	
-	
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
