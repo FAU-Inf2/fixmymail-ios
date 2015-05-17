@@ -218,7 +218,6 @@
 				TargetAttributes = {
 					3DF253A61AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 3928PFTW6V;
 					};
 					3DF253BE1AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -279,7 +278,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n#/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
