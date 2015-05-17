@@ -17,10 +17,15 @@ import UIKit
 class KeyChainListTableViewController: UITableViewController {
 	
 	var keyItemList = [KeyItem]()
+	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
+	let myOpacity:CGFloat = 0.1
+	let monthsInYear: Int = 12
+	let monthsForFullValidity: Int = 6
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		//Load some KeyItems
 		loadInitialData()
 
         // Uncomment the following line to preserve selection between presentations
@@ -57,28 +62,68 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		var keyItem = self.keyItemList[indexPath.row]
 		
+		// Fill data to labels
 		cell.LabelKeyOwner.text = keyItem.keyOwner
 		cell.LabelMailAddress.text = keyItem.mailAddress
 		cell.LabelKeyID.text = keyItem.keyID
 		
-	/*	switch keyItem.keyType {
+		// Set the right lables for the key type
+		switch keyItem.keyType {
 			case "SMIME":
-				cell.pgpTextField.text = ""
+				cell.LabelPGP.alpha = myOpacity
 			case "PGP":
-				cell.smimeTextField.text = ""
+				cell.LabelSMIME.alpha = myOpacity
 			default:
-				cell.pgpTextField.text = ""
-				cell.smimeTextField.text = ""
+				cell.LabelSMIME.alpha = myOpacity
+				cell.LabelPGP.alpha = myOpacity
 		}
 		
 		if !keyItem.isSecretKey {
-			cell.secretKeyTextField.text = ""
+			cell.LabelSecretKey.alpha = myOpacity
 		}
 		
 		if !keyItem.isPublicKey {
-			cell.publicKeyTextField.text = ""
+			cell.LabelPublicKey.alpha = myOpacity
 		}
-    */
+		
+		
+		
+		// Set the valid thru bar
+		
+		cell.LabelValid1.text = ""
+		cell.LabelValid2.text = ""
+		cell.LabelValid3.text = ""
+		cell.LabelValid4.text = ""
+		cell.LabelValid5.text = ""
+		
+		
+		let currentDate = NSDate()
+		if keyItem.validThru.year() >= currentDate.year() {
+			if (keyItem.validThru.month() + (keyItem.validThru.year() - currentDate.year()) * monthsInYear) >= (currentDate.month() + monthsForFullValidity) {
+				cell.LabelValid1.backgroundColor = UIColor.greenColor()
+				cell.LabelValid2.backgroundColor = UIColor.greenColor()
+				cell.LabelValid3.backgroundColor = UIColor.greenColor()
+				cell.LabelValid4.backgroundColor = UIColor.greenColor()
+				cell.LabelValid5.backgroundColor = UIColor.greenColor()
+				
+			} else {
+				cell.LabelValid1.backgroundColor = UIColor.yellowColor()
+				cell.LabelValid2.backgroundColor = UIColor.yellowColor()
+				cell.LabelValid3.backgroundColor = UIColor.yellowColor()
+				cell.LabelValid4.backgroundColor = UIColor.lightGrayColor()
+				cell.LabelValid5.backgroundColor = UIColor.lightGrayColor()
+				
+			}
+		
+		} else {
+			cell.LabelValid1.backgroundColor = UIColor.redColor()
+			cell.LabelValid2.backgroundColor = UIColor.lightGrayColor()
+			cell.LabelValid3.backgroundColor = UIColor.lightGrayColor()
+			cell.LabelValid4.backgroundColor = UIColor.lightGrayColor()
+			cell.LabelValid5.backgroundColor = UIColor.lightGrayColor()
+		}
+		
+		
         return cell
     }
     
@@ -132,13 +177,13 @@ class KeyChainListTableViewController: UITableViewController {
 	
 	func loadInitialData() {
 
-		var key1 = KeyItem(keyOwner: "Max Mustermann", mailAddress: "max.musterman@gmail.com", keyID: "XXXXXXXX", isSecretKey: true, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2016-06-30")))
-		var key2 = KeyItem(keyOwner: "Maximilianus Mustermann", mailAddress: "maxi.mus@web.de", keyID: "XXXXXXXX", isSecretKey: false, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2016-09-03")))
+		var key1 = KeyItem(keyOwner: "Max Mustermann", mailAddress: "max.musterman@gmail.com", keyID: "XXXXXXXX", isSecretKey: true, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2014-06-30")))
+		var key2 = KeyItem(keyOwner: "Maximilianus Mustermann", mailAddress: "maxi.mus@web.de", keyID: "XXXXXXXX", isSecretKey: false, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2015-9-03")))
 		var key3 = KeyItem(keyOwner: "Max Mustermann", mailAddress: "m.m@hotmail.com", keyID: "XXXXXXXX", isSecretKey: true, isPublicKey: true, keyType: "SMIME", created: NSDate(), validThru: (NSDate(dateString: "2017-03-12")))
 		
-		keyItemList.append(key1)
-		keyItemList.append(key2)
 		keyItemList.append(key3)
+		keyItemList.append(key2)
+		keyItemList.append(key1)
 	}
 
 }

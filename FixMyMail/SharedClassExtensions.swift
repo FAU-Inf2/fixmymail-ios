@@ -20,6 +20,42 @@ extension NSDate
 		let d = dateStringFormatter.dateFromString(dateString)
 		self.init(timeInterval:0, sinceDate:d!)
 	}
+		
+	func year() -> Int
+	{
+		//Get Year
+		let calendar = NSCalendar.currentCalendar()
+		let components = calendar.components(.CalendarUnitYear, fromDate: self)
+		let year = components.year
+		
+		//Return Year
+		return year
+	}
+	
+	
+	func month() -> Int
+	{
+		//Get Month
+		let calendar = NSCalendar.currentCalendar()
+		let components = calendar.components(.CalendarUnitMonth, fromDate: self)
+		let month = components.month
+		
+		//Return Month
+		return month
+	}
+	
+	func day() -> Int
+	{
+		//Get Day
+		let calendar = NSCalendar.currentCalendar()
+		let components = calendar.components(.CalendarUnitDay, fromDate: self)
+		let day = components.day
+		
+		//Return Day
+		return day
+	}
+	
+	
 	
 	func hour() -> Int
 	{
