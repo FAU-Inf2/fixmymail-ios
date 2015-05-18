@@ -9,6 +9,10 @@
 import CoreData
 import UIKit
 
+@objc
+protocol SideBarProtocol {
+    optional func cellSelected(cell: UITableViewCell)
+}
 
 class ActionItem: NSObject {
     var cellIcon: UIImage?
@@ -26,16 +30,7 @@ class SidebarTableViewController: UITableViewController {
     var sections = [String]()
     var rows = [AnyObject]()
     var managedObjectContext: NSManagedObjectContext!
-    
-    
-//    override init!(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
-//        super.init(nibName: "SidebarTableViewController", bundle: NSBundle.mainBundle())
-//    }
-//
-//    
-//    required init!(coder aDecoder: NSCoder!) {
-//        super.init(coder: aDecoder)
-//    }
+    var delegate: SideBarProtocol?
 
     
     override func viewDidLoad() {
@@ -137,6 +132,11 @@ class SidebarTableViewController: UITableViewController {
             let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
             return inboxCell
         }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        delegate?.cellSelected!(cell)
     }
 
     /*

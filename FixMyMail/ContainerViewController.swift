@@ -78,9 +78,9 @@ extension ContainerViewController : ContentViewControllerProtocol {
     
     func addLeftPanelViewController() {
         if (self.sideBarVC == nil) {
-            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
             var sidebarVC : SidebarTableViewController = SidebarTableViewController(nibName: "SidebarTableViewController", bundle: NSBundle.mainBundle())
             self.sideBarVC = sidebarVC
+            self.sideBarVC?.delegate = self
             self.sideBarVC?.view.frame = CGRectMake(self.sideBarVC!.view.frame.origin.x, self.sideBarVC!.view.frame.origin.y, self.sideBarVC!.view.frame.width, self.view.frame.height)
             addChildSidePanelController(sideBarVC!)
         }
@@ -123,6 +123,16 @@ extension ContainerViewController : ContentViewControllerProtocol {
         } else {
             self.contentVC.view.layer.shadowOpacity = 0.0
         }
+    }
+    
+}
+
+extension ContainerViewController: SideBarProtocol {
+    
+    func cellSelected(cell: UITableViewCell) {
+        NSLog("\(cell)")
+        self.toggleLeftPanel()
+        //change ContentViewcontroller because of sidebar selection here
     }
     
 }
