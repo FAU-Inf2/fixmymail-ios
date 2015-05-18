@@ -9,35 +9,66 @@
 import CoreData
 import UIKit
 
+/*
+class ActionItem: NSObject {
+    var cellIcon: UIImage?
+    var cellName: String
+    
+    init(Name: String, icon: UIImage? = nil) {
+        self.cellName = Name
+        self.cellIcon = icon
+    }
+}
+*/
+
 class SidebarTableViewController: UITableViewController {
     
-    var dataSource = [AnyObject]()
+    var sections = [String]()
+    var rows = [AnyObject]()
     var managedObjectContext: NSManagedObjectContext!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tableView.contentInset.top = 64
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         var accountArr: [EmailAccount] = [EmailAccount]();
         let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
         if let appDelegate = appDel {
             managedObjectContext = appDelegate.managedObjectContext
             var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-//            var error: NSError?
-            let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: nil) as? [EmailAccount]
+            var error: NSError?
+            let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
             if let account = acc {
                 for emailAcc: EmailAccount in account {
                     accountArr.append(emailAcc)
                 }
-            } /*else {
-                NSLog(error.debugDescription);
-            }*/
+            } else {
+                if((error) != nil) {
+                    NSLog(error!.description)
+                }
+            }
         }
+        
+        self.sections = ["Inboxes", "Accounts", ""]
+        var inboxRows: [AnyObject] = [AnyObject]()
+        inboxRows.append(["All"])
+        for emailAcc: EmailAccount in accountArr {
+            inboxRows.append(emailAcc)
+        }
+        /*
+        var settingsArr: [ActionItem] = [ActionItem]()
+        settingsArr.append(ActionItem(Name: "TODO"))
+        settingsArr.append(ActionItem(Name: "Keychain"))
+        settingsArr.append(ActionItem(Name: "Preferences"))
+        */
+        self.rows.append(inboxRows)
+        self.rows.append([])
+        self.rows.append([])
+        //self.rows.append([settingsArr])
         
         
     }
@@ -50,26 +81,40 @@ class SidebarTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Potentially incomplete method implementation.
-        // Return the number of sections.
-        return 0
+        return self.sections.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        return 0
+        return self.rows[section].count
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.sections[section]
     }
 
-    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
-
-        // Configure the cell...
-
-        return cell
+        if indexPath.section == 0 {
+            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
+            if(indexPath.row == 0) {
+                inboxCell.menuLabel.text = "All"
+            } else {
+                let mailAcc: EmailAccount = self.rows[indexPath.section][indexPath.row] as! EmailAccount
+                inboxCell.menuLabel.text = mailAcc.username
+            }
+            return inboxCell
+//        } else if indexPath.section == 2 {
+//            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
+//            let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+//            inboxCell.menuLabel.text = actionItem.cellName
+//            if let icon = actionItem.cellIcon {
+//                inboxCell.menuImg.image = icon
+//            }
+//            return inboxCell
+        } else {
+            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
+            return inboxCell
+        }
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
