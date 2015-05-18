@@ -16,6 +16,8 @@ class Email: NSManagedObject {
     @NSManaged var sender: String
     @NSManaged var smime: Bool
     @NSManaged var pgp: Bool
+    @NSManaged var uid: UInt32
+    @NSManaged var data: NSData
     @NSManaged var toAccount: EmailAccount
 
 }

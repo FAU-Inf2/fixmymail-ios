@@ -11,8 +11,13 @@ import CoreData
 
 class EmailAccount: NSManagedObject {
 
+    @NSManaged var emailAddress: String
     @NSManaged var username: String
     @NSManaged var password: String
+    @NSManaged var imapHostname: String
+    @NSManaged var imapPort: UInt32
+    @NSManaged var smtpHostname: String
+    @NSManaged var smtpPort: UInt32
     @NSManaged var emails: NSSet
 
 }
