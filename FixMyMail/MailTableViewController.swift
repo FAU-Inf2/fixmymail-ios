@@ -39,6 +39,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
     }
@@ -72,7 +73,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
         
         cell.mailFrom.text = mail.sender
-        cell.mailBody.text = mail.message
+        cell.mailBody.text = mail.title
         cell.mail = mail
         
         return cell
