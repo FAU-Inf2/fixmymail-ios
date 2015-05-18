@@ -9,7 +9,7 @@
 import CoreData
 import UIKit
 
-/*
+
 class ActionItem: NSObject {
     var cellIcon: UIImage?
     var cellName: String
@@ -19,18 +19,27 @@ class ActionItem: NSObject {
         self.cellIcon = icon
     }
 }
-*/
 
 class SidebarTableViewController: UITableViewController {
     
+    @IBOutlet var sidebarCell: SideBarTableViewCell!
     var sections = [String]()
     var rows = [AnyObject]()
     var managedObjectContext: NSManagedObjectContext!
+    
+    
+//    override init!(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
+//        super.init(nibName: "SidebarTableViewController", bundle: NSBundle.mainBundle())
+//    }
+//
+//    
+//    required init!(coder aDecoder: NSCoder!) {
+//        super.init(coder: aDecoder)
+//    }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.tableView.contentInset.top = 64
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -94,14 +103,28 @@ class SidebarTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
-            if(indexPath.row == 0) {
-                inboxCell.menuLabel.text = "All"
+            var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
+            if let cell = inboxCell {
+                if(indexPath.row == 0) {
+                    cell.menuLabel.text = "All"
+                } else {
+                    let mailAcc: EmailAccount = self.rows[indexPath.section][indexPath.row] as! EmailAccount
+                    cell.menuLabel.text = mailAcc.username
+                }
+                
+                return cell
             } else {
-                let mailAcc: EmailAccount = self.rows[indexPath.section][indexPath.row] as! EmailAccount
-                inboxCell.menuLabel.text = mailAcc.username
+                NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
+                var sideBarCell: SideBarTableViewCell = self.sidebarCell
+                self.sidebarCell = nil
+                if(indexPath.row == 0) {
+                    sideBarCell.menuLabel.text = "All"
+                } else {
+                    let mailAcc: EmailAccount = self.rows[indexPath.section][indexPath.row] as! EmailAccount
+                    sideBarCell.menuLabel.text = mailAcc.username
+                }
+                return sideBarCell
             }
-            return inboxCell
 //        } else if indexPath.section == 2 {
 //            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
 //            let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem

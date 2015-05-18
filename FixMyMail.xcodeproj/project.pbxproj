@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */; };
+		3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */; };
+		3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */; };
+		3D0FFD6F1B0A3BB900C4F8F6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */; };
 		3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37FFA81B01DBC200388F81 /* ContentViewController.swift */; };
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
 		3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */; };
@@ -17,7 +21,7 @@
 		3D9027621AF97313000D3E72 /* Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9027611AF97313000D3E72 /* Email.swift */; };
 		3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */; };
 		3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */; };
-		3DF253B21AF7611D00B99BC8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253B11AF7611D00B99BC8 /* ViewController.swift */; };
+		3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */; };
 		3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B31AF7611D00B99BC8 /* Main.storyboard */; };
 		3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B61AF7611D00B99BC8 /* Images.xcassets */; };
 		3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */; };
@@ -35,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SidebarTableViewController.xib; sourceTree = "<group>"; };
+		3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SideBarTableViewCell.xib; sourceTree = "<group>"; };
+		3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContentViewController.xib; sourceTree = "<group>"; };
+		3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
@@ -47,7 +55,7 @@
 		3DF253AB1AF7611D00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DF253AF1AF7611D00B99BC8 /* FixMyMail.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FixMyMail.xcdatamodel; sourceTree = "<group>"; };
-		3DF253B11AF7611D00B99BC8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		3DF253B41AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3DF253B61AF7611D00B99BC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3DF253B91AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -81,9 +89,12 @@
 		3D8D90DF1B00A1DE00D5135D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				3DF253B11AF7611D00B99BC8 /* ViewController.swift */,
+				3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */,
+				3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */,
 				3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */,
+				3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */,
 				3D37FFA81B01DBC200388F81 /* ContentViewController.swift */,
+				3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -92,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */,
+				3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -249,8 +261,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
 				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
+				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
+				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -287,9 +302,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DF253B21AF7611D00B99BC8 /* ViewController.swift in Sources */,
+				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
+				3D0FFD6F1B0A3BB900C4F8F6 /* ViewController.swift in Sources */,
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,

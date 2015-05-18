@@ -11,17 +11,29 @@ import UIKit
 @objc
 protocol ContentViewControllerProtocol {
     optional func toggleLeftPanel()
-    optional func collapseSidePanels()
 }
 
 class ContentViewController: UIViewController {
     
     var delegate: ContentViewControllerProtocol?
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        var navigationBar: UINavigationBar = UINavigationBar(frame: CGRectMake(0, 0, self.view.frame.width, 55))
+        navigationBar.barTintColor = UIColor.lightTextColor()
+        
+        
+        self.view.addSubview(navigationBar)
+        
+        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+        
+        var navItem: UINavigationItem = UINavigationItem(title: "")
+        navItem.leftBarButtonItems = [menuItem]
+        
+        navigationBar.pushNavigationItem(navItem, animated: true)
+        
     }
 
     override func didReceiveMemoryWarning() {
