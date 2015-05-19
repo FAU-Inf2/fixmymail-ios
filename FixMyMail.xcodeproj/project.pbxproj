@@ -19,6 +19,7 @@
 		3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B61AF7611D00B99BC8 /* Images.xcassets */; };
 		3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */; };
 		3DF253C61AF7611E00B99BC8 /* FixMyMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */; };
+		5B5299721B0B6E2900859DFE /* MailSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5299711B0B6E2900859DFE /* MailSendViewController.swift */; };
 		5B5479A21B0A25CC00EC91A9 /* MailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5479A11B0A25CC00EC91A9 /* MailViewController.swift */; };
 		5B9214B11B0A206600C99A9C /* CostumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9214AF1B0A206600C99A9C /* CostumTableViewCell.swift */; };
 		5B9214B21B0A206600C99A9C /* MailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9214B01B0A206600C99A9C /* MailTableViewController.swift */; };
@@ -52,6 +53,7 @@
 		3DF253C41AF7611E00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixMyMailTests.swift; sourceTree = "<group>"; };
 		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "FixMyMailTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		5B5299711B0B6E2900859DFE /* MailSendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailSendViewController.swift; sourceTree = "<group>"; };
 		5B5479A11B0A25CC00EC91A9 /* MailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailViewController.swift; sourceTree = "<group>"; };
 		5B9214AF1B0A206600C99A9C /* CostumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CostumTableViewCell.swift; sourceTree = "<group>"; };
 		5B9214B01B0A206600C99A9C /* MailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailTableViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				5B9214B01B0A206600C99A9C /* MailTableViewController.swift */,
 				5B5479A11B0A25CC00EC91A9 /* MailViewController.swift */,
 				3DF253B31AF7611D00B99BC8 /* Main.storyboard */,
+				5B5299711B0B6E2900859DFE /* MailSendViewController.swift */,
 				3DF253B61AF7611D00B99BC8 /* Images.xcassets */,
 				3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */,
 				3DF253AA1AF7611D00B99BC8 /* Supporting Files */,
@@ -278,6 +281,7 @@
 				5B9214B21B0A206600C99A9C /* MailTableViewController.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				5B5479A21B0A25CC00EC91A9 /* MailViewController.swift in Sources */,
+				5B5299721B0B6E2900859DFE /* MailSendViewController.swift in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
 			);
