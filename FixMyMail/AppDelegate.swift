@@ -92,7 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if coordinator == nil {
             return nil
         }
-        var managedObjectContext = NSManagedObjectContext()
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()
@@ -147,33 +147,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if error != nil {
                     NSLog("Could not load messages: %@", error)
                 } else {
-                    
-                    NSLog("mailcount:%i", messages.count)
-                    for message in messages {
-                        var email: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                        email.uid = (message as! MCOIMAPMessage).uid
-                        email.sender = "bla"
-                        email.title = "bla"
-                        
-                        let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: email.uid)
-                        
-                        fetchOp.start({(error, data) in
-                            if error != nil {
-                                NSLog("Could not recieve mail: %@", error)
-                            } else {
-                                email.data = data
-                                let parser: MCOMessageParser! = MCOMessageParser(data: data)
-                                email.sender = parser.header.from.displayName
-                                email.title = parser.header.subject
-                            }
-                        })
-                        email.toAccount = gmailAccount
-                    }
+                    self.managedObjectContext!.performBlockAndWait({ () -> Void in
+                        NSLog("mailcount:%i", messages.count)
+                        for message in messages {
+                            var email: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
+                            email.uid = (message as! MCOIMAPMessage).uid
+                            email.sender = ""
+                            email.title = ""
+                            
+                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: email.uid)
+                            
+                            fetchOp.start({(error, data) in
+                                if error != nil {
+                                    NSLog("Could not recieve mail: %@", error)
+                                } else {
+                                    email.data = data
+                                    let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                                    email.sender = parser.header.from.displayName
+                                    email.title = parser.header.subject
+                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
+                                    })
+                                }
+                            })
+                            email.toAccount = gmailAccount
+                        }
+                    })
                 }
             })
             
             var error: NSError?
             self.managedObjectContext!.save(&error)
+      
             if error != nil {
                 NSLog("%@", error!.description)
             } else {

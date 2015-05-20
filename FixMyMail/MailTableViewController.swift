@@ -31,6 +31,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshTableView:", name: "notification", object: nil)
+        NSLog("viewdidload")
         
         var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
@@ -38,7 +40,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -47,6 +48,26 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    @IBAction func refresh(sender: AnyObject) {
+        var error: NSError? = nil
+        if (fetchedResultsController.performFetch(&error) == false) {
+            print("An error occurred: \(error?.localizedDescription)")
+        }
+        self.mailTableView.reloadData()
+    }
+    
+    func refreshTableView(notifaction: NSNotification) {
+        var error: NSError? = nil
+        if (fetchedResultsController.performFetch(&error) == false) {
+            print("An error occurred: \(error?.localizedDescription)")
+        }
+        self.mailTableView.reloadData()
     }
 
     // MARK: - Table view data source
