@@ -90,7 +90,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: CostumTableViewCell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CostumTableViewCell
+        NSBundle.mainBundle().loadNibNamed("CustomMailTableViewCell", owner: self, options: nil)
+        let cell: CustomMailTableViewCell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
         let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
         
         cell.mailFrom.text = mail.sender
@@ -111,7 +112,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            let mail = (tableView.cellForRowAtIndexPath(indexPath) as! CostumTableViewCell).mail
+            let mail = (tableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail
             managedObjectContext.deleteObject(mail!)
             
         } else if editingStyle == UITableViewCellEditingStyle.Insert {

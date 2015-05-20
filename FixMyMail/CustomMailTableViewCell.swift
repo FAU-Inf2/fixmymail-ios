@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CostumTableViewCell: UITableViewCell {
+class CustomMailTableViewCell: UITableViewCell {
     
     @IBOutlet var mailFrom: UILabel!
     @IBOutlet var mailBody: UILabel!

@@ -5,7 +5,15 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MailViewController" customModule="FixMyMail" customModuleProvider="target">
+            <connections>
+                <outlet property="lblFrom" destination="RXx-ex-OX6" id="uRx-yz-rqi"/>
+                <outlet property="lblSubject" destination="r1J-P7-B1w" id="Jep-pA-6HZ"/>
+                <outlet property="lblTo" destination="Gij-Zq-s4e" id="K9v-3a-WLQ"/>
+                <outlet property="tvTxt" destination="pOG-Rb-uxd" id="WxQ-x5-tJb"/>
+                <outlet property="view" destination="iN0-l3-epB" id="aq2-7p-Yqv"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -34,12 +42,18 @@
                     <state key="normal" title="&gt;&gt;">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="butNext:" destination="-1" eventType="touchUpInside" id="X1e-Kr-jt7"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N4H-9w-Mbb">
                     <rect key="frame" x="492" y="8" width="30" height="30"/>
                     <state key="normal" title="&lt;&lt;">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="butPrevious:" destination="-1" eventType="touchUpInside" id="ojn-FI-cIF"/>
+                    </connections>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pOG-Rb-uxd">
                     <rect key="frame" x="8" y="128" width="584" height="464"/>
@@ -68,6 +82,7 @@
                 <constraint firstItem="Gij-Zq-s4e" firstAttribute="leading" secondItem="RXx-ex-OX6" secondAttribute="leading" id="l6X-gH-egG"/>
                 <constraint firstItem="pOG-Rb-uxd" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottomMargin" id="m7g-bf-rox"/>
             </constraints>
+            <point key="canvasLocation" x="173" y="406"/>
         </view>
     </objects>
 </document>

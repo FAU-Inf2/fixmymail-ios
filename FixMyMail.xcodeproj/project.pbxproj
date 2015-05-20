@@ -22,9 +22,10 @@
 		5B3EB47E1B0CB49100900B00 /* MailTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3EB47D1B0CB49100900B00 /* MailTableViewController.xib */; };
 		5B3EB4801B0CB4A100900B00 /* MailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3EB47F1B0CB4A100900B00 /* MailViewController.xib */; };
 		5B3EB4821B0CB4AA00900B00 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3EB4811B0CB4AA00900B00 /* MailSendViewController.xib */; };
+		5B3EB4841B0CBB7500900B00 /* CustomMailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3EB4831B0CBB7500900B00 /* CustomMailTableViewCell.xib */; };
 		5B5299721B0B6E2900859DFE /* MailSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5299711B0B6E2900859DFE /* MailSendViewController.swift */; };
 		5B5479A21B0A25CC00EC91A9 /* MailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5479A11B0A25CC00EC91A9 /* MailViewController.swift */; };
-		5B9214B11B0A206600C99A9C /* CostumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9214AF1B0A206600C99A9C /* CostumTableViewCell.swift */; };
+		5B9214B11B0A206600C99A9C /* CustomMailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9214AF1B0A206600C99A9C /* CustomMailTableViewCell.swift */; };
 		5B9214B21B0A206600C99A9C /* MailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9214B01B0A206600C99A9C /* MailTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,9 +60,10 @@
 		5B3EB47D1B0CB49100900B00 /* MailTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailTableViewController.xib; sourceTree = "<group>"; };
 		5B3EB47F1B0CB4A100900B00 /* MailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailViewController.xib; sourceTree = "<group>"; };
 		5B3EB4811B0CB4AA00900B00 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
+		5B3EB4831B0CBB7500900B00 /* CustomMailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomMailTableViewCell.xib; sourceTree = "<group>"; };
 		5B5299711B0B6E2900859DFE /* MailSendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailSendViewController.swift; sourceTree = "<group>"; };
 		5B5479A11B0A25CC00EC91A9 /* MailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailViewController.swift; sourceTree = "<group>"; };
-		5B9214AF1B0A206600C99A9C /* CostumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CostumTableViewCell.swift; sourceTree = "<group>"; };
+		5B9214AF1B0A206600C99A9C /* CustomMailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMailTableViewCell.swift; sourceTree = "<group>"; };
 		5B9214B01B0A206600C99A9C /* MailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,8 +128,9 @@
 				5B3EB47D1B0CB49100900B00 /* MailTableViewController.xib */,
 				5B3EB47F1B0CB4A100900B00 /* MailViewController.xib */,
 				5B3EB4811B0CB4AA00900B00 /* MailSendViewController.xib */,
-				5B9214AF1B0A206600C99A9C /* CostumTableViewCell.swift */,
+				5B9214AF1B0A206600C99A9C /* CustomMailTableViewCell.swift */,
 				5B9214B01B0A206600C99A9C /* MailTableViewController.swift */,
+				5B3EB4831B0CBB7500900B00 /* CustomMailTableViewCell.xib */,
 				5B5479A11B0A25CC00EC91A9 /* MailViewController.swift */,
 				3DF253B31AF7611D00B99BC8 /* Main.storyboard */,
 				5B5299711B0B6E2900859DFE /* MailSendViewController.swift */,
@@ -250,6 +253,7 @@
 				5B3EB4821B0CB4AA00900B00 /* MailSendViewController.xib in Resources */,
 				5B3EB4801B0CB4A100900B00 /* MailViewController.xib in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
+				5B3EB4841B0CBB7500900B00 /* CustomMailTableViewCell.xib in Resources */,
 				5B3EB47E1B0CB49100900B00 /* MailTableViewController.xib in Resources */,
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
 			);
@@ -278,7 +282,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n/usr/local/bin/carthage copy-frameworks";
+			shellScript = "#/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n#/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -287,7 +291,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B9214B11B0A206600C99A9C /* CostumTableViewCell.swift in Sources */,
+				5B9214B11B0A206600C99A9C /* CustomMailTableViewCell.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ViewController.swift in Sources */,
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
 				5B9214B21B0A206600C99A9C /* MailTableViewController.swift in Sources */,
