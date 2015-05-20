@@ -63,16 +63,15 @@ class SidebarTableViewController: UITableViewController {
         for emailAcc: EmailAccount in accountArr {
             inboxRows.append(emailAcc)
         }
-        /*
+        
         var settingsArr: [ActionItem] = [ActionItem]()
         settingsArr.append(ActionItem(Name: "TODO"))
         settingsArr.append(ActionItem(Name: "Keychain"))
         settingsArr.append(ActionItem(Name: "Preferences"))
-        */
+
         self.rows.append(inboxRows)
         self.rows.append([])
-        self.rows.append([])
-        //self.rows.append([settingsArr])
+        self.rows.append(settingsArr)
         
         
     }
@@ -120,16 +119,28 @@ class SidebarTableViewController: UITableViewController {
                 }
                 return sideBarCell
             }
-//        } else if indexPath.section == 2 {
-//            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
-//            let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-//            inboxCell.menuLabel.text = actionItem.cellName
-//            if let icon = actionItem.cellIcon {
-//                inboxCell.menuImg.image = icon
-//            }
-//            return inboxCell
+        } else if indexPath.section == 2 {
+            var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
+            if let cell = inboxCell {
+                let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+                cell.menuLabel.text = actionItem.cellName
+                if let icon = actionItem.cellIcon {
+                    cell.menuImg.image = icon
+                }
+                return cell
+            } else {
+                NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
+                var sideBarCell: SideBarTableViewCell = self.sidebarCell
+                self.sidebarCell = nil
+                let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+                sideBarCell.menuLabel.text = actionItem.cellName
+                if let icon = actionItem.cellIcon {
+                    sideBarCell.menuImg.image = icon
+                }
+                return sideBarCell
+            }
         } else {
-            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell", forIndexPath: indexPath) as! SideBarTableViewCell
+            let inboxCell: SideBarTableViewCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as! SideBarTableViewCell
             return inboxCell
         }
     }
