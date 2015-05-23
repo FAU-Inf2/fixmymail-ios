@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+		
         //WARNING: This is only a sample for fetching CoreData entities and evaluates that the insertion was successful!!!
         getAndLogCoreDataTestEntries()
         

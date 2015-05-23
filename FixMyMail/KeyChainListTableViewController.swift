@@ -14,7 +14,7 @@ import UIKit
 
 
 
-class KeyChainListTableViewController: UITableViewController {
+class KeyChainListTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
 	
 	var keyItemList = [KeyItem]()
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
@@ -27,6 +27,8 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		//Load some KeyItems
 		loadInitialData()
+		
+		tableView.registerNib(UINib(nibName: "KeyItemTableViewCell", bundle: nil),forCellReuseIdentifier:"ListPrototypCell")
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

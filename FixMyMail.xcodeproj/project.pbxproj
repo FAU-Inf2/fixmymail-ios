@@ -15,10 +15,11 @@
 		3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */; };
 		3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */; };
 		3DF253B21AF7611D00B99BC8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253B11AF7611D00B99BC8 /* ViewController.swift */; };
-		3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B31AF7611D00B99BC8 /* Main.storyboard */; };
 		3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B61AF7611D00B99BC8 /* Images.xcassets */; };
 		3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */; };
 		3DF253C61AF7611E00B99BC8 /* FixMyMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */; };
+		AD45E8571B1095F900CB431F /* KeyItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD45E8561B1095F900CB431F /* KeyItemTableViewCell.xib */; };
+		AD45E8591B109ED500CB431F /* TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD45E8581B109ED500CB431F /* TableViewController.xib */; };
 		ADE075281B0788D3002C577F /* KeyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE075271B0788D3002C577F /* KeyItem.swift */; };
 		ADE0752A1B078C48002C577F /* KeyChainListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */; };
 		ADE0752C1B07930E002C577F /* SharedClassExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */; };
@@ -46,13 +47,14 @@
 		3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DF253AF1AF7611D00B99BC8 /* FixMyMail.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FixMyMail.xcdatamodel; sourceTree = "<group>"; };
 		3DF253B11AF7611D00B99BC8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3DF253B41AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3DF253B61AF7611D00B99BC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3DF253B91AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		3DF253BF1AF7611D00B99BC8 /* FixMyMailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FixMyMailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DF253C41AF7611E00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixMyMailTests.swift; sourceTree = "<group>"; };
 		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "FixMyMailTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		AD45E8561B1095F900CB431F /* KeyItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyItemTableViewCell.xib; sourceTree = "<group>"; };
+		AD45E8581B109ED500CB431F /* TableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TableViewController.xib; path = ../TableViewController.xib; sourceTree = "<group>"; };
 		ADE075271B0788D3002C577F /* KeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItem.swift; sourceTree = "<group>"; };
 		ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
 		ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedClassExtensions.swift; sourceTree = "<group>"; };
@@ -117,10 +119,11 @@
 				3D9027561AF970A2000D3E72 /* CoreData */,
 				3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */,
 				3DF253B11AF7611D00B99BC8 /* ViewController.swift */,
-				3DF253B31AF7611D00B99BC8 /* Main.storyboard */,
+				AD45E8581B109ED500CB431F /* TableViewController.xib */,
 				ADE075271B0788D3002C577F /* KeyItem.swift */,
 				ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */,
 				ADE0752D1B08C427002C577F /* KeyItemTableViewCell.swift */,
+				AD45E8561B1095F900CB431F /* KeyItemTableViewCell.xib */,
 				ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */,
 				3DF253B61AF7611D00B99BC8 /* Images.xcassets */,
 				3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */,
@@ -237,9 +240,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
+				AD45E8591B109ED500CB431F /* TableViewController.xib in Resources */,
+				AD45E8571B1095F900CB431F /* KeyItemTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,14 +310,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3DF253B31AF7611D00B99BC8 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3DF253B41AF7611D00B99BC8 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
