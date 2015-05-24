@@ -12,16 +12,21 @@ import CoreData
 class ViewController: UIViewController {
     
     var mailTableView : MailTableViewController!
-    var mailView : MailViewController!
-    var mailSendView : MailSendViewController!
-
+    var toolBar: ToolBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         self.mailTableView = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+        self.mailTableView.rootView = self
         self.mailTableView.view.frame = self.view.frame
         view.addSubview(self.mailTableView.view)
+        
+        self.toolBar = ToolBar(nibName: "ToolBar", bundle: NSBundle.mainBundle())
+        self.toolBar.rootView = self
+        self.toolBar.view.frame = CGRectMake(0, self.view.frame.height - 45, self.view.frame.width, 45)
+        view.addSubview(self.toolBar.view)
         
         //WARNING: This is only a sample for fetching CoreData entities and evaluates that the insertion was successful!!!
         //getAndLogCoreDataTestEntries()

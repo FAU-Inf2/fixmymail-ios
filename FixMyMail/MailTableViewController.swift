@@ -12,7 +12,9 @@ import CoreData
 class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var mailTableView: UITableView!
-    @IBOutlet weak var cell: CustomMailTableViewCell!
+    var rootView: ViewController!
+    
+    //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let mailFetchRequest = NSFetchRequest(entityName: "Email")
@@ -32,6 +34,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.mailTableView.contentInset = UIEdgeInsetsMake(65, 0, 0, 0)
+        self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshTableView:", name: "notification", object: nil)
         NSLog("viewdidload")
         
@@ -68,6 +74,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
         }
+        self.managedObjectContext.save(nil)
         self.mailTableView.reloadData()
     }
 
@@ -91,15 +98,15 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var mycell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as? CustomMailTableViewCell
+        var mailcell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
         let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
-        if let mailcell = mycell {
+        //if let mailcell = mycell {
             mailcell.mailFrom.text = mail.sender
             mailcell.mailBody.text = mail.title
             mailcell.mail = mail
         
             return mailcell
-        } else {
+        /*} else {
             NSBundle.mainBundle().loadNibNamed("CustomMailTableViewCell", owner: self, options: nil)
             var mailcell: CustomMailTableViewCell = self.cell
             self.cell = nil
@@ -109,7 +116,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             mailcell.mailBody.text = mail.title
             
             return mailcell
-        }
+        }*/
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.rootView.navigationController?.pushViewController(MailViewController(nibName: "MailViewController", bundle: nil), animated: true)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

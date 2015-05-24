@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ToolBar" customModule="FixMyMail" customModuleProvider="target">
+            <connections>
+                <outlet property="toolBar" destination="ou7-wc-Y3c" id="3C4-80-GTd"/>
+                <outlet property="view" destination="ou7-wc-Y3c" id="f6M-tL-Pc5"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ou7-wc-Y3c">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+            <items>
+                <barButtonItem systemItem="compose" id="1SK-sQ-mJr">
+                    <connections>
+                        <action selector="writeMail:" destination="-1" id="jUZ-F0-To2"/>
+                    </connections>
+                </barButtonItem>
+            </items>
+            <point key="canvasLocation" x="213" y="223"/>
+        </toolbar>
+    </objects>
+</document>

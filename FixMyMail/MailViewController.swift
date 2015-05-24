@@ -77,7 +77,6 @@ class MailViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        
         showMail(mailPos)
         
         /*let session = MCOIMAPSession()
