@@ -22,9 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         initCoreDataTestEntries()
 		
 		window = UIWindow(frame: UIScreen.mainScreen().bounds)
-		var mainViewController = KeyChainListTableViewController(nibName: "TableViewController",bundle:nil)
+		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainTableView",bundle:nil)
+		mainViewController.title = "KeyChain"
 		var navigationController = UINavigationController(rootViewController: mainViewController)
-		window?.rootViewController = mainViewController
+		window?.rootViewController = navigationController
 		window?.makeKeyAndVisible()
         
         return true

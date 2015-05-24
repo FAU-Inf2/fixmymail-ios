@@ -28,14 +28,16 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		//Load some KeyItems
 		loadInitialData()
 		
+		
 		tableView.registerNib(UINib(nibName: "KeyItemTableViewCell", bundle: nil),forCellReuseIdentifier:"ListPrototypCell")
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-    }
+		self.navigationItem.rightBarButtonItem = self.editButtonItem()
+		
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
