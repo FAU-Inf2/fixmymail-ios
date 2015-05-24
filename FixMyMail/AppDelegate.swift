@@ -13,11 +13,18 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var viewController: ViewController?
+    var navigationController: UINavigationController?
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.viewController = ViewController(nibName: "ViewController", bundle: NSBundle.mainBundle())
+        self.viewController?.title = "INBOX"
+        self.navigationController = UINavigationController(rootViewController: self.viewController!)
+        self.window?.rootViewController = self.navigationController!
+        self.window?.makeKeyAndVisible()
         //WARNING: This is method is only for adding dummy entries to CoreData!!!
         initCoreDataTestEntries()
         

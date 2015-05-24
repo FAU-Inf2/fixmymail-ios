@@ -12,6 +12,7 @@ import CoreData
 class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var mailTableView: UITableView!
+    @IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let mailFetchRequest = NSFetchRequest(entityName: "Email")
@@ -54,13 +55,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    @IBAction func refresh(sender: AnyObject) {
+    /*@IBAction func refresh(sender: AnyObject) {
         var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
         }
         self.mailTableView.reloadData()
-    }
+    }*/
     
     func refreshTableView(notifaction: NSNotification) {
         var error: NSError? = nil
@@ -90,15 +91,25 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        NSBundle.mainBundle().loadNibNamed("CustomMailTableViewCell", owner: self, options: nil)
-        let cell: CustomMailTableViewCell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
+        var mycell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as? CustomMailTableViewCell
         let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
+        if let mailcell = mycell {
+            mailcell.mailFrom.text = mail.sender
+            mailcell.mailBody.text = mail.title
+            mailcell.mail = mail
         
-        cell.mailFrom.text = mail.sender
-        cell.mailBody.text = mail.title
-        cell.mail = mail
-        
-        return cell
+            return mailcell
+        } else {
+            NSBundle.mainBundle().loadNibNamed("CustomMailTableViewCell", owner: self, options: nil)
+            var mailcell: CustomMailTableViewCell = self.cell
+            self.cell = nil
+            
+            mailcell.mail = mail
+            mailcell.mailFrom.text = mail.sender
+            mailcell.mailBody.text = mail.title
+            
+            return mailcell
+        }
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
