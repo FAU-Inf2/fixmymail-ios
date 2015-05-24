@@ -25,6 +25,7 @@ class KeyItemTableViewCell: UITableViewCell {
 	@IBOutlet weak var LabelValid4: UILabel!
 	@IBOutlet weak var LabelValid5: UILabel!
 	
+	@IBOutlet weak var ButtonKeyDetail: UIButton!
 	
 
     override func awakeFromNib() {

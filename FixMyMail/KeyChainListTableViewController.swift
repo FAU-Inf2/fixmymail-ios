@@ -60,8 +60,17 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ListPrototypCell", forIndexPath: indexPath) as! KeyItemTableViewCell
+		
+		let cell = tableView.dequeueReusableCellWithIdentifier("ListPrototypCell", forIndexPath: indexPath) as! KeyItemTableViewCell
 
+	/*	let identifier = "ListPrototypCell"
+		var cell: KeyItemTableViewCell! = tableView.dequeueReusableCellWithIdentifier(identifier) as? KeyItemTableViewCell
+		if cell == nil {
+			tableView.registerNib(UINib(nibName: "KeyItemTableViewCell", bundle: nil), forCellReuseIdentifier: identifier)
+			cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? KeyItemTableViewCell
+		}
+		
+	*/
         // Configure the cell...
 		
 		var keyItem = self.keyItemList[indexPath.row]
@@ -127,10 +136,14 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 			cell.LabelValid5.backgroundColor = UIColor.lightGrayColor()
 		}
 		
+		var keyDetailView = KeyDetailViewController(nibName: "KeyDetailViewController", bundle: nil)
+		
 		
         return cell
     }
-    
+	
+	
+
 
     /*
     // Override to support conditional editing of the table view.
@@ -176,8 +189,16 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
         // Pass the selected object to the new view controller.
     }
     */
-	
-	
+	/*
+	override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+		var detailview: KeyDetailViewController = KeyDetailViewController()
+		self.presentViewController(detailview, animated: true) { () -> Void in
+			
+		}
+		
+		
+	}
+	*/
 	
 	func loadInitialData() {
 

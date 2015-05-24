@@ -19,7 +19,9 @@
 		3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */; };
 		3DF253C61AF7611E00B99BC8 /* FixMyMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */; };
 		AD45E8571B1095F900CB431F /* KeyItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD45E8561B1095F900CB431F /* KeyItemTableViewCell.xib */; };
-		AD45E8591B109ED500CB431F /* KeyChainTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD45E8581B109ED500CB431F /* KeyChainTableView.xib */; };
+		AD45E8591B109ED500CB431F /* KeyChainListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD45E8581B109ED500CB431F /* KeyChainListTableViewController.xib */; };
+		AD6D91AD1B11F4CA00B7B19F /* KeyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6D91AB1B11F4CA00B7B19F /* KeyDetailViewController.swift */; };
+		AD6D91AE1B11F4CA00B7B19F /* KeyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD6D91AC1B11F4CA00B7B19F /* KeyDetailViewController.xib */; };
 		ADE075281B0788D3002C577F /* KeyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE075271B0788D3002C577F /* KeyItem.swift */; };
 		ADE0752A1B078C48002C577F /* KeyChainListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */; };
 		ADE0752C1B07930E002C577F /* SharedClassExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */; };
@@ -54,7 +56,9 @@
 		3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixMyMailTests.swift; sourceTree = "<group>"; };
 		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "FixMyMailTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		AD45E8561B1095F900CB431F /* KeyItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyItemTableViewCell.xib; sourceTree = "<group>"; };
-		AD45E8581B109ED500CB431F /* KeyChainTableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KeyChainTableView.xib; path = ../KeyChainTableView.xib; sourceTree = "<group>"; };
+		AD45E8581B109ED500CB431F /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KeyChainListTableViewController.xib; path = ../KeyChainListTableViewController.xib; sourceTree = "<group>"; };
+		AD6D91AB1B11F4CA00B7B19F /* KeyDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailViewController.swift; sourceTree = "<group>"; };
+		AD6D91AC1B11F4CA00B7B19F /* KeyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailViewController.xib; sourceTree = "<group>"; };
 		ADE075271B0788D3002C577F /* KeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItem.swift; sourceTree = "<group>"; };
 		ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
 		ADE0752B1B07930E002C577F /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedClassExtensions.swift; sourceTree = "<group>"; };
@@ -119,8 +123,10 @@
 				3D9027561AF970A2000D3E72 /* CoreData */,
 				3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */,
 				3DF253B11AF7611D00B99BC8 /* ViewController.swift */,
-				AD45E8581B109ED500CB431F /* KeyChainTableView.xib */,
+				AD6D91AB1B11F4CA00B7B19F /* KeyDetailViewController.swift */,
+				AD6D91AC1B11F4CA00B7B19F /* KeyDetailViewController.xib */,
 				ADE075271B0788D3002C577F /* KeyItem.swift */,
+				AD45E8581B109ED500CB431F /* KeyChainListTableViewController.xib */,
 				ADE075291B078C48002C577F /* KeyChainListTableViewController.swift */,
 				ADE0752D1B08C427002C577F /* KeyItemTableViewCell.swift */,
 				AD45E8561B1095F900CB431F /* KeyItemTableViewCell.xib */,
@@ -242,7 +248,8 @@
 			files = (
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
-				AD45E8591B109ED500CB431F /* KeyChainTableView.xib in Resources */,
+				AD45E8591B109ED500CB431F /* KeyChainListTableViewController.xib in Resources */,
+				AD6D91AE1B11F4CA00B7B19F /* KeyDetailViewController.xib in Resources */,
 				AD45E8571B1095F900CB431F /* KeyItemTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,6 +291,7 @@
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
 				ADE0752C1B07930E002C577F /* SharedClassExtensions.swift in Sources */,
 				ADE0752A1B078C48002C577F /* KeyChainListTableViewController.swift in Sources */,
+				AD6D91AD1B11F4CA00B7B19F /* KeyDetailViewController.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				ADE0752E1B08C427002C577F /* KeyItemTableViewCell.swift in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
