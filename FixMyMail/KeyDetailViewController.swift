@@ -14,6 +14,7 @@ class KeyDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+		self.Label1.text = keyItem!.keyOwner
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,6 +23,18 @@ class KeyDetailViewController: UIViewController {
     }
     
 
+	@IBOutlet weak var button1: UIButton!
+	
+	@IBOutlet weak var Label1: UILabel!
+	
+	var keyItem: KeyItem?
+	
+	
+	
+	func makeKeyItem(keyItem: KeyItem) {
+		self.keyItem = keyItem
+	}
+	
     /*
     // MARK: - Navigation
 

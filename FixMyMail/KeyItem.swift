@@ -12,12 +12,13 @@ class KeyItem: NSObject {
 	
 	var keyOwner: String
 	var mailAddress: String
-	let keyID: String
+	let keyID: String?
 	var isSecretKey: Bool
 	var isPublicKey: Bool
 	var keyType: String
 	let created: NSDate
 	let validThru: NSDate
+	
 	
 	init(keyOwner:String, mailAddress:String, keyID:String, isSecretKey:Bool, isPublicKey:Bool, keyType:String,
 		created:NSDate, validThru:NSDate) {
@@ -31,5 +32,5 @@ class KeyItem: NSObject {
 		self.validThru = validThru
 	}
 	
-   
+	
 }

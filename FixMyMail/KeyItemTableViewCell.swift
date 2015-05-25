@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CellDelegate {
-	func didClickOnCellAtIndex(cellIndex: Int, withData: AnyObject)
+	func didClickOnCellAtIndex(cellIndex: Int)
 }
 
 class KeyItemTableViewCell: UITableViewCell, CellDelegate {
@@ -36,7 +36,7 @@ class KeyItemTableViewCell: UITableViewCell, CellDelegate {
 	
 	// http://stackoverflow.com/questions/20655060/get-button-click-inside-ui-table-view-cell
 	@IBAction func keyDetailButtonClicked(sender: UIButton) {
-		self.delegate?.didClickOnCellAtIndex(cellIndex!, withData: self)
+		self.delegate!.didClickOnCellAtIndex(cellIndex!)
 	}
 	
 
@@ -51,8 +51,7 @@ class KeyItemTableViewCell: UITableViewCell, CellDelegate {
         // Configure the view for the selected state
     }
 	
-	func didClickOnCellAtIndex(cellIndex: Int, withData: AnyObject) {
-		
+	func didClickOnCellAtIndex(cellIndex: Int) {
 	}
 
 }

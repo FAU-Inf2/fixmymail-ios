@@ -31,7 +31,7 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		
 		
 		tableView.registerNib(UINib(nibName: "KeyItemTableViewCell", bundle: nil),forCellReuseIdentifier:"ListPrototypCell")
-
+			
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -222,8 +222,9 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 	}
 	*/
 	
-	func didClickOnCellAtIndex(cellIndex: Int, withData: AnyObject) {
-		
-		self.navigationController?.pushViewController(keyDetailView, animated: true)
+	func didClickOnCellAtIndex(cellIndex: Int) {
+		var keyItem = self.keyItemList[cellIndex]
+		self.keyDetailView.keyItem = keyItem
+		self.navigationController?.pushViewController(self.keyDetailView, animated: true)
 	}
 }
