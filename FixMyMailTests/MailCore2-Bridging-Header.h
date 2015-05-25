@@ -10,5 +10,9 @@
 //#define FixMyMail_MailCore2_Bridging_Header_h
 
 #import <MailCore/MailCore.h>
+#import "MCOCIDURLProtocol.h"
+#import "MCOMessageView.h"
+#import "MCTMsgViewController.h"
+
 
 //#endif
