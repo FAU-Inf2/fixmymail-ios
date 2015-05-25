@@ -158,11 +158,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         NSLog("mailcount:%i", messages.count)
                         for message in messages {
                             var email: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                            email.uid = (message as! MCOIMAPMessage).uid
+                            email.mcomessage = message
                             email.sender = ""
                             email.title = ""
                             
-                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: email.uid)
+                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
                             
                             fetchOp.start({(error, data) in
                                 if error != nil {

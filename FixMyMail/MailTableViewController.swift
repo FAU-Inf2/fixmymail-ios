@@ -88,7 +88,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         //Fetch Account Data
         var account : EmailAccount?
         let session = MCOIMAPSession()
-        var managedObjectContext: NSManagedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
         let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
         var error: NSError?
         var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
@@ -130,7 +129,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             if let emailAccounts = result {
                                 let emailAccount : EmailAccount = emailAccounts[0] as! EmailAccount
                                 for emails in emailAccount.emails {
-                                    if emails.uid == (message as! MCOIMAPMessage).uid {
+                                    if ((emails as! Email).mcomessage as! MCOIMAPMessage).uid == (message as! MCOIMAPMessage).uid {
                                         newMail = false
                                         break
                                     }
@@ -140,11 +139,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         
                         if newMail == true {
                             var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                            newEmail.uid = (message as! MCOIMAPMessage).uid
+                            newEmail.mcomessage = message
                             newEmail.sender = ""
                             newEmail.title = ""
                             
-                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: newEmail.uid)
+                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
                             
                             fetchOp.start({(error, data) in
                                 if error != nil {
@@ -173,7 +172,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
         
         NSLog("refeshed")
-        self.mailTableView.reloadData()
         self.refreshControl.endRefreshing()
     }
 
@@ -219,7 +217,29 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.rootView.navigationController?.pushViewController(MailViewController(nibName: "MailViewController", bundle: nil), animated: true)
+        var mailView: MCTMsgViewController = MCTMsgViewController()
+        mailView.message = (mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail?.mcomessage as! MCOIMAPMessage
+        var session: MCOIMAPSession = MCOIMAPSession()
+        let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+        var error: NSError?
+        var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+        if error != nil {
+            NSLog("%@", error!.description)
+        } else {
+            if let emailAccounts = result {
+                var account = emailAccounts[0] as? EmailAccount
+                session.hostname = account!.imapHostname
+                session.port = account!.imapPort
+                session.username = account!.username
+                session.password = account!.password
+                session.authType = MCOAuthType.SASLPlain
+                session.connectionType = MCOConnectionType.TLS
+            }
+        }
+        mailView.session = session
+        mailView.folder = "INBOX"
+        //self.rootView.navigationController?.pushViewController(MailViewController(nibName: "MailViewController", bundle: nil), animated: true)
+        self.rootView.navigationController?.pushViewController(mailView, animated: true)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
@@ -236,6 +256,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if editingStyle == UITableViewCellEditingStyle.Delete {
             let mail = (tableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail
             managedObjectContext.deleteObject(mail!)
+            
+            managedObjectContext.save(nil)
+            mailTableView.reloadData()
             
         } else if editingStyle == UITableViewCellEditingStyle.Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
