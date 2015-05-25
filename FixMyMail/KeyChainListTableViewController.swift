@@ -14,8 +14,9 @@ import UIKit
 
 
 
-class KeyChainListTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
+class KeyChainListTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, CellDelegate {
 	
+	var keyDetailView: KeyDetailViewController = KeyDetailViewController(nibName:"KeyDetailViewController", bundle:nil)
 	var keyItemList = [KeyItem]()
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
 	let myOpacity:CGFloat = 0.1
@@ -71,6 +72,12 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		}
 		
 	*/
+		
+		cell.delegate = self
+		cell.cellIndex = indexPath.row
+		
+		
+		
         // Configure the cell...
 		
 		var keyItem = self.keyItemList[indexPath.row]
@@ -135,8 +142,6 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 			cell.LabelValid4.backgroundColor = UIColor.lightGrayColor()
 			cell.LabelValid5.backgroundColor = UIColor.lightGrayColor()
 		}
-		
-		var keyDetailView = KeyDetailViewController(nibName: "KeyDetailViewController", bundle: nil)
 		
 		
         return cell
@@ -210,5 +215,15 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		keyItemList.append(key2)
 		keyItemList.append(key1)
 	}
-
+	
+	/*
+	@IBAction func pushKeyDetailView(sender: UIButton) {
+		self.navigationController?.pushViewController(keyDetailView, animated: true)
+	}
+	*/
+	
+	func didClickOnCellAtIndex(cellIndex: Int, withData: AnyObject) {
+		
+		self.navigationController?.pushViewController(keyDetailView, animated: true)
+	}
 }

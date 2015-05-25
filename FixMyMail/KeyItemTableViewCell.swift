@@ -8,7 +8,11 @@
 
 import UIKit
 
-class KeyItemTableViewCell: UITableViewCell {
+protocol CellDelegate {
+	func didClickOnCellAtIndex(cellIndex: Int, withData: AnyObject)
+}
+
+class KeyItemTableViewCell: UITableViewCell, CellDelegate {
 	
 	
 	@IBOutlet weak var LabelKeyOwner: UILabel!
@@ -27,6 +31,14 @@ class KeyItemTableViewCell: UITableViewCell {
 	
 	@IBOutlet weak var ButtonKeyDetail: UIButton!
 	
+	var delegate: CellDelegate?
+	var cellIndex: Int?
+	
+	// http://stackoverflow.com/questions/20655060/get-button-click-inside-ui-table-view-cell
+	@IBAction func keyDetailButtonClicked(sender: UIButton) {
+		self.delegate?.didClickOnCellAtIndex(cellIndex!, withData: self)
+	}
+	
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,5 +50,9 @@ class KeyItemTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+	
+	func didClickOnCellAtIndex(cellIndex: Int, withData: AnyObject) {
+		
+	}
 
 }
