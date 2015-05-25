@@ -8,6 +8,7 @@
 
 import UIKit
 
+// http://www.codingexplorer.com/swiftly-getting-human-readable-date-nsdateformatter/
 // for convenient creation of NSDate Objects: expl: NSDate(dateString:"2014-06-06")
 // let currentDate = NSDate()
 extension NSDate
@@ -89,6 +90,17 @@ extension NSDate
 		
 		//Return Short Time String
 		return timeString
+	}
+	
+	func toLongDateString() -> String
+	{
+	//Get Short Time String
+	let formatter = NSDateFormatter()
+	formatter.dateStyle = .LongStyle
+	let dateString = formatter.stringFromDate(self)
+	
+	//Return Short Time String
+	return dateString
 	}
 	
 	

@@ -10,30 +10,34 @@ import UIKit
 
 class KeyDetailViewController: UIViewController {
 
+	var keyItem: KeyItem?
+	
+	@IBOutlet weak var LabelKeyOwner: UILabel!
+	@IBOutlet weak var LabelMailAddress: UILabel!
+	@IBOutlet weak var LabelKeyID: UILabel!
+	@IBOutlet weak var LabelValidThru: UILabel!
+	
+	@IBOutlet weak var TextfieldKeyOwner: UITextField!
+	@IBOutlet weak var TextfieldMailAddress1: UITextField!
+	@IBOutlet weak var TextfieldMailAddress2: UITextField!
+	@IBOutlet weak var TextfieldMailAddress3: UITextField!
+	@IBOutlet weak var TextfieldKeyID: UITextField!
+	@IBOutlet weak var TextfieldValidThru: UITextField!
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-		self.Label1.text = keyItem!.keyOwner
+		self.TextfieldKeyOwner.text = keyItem?.keyOwner
+		self.TextfieldMailAddress1.text = keyItem?.mailAddress
+		self.TextfieldKeyID.text = keyItem?.keyID
+		self.TextfieldValidThru.text = keyItem?.validThru.toLongDateString()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-	@IBOutlet weak var button1: UIButton!
-	
-	@IBOutlet weak var Label1: UILabel!
-	
-	var keyItem: KeyItem?
-	
-	
-	
-	func makeKeyItem(keyItem: KeyItem) {
-		self.keyItem = keyItem
-	}
 	
     /*
     // MARK: - Navigation
@@ -45,4 +49,8 @@ class KeyDetailViewController: UIViewController {
     }
     */
 
+	func makeKeyItem(keyItem: KeyItem) {
+		self.keyItem = keyItem
+	}
+	
 }

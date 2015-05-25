@@ -8,15 +8,9 @@
 
 import UIKit
 
-
-
-
-
-
-
 class KeyChainListTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, CellDelegate {
 	
-	var keyDetailView: KeyDetailViewController = KeyDetailViewController(nibName:"KeyDetailViewController", bundle:nil)
+	var keyDetailView: KeyDetailViewController?
 	var keyItemList = [KeyItem]()
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
 	let myOpacity:CGFloat = 0.1
@@ -64,19 +58,9 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		
 		let cell = tableView.dequeueReusableCellWithIdentifier("ListPrototypCell", forIndexPath: indexPath) as! KeyItemTableViewCell
 
-	/*	let identifier = "ListPrototypCell"
-		var cell: KeyItemTableViewCell! = tableView.dequeueReusableCellWithIdentifier(identifier) as? KeyItemTableViewCell
-		if cell == nil {
-			tableView.registerNib(UINib(nibName: "KeyItemTableViewCell", bundle: nil), forCellReuseIdentifier: identifier)
-			cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? KeyItemTableViewCell
-		}
-		
-	*/
-		
+		// for detail info button functionality
 		cell.delegate = self
 		cell.cellIndex = indexPath.row
-		
-		
 		
         // Configure the cell...
 		
@@ -105,17 +89,14 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		if !keyItem.isPublicKey {
 			cell.LabelPublicKey.alpha = myOpacity
 		}
-		
-		
+
 		
 		// Set the valid thru bar
-		
 		cell.LabelValid1.text = ""
 		cell.LabelValid2.text = ""
 		cell.LabelValid3.text = ""
 		cell.LabelValid4.text = ""
 		cell.LabelValid5.text = ""
-		
 		
 		let currentDate = NSDate()
 		if keyItem.validThru.year() >= currentDate.year() {
@@ -132,7 +113,6 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 				cell.LabelValid3.backgroundColor = UIColor.yellowColor()
 				cell.LabelValid4.backgroundColor = UIColor.lightGrayColor()
 				cell.LabelValid5.backgroundColor = UIColor.lightGrayColor()
-				
 			}
 		
 		} else {
@@ -216,15 +196,11 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		keyItemList.append(key1)
 	}
 	
-	/*
-	@IBAction func pushKeyDetailView(sender: UIButton) {
-		self.navigationController?.pushViewController(keyDetailView, animated: true)
-	}
-	*/
-	
-	func didClickOnCellAtIndex(cellIndex: Int) {
+	// get detail view of the corresponding cell
+	func didClickOnCellInfoButton(cellIndex: Int) {
 		var keyItem = self.keyItemList[cellIndex]
-		self.keyDetailView.keyItem = keyItem
-		self.navigationController?.pushViewController(self.keyDetailView, animated: true)
+		keyDetailView = KeyDetailViewController(nibName:"KeyDetailViewController", bundle:nil)
+		self.keyDetailView!.keyItem = keyItem
+		self.navigationController?.pushViewController(self.keyDetailView!, animated: true)
 	}
 }

@@ -31,6 +31,4 @@ class KeyItem: NSObject {
 		self.created = created
 		self.validThru = validThru
 	}
-	
-	
 }
