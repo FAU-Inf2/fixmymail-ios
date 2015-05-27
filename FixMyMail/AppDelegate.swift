@@ -8,6 +8,10 @@
 
 import UIKit
 import CoreData
+import AddressBook
+
+
+var addressBook : ABAddressBookRef?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         //WARNING: This is method is only for adding dummy entries to CoreData!!!
         initCoreDataTestEntries()
-   */
+*/
 		window = UIWindow(frame: UIScreen.mainScreen().bounds)
 		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainListTableViewController",bundle:nil)
 		mainViewController.title = "KeyChain"
@@ -53,7 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user 
+        AccessAddressBook()
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -199,6 +204,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 defaults.setBool(true, forKey: "TestEntriesInserted")
             }
         }
+    }
+    
+   func AccessAddressBook() {
+        switch ABAddressBookGetAuthorizationStatus(){
+        case .Authorized:
+            println("Already authorized")
+            createAddressBook()
+            /* Access the address book */
+        case .Denied:
+            println("Denied access to address book")
+            
+        case .NotDetermined:
+            createAddressBook()
+            if let theBook: ABAddressBookRef = addressBook{
+                ABAddressBookRequestAccessWithCompletion(theBook,
+                    {(granted: Bool, error: CFError!) in
+                        
+                        if granted{
+                            println("Access granted")
+                        } else {
+                            println("Access not granted")
+                        }
+                        
+                })
+            }
+            
+        case .Restricted:
+            println("Access restricted")
+            
+        default:
+            println("Other Problem")
+        }
+    }
+    
+    func createAddressBook(){
+        var error: Unmanaged<CFError>?
+        addressBook = ABAddressBookCreateWithOptions(nil, &error).takeRetainedValue()
     }
 }
 
