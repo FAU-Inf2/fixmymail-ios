@@ -19,5 +19,5 @@ dependencies:
     - git clone https://github.com/MailCore/mailcore2 Carthage/Checkouts/mailcore2
     - git clone https://github.com/SwiftyJSON/SwiftyJSON.git Carthage/Checkouts/SwiftyJSON
     - cd Carthage/Checkouts/SwiftyJSON && git checkout tags/2.2.0 && cd ../../..
-    - carthage build --platform iOS --configuration Release
+    - carthage build --verbose --platform iOS --configuration Release
     - ./scripts/remove-key.sh

@@ -20,6 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //WARNING: This is method is only for adding dummy entries to CoreData!!!
         initCoreDataTestEntries()
+		
+		window = UIWindow(frame: UIScreen.mainScreen().bounds)
+		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainListTableViewController",bundle:nil)
+		mainViewController.title = "KeyChain"
+		var navigationController = UINavigationController(rootViewController: mainViewController)
+		window?.rootViewController = navigationController
+		window?.makeKeyAndVisible()
         
         return true
     }
