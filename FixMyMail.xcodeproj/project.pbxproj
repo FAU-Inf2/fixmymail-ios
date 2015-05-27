@@ -26,6 +26,13 @@
 		3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B61AF7611D00B99BC8 /* Images.xcassets */; };
 		3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */; };
 		3DF253C61AF7611E00B99BC8 /* FixMyMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */; };
+		ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */; };
+		ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */; };
+		ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */; };
+		ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C31B15B56300A9B31A /* KeyItem.swift */; };
+		ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */; };
+		ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */; };
+		ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +70,13 @@
 		3DF253C41AF7611E00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixMyMailTests.swift; sourceTree = "<group>"; };
 		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "FixMyMailTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
+		ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailViewController.swift; sourceTree = "<group>"; };
+		ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailViewController.xib; sourceTree = "<group>"; };
+		ADD135C31B15B56300A9B31A /* KeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItem.swift; sourceTree = "<group>"; };
+		ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItemTableViewCell.swift; sourceTree = "<group>"; };
+		ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyItemTableViewCell.xib; sourceTree = "<group>"; };
+		ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedClassExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +103,9 @@
 		3D8D90DF1B00A1DE00D5135D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
+				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
+				ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */,
 				3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */,
 				3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */,
 				3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */,
@@ -102,6 +119,8 @@
 		3D8D90E21B00A2AF00D5135D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */,
+				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
 				3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */,
 				3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */,
 			);
@@ -145,6 +164,7 @@
 				3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */,
 				3D8D90E21B00A2AF00D5135D /* UI */,
 				3D9027561AF970A2000D3E72 /* CoreData */,
+				ADD135CE1B15B5C200A9B31A /* Model */,
 				3D8D90DF1B00A1DE00D5135D /* ViewController */,
 				3DF253B31AF7611D00B99BC8 /* Main.storyboard */,
 				3DF253B61AF7611D00B99BC8 /* Images.xcassets */,
@@ -157,6 +177,7 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 			);
@@ -178,6 +199,14 @@
 				3DF253C41AF7611E00B99BC8 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ADD135CE1B15B5C200A9B31A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				ADD135C31B15B56300A9B31A /* KeyItem.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,6 +294,8 @@
 				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
 				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
+				ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */,
+				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
 				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
 			);
@@ -302,11 +333,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
+				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
+				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
+				ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */,
 				3D0FFD6F1B0A3BB900C4F8F6 /* ViewController.swift in Sources */,
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
+				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
