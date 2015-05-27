@@ -13,11 +13,18 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var viewController: ViewController?
+    var navigationController: UINavigationController?
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.viewController = ViewController(nibName: "ViewController", bundle: NSBundle.mainBundle())
+        self.viewController?.title = "INBOX"
+        self.navigationController = UINavigationController(rootViewController: self.viewController!)
+        self.window?.rootViewController = self.navigationController!
+        self.window?.makeKeyAndVisible()
         //WARNING: This is method is only for adding dummy entries to CoreData!!!
         initCoreDataTestEntries()
 		
@@ -99,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if coordinator == nil {
             return nil
         }
-        var managedObjectContext = NSManagedObjectContext()
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()
@@ -122,22 +129,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func initCoreDataTestEntries() {
         let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if(!defaults.boolForKey("TestEntriesInserted")) {
-            var dummyEmailAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
-            dummyEmailAccount.username = "TestUser"
-            dummyEmailAccount.password = "testTEST"
+            var gmailAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            gmailAccount.username = "fixmymail2015"
+            gmailAccount.password = "fixinginMAD2015"
+            gmailAccount.emailAddress = "fixmymail2015@gmail.com"
+            gmailAccount.imapHostname = "imap.gmail.com"
+            gmailAccount.imapPort = 993
+            gmailAccount.smtpHostname = "smtp.gmail.com"
+            gmailAccount.smtpPort = 465
             
-            for i in 1...3 {
-                var dummyEmail1: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                dummyEmail1.sender = "test\(i)@test.de"
-                dummyEmail1.title = "Testmail \(i)"
-                dummyEmail1.smime = false
-                dummyEmail1.pgp = false
-                dummyEmail1.message = "This is dummy mail \(i)!"
-                dummyEmail1.toAccount = dummyEmailAccount
-            }
+            let session = MCOIMAPSession()
+            session.hostname = gmailAccount.imapHostname
+            session.port = gmailAccount.imapPort
+            session.username = gmailAccount.username
+            session.password = gmailAccount.password
+            session.authType = MCOAuthType.SASLPlain
+            session.connectionType = MCOConnectionType.TLS
+            
+            let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure |
+                MCOIMAPMessagesRequestKind.InternalDate | MCOIMAPMessagesRequestKind.HeaderSubject |
+                MCOIMAPMessagesRequestKind.Flags)
+            
+            /*let infoOp = session.folderInfoOperation("INBOX")
+            infoOp.start({(error, info) in
+            NSLog("messages on server: %i", info.messageCount)
+            })*/
+            
+            let fetchallOp = session.fetchMessagesByNumberOperationWithFolder("INBOX", requestKind: requestKind, numbers: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
+            
+            fetchallOp.start({(error, messages, range) in
+                if error != nil {
+                    NSLog("Could not load messages: %@", error)
+                } else {
+                    self.managedObjectContext!.performBlockAndWait({ () -> Void in
+                        NSLog("mailcount:%i", messages.count)
+                        for message in messages {
+                            var email: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
+                            email.mcomessage = message
+                            email.sender = ""
+                            email.title = ""
+                            
+                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
+                            
+                            fetchOp.start({(error, data) in
+                                if error != nil {
+                                    NSLog("Could not recieve mail: %@", error)
+                                } else {
+                                    email.data = data
+                                    let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                                    email.sender = parser.header.from.displayName
+                                    email.title = parser.header.subject
+                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
+                                    })
+                                }
+                            })
+                            email.toAccount = gmailAccount
+                        }
+                    })
+                }
+            })
             
             var error: NSError?
             self.managedObjectContext!.save(&error)
+      
             if error != nil {
                 NSLog("%@", error!.description)
             } else {

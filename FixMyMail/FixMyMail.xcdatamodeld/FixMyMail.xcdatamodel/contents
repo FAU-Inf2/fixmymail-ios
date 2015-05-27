@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D105g" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D136" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Email" representedClassName="FixMyMail.Email" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="mcomessage" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pgp" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
@@ -9,12 +11,17 @@
         <relationship name="toAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmailAccount" inverseName="emails" inverseEntity="EmailAccount" syncable="YES"/>
     </entity>
     <entity name="EmailAccount" representedClassName="FixMyMail.EmailAccount" syncable="YES">
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imapHostname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imapPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="smtpHostname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="smtpPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="emails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Email" inverseName="toAccount" inverseEntity="Email" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Email" positionX="-306" positionY="-153" width="128" height="135"/>
-        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="90"/>
+        <element name="Email" positionX="-333" positionY="-309" width="128" height="165"/>
+        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="165"/>
     </elements>
 </model>
