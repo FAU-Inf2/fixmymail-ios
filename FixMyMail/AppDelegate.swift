@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    /*    self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.viewController = ViewController(nibName: "ViewController", bundle: NSBundle.mainBundle())
         self.viewController?.title = "INBOX"
         self.navigationController = UINavigationController(rootViewController: self.viewController!)
@@ -27,13 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         //WARNING: This is method is only for adding dummy entries to CoreData!!!
         initCoreDataTestEntries()
-		
-		/*window = UIWindow(frame: UIScreen.mainScreen().bounds)
+   */
+		window = UIWindow(frame: UIScreen.mainScreen().bounds)
 		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainListTableViewController",bundle:nil)
 		mainViewController.title = "KeyChain"
 		var navigationController = UINavigationController(rootViewController: mainViewController)
 		window?.rootViewController = navigationController
-		window?.makeKeyAndVisible()*/
+		window?.makeKeyAndVisible()
         
         return true
     }
