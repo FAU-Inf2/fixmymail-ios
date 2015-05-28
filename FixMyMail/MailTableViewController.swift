@@ -12,7 +12,6 @@ import CoreData
 class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var mailTableView: UITableView!
-    var rootView: ViewController!
     var refreshControl: UIRefreshControl!
     var delegate: ContentViewControllerProtocol?
     
@@ -38,7 +37,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.mailTableView.contentInset = UIEdgeInsetsMake(65, 0, 0, 0)
+        //self.mailTableView.contentInset = UIEdgeInsetsMake(0, 0, 35, 0)
         self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
         self.refreshControl = UIRefreshControl()
         self.refreshControl.addTarget(self, action: "pullToRefresh", forControlEvents: UIControlEvents.ValueChanged)
@@ -54,11 +53,20 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-        
+
         var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
         self.navigationItem.leftBarButtonItem = menuItem
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        //self.navigationItem.rightBarButtonItem = composeButton
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setToolbarHidden(false, animated: false)
+        var composeButton: UIBarButtonItem = UIBarButtonItem(title: "Compose   ", style: .Plain, target: self, action: "showMailSendView")
+        var items = [composeButton]
+        self.navigationController?.setToolbarItems(items, animated: false)
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,6 +85,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
         self.mailTableView.reloadData()
     }*/
+    
+    func showMailSendView() {
+        self.navigationController?.pushViewController(MailSendViewController(nibName: "MailSendViewController", bundle: nil), animated: true)
+    }
     
     func refreshTableView(notifaction: NSNotification) {
         var error: NSError? = nil
@@ -243,8 +255,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
         mailView.session = session
         mailView.folder = "INBOX"
-        //self.rootView.navigationController?.pushViewController(MailViewController(nibName: "MailViewController", bundle: nil), animated: true)
-        self.rootView.navigationController?.pushViewController(mailView, animated: true)
+        self.navigationController?.pushViewController(mailView, animated: true)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     

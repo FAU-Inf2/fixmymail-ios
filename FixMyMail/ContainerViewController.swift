@@ -39,10 +39,12 @@ class ContainerViewController: UIViewController {
         self.contentVC.setValue(self, forKey: "delegate")
         self.contentVC.view.frame = self.view.frame
         self.subNavController = UINavigationController(rootViewController: contentVC)
+        //(self.contentVC as! MailTableViewController).rootView = self
         var window: UIWindow = UIApplication.sharedApplication().windows[0] as! UIWindow
         window.addSubview(self.subNavController.view)
         window.makeKeyAndVisible()
         self.view.addSubview(self.subNavController.view)
+        //(self.contentVC as! MailTableViewController).subNavController = self.subNavController
         
         self.leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: "swipeForSidebar:")
         self.leftSwipeGesture.direction = .Left
