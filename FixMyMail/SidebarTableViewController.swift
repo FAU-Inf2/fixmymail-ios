@@ -11,16 +11,20 @@ import UIKit
 
 @objc
 protocol SideBarProtocol {
-    optional func cellSelected(cell: UITableViewCell)
+    optional func cellSelected(actionItem: ActionItem)
 }
 
 class ActionItem: NSObject {
     var cellIcon: UIImage?
     var cellName: String
+    var viewController: String
+    var mailAdress: String?
     
-    init(Name: String, icon: UIImage? = nil) {
+    init(Name: String, viewController: String, mailAdress: String? = nil, icon: UIImage? = nil) {
         self.cellName = Name
         self.cellIcon = icon
+        self.viewController = viewController
+        self.mailAdress = mailAdress
     }
 }
 
@@ -58,16 +62,17 @@ class SidebarTableViewController: UITableViewController {
         }
         
         self.sections = ["Inboxes", "Accounts", ""]
-        var inboxRows: [AnyObject] = [AnyObject]()
-        inboxRows.append(["All"])
+        var inboxRows: [ActionItem] = [ActionItem]()
+        inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll"))
         for emailAcc: EmailAccount in accountArr {
-            inboxRows.append(emailAcc)
+            var actionItem = ActionItem(Name: emailAcc.username, viewController: "EmailSpecific", mailAdress: emailAcc.emailAddress)
+            inboxRows.append(actionItem)
         }
         
         var settingsArr: [ActionItem] = [ActionItem]()
-        settingsArr.append(ActionItem(Name: "TODO"))
-        settingsArr.append(ActionItem(Name: "Keychain"))
-        settingsArr.append(ActionItem(Name: "Preferences"))
+        settingsArr.append(ActionItem(Name: "TODO", viewController: "TODO"))
+        settingsArr.append(ActionItem(Name: "Keychain", viewController: "KeyChain"))
+        settingsArr.append(ActionItem(Name: "Preferences", viewController: "Preferences"))
 
         self.rows.append(inboxRows)
         self.rows.append([])
@@ -102,8 +107,8 @@ class SidebarTableViewController: UITableViewController {
                 if(indexPath.row == 0) {
                     cell.menuLabel.text = "All"
                 } else {
-                    let mailAcc: EmailAccount = self.rows[indexPath.section][indexPath.row] as! EmailAccount
-                    cell.menuLabel.text = mailAcc.username
+                    let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+                    cell.menuLabel.text = mailAcc.cellName
                 }
                 
                 return cell
@@ -114,8 +119,8 @@ class SidebarTableViewController: UITableViewController {
                 if(indexPath.row == 0) {
                     sideBarCell.menuLabel.text = "All"
                 } else {
-                    let mailAcc: EmailAccount = self.rows[indexPath.section][indexPath.row] as! EmailAccount
-                    sideBarCell.menuLabel.text = mailAcc.username
+                    let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+                    sideBarCell.menuLabel.text = mailAcc.cellName
                 }
                 return sideBarCell
             }
@@ -146,8 +151,8 @@ class SidebarTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
-        delegate?.cellSelected!(cell)
+        let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+        delegate?.cellSelected!(actionItem)
     }
 
     /*

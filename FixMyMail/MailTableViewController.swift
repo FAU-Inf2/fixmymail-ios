@@ -14,6 +14,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     @IBOutlet weak var mailTableView: UITableView!
     var rootView: ViewController!
     var refreshControl: UIRefreshControl!
+    var delegate: ContentViewControllerProtocol?
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
@@ -32,11 +33,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         return frc
         }()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.mailTableView.contentInset = UIEdgeInsetsMake(65, 0, 0, 0)
+        //self.mailTableView.contentInset = UIEdgeInsetsMake(65, 0, 0, 0)
         self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
         self.refreshControl = UIRefreshControl()
         self.refreshControl.addTarget(self, action: "pullToRefresh", forControlEvents: UIControlEvents.ValueChanged)
@@ -49,11 +51,14 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
         }
-        
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
+        
+        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+        self.navigationItem.leftBarButtonItem = menuItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -325,5 +330,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func menuTapped(sender: AnyObject) -> Void {
+        self.delegate?.toggleLeftPanel()
+    }
 
 }

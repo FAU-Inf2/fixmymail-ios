@@ -69,8 +69,8 @@
 		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
-		3D9027521AF96D0D000D3E72 /* MailCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MailCore.framework; path = Carthage/Build/iOS/MailCore.framework; sourceTree = "<group>"; };
-		3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		3D9027521AF96D0D000D3E72 /* MailCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MailCore.framework; path = ../Carthage/Build/iOS/MailCore.framework; sourceTree = "<group>"; };
+		3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = ../Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D90275D1AF97167000D3E72 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3D90275F1AF97313000D3E72 /* EmailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccount.swift; sourceTree = "<group>"; };
 		3D9027611AF97313000D3E72 /* Email.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Email.swift; sourceTree = "<group>"; };
@@ -140,7 +140,8 @@
 		3D8D90DF1B00A1DE00D5135D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
+				3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */,
+				3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */,
 				8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */,
 				8E450B9A1B15BBF0001E37B9 /* MailSendViewController.xib */,
 				8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */,
@@ -150,10 +151,9 @@
 				8E450BA51B15BBF0001E37B9 /* ToolBar.swift */,
 				8E450BA61B15BBF0001E37B9 /* ToolBar.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
+				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
 				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
 				ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */,
-				3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */,
-				3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */,
 				3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */,
 				3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */,
 				3D37FFA81B01DBC200388F81 /* ContentViewController.swift */,
@@ -188,11 +188,6 @@
 		3DF2539E1AF7611D00B99BC8 = {
 			isa = PBXGroup;
 			children = (
-				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
-				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
-				3D90275D1AF97167000D3E72 /* CoreData.framework */,
-				3D9027521AF96D0D000D3E72 /* MailCore.framework */,
-				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
 				3DF253A91AF7611D00B99BC8 /* FixMyMail */,
 				3DF253C21AF7611E00B99BC8 /* FixMyMailTests */,
 				3DF253A81AF7611D00B99BC8 /* Products */,
@@ -227,6 +222,11 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
+				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
+				3D90275D1AF97167000D3E72 /* CoreData.framework */,
+				3D9027521AF96D0D000D3E72 /* MailCore.framework */,
+				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
 				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */,
@@ -315,6 +315,7 @@
 				TargetAttributes = {
 					3DF253A61AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 3928PFTW6V;
 					};
 					3DF253BE1AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -556,7 +557,7 @@
 				INFOPLIST_FILE = FixMyMail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cf6e9333-673e-4ec5-8813-fa4272594487";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/FixMyMailTests/MailCore2-Bridging-Header.h";
 			};
 			name = Debug;
@@ -576,7 +577,7 @@
 				INFOPLIST_FILE = FixMyMail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cf6e9333-673e-4ec5-8813-fa4272594487";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/FixMyMailTests/MailCore2-Bridging-Header.h";
 			};
 			name = Release;

@@ -10,7 +10,7 @@ import UIKit
 
 @objc
 protocol ContentViewControllerProtocol {
-    optional func toggleLeftPanel()
+    func toggleLeftPanel()
 }
 
 class ContentViewController: UIViewController {
@@ -43,7 +43,7 @@ class ContentViewController: UIViewController {
     
     @IBAction func menuTapped(sender: AnyObject) {
        
-        delegate?.toggleLeftPanel?()
+        delegate?.toggleLeftPanel()
         
     }
 

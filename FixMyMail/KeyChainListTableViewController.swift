@@ -8,8 +8,10 @@
 
 import UIKit
 
-class KeyChainListTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, CellDelegate {
+class KeyChainListTableViewController: UITableViewController, CellDelegate {
 	
+    var delegate: ContentViewControllerProtocol?
+    var navController: UINavigationController!
 	var keyDetailView: KeyDetailViewController?
 	var keyItemList = [KeyItem]()
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
@@ -30,7 +32,11 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-		self.navigationItem.rightBarButtonItem = self.editButtonItem()
+		//self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+        self.navigationItem.leftBarButtonItem = menuItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem()
 		
 	}
 
@@ -203,4 +209,9 @@ class KeyChainListTableViewController: UITableViewController, UITableViewDataSou
 		self.keyDetailView!.keyItem = keyItem
 		self.navigationController?.pushViewController(self.keyDetailView!, animated: true)
 	}
+    
+    
+    @IBAction func menuTapped(sender: AnyObject) {
+        self.delegate?.toggleLeftPanel()
+    }
 }

@@ -16,7 +16,8 @@ enum SlideOutState {
 
 class ContainerViewController: UIViewController {
     
-    var contentVC: ContentViewController!
+    var contentVC: UIViewController!
+    var subNavController: UINavigationController!
     var currentState: SlideOutState = .PanelCollapsed {
         didSet {
             let shouldShowShadow = currentState != .PanelCollapsed
@@ -33,11 +34,15 @@ class ContainerViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.contentVC = ContentViewController(nibName: "ContentViewController", bundle: NSBundle.mainBundle())
-        self.contentVC.delegate = self
+        
+        self.contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+        self.contentVC.setValue(self, forKey: "delegate")
         self.contentVC.view.frame = self.view.frame
-        self.navigationItem.leftBarButtonItem = contentVC.navigationItem.leftBarButtonItem
-        view.addSubview(contentVC.view)
+        self.subNavController = UINavigationController(rootViewController: contentVC)
+        var window: UIWindow = UIApplication.sharedApplication().windows[0] as! UIWindow
+        window.addSubview(self.subNavController.view)
+        window.makeKeyAndVisible()
+        self.view.addSubview(self.subNavController.view)
         
         self.leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: "swipeForSidebar:")
         self.leftSwipeGesture.direction = .Left
@@ -113,7 +118,9 @@ extension ContainerViewController : ContentViewControllerProtocol {
     
     func animateContentPanelXPosition(#targetPosition: CGFloat, completion: ((Bool) -> Void)! = nil) {
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: { () -> Void in
-            self.contentVC.view.frame.origin.x = targetPosition
+            self.subNavController.view.frame.origin.x = targetPosition
+            //self.contentVC.view.frame.origin.x = targetPosition
+            
         }, completion: completion)
     }
     
@@ -129,10 +136,40 @@ extension ContainerViewController : ContentViewControllerProtocol {
 
 extension ContainerViewController: SideBarProtocol {
     
-    func cellSelected(cell: UITableViewCell) {
-        NSLog("\(cell)")
+    func cellSelected(actionItem: ActionItem) {
+        NSLog("\(self.contentVC.parentViewController)")
         self.toggleLeftPanel()
-        //change ContentViewcontroller because of sidebar selection here
+        
+        var shouldChangeVC = false
+        switch actionItem.viewController {
+        case "EmailAll":
+            if contentVC is MailTableViewController == false {
+                contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+                shouldChangeVC = true
+            }
+        case "EmailSpecific":
+            if contentVC is MailTableViewController == false {
+                contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+                shouldChangeVC = true
+                //Do something to load correct mails
+            }
+        //case "TODO":
+            //Insert TODO VC here!
+        case "KeyChain":
+            if contentVC is KeyChainListTableViewController == false {
+                contentVC = KeyChainListTableViewController(nibName: "KeyChainListTableViewController", bundle: NSBundle.mainBundle())
+                shouldChangeVC = true
+            }
+        //case "Preferences":
+            //Insert Preferences VC here!
+        default:
+            break
+        }
+        if shouldChangeVC == true {
+            self.contentVC.setValue(self, forKey: "delegate")
+            self.contentVC.view.frame = self.view.frame
+            self.subNavController.pushViewController(contentVC, animated: false)
+        }
     }
     
 }

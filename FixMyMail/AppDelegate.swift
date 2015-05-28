@@ -29,15 +29,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.navigationController = UINavigationController(rootViewController: self.viewController!)
         self.window?.rootViewController = self.navigationController!
         self.window?.makeKeyAndVisible()
-        //WARNING: This is method is only for adding dummy entries to CoreData!!!
+        //WARNING: This is method is only for adding dummy entries to CoreData!!!*/
         initCoreDataTestEntries()
-*/
-		window = UIWindow(frame: UIScreen.mainScreen().bounds)
-		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainListTableViewController",bundle:nil)
-		mainViewController.title = "KeyChain"
-		var navigationController = UINavigationController(rootViewController: mainViewController)
-		window?.rootViewController = navigationController
-		window?.makeKeyAndVisible()
+
+//		window = UIWindow(frame: UIScreen.mainScreen().bounds)
+//		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainListTableViewController",bundle:nil)
+//		mainViewController.title = "KeyChain"
+//		var navigationController = UINavigationController(rootViewController: mainViewController)
+//		window?.rootViewController = navigationController
+//		window?.makeKeyAndVisible()
         
         return true
     }

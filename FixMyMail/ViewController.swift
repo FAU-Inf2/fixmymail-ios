@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.mailTableView = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+        //self.mailTableView = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
         self.mailTableView.rootView = self
         self.mailTableView.view.frame = self.view.frame
         view.addSubview(self.mailTableView.view)
