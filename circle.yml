@@ -21,6 +21,6 @@ dependencies:
     - cd Carthage/Checkouts/SwiftyJSON && git checkout tags/2.2.0 && cd ../../..
     - carthage build --verbose --platform iOS --configuration Release
 deployment:
-  override:
+  deploy:
     - ./scripts/depoy.sh
     - ./scripts/remove-key.sh
