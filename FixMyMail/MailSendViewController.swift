@@ -10,6 +10,8 @@ class MailSendViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        var sendBut: UIBarButtonItem = UIBarButtonItem(title: "Senden", style: .Plain, target: self, action: "butSend:")
+        self.navigationItem.rightBarButtonItem = sendBut
         LoadAddresses()
     }
     

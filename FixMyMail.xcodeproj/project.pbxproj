@@ -10,7 +10,6 @@
 		3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */; };
 		3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */; };
 		3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */; };
-		3D0FFD6F1B0A3BB900C4F8F6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */; };
 		3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37FFA81B01DBC200388F81 /* ContentViewController.swift */; };
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
 		3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */; };
@@ -37,8 +36,6 @@
 		8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA01B15BBF0001E37B9 /* MCOCIDURLProtocol.mm */; };
 		8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA21B15BBF0001E37B9 /* MCOMessageView.mm */; };
 		8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */; };
-		8E450BB51B15BBF0001E37B9 /* ToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA51B15BBF0001E37B9 /* ToolBar.swift */; };
-		8E450BB61B15BBF0001E37B9 /* ToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E450BA61B15BBF0001E37B9 /* ToolBar.xib */; };
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
 		ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */; };
@@ -65,7 +62,6 @@
 		3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SidebarTableViewController.xib; sourceTree = "<group>"; };
 		3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SideBarTableViewCell.xib; sourceTree = "<group>"; };
 		3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContentViewController.xib; sourceTree = "<group>"; };
-		3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
@@ -100,8 +96,6 @@
 		8E450BA21B15BBF0001E37B9 /* MCOMessageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MCOMessageView.mm; sourceTree = "<group>"; };
 		8E450BA31B15BBF0001E37B9 /* MCTMsgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCTMsgViewController.h; sourceTree = "<group>"; };
 		8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MCTMsgViewController.mm; sourceTree = "<group>"; };
-		8E450BA51B15BBF0001E37B9 /* ToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
-		8E450BA61B15BBF0001E37B9 /* ToolBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToolBar.xib; sourceTree = "<group>"; };
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
@@ -140,7 +134,6 @@
 		3D8D90DF1B00A1DE00D5135D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				3D0FFD6E1B0A3BB900C4F8F6 /* ViewController.swift */,
 				3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */,
 				8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */,
 				8E450B9A1B15BBF0001E37B9 /* MailSendViewController.xib */,
@@ -148,8 +141,6 @@
 				8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */,
 				8E450B9D1B15BBF0001E37B9 /* MailViewController.swift */,
 				8E450B9E1B15BBF0001E37B9 /* MailViewController.xib */,
-				8E450BA51B15BBF0001E37B9 /* ToolBar.swift */,
-				8E450BA61B15BBF0001E37B9 /* ToolBar.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
 				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
 				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
@@ -315,7 +306,7 @@
 				TargetAttributes = {
 					3DF253A61AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = YHA9PM3D6M;
+						DevelopmentTeam = 3928PFTW6V;
 					};
 					3DF253BE1AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -348,7 +339,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
-				8E450BB61B15BBF0001E37B9 /* ToolBar.xib in Resources */,
 				8E450BB11B15BBF0001E37B9 /* MailViewController.xib in Resources */,
 				8E450BAF1B15BBF0001E37B9 /* MailTableViewController.xib in Resources */,
 				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
@@ -401,13 +391,11 @@
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
-				8E450BB51B15BBF0001E37B9 /* ToolBar.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
 				ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */,
-				3D0FFD6F1B0A3BB900C4F8F6 /* ViewController.swift in Sources */,
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
 				8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */,

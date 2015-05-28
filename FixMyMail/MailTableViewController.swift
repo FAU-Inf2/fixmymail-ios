@@ -56,17 +56,22 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
 
         var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
         self.navigationItem.leftBarButtonItem = menuItem
+        //var editButton: UIBarButtonItem = UIBarButtonItem(title: "Edit", style: .Plain, target: self, action: "editToggled:")
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        //self.navigationItem.rightBarButtonItem = composeButton
         
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setToolbarHidden(false, animated: false)
-        var composeButton: UIBarButtonItem = UIBarButtonItem(title: "Compose   ", style: .Plain, target: self, action: "showMailSendView")
+        var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showMailSendView")
         var items = [composeButton]
-        self.navigationController?.setToolbarItems(items, animated: false)
+        self.navigationController?.visibleViewController.setToolbarItems(items, animated: animated)
+        self.navigationController?.setToolbarHidden(false, animated: animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setToolbarHidden(true, animated: animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,12 +83,24 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    
+    
     /*@IBAction func refresh(sender: AnyObject) {
         var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
         }
         self.mailTableView.reloadData()
+    }*/
+    
+    /*func editToggled(sender: AnyObject) {
+        if self.navigationItem.rightBarButtonItem?.title == "Edit" {
+            self.navigationItem.rightBarButtonItem?.title = "Done"
+            self.setEditing(true, animated: true)
+        } else {
+            self.navigationItem.rightBarButtonItem?.title = "Edit"
+            self.setEditing(false, animated: true)
+        }
     }*/
     
     func showMailSendView() {
