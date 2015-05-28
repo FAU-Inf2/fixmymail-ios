@@ -23,5 +23,4 @@ dependencies:
 deployment:
   override:
     - ./scripts/depoy.sh
-  post:
     - ./scripts/remove-key.sh
