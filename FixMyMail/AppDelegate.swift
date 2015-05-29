@@ -158,7 +158,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("messages on server: %i", info.messageCount)
             })*/
             
-            let fetchallOp = session.fetchMessagesByNumberOperationWithFolder("INBOX", requestKind: requestKind, numbers: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
+            /*let fetchallOp = session.fetchMessagesByNumberOperationWithFolder("INBOX", requestKind: requestKind, numbers: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
             
             fetchallOp.start({(error, messages, range) in
                 if error != nil {
@@ -191,7 +191,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                     })
                 }
-            })
+            })*/
             
             var error: NSError?
             self.managedObjectContext!.save(&error)

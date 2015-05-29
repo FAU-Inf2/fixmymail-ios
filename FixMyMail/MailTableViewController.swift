@@ -15,6 +15,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var refreshControl: UIRefreshControl!
     var delegate: ContentViewControllerProtocol?
     
+    //var for imap-update
+    var numberOfMessagesToLoad : UInt64 = 0
+    var curNumberOfInboxMessages : UInt64 = 0
+    var totalNumberOfInboxMessages : UInt64 = 0
+    
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -120,7 +125,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func pullToRefresh() {
         
         //Fetch Account Data
-        var account : EmailAccount?
+        var account : EmailAccount!
         let session = MCOIMAPSession()
         let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
         var error: NSError?
@@ -129,11 +134,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             NSLog("%@", error!.description)
         } else {
             if let emailAccounts = result {
-                account = emailAccounts[0] as? EmailAccount
-                session.hostname = account!.imapHostname
-                session.port = account!.imapPort
-                session.username = account!.username
-                session.password = account!.password
+                account = emailAccounts[0] as! EmailAccount
+                session.hostname = account.imapHostname
+                session.port = account.imapPort
+                session.username = account.username
+                session.password = account.password
                 session.authType = MCOAuthType.SASLPlain
                 session.connectionType = MCOConnectionType.TLS
             }
@@ -143,60 +148,68 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             MCOIMAPMessagesRequestKind.InternalDate | MCOIMAPMessagesRequestKind.HeaderSubject |
             MCOIMAPMessagesRequestKind.Flags)
         
-        let fetchallOp = session.fetchMessagesByNumberOperationWithFolder("INBOX", requestKind: requestKind, numbers: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
+        self.curNumberOfInboxMessages = UInt64(account.emails.count)
+        var inboxFolder = "Inbox"
         
-        fetchallOp.start({(error, messages, range) in
-            if error != nil {
-                NSLog("Could not load messages: %@", error)
-            } else {
-                self.managedObjectContext!.performBlockAndWait({ () -> Void in
-                    NSLog("mailcount:%i", messages.count)
-                    for message in messages {
-                        var newMail = true
-                        var managedObjectContext: NSManagedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
-                        let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-                        var error: NSError?
-                        var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
-                        if error != nil {
-                            NSLog("%@", error!.description)
-                        } else {
-                            if let emailAccounts = result {
-                                let emailAccount : EmailAccount = emailAccounts[0] as! EmailAccount
-                                for emails in emailAccount.emails {
-                                    if ((emails as! Email).mcomessage as! MCOIMAPMessage).uid == (message as! MCOIMAPMessage).uid {
-                                        newMail = false
-                                        break
-                                    }
+        //Fetch Folder Info
+        let inboxFolderInfo : MCOIMAPFolderInfoOperation = session.folderInfoOperation(inboxFolder)
+        inboxFolderInfo.start({(error, info) in
+            //var totalNumberOfMessagesDidChange = totalNumberOfInboxMessages != UInt64(info.messageCount)
+            self.totalNumberOfInboxMessages = UInt64(info.messageCount)
+            
+            self.numberOfMessagesToLoad = self.totalNumberOfInboxMessages - self.curNumberOfInboxMessages
+            
+            NSLog(String(self.numberOfMessagesToLoad) + " new mails")
+            if self.numberOfMessagesToLoad == 0 {
+                return
+            }
+            
+            var fetchRange : MCORange = MCORangeMake(self.totalNumberOfInboxMessages - (self.numberOfMessagesToLoad - 1), (self.numberOfMessagesToLoad - 1));
+            
+            let fetchallOp = session.fetchMessagesByNumberOperationWithFolder("INBOX", requestKind: requestKind, numbers: MCOIndexSet(range: fetchRange))
+            
+            fetchallOp.start({(error, messages, range) in
+                if error != nil {
+                    NSLog("Could not load messages: %@", error)
+                } else {
+                    self.managedObjectContext!.performBlockAndWait({ () -> Void in
+                        NSLog("mailcount:%i", messages.count)
+                        for message in messages {
+                            var newMail = true
+                            for emails in account.emails {
+                                if ((emails as! Email).mcomessage as! MCOIMAPMessage).uid == (message as! MCOIMAPMessage).uid {
+                                    newMail = false
+                                    break
                                 }
                             }
-                        }
-                        
-                        if newMail == true {
-                            var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                            newEmail.mcomessage = message
-                            newEmail.sender = ""
-                            newEmail.title = ""
                             
-                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
-                            
-                            fetchOp.start({(error, data) in
-                                if error != nil {
-                                    NSLog("Could not recieve mail: %@", error)
-                                } else {
-                                    newEmail.data = data
-                                    let parser: MCOMessageParser! = MCOMessageParser(data: data)
-                                    newEmail.sender = parser.header.from.displayName
-                                    newEmail.title = parser.header.subject
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
-                                    })
-                                }
-                            })
-                            newEmail.toAccount = account!
+                            if newMail == true {
+                                var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
+                                newEmail.mcomessage = message
+                                newEmail.sender = ""
+                                newEmail.title = ""
+                                
+                                let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
+                                
+                                fetchOp.start({(error, data) in
+                                    if error != nil {
+                                        NSLog("Could not recieve mail: %@", error)
+                                    } else {
+                                        newEmail.data = data
+                                        let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                                        newEmail.sender = parser.header.from.displayName
+                                        newEmail.title = parser.header.subject
+                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
+                                        })
+                                    }
+                                })
+                                newEmail.toAccount = account!
+                            }
                         }
-                    }
-                })
-            }
+                    })
+                }
+            })
         })
         
         self.managedObjectContext!.save(&error)
