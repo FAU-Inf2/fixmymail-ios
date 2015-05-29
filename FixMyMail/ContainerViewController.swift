@@ -162,8 +162,12 @@ extension ContainerViewController: SideBarProtocol {
                 contentVC = KeyChainListTableViewController(nibName: "KeyChainListTableViewController", bundle: NSBundle.mainBundle())
                 shouldChangeVC = true
             }
-        //case "Preferences":
+        case "Preferences":
             //Insert Preferences VC here!
+			if contentVC is PreferenceTableViewController == false {
+				contentVC = PreferenceTableViewController(nibName: "PreferenceTableViewController", bundle: NSBundle.mainBundle())
+				shouldChangeVC = true
+			}
         default:
             break
         }
