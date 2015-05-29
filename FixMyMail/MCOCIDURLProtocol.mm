@@ -16,8 +16,8 @@
 {
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-		[NSURLProtocol registerClass:[MCOCIDURLProtocol class]];
-	});
+        [NSURLProtocol registerClass:[MCOCIDURLProtocol class]];
+    });
 }
 
 + (BOOL) canInitWithRequest:(NSURLRequest *)theRequest
@@ -31,16 +31,16 @@
 
 + (BOOL) isCID:(NSURL *)url
 {
-	NSString *theScheme = [url scheme];
-	if ([theScheme caseInsensitiveCompare:@"cid"] == NSOrderedSame)
+    NSString *theScheme = [url scheme];
+    if ([theScheme caseInsensitiveCompare:@"cid"] == NSOrderedSame)
         return YES;
     return NO;
 }
 
 + (BOOL) isXMailcoreImage:(NSURL *)url
 {
-	NSString *theScheme = [url scheme];
-	if ([theScheme caseInsensitiveCompare:@"x-mailcore-image"] == NSOrderedSame)
+    NSString *theScheme = [url scheme];
+    if ([theScheme caseInsensitiveCompare:@"x-mailcore-image"] == NSOrderedSame)
         return YES;
     return NO;
 }
@@ -104,6 +104,7 @@
     [[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
     [[self client] URLProtocol:self didLoadData:data];
     [[self client] URLProtocolDidFinishLoading:self];
+    response = nil;
 }
 
 - (void) stopLoading
@@ -134,6 +135,7 @@
         [userInfo setObject:data forKey:@"Data"];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MCOCIDURLProtocolDownloadedNotification object:nil userInfo:userInfo];
+    userInfo = nil;
 }
 
 @end

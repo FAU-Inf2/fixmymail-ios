@@ -69,7 +69,7 @@
 
 - (void) setMessage:(MCOIMAPMessage *)message
 {
-	MCLog("set message : %s", message.description.UTF8String);
+    MCLog("set message : %s", message.description.UTF8String);
     for(MCOOperation * op in _ops) {
         [op cancel];
     }
@@ -133,12 +133,12 @@ typedef void (^DownloadCallback)(NSError * error);
 - (NSString *) MCOMessageView_templateForAttachment:(MCOMessageView *)view
 {
     return @"<div><img src=\"http://www.iconshock.com/img_jpg/OFFICE/general/jpg/128/attachment_icon.jpg\"/></div>\
-{{#HASSIZE}}\
-<div>- {{FILENAME}}, {{SIZE}}</div>\
-{{/HASSIZE}}\
-{{#NOSIZE}}\
-<div>- {{FILENAME}}</div>\
-{{/NOSIZE}}";
+    {{#HASSIZE}}\
+    <div>- {{FILENAME}}, {{SIZE}}</div>\
+    {{/HASSIZE}}\
+    {{#NOSIZE}}\
+    <div>- {{FILENAME}}</div>\
+    {{/NOSIZE}}";
 }
 
 - (NSString *) MCOMessageView_templateForMessage:(MCOMessageView *)view
@@ -188,14 +188,14 @@ typedef void (^DownloadCallback)(NSError * error);
 
 - (NSData *) MCOMessageView:(MCOMessageView *)view dataForPartWithUniqueID:(NSString *)partUniqueID
 {
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"FetchFullMessageEnabled"]) {
-		MCOAttachment * attachment = (MCOAttachment *) [[_messageView message] partForUniqueID:partUniqueID];
-		return [attachment data];
-	}
-	else {
-		NSData * data = [_storage objectForKey:partUniqueID];
-		return data;
-	}
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"FetchFullMessageEnabled"]) {
+        MCOAttachment * attachment = (MCOAttachment *) [[_messageView message] partForUniqueID:partUniqueID];
+        return [attachment data];
+    }
+    else {
+        NSData * data = [_storage objectForKey:partUniqueID];
+        return data;
+    }
 }
 
 - (void) MCOMessageView:(MCOMessageView *)view fetchDataForPartWithUniqueID:(NSString *)partUniqueID
@@ -239,36 +239,36 @@ typedef void (^DownloadCallback)(NSError * error);
     int width;
     int height;
     float quality;
-
+    
     width = IMAGE_PREVIEW_WIDTH;
     height = IMAGE_PREVIEW_HEIGHT;
     quality = 1.0;
-
+    
     imageSource = CGImageSourceCreateWithData((__bridge CFDataRef) data, NULL);
     if (imageSource == NULL)
         return nil;
-
+    
     info = [[NSMutableDictionary alloc] init];
     [info setObject:(id) kCFBooleanTrue forKey:(__bridge id) kCGImageSourceCreateThumbnailWithTransform];
     [info setObject:(id) kCFBooleanTrue forKey:(__bridge id) kCGImageSourceCreateThumbnailFromImageAlways];
     [info setObject:(id) [NSNumber numberWithFloat:(float) IMAGE_PREVIEW_WIDTH] forKey:(__bridge id) kCGImageSourceThumbnailMaxPixelSize];
     thumbnail = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, (__bridge CFDictionaryRef) info);
-
+    
     CGImageDestinationRef destination;
     NSMutableData * destData = [NSMutableData data];
-
+    
     destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef) destData,
                                                    (CFStringRef) @"public.jpeg",
                                                    1, NULL);
     
     CGImageDestinationAddImage(destination, thumbnail, NULL);
     CGImageDestinationFinalize(destination);
-
+    
     CFRelease(destination);
-
+    
     CFRelease(thumbnail);
     CFRelease(imageSource);
-
+    
     return destData;
 }
 
