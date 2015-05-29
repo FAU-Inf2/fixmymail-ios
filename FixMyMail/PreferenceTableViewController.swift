@@ -67,7 +67,6 @@ class PreferenceTableViewController: UITableViewController {
 		
         // Configure the cell...
 		let cellItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-		
 		cell.menuLabel.text = cellItem.cellName
 		
         return cell
