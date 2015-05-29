@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PreferenceTableViewController" customModule="FixMyMail" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PreferenceCell" id="D1C-aT-Hvk" userLabel="PreferenceCell" customClass="PreferenceTableViewCell" customModule="FixMyMail" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D1C-aT-Hvk" id="oRB-vO-eDh">
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eif-lK-9Xt">
+                        <rect key="frame" x="8" y="0.0" width="43" height="43"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="43" id="5KT-9M-iFX"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="So8-Py-lI0">
+                        <rect key="frame" x="59" y="11" width="241" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="eif-lK-9Xt" firstAttribute="leading" secondItem="oRB-vO-eDh" secondAttribute="leadingMargin" id="0Cf-Ei-56U"/>
+                    <constraint firstItem="eif-lK-9Xt" firstAttribute="top" secondItem="oRB-vO-eDh" secondAttribute="top" id="2Nk-YH-F8H"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="So8-Py-lI0" secondAttribute="trailing" constant="12" id="Ngn-vj-4de"/>
+                    <constraint firstAttribute="bottom" secondItem="eif-lK-9Xt" secondAttribute="bottom" id="d5j-3U-nKX"/>
+                    <constraint firstItem="So8-Py-lI0" firstAttribute="leading" secondItem="eif-lK-9Xt" secondAttribute="trailing" constant="8" symbolic="YES" id="mjt-zb-Hi2"/>
+                    <constraint firstItem="eif-lK-9Xt" firstAttribute="centerY" secondItem="So8-Py-lI0" secondAttribute="centerY" id="tVa-UK-Cur"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="menuImg" destination="eif-lK-9Xt" id="jBo-x2-s6B"/>
+                <outlet property="menuLabel" destination="So8-Py-lI0" id="9zR-gM-oph"/>
+            </connections>
+            <point key="canvasLocation" x="256" y="-55"/>
+        </tableViewCell>
+    </objects>
+</document>
