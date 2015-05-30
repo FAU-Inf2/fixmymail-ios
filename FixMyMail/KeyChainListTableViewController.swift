@@ -35,6 +35,7 @@ class KeyChainListTableViewController: UITableViewController, CellDelegate {
 		//self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+		self.navigationItem.title = "KeyChain"
         self.navigationItem.leftBarButtonItem = menuItem
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
 		

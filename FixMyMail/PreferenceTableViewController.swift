@@ -23,7 +23,11 @@ class PreferenceTableViewController: UITableViewController {
 		
 		loadPreferenceCells()
 		
+		tableView.registerNib(UINib(nibName: "PreferenceTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceCell")
+
+		
 		var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+		self.navigationItem.title = "Preferences"
 		self.navigationItem.leftBarButtonItem = menuItem
 		
 		self.sections = ["", "", ""]
@@ -48,15 +52,13 @@ class PreferenceTableViewController: UITableViewController {
         return self.sections.count
     }
 	
+	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return self.rows[section].count
+	}
+	
 	override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 		return self.sections[section]
 	}
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        return self.preferenceCellItem.count
-    }
 
 	
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -64,16 +66,9 @@ class PreferenceTableViewController: UITableViewController {
 
 		
         // Configure the cell...
-		
-		
 		let cellItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-		
-		
-		
 		cell.menuLabel.text = cellItem.cellName
 		
-		
-
         return cell
     }
 	
@@ -131,14 +126,15 @@ class PreferenceTableViewController: UITableViewController {
 		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", mailAdress: nil, icon: nil)
 		var item5 = ActionItem(Name: "Feedback", viewController: "Feedback", mailAdress: nil, icon: nil)
 		
-		otherItem.append(item5)
 		otherItem.append(item4)
-		preferenceCellItem.append(item3)
-		preferenceCellItem.append(item2)
+		otherItem.append(item5)
 		preferenceCellItem.append(item1)
+		preferenceCellItem.append(item2)
+		preferenceCellItem.append(item3)
 		
-		rows.append(otherItem)
 		rows.append(preferenceCellItem)
+		rows.append([])
+		rows.append(otherItem)
 		
 	}
 	
