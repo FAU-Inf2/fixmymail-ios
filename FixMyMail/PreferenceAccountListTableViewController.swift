@@ -6,12 +6,14 @@
 //  Copyright (c) 2015 FixMymail. All rights reserved.
 //
 
+import CoreData
 import UIKit
 
 class PreferenceAccountListTableViewController: UITableViewController {
 	
 	var delegate: ContentViewControllerProtocol?
 	var navController: UINavigationController!
+	var managedObjectContext: NSManagedObjectContext!
 	var accountPreferenceCellItem: [ActionItem] = [ActionItem]()
 	var otherItem: [ActionItem] = [ActionItem]()
 	var sections = [String]()
@@ -30,7 +32,7 @@ class PreferenceAccountListTableViewController: UITableViewController {
 		self.navigationItem.title = "Accounts"
 		self.navigationItem.leftBarButtonItem = menuItem
 		
-		self.sections = ["", "", ""]
+		self.sections = ["Accounts", "", ""]
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -45,6 +47,11 @@ class PreferenceAccountListTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
+	
+	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+		// Return the number of sections.
+		return self.sections.count
+	}
 
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.rows[section].count
@@ -56,14 +63,18 @@ class PreferenceAccountListTableViewController: UITableViewController {
 
 	
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceCell") as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceCell") as! PreferenceTableViewCell
 
         // Configure the cell...
+		let cellItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+		cell.menuLabel.text = cellItem.cellName
 
         return cell
     }
     
 
+	
+		
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -112,18 +123,36 @@ class PreferenceAccountListTableViewController: UITableViewController {
 	func loadCoreDataAccounts() {
 		
 		
+	/*	var accountArr: [EmailAccount] = [EmailAccount]();
+		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
+		if let appDelegate = appDel {
+			managedObjectContext = appDelegate.managedObjectContext
+			var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			var error: NSError?
+			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
+			if let account = acc {
+				for emailAcc: EmailAccount in account {
+					accountArr.append(emailAcc)
+				}
+			} else {
+				if((error) != nil) {
+					NSLog(error!.description)
+				}
+			}
+		}
 		
-		var item1 = ActionItem(Name: "Accounts", viewController: "Accounts_Pref", mailAdress: nil, icon: nil)
-		var item2 = ActionItem(Name: "TODO", viewController: "TODO_Pref", mailAdress: nil, icon: nil)
-		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", mailAdress: nil, icon: nil)
-		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", mailAdress: nil, icon: nil)
-		var item5 = ActionItem(Name: "Feedback", viewController: "Feedback", mailAdress: nil, icon: nil)
+		for emailAcc: EmailAccount in accountArr {
+			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView", mailAdress: emailAcc.emailAddress)
+			accountPreferenceCellItem.append(actionItem)
+		}
+
+	*/
+		var mailAccount = ActionItem(Name: "fixmaimaildummy", viewController: "Account_Detail", mailAdress: nil, icon: nil)
+		accountPreferenceCellItem.append(mailAccount)
 		
-		otherItem.append(item4)
-		otherItem.append(item5)
-		accountPreferenceCellItem.append(item1)
-		accountPreferenceCellItem.append(item2)
-		accountPreferenceCellItem.append(item3)
+		
+		var item1 = ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: nil, icon: nil)
+		otherItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: nil, icon: nil))
 		
 		rows.append(accountPreferenceCellItem)
 		rows.append([])

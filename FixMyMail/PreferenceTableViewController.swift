@@ -72,6 +72,21 @@ class PreferenceTableViewController: UITableViewController {
         return cell
     }
 	
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+		switch actionItem.cellName {
+		case "Accounts":
+			var prefAccountVC = PreferenceAccountListTableViewController(nibName:"PreferenceAccountListTableViewController", bundle:nil)
+			self.navigationController?.pushViewController(prefAccountVC, animated: true)
+		default:
+			break
+		}
+		
+		
+	}
+
+	
 
     /*
     // Override to support conditional editing of the table view.
@@ -120,7 +135,7 @@ class PreferenceTableViewController: UITableViewController {
 	
 	func loadPreferenceCells() {
 		
-		var item1 = ActionItem(Name: "Accounts", viewController: "Accounts_Pref", mailAdress: nil, icon: nil)
+		var item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", mailAdress: nil, icon: nil)
 		var item2 = ActionItem(Name: "TODO", viewController: "TODO_Pref", mailAdress: nil, icon: nil)
 		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", mailAdress: nil, icon: nil)
 		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", mailAdress: nil, icon: nil)
