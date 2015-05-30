@@ -168,6 +168,11 @@ extension ContainerViewController: SideBarProtocol {
 				contentVC = PreferenceTableViewController(nibName: "PreferenceTableViewController", bundle: NSBundle.mainBundle())
 				shouldChangeVC = true
 			}
+		case "Accounts_Pref":
+			if contentVC is PreferenceAccountListTableViewController == false {
+				contentVC = PreferenceAccountListTableViewController(nibName: "PreferenceAccountListTableViewController", bundle: NSBundle.mainBundle())
+				shouldChangeVC = true
+			}
         default:
             break
         }
