@@ -1,36 +1,31 @@
 //
-//  PreferenceTableViewController.swift
+//  PreferenceAccountListTableViewController.swift
 //  FixMyMail
 //
-//  Created by Sebastian Thürauf on 29.05.15.
+//  Created by Sebastian Thürauf on 30.05.15.
 //  Copyright (c) 2015 FixMymail. All rights reserved.
 //
 
+import CoreData
 import UIKit
 
-class PreferenceTableViewController: UITableViewController {
+class PreferenceAccountListTableViewController: UITableViewController {
 	
 	var delegate: ContentViewControllerProtocol?
 	var navController: UINavigationController!
-	var preferenceCellItem: [ActionItem] = [ActionItem]()
+	var managedObjectContext: NSManagedObjectContext!
+	var accountPreferenceCellItem: [ActionItem] = [ActionItem]()
 	var otherItem: [ActionItem] = [ActionItem]()
 	var sections = [String]()
 	var rows = [AnyObject]()
-	
         
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		loadPreferenceCells()
-		
+		loadCoreDataAccounts()
 		tableView.registerNib(UINib(nibName: "PreferenceTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceCell")
-
-		
-		var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
-		self.navigationItem.title = "Preferences"
-		self.navigationItem.leftBarButtonItem = menuItem
-		
-		self.sections = ["", "", ""]
+		self.navigationItem.title = "Accounts"
+		self.sections = ["Accounts", "", ""]
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -45,13 +40,12 @@ class PreferenceTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Potentially incomplete method implementation.
-        // Return the number of sections.
-        return self.sections.count
-    }
 	
+	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+		// Return the number of sections.
+		return self.sections.count
+	}
+
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.rows[section].count
 	}
@@ -64,32 +58,16 @@ class PreferenceTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceCell", forIndexPath: indexPath) as! PreferenceTableViewCell
 
-		
         // Configure the cell...
 		let cellItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-		cell.menuLabel.text = cellItem.cellName
 		
+		cell.menuLabel.text = cellItem.mailAdress
+		cell.menuImg.image = cellItem.cellIcon
+
         return cell
     }
 	
-	
-	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-		switch actionItem.cellName {
-		case "Accounts":
-			var prefAccountVC = PreferenceAccountListTableViewController(nibName:"PreferenceAccountListTableViewController", bundle: nil)
-			self.navigationController?.pushViewController(prefAccountVC, animated: true)
-		default:
-			break
-		}
 		
-		tableView.deselectRowAtIndexPath(indexPath, animated: true)
-
-		
-	}
-
-	
-
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -135,28 +113,50 @@ class PreferenceTableViewController: UITableViewController {
     }
     */
 	
-	func loadPreferenceCells() {
+	func loadCoreDataAccounts() {
 		
-		var item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", mailAdress: nil, icon: nil)
-		var item2 = ActionItem(Name: "TODO", viewController: "TODO_Pref", mailAdress: nil, icon: nil)
-		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", mailAdress: nil, icon: nil)
-		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", mailAdress: nil, icon: nil)
-		var item5 = ActionItem(Name: "Feedback", viewController: "Feedback", mailAdress: nil, icon: nil)
+		// get mail accounts from coredata
+		var accountArr: [EmailAccount] = [EmailAccount]();
+		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
+		if let appDelegate = appDel {
+			managedObjectContext = appDelegate.managedObjectContext
+			var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			var error: NSError?
+			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
+			if let account = acc {
+				for emailAcc: EmailAccount in account {
+					accountArr.append(emailAcc)
+				}
+			} else {
+				if((error) != nil) {
+					NSLog(error!.description)
+				}
+			}
+		}
 		
-		otherItem.append(item4)
-		otherItem.append(item5)
-		preferenceCellItem.append(item1)
-		preferenceCellItem.append(item2)
-		preferenceCellItem.append(item3)
+		// create ActionItems for mail accounts
+		for emailAcc: EmailAccount in accountArr {
+			var accountImage: UIImage?
+			if emailAcc.emailAddress.rangeOfString("@gmail.com") != nil {
+				accountImage = UIImage(named: "Gmail-128.png")
+			}
+			
+			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView", mailAdress: emailAcc.emailAddress, icon: accountImage)
+			accountPreferenceCellItem.append(actionItem)
+		}
+
+		// Add New Account Cell
+		otherItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
 		
-		rows.append(preferenceCellItem)
+		rows.append(accountPreferenceCellItem)
 		rows.append([])
 		rows.append(otherItem)
-		
+
 	}
 	
 	@IBAction func menuTapped(sender: AnyObject) -> Void {
 		self.delegate?.toggleLeftPanel()
 	}
 	
+    
 }
