@@ -12,7 +12,7 @@ class CustomMailTableViewCell: UITableViewCell {
     
     @IBOutlet var mailFrom: UILabel!
     @IBOutlet var mailBody: UILabel!
-    var mail: Email?
+    var mail: Email!
     
     
     override func awakeFromNib() {
