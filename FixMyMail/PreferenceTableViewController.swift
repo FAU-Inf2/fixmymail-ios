@@ -62,7 +62,7 @@ class PreferenceTableViewController: UITableViewController {
 
 	
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceCell") as! PreferenceTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceCell", forIndexPath: indexPath) as! PreferenceTableViewCell
 
 		
         // Configure the cell...
@@ -77,12 +77,14 @@ class PreferenceTableViewController: UITableViewController {
 		let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 		switch actionItem.cellName {
 		case "Accounts":
-			var prefAccountVC = PreferenceAccountListTableViewController(nibName:"PreferenceAccountListTableViewController", bundle:nil)
+			var prefAccountVC = PreferenceAccountListTableViewController(nibName:"PreferenceAccountListTableViewController", bundle: nil)
 			self.navigationController?.pushViewController(prefAccountVC, animated: true)
 		default:
 			break
 		}
 		
+		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
 		
 	}
 

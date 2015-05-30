@@ -23,15 +23,8 @@ class PreferenceAccountListTableViewController: UITableViewController {
         super.viewDidLoad()
 		
 		loadCoreDataAccounts()
-		
-		
-		tableView.registerNib(UINib(nibName: "PreferenceAccountListTableViewController", bundle: nil),forCellReuseIdentifier:"PreferenceCell")
-		
-		
-		var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+		tableView.registerNib(UINib(nibName: "PreferenceTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceCell")
 		self.navigationItem.title = "Accounts"
-		self.navigationItem.leftBarButtonItem = menuItem
-		
 		self.sections = ["Accounts", "", ""]
 
         // Uncomment the following line to preserve selection between presentations
@@ -63,16 +56,16 @@ class PreferenceAccountListTableViewController: UITableViewController {
 
 	
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceCell") as! PreferenceTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceCell", forIndexPath: indexPath) as! PreferenceTableViewCell
 
         // Configure the cell...
 		let cellItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-		cell.menuLabel.text = cellItem.cellName
+		
+		cell.menuLabel.text = cellItem.mailAdress
+		cell.menuImg.image = cellItem.cellIcon
 
         return cell
     }
-    
-
 	
 		
     /*
@@ -122,8 +115,8 @@ class PreferenceAccountListTableViewController: UITableViewController {
 	
 	func loadCoreDataAccounts() {
 		
-		
-	/*	var accountArr: [EmailAccount] = [EmailAccount]();
+		// get mail accounts from coredata
+		var accountArr: [EmailAccount] = [EmailAccount]();
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 		if let appDelegate = appDel {
 			managedObjectContext = appDelegate.managedObjectContext
@@ -141,18 +134,19 @@ class PreferenceAccountListTableViewController: UITableViewController {
 			}
 		}
 		
+		// create ActionItems for mail accounts
 		for emailAcc: EmailAccount in accountArr {
-			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView", mailAdress: emailAcc.emailAddress)
+			var accountImage: UIImage?
+			if emailAcc.emailAddress.rangeOfString("@gmail.com") != nil {
+				accountImage = UIImage(named: "Gmail-128.png")
+			}
+			
+			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView", mailAdress: emailAcc.emailAddress, icon: accountImage)
 			accountPreferenceCellItem.append(actionItem)
 		}
 
-	*/
-		var mailAccount = ActionItem(Name: "fixmaimaildummy", viewController: "Account_Detail", mailAdress: nil, icon: nil)
-		accountPreferenceCellItem.append(mailAccount)
-		
-		
-		var item1 = ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: nil, icon: nil)
-		otherItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: nil, icon: nil))
+		// Add New Account Cell
+		otherItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
 		
 		rows.append(accountPreferenceCellItem)
 		rows.append([])
