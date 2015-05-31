@@ -205,11 +205,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags {
                                 NSLog("Updated Flags " + String(((mail as! Email).mcomessage as! MCOIMAPMessage).uid))
                                 (mail as! Email).mcomessage = (message as! MCOIMAPMessage)
-                                var error: NSError? = nil
-                                self.managedObjectContext!.save(&error)
-                                if error != nil {
-                                    NSLog("%@", error!.description)
-                                }
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
+                                })
                             }
                             deleted = false
                             continue
