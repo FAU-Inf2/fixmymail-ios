@@ -1,2 +1,6 @@
 gmail:	http://www.iconspedia.com/icon/gmail-icon-23679.html
 plus:	http://uxrepo.com/icon/ios7-plus-empty-by-ionicons
+gmx:	http://chip05.chipimages.de/crawler-mq/gplay/21/05/60/36/38/de.gmx.mobile.android.mail/217929147d003829046870a4eaeba461
+web.de:	http://chip04.chipimages.de/crawler-mq/gplay/21/23/29/83/72/de.web.mobile.android.mail/9a6e04787e6841e7ed7bcd543c99196f
+yahoo:	http://icons.iconarchive.com/icons/limav/flat-gradient-social/512/Yahoo-icon.png
+outlook:http://cdn.arstechnica.net//wp-content/uploads/2012/07/outlook-2013-icon.png

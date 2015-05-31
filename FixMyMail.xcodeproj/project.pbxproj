@@ -43,6 +43,11 @@
 		AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DB1B1A223A005EA5CE /* ios7-plus.png */; };
 		AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */; };
 		AD1255E01B1A302F005EA5CE /* sources.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DF1B1A302F005EA5CE /* sources.txt */; };
+		AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0211B1AFE0300751FFA /* smile-gray.png */; };
+		AD44E0271B1B017900751FFA /* outlook.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0231B1B017900751FFA /* outlook.png */; };
+		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
+		AD44E0291B1B017900751FFA /* gmx.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0251B1B017900751FFA /* gmx.png */; };
+		AD44E02A1B1B017900751FFA /* webde.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0261B1B017900751FFA /* webde.png */; };
 		AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */; };
 		AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */; };
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
@@ -113,6 +118,11 @@
 		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
 		AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Gmail-128.png"; sourceTree = "<group>"; };
 		AD1255DF1B1A302F005EA5CE /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
+		AD44E0211B1AFE0300751FFA /* smile-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "smile-gray.png"; sourceTree = "<group>"; };
+		AD44E0231B1B017900751FFA /* outlook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outlook.png; sourceTree = "<group>"; };
+		AD44E0241B1B017900751FFA /* Yahoo-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Yahoo-icon.png"; sourceTree = "<group>"; };
+		AD44E0251B1B017900751FFA /* gmx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gmx.png; sourceTree = "<group>"; };
+		AD44E0261B1B017900751FFA /* webde.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = webde.png; sourceTree = "<group>"; };
 		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
 		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -294,6 +304,11 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AD44E0231B1B017900751FFA /* outlook.png */,
+				AD44E0241B1B017900751FFA /* Yahoo-icon.png */,
+				AD44E0251B1B017900751FFA /* gmx.png */,
+				AD44E0261B1B017900751FFA /* webde.png */,
+				AD44E0211B1AFE0300751FFA /* smile-gray.png */,
 				AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */,
 				AD1255DB1B1A223A005EA5CE /* ios7-plus.png */,
 				AD1255DF1B1A302F005EA5CE /* sources.txt */,
@@ -394,6 +409,7 @@
 			files = (
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
 				8E450BB11B15BBF0001E37B9 /* MailViewController.xib in Resources */,
+				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
 				8E450BAF1B15BBF0001E37B9 /* MailTableViewController.xib in Resources */,
 				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
@@ -402,10 +418,14 @@
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
 				AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */,
 				AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */,
+				AD44E02A1B1B017900751FFA /* webde.png in Resources */,
 				AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */,
+				AD44E0271B1B017900751FFA /* outlook.png in Resources */,
+				AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
 				8E450BAD1B15BBF0001E37B9 /* MailSendViewController.xib in Resources */,
 				ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */,
+				AD44E0291B1B017900751FFA /* gmx.png in Resources */,
 				ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */,
 				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
