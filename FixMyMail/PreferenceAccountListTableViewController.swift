@@ -70,6 +70,22 @@ class PreferenceAccountListTableViewController: UITableViewController {
         return cell
     }
 	
+	
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		var editAccountVC = PreferenceEditAccountViewController(nibName:"PreferenceEditAccountViewController", bundle: nil)
+		if let emailAccountItem = self.rowsEmail[indexPath.section][indexPath.row] as? EmailAccount {
+			editAccountVC.emailAcc = emailAccountItem
+		}
+		var actionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+		editAccountVC.actionItem = actionItem
+		
+		self.navigationController?.pushViewController(editAccountVC, animated: true)
+		
+		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		
+		
+	}
 		
     /*
     // Override to support conditional editing of the table view.
@@ -178,7 +194,7 @@ class PreferenceAccountListTableViewController: UITableViewController {
 		
 		rowsEmail.append(accountArr)
 		rowsEmail.append([])
-		rowsEmail.append([])
+		rowsEmail.append(otherItem)
 
 	}
 	
