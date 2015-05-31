@@ -245,12 +245,19 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var mailView: MCTMsgViewController = MCTMsgViewController()
+        /*var mailView: MCTMsgViewController = MCTMsgViewController()
         mailView.message = (mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail?.mcomessage as! MCOIMAPMessage
         var session: MCOIMAPSession = getSession()
         
         mailView.session = session
         mailView.folder = "INBOX"
+        self.navigationController?.pushViewController(mailView, animated: true)*/
+        var mailView: WebViewController = WebViewController()
+        mailView.putMessage()
+        mailView.message = (mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail
+        var session: MCOIMAPSession = getSession()
+        
+        mailView.session = session
         self.navigationController?.pushViewController(mailView, animated: true)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
