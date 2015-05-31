@@ -36,6 +36,20 @@ class PreferenceAccountListTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(true)
+		accountArr.removeAll(keepCapacity: false)
+		otherArr.removeAll(keepCapacity: false)
+		accountPreferenceCellItem.removeAll(keepCapacity: false)
+		otherItem.removeAll(keepCapacity: false)
+		rows.removeAll(keepCapacity: false)
+		rowsEmail.removeAll(keepCapacity: false)
+		
+		loadCoreDataAccounts()
+		self.tableView.reloadData()
+		
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -83,6 +97,7 @@ class PreferenceAccountListTableViewController: UITableViewController {
 		self.navigationController?.pushViewController(editAccountVC, animated: true)
 		
 		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		tableView.reloadData()
 		
 		
 	}
@@ -133,6 +148,7 @@ class PreferenceAccountListTableViewController: UITableViewController {
     */
 	
 	func loadCoreDataAccounts() {
+		
 		
 		// get mail accounts from coredata
 		

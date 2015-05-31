@@ -6,11 +6,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PreferenceEditAccountViewController" customModule="FixMyMail" customModuleProvider="target">
             <connections>
-                <outlet property="testfieldSmtpHostname" destination="R4A-CC-xH1" id="HOy-v4-JmJ"/>
                 <outlet property="textfieldEmailAddress" destination="pI5-BT-fVh" id="mBN-MH-WtT"/>
                 <outlet property="textfieldImapHostname" destination="5AQ-4x-1ZG" id="4AC-lz-afN"/>
                 <outlet property="textfieldImapPort" destination="Nag-NT-kMe" id="5NG-nc-mRb"/>
                 <outlet property="textfieldPassword" destination="oxx-Ry-fe3" id="fjO-tb-oJP"/>
+                <outlet property="textfieldSmtpHostname" destination="R4A-CC-xH1" id="3BX-0n-0DQ"/>
                 <outlet property="textfieldSmtpPort" destination="tDc-4r-XKB" id="cQ8-4N-TKm"/>
                 <outlet property="textfieldUsername" destination="NyW-e7-gez" id="8W8-ra-AWI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
