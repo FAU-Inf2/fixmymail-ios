@@ -38,6 +38,11 @@
 		8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */; };
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
+		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
+		AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */; };
+		AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DB1B1A223A005EA5CE /* ios7-plus.png */; };
+		AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */; };
+		AD1255E01B1A302F005EA5CE /* sources.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DF1B1A302F005EA5CE /* sources.txt */; };
 		AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */; };
 		AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */; };
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
@@ -103,6 +108,11 @@
 		8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MCTMsgViewController.mm; sourceTree = "<group>"; };
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
+		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
+		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
+		AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Gmail-128.png"; sourceTree = "<group>"; };
+		AD1255DF1B1A302F005EA5CE /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
 		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
 		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -159,8 +169,7 @@
 				3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */,
 				3D37FFA81B01DBC200388F81 /* ContentViewController.swift */,
 				3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */,
-				AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */,
-				AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */,
+				AD0100A01B19EC99009E4E18 /* Preferences */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -172,10 +181,9 @@
 				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
 				3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */,
 				3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */,
-				AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */,
-				AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */,
 				8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */,
 				8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */,
+				AD0100A11B19ECC4009E4E18 /* Preferences */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -211,6 +219,7 @@
 		3DF253A91AF7611D00B99BC8 /* FixMyMail */ = {
 			isa = PBXGroup;
 			children = (
+				AD1255DA1B1A2207005EA5CE /* Icons */,
 				3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */,
 				3D8D90E21B00A2AF00D5135D /* UI */,
 				3D9027561AF970A2000D3E72 /* CoreData */,
@@ -260,6 +269,36 @@
 				3DF253C41AF7611E00B99BC8 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AD0100A01B19EC99009E4E18 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */,
+				AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */,
+				AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */,
+				AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */,
+			);
+			name = Preferences;
+			sourceTree = "<group>";
+		};
+		AD0100A11B19ECC4009E4E18 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */,
+				AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */,
+			);
+			name = Preferences;
+			sourceTree = "<group>";
+		};
+		AD1255DA1B1A2207005EA5CE /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */,
+				AD1255DB1B1A223A005EA5CE /* ios7-plus.png */,
+				AD1255DF1B1A302F005EA5CE /* sources.txt */,
+			);
+			name = Icons;
 			sourceTree = "<group>";
 		};
 		ADD135CE1B15B5C200A9B31A /* Model */ = {
@@ -360,11 +399,15 @@
 				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
 				8E450BA91B15BBF0001E37B9 /* CustomMailTableViewCell.xib in Resources */,
 				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
+				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
+				AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */,
+				AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */,
 				AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
 				8E450BAD1B15BBF0001E37B9 /* MailSendViewController.xib in Resources */,
 				ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */,
 				ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */,
+				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
 				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
@@ -403,6 +446,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */,
 				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
 				8E450BB01B15BBF0001E37B9 /* MailViewController.swift in Sources */,
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,

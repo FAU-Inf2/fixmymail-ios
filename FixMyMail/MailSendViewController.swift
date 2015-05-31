@@ -1,6 +1,7 @@
 import UIKit
 import CoreData
 import AddressBook
+import Foundation
 
 class MailSendViewController: UIViewController {
     @IBOutlet weak var txtTo: UITextField!
@@ -87,32 +88,58 @@ class MailSendViewController: UIViewController {
     }
     
     @IBAction func EmailAddressEntered(sender: AnyObject) {
-        var email:String=txtTo.text
-        var i: Int = count(txtTo.text)
+        var email:String=txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        var i: Int = count(email)
         println("Toaddress: \(txtTo.text)")
         if(email==""){
             Suggestion.text=""
         }
         else if(email==Suggestion.text){}
-        else{
-            for results in sortedEmails{
-                if(i>count(results.email)){
-                    continue
-                }
-                let index: String.Index = advance(results.email.startIndex, i)
-                var substring: String = results.email.substringToIndex(index)
-                if(substring==email){
-                    Suggestion.text = results.email
-                    break
-                }
-                Suggestion.text = ""
+        else if(email.rangeOfString(",") != nil){
+            var add:NSArray = email.componentsSeparatedByString(",")
+            i=count(add.lastObject!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+ as String)
+            if(i != 0){
+                checkforsimilarEmail(i, email:add.lastObject!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) as String)
             }
-            
+        }
+        else{
+            checkforsimilarEmail(i, email:email as String)
+        }
+    }
+    
+    func checkforsimilarEmail(i:Int,email:String){
+        println("Toaddress: \(email)")
+        for results in sortedEmails{
+            if(i>count(results.email)){
+                continue
+            }
+            let index: String.Index = advance(results.email.startIndex, i)
+            var substring: String = results.email.substringToIndex(index)
+            if(substring==email){
+                Suggestion.text = results.email
+                break
+            }
+            Suggestion.text = ""
         }
     }
     @IBAction func ConfirmEmail(sender: AnyObject) {
-        txtTo.text=Suggestion.text
-        Suggestion.text=""
+        var txtAddresses:String=""
+        var add:Array=txtTo.text.componentsSeparatedByString(",")
+        if(add.count > 1){
+            add.removeAtIndex(add.count-1)
+            for var index = 0; index < add.count; ++index{
+                txtAddresses += add[index] as String
+                txtAddresses += ", "
+            }
+            txtAddresses += Suggestion.text
+            txtTo.text=txtAddresses
+            Suggestion.text=""
+        }
+        else if(!(Suggestion.text==nil)){
+            txtTo.text=Suggestion.text
+            Suggestion.text=""
+        }
     }
     
     func LoadAddresses() {
