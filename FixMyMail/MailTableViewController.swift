@@ -117,8 +117,25 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
         }
-        self.managedObjectContext.save(nil)
+        
+        self.managedObjectContext!.save(&error)
+        if error != nil {
+            NSLog("%@", error!.description)
+        }
+
         self.mailTableView.reloadData()
+    }
+    
+    func getMaxUID() -> UInt32 {
+        let account = getAccount()
+        var maxUID : UInt32 = 0
+        for email in account.emails {
+            if ((email as! Email).mcomessage as! MCOIMAPMessage).uid > maxUID {
+                maxUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
+            }
+        }
+
+        return maxUID
     }
     
     //PullToRefresh
@@ -127,79 +144,90 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let account = getAccount()
         let session = getSession()
         
-        let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure |
-            MCOIMAPMessagesRequestKind.InternalDate | MCOIMAPMessagesRequestKind.HeaderSubject |
-            MCOIMAPMessagesRequestKind.Flags)
+        let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags)
         
         self.curNumberOfInboxMessages = UInt64(account.emails.count)
         
+        /*
         //Fetch Folder Info
         let inboxFolderInfo : MCOIMAPFolderInfoOperation = session.folderInfoOperation("INBOX")
         inboxFolderInfo.start({(error, info) in
             self.totalNumberOfInboxMessages = UInt64(info.messageCount)
-            self.numberOfMessagesToLoad = self.totalNumberOfInboxMessages - self.curNumberOfInboxMessages
-            
-            NSLog(String(self.numberOfMessagesToLoad) + " new mails")
-            if self.numberOfMessagesToLoad == 0 {
-                return
-            }
-            
-            //Fetching new mails
-            var fetchRange : MCORange = MCORangeMake(self.totalNumberOfInboxMessages - (self.numberOfMessagesToLoad - 1), (self.numberOfMessagesToLoad - 1));
-            let fetchallOp = session.fetchMessagesByNumberOperationWithFolder("INBOX", requestKind: requestKind, numbers: MCOIndexSet(range: fetchRange))
-            
-            fetchallOp.start({(error, messages, range) in
-                if error != nil {
-                    NSLog("Could not load messages: %@", error)
-                } else {
-                    self.managedObjectContext!.performBlockAndWait({ () -> Void in
-                        NSLog("mailcount:%i", messages.count)
-                        for message in messages {
-                            var newMail = true
-                            for emails in account.emails {
-                                if ((emails as! Email).mcomessage as! MCOIMAPMessage).uid == (message as! MCOIMAPMessage).uid {
-                                    newMail = false
-                                    break
-                                }
-                            }
-                            
-                            if newMail == true {
-                                var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                                newEmail.mcomessage = message
-                                newEmail.sender = ""
-                                newEmail.title = ""
-                                
-                                let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
-                                
-                                fetchOp.start({(error, data) in
-                                    if error != nil {
-                                        NSLog("Could not recieve mail: %@", error)
-                                    } else {
-                                        newEmail.data = data
-                                        let parser: MCOMessageParser! = MCOMessageParser(data: data)
-                                        newEmail.sender = parser.header.from.displayName
-                                        newEmail.title = parser.header.subject
-                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
-                                        })
-                                    }
-                                })
-                                newEmail.toAccount = account
-                            }
+        })
+        */
+        
+        //Check for new Emails
+        let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(self.getMaxUID()+1), UINT64_MAX)))
+        
+        fetchNewEmailsOp.start({(error, messages, range) in
+            if error != nil {
+                NSLog("Could not load messages: %@", error)
+            } else {
+                NSLog("%i new Emails", messages.count)
+                //Load new Email
+                for message in messages {
+                    var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
+                    newEmail.mcomessage = message
+                    newEmail.sender = ""
+                    newEmail.title = ""
+                    
+                    let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
+                    
+                    fetchOp.start({(error, data) in
+                        if error != nil {
+                            NSLog("Could not recieve mail: %@", error)
+                        } else {
+                            newEmail.data = data
+                            let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                            newEmail.sender = parser.header.from.displayName
+                            newEmail.title = parser.header.subject
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
+                            })
                         }
                     })
+                    newEmail.toAccount = account
                 }
-            })
+            }
         })
         
-        var error : NSError?
-        self.managedObjectContext!.save(&error)
+        //Check for deleted Emails and update Flags
+        let fetchAllOp = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
         
-        if error != nil {
-            NSLog("%@", error!.description)
+        fetchAllOp.start { (error, messages, range) -> Void in
+            if error != nil {
+                NSLog("Could not load messages: %@", error)
+            } else {
+                for mail in account.emails {
+                    var deleted = true
+                    for message in messages {
+                        if (message as! MCOIMAPMessage).uid == ((mail as! Email).mcomessage as! MCOIMAPMessage).uid {
+                            if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags {
+                                NSLog("Updated Flags " + String(((mail as! Email).mcomessage as! MCOIMAPMessage).uid))
+                                (mail as! Email).mcomessage = (message as! MCOIMAPMessage)
+                                var error: NSError? = nil
+                                self.managedObjectContext!.save(&error)
+                                if error != nil {
+                                    NSLog("%@", error!.description)
+                                }
+                            }
+                            deleted = false
+                            continue
+                        }
+                    }
+                    
+                    if deleted {
+                        NSLog("email has been deleted by another device")
+                        self.managedObjectContext.deleteObject(mail as! NSManagedObject)
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
+                        })
+                    }
+                }
+            }
         }
         
-        NSLog("refeshed")
+        NSLog("refeshing..")
         self.refreshControl.endRefreshing()
     }
 
@@ -278,7 +306,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                     NSLog("error fetchAllFoldersOperation")
                 }
             })*/
-            let newFlags = mail.mcomessage.flags | MCOMessageFlag.Deleted
             
             //Copy Mail to Trash Folder
             let localCopyMessageOperation = session.copyMessagesOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: "[Gmail]/Papierkorb")
@@ -291,31 +318,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 }
             }
             
-            /*
-            //set delete Flag = remove mail from Inbox
-            let setDeleteFlag = session.storeFlagsOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), kind: MCOIMAPStoreFlagsRequestKind.Set, flags: newFlags)
-            
-            setDeleteFlag.start({ (error) -> Void in
-                if error != nil {
-                    NSLog("\nError with flag changing\n")
-                }
-                else {
-                    NSLog("\nFlag has been changed changed\n")
-                    let expungeOp = session.expungeOperation("INBOX")
-                    
-                    expungeOp.start({ (error) -> Void in
-                        if error != nil {
-                            NSLog("\nExpunge Failed\n")
-                        }else {
-                            NSLog("\nFolder Expunged\n")
-                        }
-                    })
-                }
-            })
-            */
-            
             self.managedObjectContext.deleteObject(mail!)
-            self.managedObjectContext.save(nil)
+            var error: NSError? = nil
+            self.managedObjectContext!.save(&error)
+            if error != nil {
+                NSLog("%@", error!.description)
+            }
             self.mailTableView.reloadData()
          
             
