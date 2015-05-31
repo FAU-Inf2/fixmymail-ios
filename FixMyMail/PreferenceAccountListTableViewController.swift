@@ -14,10 +14,13 @@ class PreferenceAccountListTableViewController: UITableViewController {
 	var delegate: ContentViewControllerProtocol?
 	var navController: UINavigationController!
 	var managedObjectContext: NSManagedObjectContext!
+	var accountArr: [EmailAccount] = [EmailAccount]();
+	var otherArr: [EmailAccount] = [EmailAccount]();
 	var accountPreferenceCellItem: [ActionItem] = [ActionItem]()
 	var otherItem: [ActionItem] = [ActionItem]()
 	var sections = [String]()
 	var rows = [AnyObject]()
+	var rowsEmail = [AnyObject]()
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +36,20 @@ class PreferenceAccountListTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(true)
+		accountArr.removeAll(keepCapacity: false)
+		otherArr.removeAll(keepCapacity: false)
+		accountPreferenceCellItem.removeAll(keepCapacity: false)
+		otherItem.removeAll(keepCapacity: false)
+		rows.removeAll(keepCapacity: false)
+		rowsEmail.removeAll(keepCapacity: false)
+		
+		loadCoreDataAccounts()
+		self.tableView.reloadData()
+		
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -67,6 +84,23 @@ class PreferenceAccountListTableViewController: UITableViewController {
         return cell
     }
 	
+	
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		var editAccountVC = PreferenceEditAccountViewController(nibName:"PreferenceEditAccountViewController", bundle: nil)
+		if let emailAccountItem = self.rowsEmail[indexPath.section][indexPath.row] as? EmailAccount {
+			editAccountVC.emailAcc = emailAccountItem
+		}
+		var actionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+		editAccountVC.actionItem = actionItem
+		
+		self.navigationController?.pushViewController(editAccountVC, animated: true)
+		
+		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		tableView.reloadData()
+		
+		
+	}
 		
     /*
     // Override to support conditional editing of the table view.
@@ -115,8 +149,9 @@ class PreferenceAccountListTableViewController: UITableViewController {
 	
 	func loadCoreDataAccounts() {
 		
+		
 		// get mail accounts from coredata
-		var accountArr: [EmailAccount] = [EmailAccount]();
+		
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 		if let appDelegate = appDel {
 			managedObjectContext = appDelegate.managedObjectContext
@@ -137,9 +172,41 @@ class PreferenceAccountListTableViewController: UITableViewController {
 		// create ActionItems for mail accounts
 		for emailAcc: EmailAccount in accountArr {
 			var accountImage: UIImage?
-			if emailAcc.emailAddress.rangeOfString("@gmail.com") != nil {
+			
+			// set icons
+			switch emailAcc.emailAddress {
+			case let s where s.rangeOfString("@gmail.com") != nil:
 				accountImage = UIImage(named: "Gmail-128.png")
+				
+			case let s where s.rangeOfString("@outlook") != nil:
+				accountImage = UIImage(named: "outlook.png")
+				
+			case let s where s.rangeOfString("@yahoo") != nil:
+				accountImage = UIImage(named: "Yahoo-icon.png")
+				
+			case let s where s.rangeOfString("@web.de") != nil:
+				accountImage = UIImage(named: "webde.png")
+				
+			case let s where s.rangeOfString("@gmx") != nil:
+				accountImage = UIImage(named: "gmx.png")
+				
+			case let s where s.rangeOfString("@me.com") != nil:
+				accountImage = UIImage(named: "icloud-icon.png")
+				
+			case let s where s.rangeOfString("@icloud.com") != nil:
+				accountImage = UIImage(named: "icloud-icon.png")
+				
+			case let s where s.rangeOfString("@fau.de") != nil:
+				accountImage = UIImage(named: "fau-logo.png")
+				
+			case let s where s.rangeOfString("@studium.fau.de") != nil:
+				accountImage = UIImage(named: "fau-logo.png")
+
+			default:
+				accountImage = UIImage(named: "smile-gray.png")
+				
 			}
+			
 			
 			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView", mailAdress: emailAcc.emailAddress, icon: accountImage)
 			accountPreferenceCellItem.append(actionItem)
@@ -148,9 +215,14 @@ class PreferenceAccountListTableViewController: UITableViewController {
 		// Add New Account Cell
 		otherItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
 		
+		
 		rows.append(accountPreferenceCellItem)
 		rows.append([])
 		rows.append(otherItem)
+		
+		rowsEmail.append(accountArr)
+		rowsEmail.append([])
+		rowsEmail.append(otherItem)
 
 	}
 	
