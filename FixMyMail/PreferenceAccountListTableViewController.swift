@@ -190,6 +190,18 @@ class PreferenceAccountListTableViewController: UITableViewController {
 			case let s where s.rangeOfString("@gmx") != nil:
 				accountImage = UIImage(named: "gmx.png")
 				
+			case let s where s.rangeOfString("@me.com") != nil:
+				accountImage = UIImage(named: "icloud-icon.png")
+				
+			case let s where s.rangeOfString("@icloud.com") != nil:
+				accountImage = UIImage(named: "icloud-icon.png")
+				
+			case let s where s.rangeOfString("@fau.de") != nil:
+				accountImage = UIImage(named: "fau-logo.png")
+				
+			case let s where s.rangeOfString("@studium.fau.de") != nil:
+				accountImage = UIImage(named: "fau-logo.png")
+
 			default:
 				accountImage = UIImage(named: "smile-gray.png")
 				
