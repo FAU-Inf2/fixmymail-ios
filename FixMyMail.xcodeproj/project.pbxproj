@@ -38,6 +38,7 @@
 		8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */; };
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
+		8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E57385A1B1B19C8009AA28A /* WebViewController.swift */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
 		AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */; };
 		AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DB1B1A223A005EA5CE /* ios7-plus.png */; };
@@ -116,6 +117,7 @@
 		8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MCTMsgViewController.mm; sourceTree = "<group>"; };
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
 		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
 		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */,
 				3D37FFA81B01DBC200388F81 /* ContentViewController.swift */,
 				3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */,
+				8E57385A1B1B19C8009AA28A /* WebViewController.swift */,
 				AD0100A01B19EC99009E4E18 /* Preferences */,
 			);
 			name = ViewController;
@@ -489,6 +492,7 @@
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
 				ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */,
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
+				8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */,
 				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
 				AD44E02D1B1B07D100751FFA /* PreferenceEditAccountViewController.swift in Sources */,
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
