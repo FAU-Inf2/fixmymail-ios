@@ -38,15 +38,15 @@ class MailSendViewController: UIViewController {
                 
                 var builder = MCOMessageBuilder()
                 var from = MCOAddress()
-                from.displayName = "Moritz Müller"
+                from.displayName = "Fix Me"
                 from.mailbox = acc.emailAddress
                 var sender = MCOAddress()
-                sender.displayName = "Moritz Müller"
+                sender.displayName = "Fix Me"
                 sender.mailbox = acc.emailAddress
                 builder.header.from = from
                 builder.header.sender = sender
                 var to = MCOAddress()
-                //to.displayName = "Moritz Müller"
+                //to.displayName = "Fix Me"
                 to.mailbox = txtTo.text
                 var tos : NSMutableArray = [to]
                 builder.header.to = tos as [AnyObject]
