@@ -151,7 +151,6 @@ class MailSendViewController: UIViewController {
         println("records in the array \(contactList.count)")
         
         for record:ABRecordRef in contactList{
-            // if record != nil {
             if !record.isEqual(nil){
                 var contactPerson: ABRecordRef = record
                 
@@ -160,9 +159,9 @@ class MailSendViewController: UIViewController {
                     let allEmailIDs : NSArray = ABMultiValueCopyArrayOfAllValues(emailProperty).takeUnretainedValue() as NSArray
                     for email in allEmailIDs {
                         let emailID = email as! String
-                        let contactFirstName = ABRecordCopyValue(contactPerson, kABPersonFirstNameProperty).takeRetainedValue() as! NSString
-                        let contactLastName = ABRecordCopyValue(contactPerson, kABPersonLastNameProperty).takeRetainedValue() as! NSString
-                        addRecord(Record(firstname:contactFirstName as String, lastname: contactLastName as String, email:emailID as String))
+                        let contactFirstName: String = ABRecordCopyValue(contactPerson, kABPersonFirstNameProperty)?.takeRetainedValue() as? String ?? ""
+                        let contactLastName: String = ABRecordCopyValue(contactPerson, kABPersonLastNameProperty)?.takeRetainedValue() as? String ?? ""
+                        addRecord(Record(firstname:contactFirstName, lastname: contactLastName, email:emailID as String))
                         println ("contactEmail : \(emailID) :=>")
                     }
                 }
