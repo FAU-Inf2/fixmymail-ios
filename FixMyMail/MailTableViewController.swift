@@ -14,11 +14,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     @IBOutlet weak var mailTableView: UITableView!
     var refreshControl: UIRefreshControl!
     var delegate: ContentViewControllerProtocol?
-    
-    //var for imap-update
-    var numberOfMessagesToLoad : UInt64 = 0
-    var curNumberOfInboxMessages : UInt64 = 0
-    var totalNumberOfInboxMessages : UInt64 = 0
+    var session: MCOIMAPSession?
+    var trashFolderName: String?
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
@@ -145,8 +142,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let session = getSession()
         
         let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags)
-        
-        self.curNumberOfInboxMessages = UInt64(account.emails.count)
         
         /*
         //Fetch Folder Info
@@ -303,34 +298,44 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             
             let session = getSession()
             
-            /*
-            let allfolders = session.fetchAllFoldersOperation()
-            var folders = [AnyObject]()
-            allfolders.start({ (error, folders) -> Void in
-                if error != nil {
-                    NSLog("error fetchAllFoldersOperation")
-                }
-            })*/
-            
             //Copy Mail to Trash Folder
-            let localCopyMessageOperation = session.copyMessagesOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: "[Gmail]/Papierkorb")
-
-            localCopyMessageOperation.start { (error, uidMapping) -> Void in
-                if let error = error {
-                    NSLog("error in deleting email : \(error.userInfo!)")
-                } else {
-                    NSLog("email deleted")
+            let fetchFoldersOp = session.fetchAllFoldersOperation()
+            var folders = [MCOIMAPFolder]()
+            fetchFoldersOp.start({ (error, folders) -> Void in
+                for folder in folders {
+                    if self.trashFolderName != nil {
+                        break
+                    }
+                    if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Trash) == MCOIMAPFolderFlag.Trash {
+                        self.trashFolderName = (folder as! MCOIMAPFolder).path
+                        NSLog("found it")
+                        break
+                    }
                 }
-            }
-            
-            self.managedObjectContext.deleteObject(mail!)
-            var error: NSError? = nil
-            self.managedObjectContext!.save(&error)
-            if error != nil {
-                NSLog("%@", error!.description)
-            }
-            self.mailTableView.reloadData()
-         
+                if self.trashFolderName != nil {
+                    let localCopyMessageOperation = session.copyMessagesOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: self.trashFolderName)
+                    
+                    localCopyMessageOperation.start { (error, uidMapping) -> Void in
+                        if let error = error {
+                            NSLog("error in deleting email : \(error.userInfo!)")
+                        } else {
+                            NSLog("email deleted")
+                        }
+                    }
+                    
+                    self.managedObjectContext.deleteObject(mail!)
+                    
+                    var error: NSError? = nil
+                    self.managedObjectContext!.save(&error)
+                    if error != nil {
+                        NSLog("%@", error!.description)
+                    }
+                    self.mailTableView.reloadData()
+                    
+                } else {
+                    NSLog("error: trashFolderName == nil")
+                }
+            })
             
         } else if editingStyle == UITableViewCellEditingStyle.Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -354,26 +359,28 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func getSession() -> MCOIMAPSession {
-        var session: MCOIMAPSession = MCOIMAPSession()
-        var account: EmailAccount!
-        let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-        var error: NSError?
-        var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
-        if error != nil {
-            NSLog("%@", error!.description)
-        } else {
-            if let emailAccounts = result {
-                account = emailAccounts[0] as! EmailAccount
-                session.hostname = account.imapHostname
-                session.port = account.imapPort
-                session.username = account.username
-                session.password = account.password
-                session.authType = MCOAuthType.SASLPlain
-                session.connectionType = MCOConnectionType.TLS
+        if self.session == nil {
+            self.session = MCOIMAPSession()
+            var account: EmailAccount!
+            let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+            var error: NSError?
+            var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+            if error != nil {
+                NSLog("%@", error!.description)
+            } else {
+                if let emailAccounts = result {
+                    account = emailAccounts[0] as! EmailAccount
+                    self.session!.hostname = account.imapHostname
+                    self.session!.port = account.imapPort
+                    self.session!.username = account.username
+                    self.session!.password = account.password
+                    self.session!.authType = MCOAuthType.SASLPlain
+                    self.session!.connectionType = MCOConnectionType.TLS
+                }
             }
         }
         
-        return session
+        return self.session!
     }
     
     func getAccount() -> EmailAccount {
