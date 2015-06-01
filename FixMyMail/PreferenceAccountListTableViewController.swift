@@ -80,7 +80,7 @@ class PreferenceAccountListTableViewController: UITableViewController {
 		
 		cell.menuLabel.text = cellItem.mailAdress
 		cell.menuImg.image = cellItem.cellIcon
-
+		
         return cell
     }
 	
