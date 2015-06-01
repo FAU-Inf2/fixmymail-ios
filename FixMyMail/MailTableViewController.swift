@@ -24,7 +24,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let mailFetchRequest = NSFetchRequest(entityName: "Email")
-        let primarySortDescriptor = NSSortDescriptor(key: "sender", ascending: true)
+        let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.date", ascending: true)
         mailFetchRequest.sortDescriptors = [primarySortDescriptor];
         
         let frc = NSFetchedResultsController(
@@ -48,7 +48,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.refreshControl.addTarget(self, action: "pullToRefresh", forControlEvents: UIControlEvents.ValueChanged)
         self.mailTableView.addSubview(self.refreshControl)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshTableView:", name: "notification", object: nil)
+        //NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshTableView:", name: "notification", object: nil)
         NSLog("viewdidload")
         
         var error: NSError? = nil
@@ -84,9 +84,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    /*override func viewDidDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
+    }*/
     
     
     
@@ -112,7 +112,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationController?.pushViewController(MailSendViewController(nibName: "MailSendViewController", bundle: nil), animated: true)
     }
     
-    func refreshTableView(notifaction: NSNotification) {
+    func refreshTableView(/*notifaction: NSNotification*/) {
         var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
@@ -144,7 +144,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let account = getAccount()
         let session = getSession()
         
-        let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags)
+        let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers)
         
         self.curNumberOfInboxMessages = UInt64(account.emails.count)
         
@@ -168,8 +168,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 for message in messages {
                     var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
                     newEmail.mcomessage = message
-                    newEmail.sender = ""
-                    newEmail.title = ""
+                    newEmail.sender = (message as! MCOIMAPMessage).header.from.displayName
+                    newEmail.title = (message as! MCOIMAPMessage).header.subject
                     
                     let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
                     
@@ -179,15 +179,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         } else {
                             newEmail.data = data
                             let parser: MCOMessageParser! = MCOMessageParser(data: data)
-                            newEmail.sender = parser.header.from.displayName
-                            newEmail.title = parser.header.subject
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
-                            })
+                            self.refreshTableView()
                         }
                     })
                     newEmail.toAccount = account
                 }
+                self.refreshTableView()
             }
         })
         
@@ -205,9 +202,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags {
                                 NSLog("Updated Flags " + String(((mail as! Email).mcomessage as! MCOIMAPMessage).uid))
                                 (mail as! Email).mcomessage = (message as! MCOIMAPMessage)
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
-                                })
+                                self.refreshTableView()
                             }
                             deleted = false
                             continue
@@ -217,9 +212,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                     if deleted {
                         NSLog("email has been deleted by another device")
                         self.managedObjectContext.deleteObject(mail as! NSManagedObject)
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
-                        })
+                        self.refreshTableView()
                     }
                 }
             }
