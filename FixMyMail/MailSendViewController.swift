@@ -45,10 +45,13 @@ class MailSendViewController: UIViewController {
                 sender.mailbox = acc.emailAddress
                 builder.header.from = from
                 builder.header.sender = sender
-                var to = MCOAddress()
-                //to.displayName = "Fix Me"
-                to.mailbox = txtTo.text
-                var tos : NSMutableArray = [to]
+                var tos : NSMutableArray = NSMutableArray()
+                var recipients: String = txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                for recipient in recipients.componentsSeparatedByString(", ") {
+                    var to = MCOAddress()
+                    to.mailbox = recipient
+                    tos.addObject(to)
+                }
                 builder.header.to = tos as [AnyObject]
                 builder.header.subject = txtSubject.text
                 builder.textBody = tvText.text

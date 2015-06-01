@@ -31,8 +31,6 @@
 		8E450BAD1B15BBF0001E37B9 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E450B9A1B15BBF0001E37B9 /* MailSendViewController.xib */; };
 		8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */; };
 		8E450BAF1B15BBF0001E37B9 /* MailTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */; };
-		8E450BB01B15BBF0001E37B9 /* MailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E450B9D1B15BBF0001E37B9 /* MailViewController.swift */; };
-		8E450BB11B15BBF0001E37B9 /* MailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E450B9E1B15BBF0001E37B9 /* MailViewController.xib */; };
 		8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA01B15BBF0001E37B9 /* MCOCIDURLProtocol.mm */; };
 		8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA21B15BBF0001E37B9 /* MCOMessageView.mm */; };
 		8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */; };
@@ -111,8 +109,6 @@
 		8E450B9A1B15BBF0001E37B9 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
 		8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailTableViewController.swift; sourceTree = "<group>"; };
 		8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailTableViewController.xib; sourceTree = "<group>"; };
-		8E450B9D1B15BBF0001E37B9 /* MailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailViewController.swift; sourceTree = "<group>"; };
-		8E450B9E1B15BBF0001E37B9 /* MailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailViewController.xib; sourceTree = "<group>"; };
 		8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCOCIDURLProtocol.h; sourceTree = "<group>"; };
 		8E450BA01B15BBF0001E37B9 /* MCOCIDURLProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MCOCIDURLProtocol.mm; sourceTree = "<group>"; };
 		8E450BA11B15BBF0001E37B9 /* MCOMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCOMessageView.h; sourceTree = "<group>"; };
@@ -185,8 +181,6 @@
 				8E450B9A1B15BBF0001E37B9 /* MailSendViewController.xib */,
 				8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */,
 				8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */,
-				8E450B9D1B15BBF0001E37B9 /* MailViewController.swift */,
-				8E450B9E1B15BBF0001E37B9 /* MailViewController.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
 				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
 				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
@@ -432,7 +426,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
-				8E450BB11B15BBF0001E37B9 /* MailViewController.xib in Resources */,
 				AD44E02E1B1B07D100751FFA /* PreferenceEditAccountViewController.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
@@ -496,7 +489,6 @@
 			files = (
 				AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */,
 				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
-				8E450BB01B15BBF0001E37B9 /* MailViewController.swift in Sources */,
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
