@@ -22,15 +22,21 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var cellConnectionTextfielString = [String]()
 	var rows = [AnyObject]()
 	var rowsEmail = [AnyObject]()
-	var cellArray = [PreferenceAccountTableViewCell]()
 	var deleteString = [String]()
 	var filledTextfieldCount: Int = 0
 	var alert: UIAlertController?
+	var selectedTextfield: UITextField?
         
     override func viewDidLoad() {
         super.viewDidLoad()
-		self.cellArray.removeAll(keepCapacity: false)
+		
 		loadAccountDetails()
+		
+		if emailAcc == nil {
+			filledTextfieldCount = 0
+		} else {
+			filledTextfieldCount = labelAccountDetailString.count + labelConnectionDetailString.count
+		}
 		
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
 		self.navigationItem.title = actionItem?.mailAdress
@@ -41,6 +47,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		// set alert dialog
 	    alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
 		self.alert!.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+			// save data to CoreData
 			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 			var context: NSManagedObjectContext = appDel.managedObjectContext!
 			var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
@@ -95,6 +102,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 		tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		
+		// get selected textfield
+		if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? PreferenceAccountTableViewCell {
+			
+			self.selectedTextfield = cell.textfield
+
+		}
+		
+		// show alert dialog
 		if self.rows[indexPath.section][indexPath.row] as? String == "DELETE" {
 			self.presentViewController(self.alert!, animated: true, completion: nil)
 		}
@@ -112,7 +127,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			cell.textfield.text = self.rowsEmail[indexPath.section][indexPath.row] as! String
 			cell.labelCellContent.textAlignment = NSTextAlignment.Left
 			cell.textfield.enabled = true
-			cell.textfield.shouldChangeTextInRange(UITextRange(), replacementText: "YES")
+			//cell.textfield.shouldChangeTextInRange(UITextRange(), replacementText: "YES")
+			
 			
 			// configure delete cell
 			if cell.labelCellContent.text == deleteString[0] {
@@ -122,13 +138,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				cell.textfield.placeholder = ""
 				cell.textfield.enabled = false
 				
-			}
-			
-			
-		}
-		for savedCell in self.cellArray {
-			if cell.labelCellContent.text != savedCell.labelCellContent.text {
-				self.cellArray.append(cell)
+				
 			}
 		}
 		
@@ -190,8 +200,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.cellConnectionTextfielString.append(String(Int(emailAcc!.imapPort)))
 			self.cellConnectionTextfielString.append(emailAcc!.smtpHostname)
 			self.cellConnectionTextfielString.append(String(Int(emailAcc!.smtpPort)))
-			
-			
 		}
 		
 		self.labelAccountDetailString.append("Mailaddress:")
@@ -222,7 +230,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	@IBAction func doneTapped(sender: AnyObject) -> Void {
 		
 		// check if textfields are empty
-		filledTextfieldCount = 0
+	//	self.selectedTextfield?.resignFirstResponder()
+		
+		println("DONE: Count: \(filledTextfieldCount) should be: \(labelAccountDetailString.count + labelConnectionDetailString.count)")
+		
 		checkAllTextfieldsFilled()
 		
 	//	println("cellcount: \(self.cellArray.count) and textfieldcount: \(filledTextfieldCount) and total labelcount: \(labelAccountDetailString.count + labelConnectionDetailString.count)")
@@ -237,17 +248,18 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				for var section = 0; section < self.tableView.numberOfSections(); section++ {
 					for var row = 0; row < self.tableView.numberOfRowsInSection(section); row++ {
 						var cellPath = NSIndexPath(forRow: row, inSection: section)
-						let cell = self.tableView.cellForRowAtIndexPath(cellPath) as! PreferenceAccountTableViewCell
-						
-						switch cell.labelCellContent.text! {
-						case "Mailaddress:": 	newEntry.setValue(cell.textfield.text, forKey: "emailAddress")
-						case "Accountname:": 	newEntry.setValue(cell.textfield.text, forKey: "username")
-						case "Password:": 		newEntry.setValue(cell.textfield.text, forKey: "password")
-						case "IMAP Hostname:": 	newEntry.setValue(cell.textfield.text, forKey: "imapHostname")
-						case "IMAP Port:": 		newEntry.setValue(cell.textfield.text.toInt(), forKey: "imapPort")
-						case "SMTP Hostname:": 	newEntry.setValue(cell.textfield.text, forKey: "smtpHostname")
-						case "SMTP Port:": 		newEntry.setValue(cell.textfield.text.toInt(), forKey: "smtpPort")
-						default: break
+						if	let cell = self.tableView.cellForRowAtIndexPath(cellPath) as? PreferenceAccountTableViewCell {
+							
+							switch cell.labelCellContent.text! {
+							case "Mailaddress:": 	newEntry.setValue(cell.textfield.text, forKey: "emailAddress")
+							case "Accountname:": 	newEntry.setValue(cell.textfield.text, forKey: "username")
+							case "Password:": 		newEntry.setValue(cell.textfield.text, forKey: "password")
+							case "IMAP Hostname:": 	newEntry.setValue(cell.textfield.text, forKey: "imapHostname")
+							case "IMAP Port:": 		newEntry.setValue(cell.textfield.text.toInt(), forKey: "imapPort")
+							case "SMTP Hostname:": 	newEntry.setValue(cell.textfield.text, forKey: "smtpHostname")
+							case "SMTP Port:": 		newEntry.setValue(cell.textfield.text.toInt(), forKey: "smtpPort")
+							default: break
+							}
 						}
 					}
 				}
@@ -267,19 +279,19 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						for var section = 0; section < self.tableView.numberOfSections(); section++ {
 							for var row = 0; row < self.tableView.numberOfRowsInSection(section); row++ {
 								var cellPath = NSIndexPath(forRow: row, inSection: section)
-								let cell = self.tableView.cellForRowAtIndexPath(cellPath) as! PreferenceAccountTableViewCell
-								
-								switch cell.labelCellContent.text! {
-								case "Mailaddress:": 	managedObject.setValue(cell.textfield.text, forKey: "emailAddress")
-								case "Accountname:": 	managedObject.setValue(cell.textfield.text, forKey: "username")
-								case "Password:": 		managedObject.setValue(cell.textfield.text, forKey: "password")
-								case "IMAP Hostname:": 	managedObject.setValue(cell.textfield.text, forKey: "imapHostname")
-								case "IMAP Port:": 		managedObject.setValue(cell.textfield.text.toInt(), forKey: "imapPort")
-								case "SMTP Hostname:": 	managedObject.setValue(cell.textfield.text, forKey: "smtpHostname")
-								case "SMTP Port:": 		managedObject.setValue(cell.textfield.text.toInt(), forKey: "smtpPort")
-								default: break
+								if	let cell = self.tableView.cellForRowAtIndexPath(cellPath) as? PreferenceAccountTableViewCell {
+									
+									switch cell.labelCellContent.text! {
+									case "Mailaddress:": 	managedObject.setValue(cell.textfield.text, forKey: "emailAddress")
+									case "Accountname:": 	managedObject.setValue(cell.textfield.text, forKey: "username")
+									case "Password:": 		managedObject.setValue(cell.textfield.text, forKey: "password")
+									case "IMAP Hostname:": 	managedObject.setValue(cell.textfield.text, forKey: "imapHostname")
+									case "IMAP Port:": 		managedObject.setValue(cell.textfield.text.toInt(), forKey: "imapPort")
+									case "SMTP Hostname:": 	managedObject.setValue(cell.textfield.text, forKey: "smtpHostname")
+									case "SMTP Port:": 		managedObject.setValue(cell.textfield.text.toInt(), forKey: "smtpPort")
+									default: break
+									}
 								}
-								
 								
 							}
 						}
@@ -308,7 +320,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					} else {
 						cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.blackColor()])
 						println(cell.labelCellContent.text!)
-						filledTextfieldCount += 1
+					
 					}
 				}
 				
@@ -317,8 +329,29 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 	}
 	
-//	func textFieldDidEndEditing(textField: UITextField) {
-//		println("Textfield did end editing")
-//	}
+	
+	func textFieldDidBeginEditing(textField: UITextField) {
+		if !textField.text.isEmpty {
+			filledTextfieldCount -= 1
+			println("textfield did begin editing count: \(filledTextfieldCount)")
+		}
+ }
+	
+	
+	func textFieldDidEndEditing(textField: UITextField) {
+		if !textField.text.isEmpty {
+			filledTextfieldCount += 1
+			println("textfield ended editing with count: \(filledTextfieldCount)")
+		}
+	}
+	
+	func textFieldShouldReturn(textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+	
+	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+		self.view.endEditing(true)
+	}
 	
 }
