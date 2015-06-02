@@ -18,6 +18,14 @@ class TextfieldWithPadding: UITextField {
 	override func editingRectForBounds(bounds: CGRect) -> CGRect {
 		return self.textRectForBounds(bounds)
 	}
+	
+	override func shouldChangeTextInRange(range: UITextRange, replacementText text: String) -> Bool {
+		if text == "YES"{
+			return true
+		}
+		return false
+	}
+		
 
 	
     /*

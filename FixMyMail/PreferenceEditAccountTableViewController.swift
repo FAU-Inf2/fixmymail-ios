@@ -11,8 +11,6 @@ import CoreData
 
 class PreferenceEditAccountTableViewController: UITableViewController {
 	
-	var delegate: ContentViewControllerProtocol?
-	var navController: UINavigationController!
 	var emailAcc: EmailAccount?
 	var newEmailAcc: EmailAccount?
 	var actionItem: ActionItem?
@@ -27,20 +25,43 @@ class PreferenceEditAccountTableViewController: UITableViewController {
 	var cellArray = [PreferenceAccountTableViewCell]()
 	var deleteString = [String]()
 	var filledTextfieldCount: Int?
+	var alert: UIAlertController?
         
     override func viewDidLoad() {
         super.viewDidLoad()
-		
+		self.cellArray.removeAll(keepCapacity: false)
 		loadAccountDetails()
 		
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
 		self.navigationItem.title = actionItem?.mailAdress
 		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
-		
-		
 		self.sections = ["Account Details:", "", "Connection Details:", ""]
-
+		
+		// set alert dialog
+	    alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
+		self.alert!.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+			var context: NSManagedObjectContext = appDel.managedObjectContext!
+			var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			fetchRequest.predicate = NSPredicate(format: "emailAddress = %@", self.emailAcc!.emailAddress)
+			
+			if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+				if fetchResults.count != 0{
+					
+					var managedObject = fetchResults[0]
+					context.deleteObject(managedObject)
+				}
+			}
+			
+			context.save(nil)
+			self.navigationController?.popViewControllerAnimated(true)
+		}))
+		
+		self.alert!.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
+			
+		}))
+	
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -72,6 +93,9 @@ class PreferenceEditAccountTableViewController: UITableViewController {
 		
 		tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		
+		if self.rows[indexPath.section][indexPath.row] as? String == "DELETE" {
+			self.presentViewController(self.alert!, animated: true, completion: nil)
+		}
 	}
 	
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -80,13 +104,27 @@ class PreferenceEditAccountTableViewController: UITableViewController {
         // Configure the cell...
 		
 		cell.labelCellContent.text = self.rows[indexPath.section][indexPath.row] as? String
+		cell.textfield.placeholder = self.rows[indexPath.section][indexPath.row] as? String
 		
 		if emailAcc != nil {
-			if cell.labelCellContent.text != deleteString[0] {
-				cell.textfield.text = self.rowsEmail[indexPath.section][indexPath.row] as! String
+			cell.textfield.text = self.rowsEmail[indexPath.section][indexPath.row] as! String
+			cell.labelCellContent.textAlignment = NSTextAlignment.Left
+			cell.textfield.enabled = true
+			cell.textfield.shouldChangeTextInRange(UITextRange(), replacementText: "YES")
+			
+			// configure delete cell
+			if cell.labelCellContent.text == deleteString[0] {
+				cell.labelCellContent.textAlignment = NSTextAlignment.Center
+				cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
+				cell.textfield.text = ""
+				cell.textfield.placeholder = ""
+				cell.textfield.enabled = false
+				
 			}
+			
+			
 		}
-
+		
 		self.cellArray.append(cell)
         return cell
     }
@@ -176,13 +214,14 @@ class PreferenceEditAccountTableViewController: UITableViewController {
 	}
 	
 	@IBAction func doneTapped(sender: AnyObject) -> Void {
-		filledTextfieldCount = 0
 		
 		// check if textfields are empty
+		filledTextfieldCount = 0
 		checkAllTextfieldsFilled()
 		
+	println("textfieldcount: \(filledTextfieldCount) and total labelcount: \(labelAccountDetailString.count + labelConnectionDetailString.count)")
 		if filledTextfieldCount == labelAccountDetailString.count + labelConnectionDetailString.count {
-			// write / update entity
+			// write | update entity
 			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 			var context: NSManagedObjectContext = appDel.managedObjectContext!
 			
@@ -237,10 +276,12 @@ class PreferenceEditAccountTableViewController: UITableViewController {
 	func checkAllTextfieldsFilled() {
 		
 		for cell in cellArray {
+			
 			if cell.textfield.text.isEmpty {
 				cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
 			} else {
 				cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.blackColor()])
+				println(cell.labelCellContent.text!)
 				filledTextfieldCount! += 1
 			}
 		}
