@@ -109,6 +109,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		cell.textfield.delegate = self
 		cell.labelCellContent.text = self.rows[indexPath.section][indexPath.row] as? String
 		cell.textfield.placeholder = self.rows[indexPath.section][indexPath.row] as? String
+		
+		// secure text entry for password cell
+		if cell.textfield.placeholder == "Password:" {
+			cell.textfield.secureTextEntry = true
+		} else {
+			cell.textfield.secureTextEntry = false
+		}
 	
 		if emailAcc != nil {
 			cell.textfield.text = self.rowsEmail[indexPath.section][indexPath.row] as! String
@@ -322,6 +329,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	func textFieldDidEndEditing(textField: UITextField) {
+		
+		if textField.placeholder! == "Mailaddress:" {
+			// check if mail address
+			if !(textField.text.rangeOfString("@") != nil) {
+				textField.text = ""
+			}
+		}
 		
 		// check if port entries are numbers
 		if textField.placeholder! == "IMAP Port:" || textField.placeholder! == "SMTP Port:" {
