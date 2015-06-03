@@ -20,7 +20,7 @@ dependencies:
     - git clone https://github.com/SwiftyJSON/SwiftyJSON.git Carthage/Checkouts/SwiftyJSON
     - git clone https://github.com/matthewpalmer/Locksmith
     - cd Carthage/Checkouts/SwiftyJSON && git checkout tags/2.2.0 && cd ../../..
-    - carthage update
+    - carthage update --verbose --platform iOS
     - carthage build --verbose --platform iOS --configuration Release
 deployment:
   mad:
