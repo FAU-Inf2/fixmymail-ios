@@ -24,7 +24,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var rowsEmail = [AnyObject]()
 	var entries = [String: String]()
 	var deleteString = [String]()
-	var filledTextfieldCount: Int = 0
 	var alert: UIAlertController?
 	var selectedTextfield: UITextField?
 	
@@ -239,7 +238,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 		checkAllTextfieldsFilled()
 		
-		if filledTextfieldCount == labelAccountDetailString.count + labelConnectionDetailString.count {
+		if allEntriesSet() {
 			// write | update entity
 			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 			var context: NSManagedObjectContext = appDel.managedObjectContext!
@@ -304,15 +303,16 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				}
 			}
 		}
-		
-		self.filledTextfieldCount = 0
-		for (key, value) in self.entries {
-			if value != "" {
-				self.filledTextfieldCount += 1
-			}
-		}
 	}
 	
+	func allEntriesSet() -> Bool {
+		for (key, value) in self.entries {
+			if value == "" {
+				return false
+			}
+		}
+		return true
+	}
 	
 	func textFieldDidBeginEditing(textField: UITextField) {
 		self.selectedTextfield = textField
