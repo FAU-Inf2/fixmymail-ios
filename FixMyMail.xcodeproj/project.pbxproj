@@ -49,8 +49,6 @@
 		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
 		AD44E0291B1B017900751FFA /* gmx.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0251B1B017900751FFA /* gmx.png */; };
 		AD44E02A1B1B017900751FFA /* webde.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0261B1B017900751FFA /* webde.png */; };
-		AD44E02D1B1B07D100751FFA /* PreferenceEditAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44E02B1B1B07D100751FFA /* PreferenceEditAccountViewController.swift */; };
-		AD44E02E1B1B07D100751FFA /* PreferenceEditAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD44E02C1B1B07D100751FFA /* PreferenceEditAccountViewController.xib */; };
 		AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */; };
 		AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0351B1B51ED00751FFA /* icloud-icon.png */; };
 		AD44E0381B1B528400751FFA /* fau-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0371B1B528400751FFA /* fau-logo.png */; };
@@ -132,8 +130,6 @@
 		AD44E0241B1B017900751FFA /* Yahoo-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Yahoo-icon.png"; sourceTree = "<group>"; };
 		AD44E0251B1B017900751FFA /* gmx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gmx.png; sourceTree = "<group>"; };
 		AD44E0261B1B017900751FFA /* webde.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = webde.png; sourceTree = "<group>"; };
-		AD44E02B1B1B07D100751FFA /* PreferenceEditAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountViewController.swift; sourceTree = "<group>"; };
-		AD44E02C1B1B07D100751FFA /* PreferenceEditAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountViewController.xib; sourceTree = "<group>"; };
 		AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextfieldWithPadding.swift; sourceTree = "<group>"; };
 		AD44E0351B1B51ED00751FFA /* icloud-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icloud-icon.png"; sourceTree = "<group>"; };
 		AD44E0371B1B528400751FFA /* fau-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fau-logo.png"; sourceTree = "<group>"; };
@@ -304,8 +300,6 @@
 				AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */,
 				AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */,
 				AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */,
-				AD44E02B1B1B07D100751FFA /* PreferenceEditAccountViewController.swift */,
-				AD44E02C1B1B07D100751FFA /* PreferenceEditAccountViewController.xib */,
 				ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */,
 				ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */,
 			);
@@ -432,7 +426,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
-				AD44E02E1B1B07D100751FFA /* PreferenceEditAccountViewController.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
@@ -508,7 +501,6 @@
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */,
 				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
-				AD44E02D1B1B07D100751FFA /* PreferenceEditAccountViewController.swift in Sources */,
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
 				8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
