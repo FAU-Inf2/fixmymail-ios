@@ -18,10 +18,8 @@ dependencies:
     - mkdir -p Carthage/Checkouts
     - git clone https://github.com/MailCore/mailcore2 Carthage/Checkouts/mailcore2
     - git clone https://github.com/SwiftyJSON/SwiftyJSON.git Carthage/Checkouts/SwiftyJSON
-    - git clone https://github.com/matthewpalmer/Locksmith
     - cd Carthage/Checkouts/SwiftyJSON && git checkout tags/2.2.0 && cd ../../..
-    - carthage update --verbose --platform all
-    - carthage build --verbose --platform all --configuration Release
+    - carthage build --verbose --platform iOS --configuration Release
 deployment:
   mad:
     branch: master
