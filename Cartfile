@@ -3,3 +3,6 @@ github "MailCore/mailcore2"
 
 #SwiftyJSON
 github "SwiftyJSON/SwiftyJSON" >= 2.2.0
+
+#Locksmith
+github "matthewpalmer/Locksmith"

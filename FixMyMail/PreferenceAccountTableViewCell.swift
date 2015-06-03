@@ -10,7 +10,10 @@ import UIKit
 
 class PreferenceAccountTableViewCell: UITableViewCell {
 
-	@IBOutlet weak var textfield: TextfieldWithPadding!
+	
+	@IBOutlet weak var labelCellContent: UILabel!
+	
+	@IBOutlet weak var textfield: UITextField!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
