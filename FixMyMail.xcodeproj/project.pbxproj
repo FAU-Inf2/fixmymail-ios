@@ -67,6 +67,7 @@
 		ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */; };
 		ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */; };
 		ADDE66031B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */; };
+		ADDE660A1B1F15AF00880FA1 /* Locksmith.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADDE66091B1F15AF00880FA1 /* Locksmith.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +149,7 @@
 		ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyChainListTableViewController.xib; sourceTree = "<group>"; };
 		ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountTableViewController.swift; sourceTree = "<group>"; };
 		ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountTableViewController.xib; sourceTree = "<group>"; };
+		ADDE66091B1F15AF00880FA1 /* Locksmith.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Locksmith.framework; path = Carthage/Build/iOS/Locksmith.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 				8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */,
 				8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */,
 				3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */,
+				ADDE660A1B1F15AF00880FA1 /* Locksmith.framework in Frameworks */,
 				3D9027541AF96D0D000D3E72 /* MailCore.framework in Frameworks */,
 				3D9027551AF96D0D000D3E72 /* SwiftyJSON.framework in Frameworks */,
 			);
@@ -258,6 +261,7 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				ADDE66091B1F15AF00880FA1 /* Locksmith.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
@@ -649,6 +653,7 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/FixMyMail",
 				);
 				INFOPLIST_FILE = FixMyMail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -669,6 +674,7 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/FixMyMail",
 				);
 				INFOPLIST_FILE = FixMyMail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

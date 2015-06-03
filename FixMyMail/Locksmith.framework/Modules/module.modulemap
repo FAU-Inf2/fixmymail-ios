@@ -1,0 +1,3 @@
+framework module Locksmith {
+    header "Locksmith-Swift.h"
+}
