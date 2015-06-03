@@ -236,7 +236,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.textFieldShouldReturn(self.selectedTextfield!)
 		}
 		
-		checkAllTextfieldsFilled()
+	//	checkAllTextfieldsFilled()
 		
 		if allEntriesSet() {
 			// write | update entity
@@ -307,10 +307,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func allEntriesSet() -> Bool {
 		for (key, value) in self.entries {
+			
 			if value == "" {
+				checkAllTextfieldsFilled()
 				return false
 			}
 		}
+		checkAllTextfieldsFilled()
 		return true
 	}
 	
@@ -320,7 +323,16 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func textFieldDidEndEditing(textField: UITextField) {
 		
+		// check if port entries are numbers
+		if textField.placeholder! == "IMAP Port:" || textField.placeholder! == "SMTP Port:" {
+			if textField.text.toInt() == nil {
+				textField.text = ""
+			}
+		}
+		
 		self.entries[textField.placeholder!] = textField.text
+		
+		
 
 	}
 	
