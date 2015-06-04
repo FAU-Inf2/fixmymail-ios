@@ -87,7 +87,7 @@ class PreferenceAccountListTableViewController: UITableViewController {
 	
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		var editAccountVC = PreferenceEditAccountViewController(nibName:"PreferenceEditAccountViewController", bundle: nil)
+		var editAccountVC = PreferenceEditAccountTableViewController(nibName:"PreferenceEditAccountTableViewController", bundle: nil)
 		if let emailAccountItem = self.rowsEmail[indexPath.section][indexPath.row] as? EmailAccount {
 			editAccountVC.emailAcc = emailAccountItem
 		}

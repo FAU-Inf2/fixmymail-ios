@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -14,21 +14,32 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Tl-v7-1Nb">
+                        <rect key="frame" x="8" y="7" width="304" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JAf-rj-DKe" customClass="TextfieldWithPadding" customModule="FixMyMail" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="7" width="320" height="30"/>
+                        <rect key="frame" x="137" y="7" width="183" height="30"/>
                         <nil key="textColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="JAf-rj-DKe" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="Dcf-4D-hc4"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="JAf-rj-DKe" secondAttribute="bottom" constant="-2" id="HPh-FX-hwW"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="JAf-rj-DKe" secondAttribute="trailing" constant="-8" id="S7J-kW-xkb"/>
-                    <constraint firstItem="JAf-rj-DKe" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-1" id="Y8Y-JL-3fG"/>
+                    <constraint firstItem="0Tl-v7-1Nb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="3lc-Jw-NfJ"/>
+                    <constraint firstItem="JAf-rj-DKe" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-1" id="BNd-oy-nfm"/>
+                    <constraint firstItem="JAf-rj-DKe" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="129" id="Gyr-KH-LLG"/>
+                    <constraint firstItem="0Tl-v7-1Nb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-1" id="P0j-xj-q6G"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="JAf-rj-DKe" secondAttribute="trailing" constant="-8" id="Wmj-fs-FYf"/>
+                    <constraint firstItem="0Tl-v7-1Nb" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="aZt-85-B9i"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="JAf-rj-DKe" secondAttribute="bottom" constant="-2" id="fAL-ct-Hb5"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="0Tl-v7-1Nb" secondAttribute="bottom" constant="-2" id="jFo-NT-6A6"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="labelCellContent" destination="0Tl-v7-1Nb" id="NmP-eB-BPc"/>
                 <outlet property="textfield" destination="JAf-rj-DKe" id="6US-vO-cos"/>
             </connections>
         </tableViewCell>
