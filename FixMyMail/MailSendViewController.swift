@@ -4,15 +4,18 @@ import AddressBook
 import Foundation
 import AddressBookUI
 
-
-class MailSendViewController: UIViewController, ABPeoplePickerNavigationControllerDelegate{
-    @IBOutlet weak var txtTo: UITextField!
-    @IBOutlet weak var txtSubject: UITextField!
+class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate {
+    @IBOutlet weak var sendTableView: UITableView!
     @IBOutlet weak var tvText: UITextView!
-    @IBOutlet weak var Suggestion: UITextField!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.sendTableView.registerNib(UINib(nibName: "SendViewCellSubject", bundle: nil), forCellReuseIdentifier: "SendViewCellSubject")
+        self.sendTableView.registerNib(UINib(nibName: "SendViewCellSuggestion", bundle: nil), forCellReuseIdentifier: "SendViewCellSuggestion")
+        self.sendTableView.rowHeight = UITableViewAutomaticDimension
+        self.sendTableView.estimatedRowHeight = 100
+        self.sendTableView.scrollEnabled = false
         var sendBut: UIBarButtonItem = UIBarButtonItem(title: "Senden", style: .Plain, target: self, action: "butSend:")
         self.navigationItem.rightBarButtonItem = sendBut
         LoadAddresses()
@@ -48,14 +51,17 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
                 builder.header.from = from
                 builder.header.sender = sender
                 var tos : NSMutableArray = NSMutableArray()
-                var recipients: String = txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                var toCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! SendViewCellSuggestion
+                var recipients: String = toCell.txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                 for recipient in recipients.componentsSeparatedByString(", ") {
                     var to = MCOAddress()
                     to.mailbox = recipient
+                    NSLog("%@", recipient)
                     tos.addObject(to)
                 }
                 builder.header.to = tos as [AnyObject]
-                builder.header.subject = txtSubject.text
+                var subCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! SendViewCellSubject
+                builder.header.subject = subCell.txtText.text
                 builder.textBody = tvText.text
                 
                 let op = session.sendOperationWithData(builder.data())
@@ -64,8 +70,8 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
                     if (error != nil) {
                         NSLog("can't send message: %@", error)
                     } else {
-                        self.txtSubject.text = ""
-                        self.txtTo.text = ""
+                        toCell.txtTo.text = ""
+                        subCell.txtText.text = ""
                         self.tvText.text = ""
                         NSLog("sent")
                     }
@@ -75,6 +81,35 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
         
     }
     
+    // TableView
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        switch indexPath.row {
+        case 0:
+            var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSuggestion", forIndexPath: indexPath) as! SendViewCellSuggestion
+            sendCell.emails = sortedEmails
+            var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+            addContacts.frame = CGRectMake(0, 0, 25, 25)
+            addContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
+            sendCell.accessoryView = addContacts
+            return sendCell
+        case 1:
+            var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
+            return sendCell
+        default:
+            var sendCell = UITableViewCell()
+            return sendCell
+        }
+    }
+    
+    // Addressbook functionality
     //
     //Collect Contacts from Addressbook and order Emails Ascending
     //
@@ -100,7 +135,9 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
     func LoadAddresses() {
         var source: ABRecord = ABAddressBookCopyDefaultSource(addressBook).takeRetainedValue()
         var contactList: NSArray = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, ABPersonSortOrdering(kABPersonEmailProperty )).takeRetainedValue()
+        
         println("records in the array \(contactList.count)")
+        
         for record:ABRecordRef in contactList{
             if !record.isEqual(nil){
                 var contactPerson: ABRecordRef = record
@@ -121,69 +158,6 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
     }
     
     //
-    //Check if similar Email exists in Addressbook
-    //
-    
-    @IBAction func EmailAddressEntered(sender: AnyObject) {
-        var email:String=txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        var i: Int = count(email)
-        println("Toaddress: \(txtTo.text)")
-        if(email==""){
-            Suggestion.text=""
-        }
-        else if(email==Suggestion.text){}
-        else if(email.rangeOfString(",") != nil){
-            var add:NSArray = email.componentsSeparatedByString(",")
-            i=count(add.lastObject!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) as String)
-            if(i != 0){
-                checkforsimilarEmail(i, email:add.lastObject!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) as String)
-            }
-        }
-        else{
-            checkforsimilarEmail(i, email:email as String)
-        }
-    }
-    
-    func checkforsimilarEmail(i:Int,email:String){
-        println("Toaddress: \(email)")
-        for results in sortedEmails{
-            if(i>count(results.email)){
-                continue
-            }
-            let index: String.Index = advance(results.email.startIndex, i)
-            var substring: String = results.email.substringToIndex(index)
-            if(substring==email){
-                Suggestion.text = results.email
-                break
-            }
-            Suggestion.text = ""
-        }
-    }
-    
-    //
-    //Confirm suggested Emailaddress
-    //
-    
-    @IBAction func ConfirmEmail(sender: AnyObject) {
-        var txtAddresses:String=""
-        var add:Array=txtTo.text.componentsSeparatedByString(",")
-        if(add.count > 1){
-            add.removeAtIndex(add.count-1)
-            for var index = 0; index < add.count; ++index{
-                txtAddresses += add[index] as String
-                txtAddresses += ", "
-            }
-            txtAddresses += Suggestion.text
-            txtTo.text=txtAddresses
-            Suggestion.text=""
-        }
-        else if(!(Suggestion.text==nil)){
-            txtTo.text=Suggestion.text
-            Suggestion.text=""
-        }
-    }
-    
-    //
     //   öffnet das Telefonbuch in App
     //
     @IBAction func doPeoplePicker (sender:AnyObject!) {
@@ -196,8 +170,8 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
     }
     
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!) {
-        println("person")
-        println(person)
+            println("person")
+            println(person)
     }
     
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
@@ -206,8 +180,12 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
             let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
             let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
             println(email)
-            txtTo.text=email
-            
+            var cell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! SendViewCellSuggestion
+            if cell.txtTo.text == "" {
+                cell.txtTo.text = email
+            } else {
+                cell.txtTo.text = cell.txtTo.text + ", " + email
+            }
     }
 }
 

@@ -141,7 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gmailAccount.smtpHostname = "smtp.gmail.com"
             gmailAccount.smtpPort = 465
             
-            let session = MCOIMAPSession()
+            /*let session = MCOIMAPSession()
             session.hostname = gmailAccount.imapHostname
             session.port = gmailAccount.imapPort
             session.username = gmailAccount.username
@@ -153,7 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 MCOIMAPMessagesRequestKind.InternalDate | MCOIMAPMessagesRequestKind.HeaderSubject |
                 MCOIMAPMessagesRequestKind.Flags)
             
-            /*let infoOp = session.folderInfoOperation("INBOX")
+            let infoOp = session.folderInfoOperation("INBOX")
             infoOp.start({(error, info) in
             NSLog("messages on server: %i", info.messageCount)
             })*/
