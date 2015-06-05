@@ -252,6 +252,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	@IBAction func doneTapped(sender: AnyObject) -> Void {
 		
+		self.navigationItem.rightBarButtonItem?.enabled = false
+		
 		// check if textfields are empty
 		if (self.selectedTextfield != nil) {
 			self.textFieldShouldReturn(self.selectedTextfield!)
@@ -261,7 +263,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entriesChecked[key] = false
 		}
 		self.tableView.reloadData()
-		if allEntriesSet(){
+		if self.allEntriesSet() {
 			// test the imap connection
 			var imapOperation = self.getImapOperation()
 			imapOperation.start({(NSError error) in
@@ -270,6 +272,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					var alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
 					alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
 					self.presentViewController(alert, animated: true, completion: nil)
+					self.navigationItem.rightBarButtonItem?.enabled = true
 					return
 					
 					
@@ -288,6 +291,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							var alert = UIAlertController(title: "Error", message: "Your Properties for SMTP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
 							alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
 							self.presentViewController(alert, animated: true, completion: nil)
+							self.navigationItem.rightBarButtonItem?.enabled = true
 							return
 							
 							
@@ -351,6 +355,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				}
 			})
 		
+		}
+		
+		else {
+			self.navigationItem.rightBarButtonItem?.enabled = true
 		}
 	}
 
