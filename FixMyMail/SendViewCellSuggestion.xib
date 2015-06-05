@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SendViewCellSuggestion" rowHeight="93" id="mpv-Z3-1CB" customClass="SendViewCellSuggestion" customModule="FixMyMail" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mpv-Z3-1CB" id="4an-BU-Hhp">
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fdi-Gv-aJm">
+                        <rect key="frame" x="0.0" y="10" width="23" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="K8l-bQ-XVM">
+                        <rect key="frame" x="31" y="62" width="289" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <connections>
+                            <action selector="ConfirmEmail:" destination="mpv-Z3-1CB" eventType="touchDown" id="H06-0k-XIb"/>
+                            <action selector="EmailAddressEntered:" destination="mpv-Z3-1CB" eventType="editingChanged" id="To7-8g-of8"/>
+                        </connections>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9N1-kW-J61" customClass="TextfieldWithPadding" customModule="FixMyMail" customModuleProvider="target">
+                        <rect key="frame" x="31" y="0.0" width="289" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zEN-Gw-zpP" customClass="TextfieldWithPadding" customModule="FixMyMail" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="41" width="320" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OU4-yh-gHx">
+                        <rect key="frame" x="31" y="6" width="289" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <connections>
+                            <action selector="EmailAddressEntered:" destination="mpv-Z3-1CB" eventType="editingChanged" id="BHG-q7-41Y"/>
+                        </connections>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Fdi-Gv-aJm" firstAttribute="top" secondItem="4an-BU-Hhp" secondAttribute="topMargin" constant="2" id="EwE-wG-1lx"/>
+                    <constraint firstItem="Fdi-Gv-aJm" firstAttribute="leading" secondItem="4an-BU-Hhp" secondAttribute="leading" id="Ewf-bS-Pf6"/>
+                    <constraint firstItem="K8l-bQ-XVM" firstAttribute="top" secondItem="OU4-yh-gHx" secondAttribute="bottom" constant="26" id="FmB-z5-cXb"/>
+                    <constraint firstAttribute="bottom" secondItem="K8l-bQ-XVM" secondAttribute="bottom" id="GW4-4o-7lA"/>
+                    <constraint firstItem="Fdi-Gv-aJm" firstAttribute="leading" secondItem="K8l-bQ-XVM" secondAttribute="leading" constant="-31" id="T5V-dt-f8u"/>
+                    <constraint firstItem="OU4-yh-gHx" firstAttribute="trailing" secondItem="K8l-bQ-XVM" secondAttribute="trailing" id="UpP-cy-f0t"/>
+                    <constraint firstItem="K8l-bQ-XVM" firstAttribute="top" secondItem="Fdi-Gv-aJm" secondAttribute="bottom" constant="31" id="aoP-Fh-PBL"/>
+                    <constraint firstItem="OU4-yh-gHx" firstAttribute="top" secondItem="4an-BU-Hhp" secondAttribute="topMargin" constant="-2" id="fYl-LP-vGn"/>
+                    <constraint firstAttribute="trailing" secondItem="K8l-bQ-XVM" secondAttribute="trailing" id="uux-md-76a"/>
+                    <constraint firstItem="OU4-yh-gHx" firstAttribute="leading" secondItem="Fdi-Gv-aJm" secondAttribute="trailing" constant="8" symbolic="YES" id="xiq-1r-lMN"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="subviews">
+                        <exclude reference="9N1-kW-J61"/>
+                        <exclude reference="zEN-Gw-zpP"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="txtSuggestion" destination="K8l-bQ-XVM" id="Zds-jM-CBK"/>
+                <outlet property="txtTo" destination="OU4-yh-gHx" id="ltb-e1-vMx"/>
+            </connections>
+            <point key="canvasLocation" x="310" y="163.5"/>
+        </tableViewCell>
+    </objects>
+</document>
