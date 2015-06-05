@@ -20,15 +20,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var labelConnectionDetailString = [String]()
 	var cellAccountTextfielString = [String]()
 	var cellConnectionTextfielString = [String]()
-//	var cellAccountIsChecked = [Bool]()
-//	var cellConnectionIsChecked = [Bool]()
-//	var rowsCellChecked = [AnyObject]()
 	var rows = [AnyObject]()
 	var rowsEmail = [AnyObject]()
 	var entries = [String: String]()
 	var entriesChecked = [String: Bool]()
 	var deleteString = [String]()
-//	var cellDeleteChecked = [Bool]()
 	var alert: UIAlertController?
 	var selectedTextfield: UITextField?
 	
@@ -136,10 +132,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		}
 	
 		if emailAcc != nil {
-			cell.textfield.text = self.rowsEmail[indexPath.section][indexPath.row] as! String
+			cell.textfield.text = self.entries[cell.labelCellContent.text!]
 			cell.labelCellContent.textAlignment = NSTextAlignment.Left
 			cell.textfield.enabled = true
-			self.entries[cell.labelCellContent.text!] = cell.textfield.text
 			self.entriesChecked[cell.labelCellContent.text!] = false
 			
 			// configure delete cell
@@ -213,17 +208,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.labelConnectionDetailString.append("SMTP Hostname:")
 		self.labelConnectionDetailString.append("SMTP Port:")
 		
-/*		for item in self.labelAccountDetailString {
-			self.cellAccountIsChecked.append(false)
-		}
-		for item in self.labelConnectionDetailString {
-			self.cellConnectionIsChecked.append(false)
-		}
-		
-*/
-
-		
-		
 		if emailAcc != nil {
 			self.cellAccountTextfielString.append(emailAcc!.emailAddress)
 			self.cellAccountTextfielString.append(emailAcc!.username)
@@ -252,7 +236,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 		if actionItem?.mailAdress != "Add New Account" {
 			self.deleteString.append("DELETE")
-//			self.cellDeleteChecked.append(false)
 		}
 		
 		rows.append(self.labelAccountDetailString)
@@ -264,12 +247,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		rowsEmail.append([])
 		rowsEmail.append(self.cellConnectionTextfielString)
 		rowsEmail.append(self.deleteString)
-		
-	/*	rowsCellChecked.append(self.cellAccountIsChecked)
-		rowsCellChecked.append([])
-		rowsCellChecked.append(self.cellConnectionIsChecked)
-		rowsCellChecked.append(self.cellDeleteChecked)
-	*/
 		
 	}
 	
@@ -283,58 +260,97 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		for (key, value) in self.entriesChecked{
 			self.entriesChecked[key] = false
 		}
-		
+		self.tableView.reloadData()
 		if allEntriesSet(){
-			var imap = imapConnectionValid()
-			var smtp = smtpConnectionValid()
-			if imap && smtp {
-				// write | update entity
-				var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-				var context: NSManagedObjectContext = appDel.managedObjectContext!
-				
-				if actionItem?.mailAdress == "Add New Account" {
-					var newEntry = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: context) as!EmailAccount
+			// test the imap connection
+			var imapOperation = self.getImapOperation()
+			imapOperation.start({(NSError error) in
+				if (error != nil) {
+					NSLog("can't establish Imap connection: %@", error)
+					var alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
+					alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
+					self.presentViewController(alert, animated: true, completion: nil)
+					return
 					
-					for (key, value) in self.entries {
-						switch key {
-						case "Mailaddress:": 	newEntry.setValue(value, forKey: "emailAddress")
-						case "Username:": 	newEntry.setValue(value, forKey: "username")
-						case "Password:": 		newEntry.setValue(value, forKey: "password")
-						case "IMAP Hostname:": 	newEntry.setValue(value, forKey: "imapHostname")
-						case "IMAP Port:": 		newEntry.setValue(value.toInt(), forKey: "imapPort")
-						case "SMTP Hostname:": 	newEntry.setValue(value, forKey: "smtpHostname")
-						case "SMTP Port:": 		newEntry.setValue(value.toInt(), forKey: "smtpPort")
-						default: break
-						}
-					}
+					
 				} else {
-					
-					var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
-					fetchRequest.predicate = NSPredicate(format: "emailAddress = %@", emailAcc!.emailAddress)
-					
-					if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
-						if fetchResults.count != 0{
+					println("Imap connection valid")
+					self.entriesChecked["IMAP Hostname:"] = true
+					self.entriesChecked["IMAP Port:"] = true
+					self.entriesChecked["Username:"] = true
+					self.entriesChecked["Password:"] = true
+					self.tableView.reloadData()
+					// imap connection valid -> test the smtp connection
+					var smtpOperation = self.getSmtpOperation()
+					smtpOperation.start({(NSError error) in
+						if (error != nil) {
+							NSLog("can't establish Smpt connection: %@", error)
+							var alert = UIAlertController(title: "Error", message: "Your Properties for SMTP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
+							alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
+							self.presentViewController(alert, animated: true, completion: nil)
+							return
 							
-							var managedObject = fetchResults[0]
 							
-							for (key, value) in self.entries {
-								switch key {
-								case "Mailaddress:": 	managedObject.setValue(value, forKey: "emailAddress")
-								case "Username:": 		managedObject.setValue(value, forKey: "username")
-								case "Password:": 		managedObject.setValue(value, forKey: "password")
-								case "IMAP Hostname:": 	managedObject.setValue(value, forKey: "imapHostname")
-								case "IMAP Port:": 		managedObject.setValue(value.toInt(), forKey: "imapPort")
-								case "SMTP Hostname:": 	managedObject.setValue(value, forKey: "smtpHostname")
-								case "SMTP Port:": 		managedObject.setValue(value.toInt(), forKey: "smtpPort")
-								default: break
+						} else {
+							println("Smpt connection valid")
+							self.entriesChecked["SMTP Hostname:"] = true
+							self.entriesChecked["SMTP Port:"] = true
+							self.entriesChecked["Username:"] = true
+							self.entriesChecked["Password:"] = true
+							self.tableView.reloadData()
+							// imap and smtp connections returned valid
+							// write | update entity
+							var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+							var context: NSManagedObjectContext = appDel.managedObjectContext!
+							
+							if self.actionItem?.mailAdress == "Add New Account" {
+								var newEntry = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: context) as!EmailAccount
+								
+								for (key, value) in self.entries {
+									switch key {
+									case "Mailaddress:": 	newEntry.setValue(value, forKey: "emailAddress")
+									case "Username:": 	newEntry.setValue(value, forKey: "username")
+									case "Password:": 		newEntry.setValue(value, forKey: "password")
+									case "IMAP Hostname:": 	newEntry.setValue(value, forKey: "imapHostname")
+									case "IMAP Port:": 		newEntry.setValue(value.toInt(), forKey: "imapPort")
+									case "SMTP Hostname:": 	newEntry.setValue(value, forKey: "smtpHostname")
+									case "SMTP Port:": 		newEntry.setValue(value.toInt(), forKey: "smtpPort")
+									default: break
+									}
+								}
+							} else {
+								
+								var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
+								fetchRequest.predicate = NSPredicate(format: "emailAddress = %@", self.emailAcc!.emailAddress)
+								
+								if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+									if fetchResults.count != 0{
+										
+										var managedObject = fetchResults[0]
+										
+										for (key, value) in self.entries {
+											switch key {
+											case "Mailaddress:": 	managedObject.setValue(value, forKey: "emailAddress")
+											case "Username:": 		managedObject.setValue(value, forKey: "username")
+											case "Password:": 		managedObject.setValue(value, forKey: "password")
+											case "IMAP Hostname:": 	managedObject.setValue(value, forKey: "imapHostname")
+											case "IMAP Port:": 		managedObject.setValue(value.toInt(), forKey: "imapPort")
+											case "SMTP Hostname:": 	managedObject.setValue(value, forKey: "smtpHostname")
+											case "SMTP Port:": 		managedObject.setValue(value.toInt(), forKey: "smtpPort")
+											default: break
+											}
+										}
+									}
 								}
 							}
+							context.save(nil)
+							self.navigationController?.popViewControllerAnimated(true)
 						}
-					}
+					})
+					
 				}
-				context.save(nil)
-				self.navigationController?.popViewControllerAnimated(true)
-			}
+			})
+		
 		}
 	}
 
@@ -367,8 +383,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		return true
 	}
 	
-	func imapConnectionValid() -> Bool {
-		var connectionValid: Bool = true
+	func getImapOperation() -> MCOIMAPOperation {
+		
 		var session = MCOIMAPSession()
 		session.hostname = self.entries["IMAP Hostname:"]
 		session.port = uint(self.entries["IMAP Port:"]!.toInt()!)
@@ -376,36 +392,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		session.password = self.entries["Password:"]
 		session.connectionType = MCOConnectionType.TLS
 		session.authType = MCOAuthType.SASLPlain
-		
 		var address: MCOAddress = MCOAddress(mailbox: self.entries["Mailaddress:"])
 		let op = session.checkAccountOperation()
-		op.start({(NSError error) in
-			
-			if (error != nil) {
-				connectionValid = false
-				NSLog("can't establish imap connection: %@", error)
-				var alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
-				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
-				self.presentViewController(alert, animated: true, completion: nil)
-				
-				
-				
-			} else {
-				println("imap connection valid")
-				connectionValid = true
-				self.entriesChecked["IMAP Hostname:"] = true
-				self.entriesChecked["IMAP Port:"] = true
-				self.entriesChecked["Username:"] = true
-				self.entriesChecked["Password:"] = true
-			}
-		})
-		
-		return connectionValid
+		return op!
 		
 	}
 	
-	func smtpConnectionValid() -> Bool {
-		var connectionValid: Bool = true
+	func getSmtpOperation() -> MCOSMTPOperation {
 		var session = MCOSMTPSession()
 		session.hostname = self.entries["SMTP Hostname:"]
 		session.port = uint(self.entries["SMTP Port:"]!.toInt()!)
@@ -413,28 +406,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		session.password = self.entries["Password:"]
 		session.connectionType = MCOConnectionType.TLS
 		session.authType = MCOAuthType.SASLPlain
-		
 		var address: MCOAddress = MCOAddress(mailbox: self.entries["Mailaddress:"])
-		
 		let op = session.checkAccountOperationWithFrom(address)
-		op.start({(NSError error) in
-			if (error != nil) {
-				NSLog("can't establish smtp connection: %@", error)
-				var alert = UIAlertController(title: "Error", message: "Your Properties for SMTP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
-				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
-				self.presentViewController(alert, animated: true, completion: nil)
-				connectionValid = false
-				
-			} else {
-				println("smtp connection valid")
-				connectionValid = true
-				self.entriesChecked["SMTP Hostname:"] = true
-				self.entriesChecked["SMTP Port:"] = true
-				self.entriesChecked["Username:"] = true
-				self.entriesChecked["Password:"] = true
-			}
-		})
-		return connectionValid
+		return op
 	}
 	
 	func textFieldDidBeginEditing(textField: UITextField) {
@@ -456,7 +430,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				textField.text = ""
 			}
 		}
-		
+		// save data to entries
 		self.entries[textField.placeholder!] = textField.text
 		self.entriesChecked[textField.placeholder!] = false
 		
