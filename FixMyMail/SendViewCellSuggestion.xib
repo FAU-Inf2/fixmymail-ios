@@ -19,8 +19,16 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OU4-yh-gHx">
+                        <rect key="frame" x="31" y="6" width="247" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <connections>
+                            <action selector="EmailAddressEntered:" destination="mpv-Z3-1CB" eventType="editingChanged" id="BHG-q7-41Y"/>
+                        </connections>
+                    </textField>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="K8l-bQ-XVM">
-                        <rect key="frame" x="31" y="62" width="289" height="30"/>
+                        <rect key="frame" x="31" y="62" width="247" height="30"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                         <connections>
@@ -38,14 +46,6 @@
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OU4-yh-gHx">
-                        <rect key="frame" x="31" y="6" width="289" height="30"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
-                        <connections>
-                            <action selector="EmailAddressEntered:" destination="mpv-Z3-1CB" eventType="editingChanged" id="BHG-q7-41Y"/>
-                        </connections>
-                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Fdi-Gv-aJm" firstAttribute="top" secondItem="4an-BU-Hhp" secondAttribute="topMargin" constant="2" id="EwE-wG-1lx"/>
@@ -56,7 +56,7 @@
                     <constraint firstItem="OU4-yh-gHx" firstAttribute="trailing" secondItem="K8l-bQ-XVM" secondAttribute="trailing" id="UpP-cy-f0t"/>
                     <constraint firstItem="K8l-bQ-XVM" firstAttribute="top" secondItem="Fdi-Gv-aJm" secondAttribute="bottom" constant="31" id="aoP-Fh-PBL"/>
                     <constraint firstItem="OU4-yh-gHx" firstAttribute="top" secondItem="4an-BU-Hhp" secondAttribute="topMargin" constant="-2" id="fYl-LP-vGn"/>
-                    <constraint firstAttribute="trailing" secondItem="K8l-bQ-XVM" secondAttribute="trailing" id="uux-md-76a"/>
+                    <constraint firstAttribute="trailing" secondItem="K8l-bQ-XVM" secondAttribute="trailing" constant="42" id="uux-md-76a"/>
                     <constraint firstItem="OU4-yh-gHx" firstAttribute="leading" secondItem="Fdi-Gv-aJm" secondAttribute="trailing" constant="8" symbolic="YES" id="xiq-1r-lMN"/>
                 </constraints>
                 <variation key="default">

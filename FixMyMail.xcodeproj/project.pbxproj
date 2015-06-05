@@ -48,13 +48,13 @@
 		AD1255E01B1A302F005EA5CE /* sources.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DF1B1A302F005EA5CE /* sources.txt */; };
 		AD16B2231B1C594B001645A5 /* PreferenceAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD16B2211B1C594B001645A5 /* PreferenceAccountTableViewCell.swift */; };
 		AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */; };
+		AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */; };
+		AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */; };
 		AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0211B1AFE0300751FFA /* smile-gray.png */; };
 		AD44E0271B1B017900751FFA /* outlook.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0231B1B017900751FFA /* outlook.png */; };
 		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
 		AD44E0291B1B017900751FFA /* gmx.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0251B1B017900751FFA /* gmx.png */; };
 		AD44E02A1B1B017900751FFA /* webde.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0261B1B017900751FFA /* webde.png */; };
-		AD44E02D1B1B07D100751FFA /* PreferenceEditAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44E02B1B1B07D100751FFA /* PreferenceEditAccountViewController.swift */; };
-		AD44E02E1B1B07D100751FFA /* PreferenceEditAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD44E02C1B1B07D100751FFA /* PreferenceEditAccountViewController.xib */; };
 		AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */; };
 		AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0351B1B51ED00751FFA /* icloud-icon.png */; };
 		AD44E0381B1B528400751FFA /* fau-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0371B1B528400751FFA /* fau-logo.png */; };
@@ -71,6 +71,8 @@
 		ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */; };
 		ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */; };
 		ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */; };
+		ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */; };
+		ADDE66031B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,13 +135,13 @@
 		AD1255DF1B1A302F005EA5CE /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
 		AD16B2211B1C594B001645A5 /* PreferenceAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountTableViewCell.swift; sourceTree = "<group>"; };
 		AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountTableViewCell.xib; sourceTree = "<group>"; };
+		AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locksmith.swift; sourceTree = "<group>"; };
+		AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocksmithRequest.swift; sourceTree = "<group>"; };
 		AD44E0211B1AFE0300751FFA /* smile-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "smile-gray.png"; sourceTree = "<group>"; };
 		AD44E0231B1B017900751FFA /* outlook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outlook.png; sourceTree = "<group>"; };
 		AD44E0241B1B017900751FFA /* Yahoo-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Yahoo-icon.png"; sourceTree = "<group>"; };
 		AD44E0251B1B017900751FFA /* gmx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gmx.png; sourceTree = "<group>"; };
 		AD44E0261B1B017900751FFA /* webde.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = webde.png; sourceTree = "<group>"; };
-		AD44E02B1B1B07D100751FFA /* PreferenceEditAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountViewController.swift; sourceTree = "<group>"; };
-		AD44E02C1B1B07D100751FFA /* PreferenceEditAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountViewController.xib; sourceTree = "<group>"; };
 		AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextfieldWithPadding.swift; sourceTree = "<group>"; };
 		AD44E0351B1B51ED00751FFA /* icloud-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icloud-icon.png"; sourceTree = "<group>"; };
 		AD44E0371B1B528400751FFA /* fau-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fau-logo.png"; sourceTree = "<group>"; };
@@ -156,6 +158,8 @@
 		ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyItemTableViewCell.xib; sourceTree = "<group>"; };
 		ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedClassExtensions.swift; sourceTree = "<group>"; };
 		ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyChainListTableViewController.xib; sourceTree = "<group>"; };
+		ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountTableViewController.swift; sourceTree = "<group>"; };
+		ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountTableViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +276,7 @@
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				3D9027521AF96D0D000D3E72 /* MailCore.framework */,
 				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
+				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
 				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */,
@@ -320,8 +325,8 @@
 				AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */,
 				AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */,
 				AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */,
-				AD44E02B1B1B07D100751FFA /* PreferenceEditAccountViewController.swift */,
-				AD44E02C1B1B07D100751FFA /* PreferenceEditAccountViewController.xib */,
+				ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */,
+				ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -352,6 +357,15 @@
 				AD1255DF1B1A302F005EA5CE /* sources.txt */,
 			);
 			name = Icons;
+			sourceTree = "<group>";
+		};
+		AD187B1F1B1FB4D8007806D9 /* Locksmith */ = {
+			isa = PBXGroup;
+			children = (
+				AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */,
+				AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */,
+			);
+			name = Locksmith;
 			sourceTree = "<group>";
 		};
 		ADD135CE1B15B5C200A9B31A /* Model */ = {
@@ -446,11 +460,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
-				AD44E02E1B1B07D100751FFA /* PreferenceEditAccountViewController.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
 				8E450BAF1B15BBF0001E37B9 /* MailTableViewController.xib in Resources */,
+				ADDE66031B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib in Resources */,
 				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
 				8E450BA91B15BBF0001E37B9 /* CustomMailTableViewCell.xib in Resources */,
 				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
@@ -524,14 +538,16 @@
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */,
 				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
-				AD44E02D1B1B07D100751FFA /* PreferenceEditAccountViewController.swift in Sources */,
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
 				8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */,
+				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
 				8E450BAC1B15BBF0001E37B9 /* MailSendViewController.swift in Sources */,
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
+				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
+				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
@@ -673,6 +689,7 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/FixMyMail",
 				);
 				INFOPLIST_FILE = FixMyMail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -693,6 +710,7 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/FixMyMail",
 				);
 				INFOPLIST_FILE = FixMyMail/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

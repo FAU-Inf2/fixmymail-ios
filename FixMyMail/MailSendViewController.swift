@@ -2,14 +2,11 @@ import UIKit
 import CoreData
 import AddressBook
 import Foundation
+import AddressBookUI
 
-class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate {
     @IBOutlet weak var sendTableView: UITableView!
-    
-    @IBOutlet weak var txtTo: UITextField!
-    @IBOutlet weak var txtSubject: UITextField!
     @IBOutlet weak var tvText: UITextView!
-    @IBOutlet weak var Suggestion: UITextField!
     
     
     override func viewDidLoad() {
@@ -98,6 +95,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         case 0:
             var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSuggestion", forIndexPath: indexPath) as! SendViewCellSuggestion
             sendCell.emails = sortedEmails
+            var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+            addContacts.frame = CGRectMake(0, 0, 25, 25)
+            addContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
+            sendCell.accessoryView = addContacts
             return sendCell
         case 1:
             var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
@@ -108,14 +109,17 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    
-    
     // Addressbook functionality
+    //
+    //Collect Contacts from Addressbook and order Emails Ascending
+    //
+    
     var allEmail: NSMutableArray = []
     var sortedEmails: NSArray = []
     func addRecord(Entry: Record){
         allEmail.addObject(Entry)
     }
+    
     func orderEmails(){
         var allEmailIDs:NSArray = allEmail
         println("ordering")
@@ -129,8 +133,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func LoadAddresses() {
-        
-        //var contactList: NSArray = ABAddressBookCopyArrayOfAllPeople(addressBook).takeRetainedValue()
         var source: ABRecord = ABAddressBookCopyDefaultSource(addressBook).takeRetainedValue()
         var contactList: NSArray = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, ABPersonSortOrdering(kABPersonEmailProperty )).takeRetainedValue()
         
@@ -139,7 +141,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         for record:ABRecordRef in contactList{
             if !record.isEqual(nil){
                 var contactPerson: ABRecordRef = record
-                
                 let emailProperty: ABMultiValueRef = ABRecordCopyValue(record, kABPersonEmailProperty).takeRetainedValue() as ABMultiValueRef
                 if ABMultiValueGetCount(emailProperty) > 0 {
                     let allEmailIDs : NSArray = ABMultiValueCopyArrayOfAllValues(emailProperty).takeUnretainedValue() as NSArray
@@ -154,6 +155,37 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         orderEmails()
+    }
+    
+    //
+    //   öffnet das Telefonbuch in App
+    //
+    @IBAction func doPeoplePicker (sender:AnyObject!) {
+        let picker = ABPeoplePickerNavigationController()
+        picker.peoplePickerDelegate = self
+        picker.displayedProperties = [Int(kABPersonEmailProperty)]
+        picker.predicateForSelectionOfPerson = NSPredicate(value:false)
+        picker.predicateForSelectionOfProperty = NSPredicate(value:true)
+        self.presentViewController(picker, animated:true, completion:nil)
+    }
+    
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!) {
+            println("person")
+            println(person)
+    }
+    
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
+            println("person and property")
+            let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
+            let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
+            let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
+            println(email)
+            var cell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! SendViewCellSuggestion
+            if cell.txtTo.text == "" {
+                cell.txtTo.text = email
+            } else {
+                cell.txtTo.text = cell.txtTo.text + ", " + email
+            }
     }
 }
 
