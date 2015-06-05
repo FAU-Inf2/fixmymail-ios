@@ -35,7 +35,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		loadAccountDetails()
 		
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
-		self.navigationItem.title = actionItem?.mailAdress
+		self.navigationItem.title = actionItem?.emailAddress
 		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
 		self.sections = ["Account Details:", "", "Connection Details:", ""]
@@ -234,7 +234,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["SMTP Port:"] = ""
 		}
 		
-		if actionItem?.mailAdress != "Add New Account" {
+		if actionItem?.emailAddress != "Add New Account" {
 			self.deleteString.append("DELETE")
 		}
 		
@@ -303,7 +303,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 							var context: NSManagedObjectContext = appDel.managedObjectContext!
 							
-							if self.actionItem?.mailAdress == "Add New Account" {
+							if self.actionItem?.emailAddress == "Add New Account" {
 								var newEntry = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: context) as!EmailAccount
 								
 								for (key, value) in self.entries {

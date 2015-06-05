@@ -78,7 +78,7 @@ class PreferenceAccountListTableViewController: UITableViewController {
         // Configure the cell...
 		let cellItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 		
-		cell.menuLabel.text = cellItem.mailAdress
+		cell.menuLabel.text = cellItem.emailAddress
 		cell.menuImg.image = cellItem.cellIcon
 		
         return cell
@@ -208,12 +208,12 @@ class PreferenceAccountListTableViewController: UITableViewController {
 			}
 			
 			
-			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView", mailAdress: emailAcc.emailAddress, icon: accountImage)
+			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView",emailAddress: emailAcc.emailAddress, icon: accountImage)
 			accountPreferenceCellItem.append(actionItem)
 		}
 
 		// Add New Account Cell
-		otherItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", mailAdress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
+		otherItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", emailAddress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
 		
 		
 		rows.append(accountPreferenceCellItem)

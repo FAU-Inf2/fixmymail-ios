@@ -141,6 +141,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gmailAccount.smtpHostname = "smtp.gmail.com"
             gmailAccount.smtpPort = 465
             
+            var gmxAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            gmxAccount.username = "fixmymail@gmx.de"
+            gmxAccount.password = "fixinginMAD2015"
+            gmxAccount.emailAddress = "fixmymail@gmx.de"
+            gmxAccount.imapHostname = "imap.gmx.net"
+            gmxAccount.imapPort = 993
+            gmxAccount.smtpHostname = "mail.gmx.net"
+            gmxAccount.smtpPort = 465
+            
+            var webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            webAccount.username = "fixmymail@web.de"
+            webAccount.password = "fixinginMAD2015"
+            webAccount.emailAddress = "fixmymail@web.de"
+            webAccount.imapHostname = "imap.web.de"
+            webAccount.imapPort = 993
+            webAccount.smtpHostname = "smtp.web.de"
+            webAccount.smtpPort = 465
+            
+            
             /*let session = MCOIMAPSession()
             session.hostname = gmailAccount.imapHostname
             session.port = gmailAccount.imapPort
