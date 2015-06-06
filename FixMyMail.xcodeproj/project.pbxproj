@@ -40,11 +40,11 @@
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
 		8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E57385A1B1B19C8009AA28A /* WebViewController.swift */; };
-		A917E1F91B206D200069BC91 /* KSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A917E1F51B206D1F0069BC91 /* KSToken.swift */; };
-		A917E1FA1B206D200069BC91 /* KSTokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A917E1F61B206D1F0069BC91 /* KSTokenField.swift */; };
-		A917E1FB1B206D200069BC91 /* KSTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A917E1F71B206D1F0069BC91 /* KSTokenView.swift */; };
-		A917E1FC1B206D200069BC91 /* KSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A917E1F81B206D1F0069BC91 /* KSUtils.swift */; };
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
+		A963C3F91B23373800AABDE5 /* KSTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963C3F51B23373700AABDE5 /* KSTokenView.swift */; };
+		A963C3FA1B23373800AABDE5 /* KSTokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963C3F61B23373800AABDE5 /* KSTokenField.swift */; };
+		A963C3FB1B23373800AABDE5 /* KSToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963C3F71B23373800AABDE5 /* KSToken.swift */; };
+		A963C3FC1B23373800AABDE5 /* KSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963C3F81B23373800AABDE5 /* KSUtils.swift */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
 		AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */; };
 		AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DB1B1A223A005EA5CE /* ios7-plus.png */; };
@@ -132,11 +132,11 @@
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		A917E1F51B206D1F0069BC91 /* KSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSToken.swift; path = "../../../Downloads/KSTokenView-master/KSTokenView/KSToken.swift"; sourceTree = "<group>"; };
-		A917E1F61B206D1F0069BC91 /* KSTokenField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSTokenField.swift; path = "../../../Downloads/KSTokenView-master/KSTokenView/KSTokenField.swift"; sourceTree = "<group>"; };
-		A917E1F71B206D1F0069BC91 /* KSTokenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSTokenView.swift; path = "../../../Downloads/KSTokenView-master/KSTokenView/KSTokenView.swift"; sourceTree = "<group>"; };
-		A917E1F81B206D1F0069BC91 /* KSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSUtils.swift; path = "../../../Downloads/KSTokenView-master/KSTokenView/KSUtils.swift"; sourceTree = "<group>"; };
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
+		A963C3F51B23373700AABDE5 /* KSTokenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSTokenView.swift; path = ../KSTokenView.swift; sourceTree = "<group>"; };
+		A963C3F61B23373800AABDE5 /* KSTokenField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSTokenField.swift; path = ../KSTokenField.swift; sourceTree = "<group>"; };
+		A963C3F71B23373800AABDE5 /* KSToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSToken.swift; path = ../KSToken.swift; sourceTree = "<group>"; };
+		A963C3F81B23373800AABDE5 /* KSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSUtils.swift; path = ../KSUtils.swift; sourceTree = "<group>"; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
 		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
 		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
@@ -281,6 +281,10 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A963C3F51B23373700AABDE5 /* KSTokenView.swift */,
+				A963C3F61B23373800AABDE5 /* KSTokenField.swift */,
+				A963C3F71B23373800AABDE5 /* KSToken.swift */,
+				A963C3F81B23373800AABDE5 /* KSUtils.swift */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
@@ -288,10 +292,6 @@
 				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
 				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
 				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
-				A917E1F51B206D1F0069BC91 /* KSToken.swift */,
-				A917E1F61B206D1F0069BC91 /* KSTokenField.swift */,
-				A917E1F71B206D1F0069BC91 /* KSTokenView.swift */,
-				A917E1F81B206D1F0069BC91 /* KSUtils.swift */,
 				AD24BE1F1B23042500804732 /* EmailAccount_Support.swift */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */,
@@ -541,10 +541,10 @@
 				AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */,
 				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,
+				A963C3FC1B23373800AABDE5 /* KSUtils.swift in Sources */,
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
-				A917E1FB1B206D200069BC91 /* KSTokenView.swift in Sources */,
 				AD24BE201B23042500804732 /* EmailAccount_Support.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
@@ -558,20 +558,20 @@
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
 				8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */,
 				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
-				A917E1F91B206D200069BC91 /* KSToken.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
-				A917E1FA1B206D200069BC91 /* KSTokenField.swift in Sources */,
 				8E450BAC1B15BBF0001E37B9 /* MailSendViewController.swift in Sources */,
+				A963C3FA1B23373800AABDE5 /* KSTokenField.swift in Sources */,
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
+				A963C3F91B23373800AABDE5 /* KSTokenView.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
-				A917E1FC1B206D200069BC91 /* KSUtils.swift in Sources */,
 				AD16B2231B1C594B001645A5 /* PreferenceAccountTableViewCell.swift in Sources */,
+				A963C3FB1B23373800AABDE5 /* KSToken.swift in Sources */,
 				AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */,
 				8E1441171B1DEFFA00F1A023 /* SendViewCellSuggestion.swift in Sources */,
 			);
