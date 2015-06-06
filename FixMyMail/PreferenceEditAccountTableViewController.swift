@@ -29,6 +29,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var deleteString = [String]()
 	var alert: UIAlertController?
 	var selectedTextfield: UITextField?
+	var authConVC: AuthConTableViewController?
 	
         
     override func viewDidLoad() {
@@ -102,7 +103,17 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		var labelString = self.rows[indexPath.section][indexPath.row] as! String
+		var textfieldString = self.entries[labelString]
 		
+		
+		if labelString == "IMAP Auth:" || labelString == "SMTP Auth:"  ||
+			labelString == "IMAP ConType:" ||  labelString == "SMTP ConType:" {
+			self.authConVC = AuthConTableViewController(nibName:"AuthConTableViewController", bundle: nil)
+			self.authConVC!.labelPreviousVC = labelString
+			self.authConVC!.selectedString = textfieldString!
+			self.navigationController?.pushViewController(self.authConVC!, animated: true)
+		}
 		tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		
 		// show alert dialog
@@ -114,6 +125,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
 
+		if self.authConVC != nil {
+			self.entries[self.authConVC!.labelPreviousVC] = self.authConVC!.selectedString
+		}
+		
         // Configure the cell...
 		cell.textfield.delegate = self
 		cell.labelCellContent.text = self.rows[indexPath.section][indexPath.row] as? String
@@ -256,10 +271,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["Mailaddress:"] = ""
 			self.entries["Username:"] = ""
 			self.entries["Password:"] = ""
+			
 			self.entries["IMAP Hostname:"] = ""
 			self.entries["IMAP Port:"] = ""
 			self.entries["IMAP Auth:"] = ""
 			self.entries["IMAP ConType:"] = ""
+			
 			self.entries["SMTP Hostname:"] = ""
 			self.entries["SMTP Port:"] = ""
 			self.entries["SMTP Auth:"] = ""

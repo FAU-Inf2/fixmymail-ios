@@ -63,6 +63,10 @@
 		AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */; };
 		AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0351B1B51ED00751FFA /* icloud-icon.png */; };
 		AD44E0381B1B528400751FFA /* fau-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0371B1B528400751FFA /* fau-logo.png */; };
+		AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */; };
+		AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */; };
+		AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */; };
+		AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */; };
 		AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */; };
 		AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */; };
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
@@ -155,6 +159,10 @@
 		AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextfieldWithPadding.swift; sourceTree = "<group>"; };
 		AD44E0351B1B51ED00751FFA /* icloud-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icloud-icon.png"; sourceTree = "<group>"; };
 		AD44E0371B1B528400751FFA /* fau-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fau-logo.png"; sourceTree = "<group>"; };
+		AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewController.swift; sourceTree = "<group>"; };
+		AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewController.xib; sourceTree = "<group>"; };
+		AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewCell.swift; sourceTree = "<group>"; };
+		AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewCell.xib; sourceTree = "<group>"; };
 		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
 		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -342,6 +350,8 @@
 				AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */,
 				ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */,
 				ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */,
+				AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */,
+				AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -353,6 +363,8 @@
 				AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */,
 				AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */,
 				AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */,
+				AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */,
+				AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -475,6 +487,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
+				AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
@@ -496,6 +509,7 @@
 				ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */,
 				AD44E0291B1B017900751FFA /* gmx.png in Resources */,
 				ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */,
+				AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */,
 				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
 				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
@@ -558,6 +572,7 @@
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
 				8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */,
 				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
+				AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
 				8E450BAC1B15BBF0001E37B9 /* MailSendViewController.swift in Sources */,
@@ -567,6 +582,7 @@
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
+				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
 				A963C3F91B23373800AABDE5 /* KSTokenView.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
