@@ -4,13 +4,9 @@ import AddressBook
 import Foundation
 import AddressBookUI
 
-
-class MailSendViewController: UIViewController, ABPeoplePickerNavigationControllerDelegate{
-
-    @IBOutlet weak var txtTo: UITextField!
-    @IBOutlet weak var txtSubject: UITextField!
+class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate {
+    @IBOutlet weak var sendTableView: UITableView!
     @IBOutlet weak var tvText: UITextView!
-    @IBOutlet weak var Suggestion: UITextField!
     var tokenView: KSTokenView = KSTokenView(frame: .zeroRect)
     
 
@@ -25,12 +21,13 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
         var sendBut: UIBarButtonItem = UIBarButtonItem(title: "Senden", style: .Plain, target: self, action: "butSend:")
         self.navigationItem.rightBarButtonItem = sendBut
         LoadAddresses()
-        let tokenView = KSTokenView(frame: CGRect(x: 76, y: 116, width: 250, height: 30))
+        let tokenView = KSTokenView(frame: CGRect(x: 76, y: 100, width: 250, height: 30))
         tokenView.delegate = self
         tokenView.placeholder = "Email"
         tokenView.descriptionText = "Emails"
         tokenView.maxTokenLimit = -1
         tokenView.searchResultBackgroundColor = UIColor.lightGrayColor()
+        tokenView.removesTokensOnEndEditing = false
         view.addSubview(tokenView)
 
     }
@@ -66,6 +63,7 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
                 builder.header.sender = sender
                 var tos : NSMutableArray = NSMutableArray()
                 var toCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! SendViewCellSuggestion
+               // toCell.txtTo.text = tokenView.descriptionText
                 var recipients: String = toCell.txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                 for recipient in recipients.componentsSeparatedByString(", ") {
                     var to = MCOAddress()
@@ -181,6 +179,12 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
         picker.predicateForSelectionOfPerson = NSPredicate(value:false)
         picker.predicateForSelectionOfProperty = NSPredicate(value:true)
         self.presentViewController(picker, animated:true, completion:nil)
+        var tok: Array<KSToken>= tokenView.tokens()!
+        /*var emailaddr: NSMutableArray = []
+        for var index = 0; index < tok.count-1; ++index {
+            emailaddr.addObject(tokenView(tokenView, displayTitleForObject: ))
+        }
+        println ("contactEmail :\( emailaddr.firstObject as! String)")*/
     }
     
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!) {
@@ -194,82 +198,9 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
         let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
         let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
         println(email)
-        txtTo.text=email
+        //TODO
+        //Email in KSTokenView einbinden
      }
-    
-    
-    //############################################### wird nicht mehr gebraucht #############################################################
-    /*
-    
-    //
-    //Check if similar Email exists in Addressbook
-    //
-    
-    //wird nicht mehr gebraucht
-    @IBAction func EmailAddressEntered(sender: AnyObject) {
-        var email:String=txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        var i: Int = count(email)
-        println("Toaddress: \(txtTo.text)")
-        if(email==""){
-            Suggestion.text=""
-        }
-        else if(email==Suggestion.text){}
-        else if(email.rangeOfString(",") != nil){
-            var add:NSArray = email.componentsSeparatedByString(",")
-            i=count(add.lastObject!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) as String)
-            if(i != 0){
-                checkforsimilarEmail(i, email:add.lastObject!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) as String)
-            }
-        }
-        else{
-            checkforsimilarEmail(i, email:email as String)
-        }
-    }
-    
-    //wird nicht mehr gebraucht
-    func checkforsimilarEmail(i:Int,email:String){
-        println("Toaddress: \(email)")
-        for results in sortedEmails{
-            if(i>count(results.email)){
-                continue
-            }
-            let index: String.Index = advance(results.email.startIndex, i)
-            var substring: String = results.email.substringToIndex(index)
-            if(substring==email){
-                Suggestion.text = results.email
-                break
-            }
-            Suggestion.text = ""
-        }
-    }
-    
-    //
-    //Confirm suggested Emailaddress
-    //
-    
-    //wird nicht mehr gebraucht
-    @IBAction func ConfirmEmail(sender: AnyObject) {
-        var txtAddresses:String=""
-        var add:Array=txtTo.text.componentsSeparatedByString(",")
-        if(add.count > 1){
-            add.removeAtIndex(add.count-1)
-            for var index = 0; index < add.count; ++index{
-                txtAddresses += add[index] as String
-                txtAddresses += ", "
-            }
-            txtAddresses += Suggestion.text
-            txtTo.text=txtAddresses
-            Suggestion.text=""
-        }
-        else if(!(Suggestion.text==nil)){
-            txtTo.text=Suggestion.text
-            Suggestion.text=""
-        }
-    }
-    */
-    //###############################################     Ende          #############################################################
-    
-    
     
    
     
