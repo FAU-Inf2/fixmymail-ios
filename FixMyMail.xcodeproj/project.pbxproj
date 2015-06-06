@@ -54,6 +54,7 @@
 		AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */; };
 		AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */; };
 		AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */; };
+		AD24BE201B23042500804732 /* EmailAccount_Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD24BE1F1B23042500804732 /* EmailAccount_Support.swift */; };
 		AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0211B1AFE0300751FFA /* smile-gray.png */; };
 		AD44E0271B1B017900751FFA /* outlook.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0231B1B017900751FFA /* outlook.png */; };
 		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
@@ -145,6 +146,7 @@
 		AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountTableViewCell.xib; sourceTree = "<group>"; };
 		AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locksmith.swift; sourceTree = "<group>"; };
 		AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocksmithRequest.swift; sourceTree = "<group>"; };
+		AD24BE1F1B23042500804732 /* EmailAccount_Support.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccount_Support.swift; sourceTree = "<group>"; };
 		AD44E0211B1AFE0300751FFA /* smile-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "smile-gray.png"; sourceTree = "<group>"; };
 		AD44E0231B1B017900751FFA /* outlook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outlook.png; sourceTree = "<group>"; };
 		AD44E0241B1B017900751FFA /* Yahoo-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Yahoo-icon.png"; sourceTree = "<group>"; };

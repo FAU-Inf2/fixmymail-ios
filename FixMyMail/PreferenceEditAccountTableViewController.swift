@@ -17,9 +17,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var managedObjectContext: NSManagedObjectContext!
 	var sections = [String]()
 	var labelAccountDetailString = [String]()
-	var labelConnectionDetailString = [String]()
+	var labelImapConnectionDetailString = [String]()
+	var labelSmtpConnectionDetailString = [String]()
 	var cellAccountTextfielString = [String]()
-	var cellConnectionTextfielString = [String]()
+	var cellImapConnectionTextfielString = [String]()
+	var cellSmtpConnectionTextfielString = [String]()
 	var rows = [AnyObject]()
 	var rowsEmail = [AnyObject]()
 	var entries = [String: String]()
@@ -38,7 +40,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.navigationItem.title = actionItem?.emailAddress
 		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
-		self.sections = ["Account Details:", "", "Connection Details:", ""]
+		self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", ""]
 		
 		// set alert dialog
 	    alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
@@ -130,11 +132,19 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		} else {
 			cell.textfield.secureTextEntry = false
 		}
+		
+		// set auth and conn cells
+		if cell.textfield.placeholder == "IMAP Auth:" || cell.textfield.placeholder == "SMTP Auth:"
+		 || cell.textfield.placeholder == "IMAP ConType:" || cell.textfield.placeholder == "SMTP ConType:" {
+			cell.textfield.enabled = false
+		} else {
+			cell.textfield.enabled = true
+		}
 	
 		if emailAcc != nil {
 			cell.textfield.text = self.entries[cell.labelCellContent.text!]
 			cell.labelCellContent.textAlignment = NSTextAlignment.Left
-			cell.textfield.enabled = true
+			//cell.textfield.enabled = true
 			self.entriesChecked[cell.labelCellContent.text!] = false
 			
 			// configure delete cell
@@ -203,35 +213,57 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.labelAccountDetailString.append("Mailaddress:")
 		self.labelAccountDetailString.append("Username:")
 		self.labelAccountDetailString.append("Password:")
-		self.labelConnectionDetailString.append("IMAP Hostname:")
-		self.labelConnectionDetailString.append("IMAP Port:")
-		self.labelConnectionDetailString.append("SMTP Hostname:")
-		self.labelConnectionDetailString.append("SMTP Port:")
+		
+		self.labelImapConnectionDetailString.append("IMAP Hostname:")
+		self.labelImapConnectionDetailString.append("IMAP Port:")
+		self.labelImapConnectionDetailString.append("IMAP Auth:")
+		self.labelImapConnectionDetailString.append("IMAP ConType:")
+		
+		self.labelSmtpConnectionDetailString.append("SMTP Hostname:")
+		self.labelSmtpConnectionDetailString.append("SMTP Port:")
+		self.labelSmtpConnectionDetailString.append("SMTP Auth:")
+		self.labelSmtpConnectionDetailString.append("SMTP ConType:")
 		
 		if emailAcc != nil {
 			self.cellAccountTextfielString.append(emailAcc!.emailAddress)
 			self.cellAccountTextfielString.append(emailAcc!.username)
 			self.cellAccountTextfielString.append(emailAcc!.password)
-			self.cellConnectionTextfielString.append(emailAcc!.imapHostname)
-			self.cellConnectionTextfielString.append(String(Int(emailAcc!.imapPort)))
-			self.cellConnectionTextfielString.append(emailAcc!.smtpHostname)
-			self.cellConnectionTextfielString.append(String(Int(emailAcc!.smtpPort)))
+			
+			self.cellImapConnectionTextfielString.append(emailAcc!.imapHostname)
+			self.cellImapConnectionTextfielString.append(String(Int(emailAcc!.imapPort)))
+			self.cellImapConnectionTextfielString.append(emailAcc!.authTypeImap)
+			self.cellImapConnectionTextfielString.append(emailAcc!.connectionTypeImap)
+			
+			self.cellSmtpConnectionTextfielString.append(emailAcc!.smtpHostname)
+			self.cellSmtpConnectionTextfielString.append(String(Int(emailAcc!.smtpPort)))
+			self.cellSmtpConnectionTextfielString.append(emailAcc!.authTypeSmtp)
+			self.cellSmtpConnectionTextfielString.append(emailAcc!.connectionTypeSmtp)
 			
 			self.entries["Mailaddress:"] = emailAcc!.emailAddress
 			self.entries["Username:"] = emailAcc!.username
 			self.entries["Password:"] = emailAcc!.password
+			
 			self.entries["IMAP Hostname:"] = emailAcc!.imapHostname
 			self.entries["IMAP Port:"] = String(Int(emailAcc!.imapPort))
+			self.entries["IMAP Auth:"] = emailAcc!.authTypeImap
+			self.entries["IMAP ConType:"] = emailAcc!.connectionTypeImap
+			
 			self.entries["SMTP Hostname:"] = emailAcc!.smtpHostname
 			self.entries["SMTP Port:"] = String(Int(emailAcc!.smtpPort))
+			self.entries["SMTP Auth:"] = emailAcc!.authTypeSmtp
+			self.entries["SMTP ConType:"] = emailAcc!.connectionTypeSmtp
 		} else {
 			self.entries["Mailaddress:"] = ""
 			self.entries["Username:"] = ""
 			self.entries["Password:"] = ""
 			self.entries["IMAP Hostname:"] = ""
 			self.entries["IMAP Port:"] = ""
+			self.entries["IMAP Auth:"] = ""
+			self.entries["IMAP ConType:"] = ""
 			self.entries["SMTP Hostname:"] = ""
 			self.entries["SMTP Port:"] = ""
+			self.entries["SMTP Auth:"] = ""
+			self.entries["SMTP ConType:"] = ""
 		}
 		
 		if actionItem?.emailAddress != "Add New Account" {
@@ -239,13 +271,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		}
 		
 		rows.append(self.labelAccountDetailString)
-		rows.append([])
-		rows.append(self.labelConnectionDetailString)
+		rows.append(self.labelImapConnectionDetailString)
+		rows.append(self.labelSmtpConnectionDetailString)
 		rows.append(self.deleteString)
 		
 		rowsEmail.append(self.cellAccountTextfielString)
-		rowsEmail.append([])
-		rowsEmail.append(self.cellConnectionTextfielString)
+		rowsEmail.append(self.cellImapConnectionTextfielString)
+		rowsEmail.append(self.cellSmtpConnectionTextfielString)
 		rowsEmail.append(self.deleteString)
 		
 	}
@@ -282,6 +314,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					self.entriesChecked["IMAP Port:"] = true
 					self.entriesChecked["Username:"] = true
 					self.entriesChecked["Password:"] = true
+					self.entriesChecked["IMAP Auth:"] = true
+					self.entriesChecked["IMAP ConType:"] = true
 					self.tableView.reloadData()
 					// imap connection valid -> test the smtp connection
 					var smtpOperation = self.getSmtpOperation()
@@ -301,6 +335,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							self.entriesChecked["SMTP Port:"] = true
 							self.entriesChecked["Username:"] = true
 							self.entriesChecked["Password:"] = true
+							self.entriesChecked["SMTP Auth:"] = true
+							self.entriesChecked["SMTP ConType:"] = true
 							self.tableView.reloadData()
 							// imap and smtp connections returned valid
 							// write | update entity
@@ -312,13 +348,17 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 								
 								for (key, value) in self.entries {
 									switch key {
-									case "Mailaddress:": 	newEntry.setValue(value, forKey: "emailAddress")
-									case "Username:": 	newEntry.setValue(value, forKey: "username")
-									case "Password:": 		newEntry.setValue(value, forKey: "password")
-									case "IMAP Hostname:": 	newEntry.setValue(value, forKey: "imapHostname")
-									case "IMAP Port:": 		newEntry.setValue(value.toInt(), forKey: "imapPort")
-									case "SMTP Hostname:": 	newEntry.setValue(value, forKey: "smtpHostname")
-									case "SMTP Port:": 		newEntry.setValue(value.toInt(), forKey: "smtpPort")
+									case "Mailaddress:": 		newEntry.setValue(value, forKey: "emailAddress")
+									case "Username:": 			newEntry.setValue(value, forKey: "username")
+									case "Password:": 			newEntry.setValue(value, forKey: "password")
+									case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
+									case "IMAP Port:": 			newEntry.setValue(value.toInt(), forKey: "imapPort")
+									case "IMAP Auth:":			newEntry.setValue(value, forKey: "authTypeImap")
+									case "IMAP ConType:":		newEntry.setValue(value, forKey: "connectionTypeImap")
+									case "SMTP Hostname:": 		newEntry.setValue(value, forKey: "smtpHostname")
+									case "SMTP Port:": 			newEntry.setValue(value.toInt(), forKey: "smtpPort")
+									case "SMTP Auth:": 			newEntry.setValue(value, forKey: "authTypeSmtp")
+									case "SMTP ConType:":		newEntry.setValue(value, forKey: "connectionTypeSmtp")
 									default: break
 									}
 								}
@@ -334,13 +374,17 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 										
 										for (key, value) in self.entries {
 											switch key {
-											case "Mailaddress:": 	managedObject.setValue(value, forKey: "emailAddress")
-											case "Username:": 		managedObject.setValue(value, forKey: "username")
-											case "Password:": 		managedObject.setValue(value, forKey: "password")
-											case "IMAP Hostname:": 	managedObject.setValue(value, forKey: "imapHostname")
-											case "IMAP Port:": 		managedObject.setValue(value.toInt(), forKey: "imapPort")
-											case "SMTP Hostname:": 	managedObject.setValue(value, forKey: "smtpHostname")
-											case "SMTP Port:": 		managedObject.setValue(value.toInt(), forKey: "smtpPort")
+											case "Mailaddress:": 		managedObject.setValue(value, forKey: "emailAddress")
+											case "Username:": 			managedObject.setValue(value, forKey: "username")
+											case "Password:": 			managedObject.setValue(value, forKey: "password")
+											case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
+											case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
+											case "IMAP Auth:":			managedObject.setValue(value, forKey: "authTypeImap")
+											case "IMAP ConType:":	managedObject.setValue(value, forKey: "connectionTypeImap")
+											case "SMTP Hostname:": 		managedObject.setValue(value, forKey: "smtpHostname")
+											case "SMTP Port:": 			managedObject.setValue(value.toInt(), forKey: "smtpPort")
+											case "SMTP Auth:": 			managedObject.setValue(value, forKey: "authTypeSmtp")
+											case "SMTP ConType:":	managedObject.setValue(value, forKey: "connectionTypeSmtp")
 											default: break
 											}
 										}
@@ -398,8 +442,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		session.port = uint(self.entries["IMAP Port:"]!.toInt()!)
 		session.username = self.entries["Username:"]
 		session.password = self.entries["Password:"]
-		session.connectionType = MCOConnectionType.TLS
-		session.authType = MCOAuthType.SASLPlain
+		var con = StringToConnectionType(self.entries["IMAP ConType:"]!)
+		var auth = StringToAuthType(self.entries["IMAP Auth:"]!)
+		session.connectionType = StringToConnectionType(self.entries["IMAP ConType:"]!)
+		session.authType = StringToAuthType(self.entries["IMAP Auth:"]!)
 		var address: MCOAddress = MCOAddress(mailbox: self.entries["Mailaddress:"])
 		let op = session.checkAccountOperation()
 		return op!
@@ -412,12 +458,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		session.port = uint(self.entries["SMTP Port:"]!.toInt()!)
 		session.username = self.entries["Username:"]
 		session.password = self.entries["Password:"]
-		session.connectionType = MCOConnectionType.TLS
-		session.authType = MCOAuthType.SASLPlain
+		session.connectionType = StringToConnectionType(self.entries["SMTP ConType:"]!)
+		session.authType = StringToAuthType(self.entries["SMTP Auth:"]!)
 		var address: MCOAddress = MCOAddress(mailbox: self.entries["Mailaddress:"])
 		let op = session.checkAccountOperationWithFrom(address)
 		return op
 	}
+	
+		
 	
 	func textFieldDidBeginEditing(textField: UITextField) {
 		self.selectedTextfield = textField
