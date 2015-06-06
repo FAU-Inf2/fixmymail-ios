@@ -20,5 +20,10 @@ class EmailAccount: NSManagedObject {
     @NSManaged var smtpPort: UInt32
     @NSManaged var emails: NSSet
     @NSManaged var active: Bool
-    
+	@NSManaged var authTypeImap: String
+	@NSManaged var connectionTypeImap: String
+	@NSManaged var authTypeSmtp: String
+	@NSManaged var connectionTypeSmtp: String
+	
+	
 }
