@@ -206,8 +206,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         NSLog("\(newMails) new Mails")
                         self.refreshTableView()
                     }
-                    
-                    var disconnect: IMA = IMAPDisconnectOperation()
                 })
             }
         }
