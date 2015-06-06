@@ -6,16 +6,28 @@ import AddressBookUI
 
 
 class MailSendViewController: UIViewController, ABPeoplePickerNavigationControllerDelegate{
+
     @IBOutlet weak var txtTo: UITextField!
     @IBOutlet weak var txtSubject: UITextField!
     @IBOutlet weak var tvText: UITextView!
     @IBOutlet weak var Suggestion: UITextField!
+    var tokenView: KSTokenView = KSTokenView(frame: .zeroRect)
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         var sendBut: UIBarButtonItem = UIBarButtonItem(title: "Senden", style: .Plain, target: self, action: "butSend:")
         self.navigationItem.rightBarButtonItem = sendBut
         LoadAddresses()
+        let tokenView = KSTokenView(frame: CGRect(x: 76, y: 116, width: 250, height: 30))
+        tokenView.delegate = self
+        tokenView.placeholder = "Email"
+        tokenView.descriptionText = "Emails"
+        tokenView.maxTokenLimit = -1
+        tokenView.searchResultBackgroundColor = UIColor.lightGrayColor()
+        view.addSubview(tokenView)
+
     }
     
     
@@ -121,9 +133,40 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
     }
     
     //
+    //   öffnet das Telefonbuch in App
+    //
+    @IBAction func doPeoplePicker (sender:AnyObject!) {
+        let picker = ABPeoplePickerNavigationController()
+        picker.peoplePickerDelegate = self
+        picker.displayedProperties = [Int(kABPersonEmailProperty)]
+        picker.predicateForSelectionOfPerson = NSPredicate(value:false)
+        picker.predicateForSelectionOfProperty = NSPredicate(value:true)
+        self.presentViewController(picker, animated:true, completion:nil)
+    }
+    
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!) {
+        println("person")
+        println(person)
+    }
+    
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
+        println("person and property")
+        let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
+        let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
+        let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
+        println(email)
+        txtTo.text=email
+     }
+    
+    
+    //############################################### wird nicht mehr gebraucht #############################################################
+    /*
+    
+    //
     //Check if similar Email exists in Addressbook
     //
     
+    //wird nicht mehr gebraucht
     @IBAction func EmailAddressEntered(sender: AnyObject) {
         var email:String=txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         var i: Int = count(email)
@@ -144,6 +187,7 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
         }
     }
     
+    //wird nicht mehr gebraucht
     func checkforsimilarEmail(i:Int,email:String){
         println("Toaddress: \(email)")
         for results in sortedEmails{
@@ -164,6 +208,7 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
     //Confirm suggested Emailaddress
     //
     
+    //wird nicht mehr gebraucht
     @IBAction func ConfirmEmail(sender: AnyObject) {
         var txtAddresses:String=""
         var add:Array=txtTo.text.componentsSeparatedByString(",")
@@ -182,32 +227,30 @@ class MailSendViewController: UIViewController, ABPeoplePickerNavigationControll
             Suggestion.text=""
         }
     }
+    */
+    //###############################################     Ende          #############################################################
     
-    //
-    //   öffnet das Telefonbuch in App
-    //
-    @IBAction func doPeoplePicker (sender:AnyObject!) {
-        let picker = ABPeoplePickerNavigationController()
-        picker.peoplePickerDelegate = self
-        picker.displayedProperties = [Int(kABPersonEmailProperty)]
-        picker.predicateForSelectionOfPerson = NSPredicate(value:false)
-        picker.predicateForSelectionOfProperty = NSPredicate(value:true)
-        self.presentViewController(picker, animated:true, completion:nil)
+    
+    
+   
+    
+}
+extension MailSendViewController: KSTokenViewDelegate {
+    func tokenView(token: KSTokenView, performSearchWithString string: String, completion: ((results: Array<AnyObject>) -> Void)?) {
+        token.searchResultBackgroundColor = UIColor.lightGrayColor()
+        var data: Array<String> = []
+        for value in sortedEmails {
+            var emailaddress:String = value.email
+            if emailaddress.lowercaseString.rangeOfString(string.lowercaseString) != nil {
+                data.append(emailaddress as String)
+            }
+        }
+        completion!(results: data)
     }
     
-    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!) {
-        println("person")
-        println(person)
-    }
-    
-    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
-            println("person and property")
-            let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
-            let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
-            let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
-            println(email)
-            txtTo.text=email
-            
+    func tokenView(token: KSTokenView, displayTitleForObject object: AnyObject) -> String {
+        
+        return object as! String
     }
 }
 
