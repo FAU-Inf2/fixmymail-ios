@@ -52,7 +52,7 @@ class SidebarTableViewController: UITableViewController {
         var inboxRows: [ActionItem] = [ActionItem]()
         inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll"))
         for emailAcc: EmailAccount in accountArr {
-            var actionItem = ActionItem(Name: emailAcc.username, viewController: "EmailSpecific", mailAdress: emailAcc.emailAddress)
+            var actionItem = ActionItem(Name: emailAcc.username, viewController: "EmailSpecific", emailAddress: emailAcc.emailAddress)
             inboxRows.append(actionItem)
         }
         

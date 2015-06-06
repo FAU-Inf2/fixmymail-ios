@@ -138,11 +138,11 @@ class PreferenceTableViewController: UITableViewController {
 	
 	func loadPreferenceCells() {
 		
-		var item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", mailAdress: nil, icon: nil)
-		var item2 = ActionItem(Name: "TODO", viewController: "TODO_Pref", mailAdress: nil, icon: nil)
-		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", mailAdress: nil, icon: nil)
-		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", mailAdress: nil, icon: nil)
-		var item5 = ActionItem(Name: "Feedback", viewController: "Feedback", mailAdress: nil, icon: nil)
+		var item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", emailAddress: nil, icon: nil)
+		var item2 = ActionItem(Name: "TODO", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
+		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", emailAddress: nil, icon: nil)
+		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", emailAddress: nil, icon: nil)
+		var item5 = ActionItem(Name: "Feedback", viewController: "Feedback", emailAddress: nil, icon: nil)
 		
 		otherItem.append(item4)
 		otherItem.append(item5)

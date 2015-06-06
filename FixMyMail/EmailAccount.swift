@@ -19,5 +19,6 @@ class EmailAccount: NSManagedObject {
     @NSManaged var smtpHostname: String
     @NSManaged var smtpPort: UInt32
     @NSManaged var emails: NSSet
-
+    @NSManaged var active: Bool
+    
 }
