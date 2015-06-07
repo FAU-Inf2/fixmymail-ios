@@ -239,6 +239,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         //if let mailcell = mycell {
             mailcell.mailFrom.text = mail.sender
             mailcell.mailBody.text = mail.title
+            if (mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Seen == MCOMessageFlag.Seen{
+                mailcell.unseendot.hidden = true
+            } else {
+                mailcell.unseendot.hidden = false
+            }
             mailcell.mail = mail
         
             return mailcell
@@ -270,6 +275,27 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         mailView.session = session
         self.navigationController?.pushViewController(mailView, animated: true)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        //set seen flag
+        if (mailView.message.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Seen != MCOMessageFlag.Seen {
+            var newmcomessage = (mailView.message.mcomessage as! MCOIMAPMessage)
+            newmcomessage.flags |= MCOMessageFlag.Seen
+            mailView.message.mcomessage = newmcomessage
+            let setSeenFlagOP = session.storeFlagsOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((mailView.message.mcomessage as! MCOIMAPMessage).uid)), kind: MCOIMAPStoreFlagsRequestKind.Add, flags: MCOMessageFlag.Seen)
+            
+            setSeenFlagOP.start({ (error) -> Void in
+                if let error = error {
+                    NSLog("error in setSeenFlagOP: \(error.userInfo)")
+                } else {
+                    NSLog("email.seenflag = true")
+                    
+                    let expangeFolder = session.expungeOperation("INBOX")
+                    expangeFolder.start({ (error) -> Void in })
+                }
+            })
+            
+            self.refreshTableView()
+        }
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
