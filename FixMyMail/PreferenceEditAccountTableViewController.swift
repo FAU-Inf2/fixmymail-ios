@@ -29,15 +29,15 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var deleteString = [String]()
 	var alert: UIAlertController?
 	var selectedTextfield: UITextField?
+	var selectedIndexPath: NSIndexPath?
 	var authConVC: AuthConTableViewController?
+	var origintableViewInsets: UIEdgeInsets?
 	
 	
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		
-		
+	
 		loadAccountDetails()
 		
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
@@ -505,6 +505,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func textFieldDidBeginEditing(textField: UITextField) {
 		self.selectedTextfield = textField
+		var cellView = textField.superview
+		var cell = cellView?.superview as! PreferenceAccountTableViewCell
+		var indexPath = self.tableView.indexPathForCell(cell)
+		self.selectedIndexPath = indexPath
 	}
 	
 	func textFieldDidEndEditing(textField: UITextField) {
@@ -525,6 +529,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.entries[textField.placeholder!] = textField.text
 		self.entriesChecked[textField.placeholder!] = false
 		self.selectedTextfield = nil
+		self.selectedIndexPath = nil
 	}
 	
 	func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -536,63 +541,30 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.view.endEditing(true)
 	}
 	
+	// add keyboard size to tableView size
 	func keyboardWillShow(notification: NSNotification) {
-		// get the keyboard size
-		if let keyboardBounds = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-			let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.height, right: 0)
+		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
+			var contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
 			
-			// Detect orientation
-			var orientation = UIApplication.sharedApplication().statusBarOrientation
-			var frame = self.tableView.frame
-
-			
-			// Start animation
-			UIView.beginAnimations(nil, context: nil)
-			UIView.setAnimationBeginsFromCurrentState(true)
-			UIView.setAnimationDuration(0.3)
-			
-			if UIInterfaceOrientationIsPortrait(orientation) {
-				frame.size.height -= keyboardBounds.size.height
-				
-			} else {
-				frame.size.height -= keyboardBounds.size.width
+			if self.origintableViewInsets == nil {
+				self.origintableViewInsets = self.tableView.contentInset
 			}
 			
-			//Apply new size of table view
-			self.tableView.frame = frame
-			
-			// Scroll the table view to see the Textfield just above the keyboard
-			if (self.selectedTextfield != nil) {
-				var textFieldRect = self.tableView.convertRect(self.selectedTextfield!.bounds, fromView: self.selectedTextfield)
-				self.tableView.scrollRectToVisible(textFieldRect, animated: false)
-			}
-			
-			UIView.commitAnimations()
+			self.tableView.contentInset = contentInsets
+			self.tableView.scrollIndicatorInsets = contentInsets
+			self.tableView.scrollToRowAtIndexPath(self.selectedIndexPath!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
 		}
+		
 	}
-	
+	// bring tableview size back to origin
 	func keyboardWillHide(notification: NSNotification) {
-		// get the keyboard size
-		if let keyboardBounds = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-			let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.height, right: 0)
-
-			// Detect orientation
-			var orientation = UIApplication.sharedApplication().statusBarOrientation
-			var frame = self.tableView.frame
-			
-			UIView.beginAnimations(nil, context: nil)
-			UIView.setAnimationBeginsFromCurrentState(true)
-			UIView.setAnimationDuration(0.3)
-			
-			// reduce size of table view
-			if UIInterfaceOrientationIsPortrait(orientation) {
-				frame.size.height += keyboardBounds.size.height
-			} else {
-				frame.size.height += keyboardBounds.size.width
+		if let animationDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double) {
+			if self.origintableViewInsets != nil {
+				UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+					self.tableView.contentInset = self.origintableViewInsets!
+					self.tableView.scrollIndicatorInsets = self.origintableViewInsets!
+				})
 			}
-			
-			self.tableView.frame = frame
-			UIView.commitAnimations()
 		}
 	}
 	
