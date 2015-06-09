@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class PreferenceEditAccountTableViewController: UITableViewController, UITextFieldDelegate {
+class PreferenceEditAccountTableViewController: UITableViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 	
 	var emailAcc: EmailAccount?
 	var newEmailAcc: EmailAccount?
@@ -32,8 +32,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var authConVC: AuthConTableViewController?
 	
 	
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		
 		
 		loadAccountDetails()
 		
@@ -76,8 +79,25 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	override func viewWillAppear(animated: Bool) {
+		// Register notification when the keyboard will be show
+		NSNotificationCenter.defaultCenter().addObserver(
+			self,
+			selector: "keyboardWillShow:",
+			name: UIKeyboardWillShowNotification,
+			object: nil)
+		
+		// Register notification when the keyboard will be hide
+		NSNotificationCenter.defaultCenter().addObserver(
+			self,
+			selector: "keyboardWillHide:",
+			name: UIKeyboardWillHideNotification,
+			object: nil)
 		self.tableView.reloadData()
 		
+	}
+	
+	override func viewWillDisappear(animated: Bool) {
+		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -504,6 +524,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		// save data to entries
 		self.entries[textField.placeholder!] = textField.text
 		self.entriesChecked[textField.placeholder!] = false
+		self.selectedTextfield = nil
 	}
 	
 	func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -514,4 +535,66 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
 		self.view.endEditing(true)
 	}
+	
+	func keyboardWillShow(notification: NSNotification) {
+		// get the keyboard size
+		if let keyboardBounds = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+			let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.height, right: 0)
+			
+			// Detect orientation
+			var orientation = UIApplication.sharedApplication().statusBarOrientation
+			var frame = self.tableView.frame
+
+			
+			// Start animation
+			UIView.beginAnimations(nil, context: nil)
+			UIView.setAnimationBeginsFromCurrentState(true)
+			UIView.setAnimationDuration(0.3)
+			
+			if UIInterfaceOrientationIsPortrait(orientation) {
+				frame.size.height -= keyboardBounds.size.height
+				
+			} else {
+				frame.size.height -= keyboardBounds.size.width
+			}
+			
+			//Apply new size of table view
+			self.tableView.frame = frame
+			
+			// Scroll the table view to see the Textfield just above the keyboard
+			if (self.selectedTextfield != nil) {
+				var textFieldRect = self.tableView.convertRect(self.selectedTextfield!.bounds, fromView: self.selectedTextfield)
+				self.tableView.scrollRectToVisible(textFieldRect, animated: false)
+			}
+			
+			UIView.commitAnimations()
+		}
+	}
+	
+	func keyboardWillHide(notification: NSNotification) {
+		// get the keyboard size
+		if let keyboardBounds = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+			let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.height, right: 0)
+
+			// Detect orientation
+			var orientation = UIApplication.sharedApplication().statusBarOrientation
+			var frame = self.tableView.frame
+			
+			UIView.beginAnimations(nil, context: nil)
+			UIView.setAnimationBeginsFromCurrentState(true)
+			UIView.setAnimationDuration(0.3)
+			
+			// reduce size of table view
+			if UIInterfaceOrientationIsPortrait(orientation) {
+				frame.size.height += keyboardBounds.size.height
+			} else {
+				frame.size.height += keyboardBounds.size.width
+			}
+			
+			self.tableView.frame = frame
+			UIView.commitAnimations()
+		}
+	}
+	
+	
 }
