@@ -245,6 +245,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	func loadAccountDetails() {
 		
 		self.labelAccountDetailString.append("Mailaddress:")
+		self.labelAccountDetailString.append("Realname:")
+		self.labelAccountDetailString.append("Accountname:")
 		self.labelAccountDetailString.append("Username:")
 		self.labelAccountDetailString.append("Password:")
 		
@@ -260,6 +262,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 		if emailAcc != nil {
 			self.cellAccountTextfielString.append(emailAcc!.emailAddress)
+			self.cellAccountTextfielString.append(emailAcc!.realName)
+			self.cellAccountTextfielString.append(emailAcc!.accountName)
 			self.cellAccountTextfielString.append(emailAcc!.username)
 			self.cellAccountTextfielString.append(emailAcc!.password)
 			
@@ -274,6 +278,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.cellSmtpConnectionTextfielString.append(emailAcc!.connectionTypeSmtp)
 			
 			self.entries["Mailaddress:"] = emailAcc!.emailAddress
+			self.entries["Realname:"] = emailAcc!.realName
+			self.entries["Accountname:"] = emailAcc!.accountName
 			self.entries["Username:"] = emailAcc!.username
 			self.entries["Password:"] = emailAcc!.password
 			
@@ -288,6 +294,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["SMTP ConType:"] = emailAcc!.connectionTypeSmtp
 		} else {
 			self.entries["Mailaddress:"] = ""
+			self.entries["Realname:"] = ""
+			self.entries["Accountname:"] = ""
 			self.entries["Username:"] = ""
 			self.entries["Password:"] = ""
 			
@@ -385,6 +393,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 								for (key, value) in self.entries {
 									switch key {
 									case "Mailaddress:": 		newEntry.setValue(value, forKey: "emailAddress")
+									case "Realname:":			newEntry.setValue(value, forKey: "realName")
+									case "Accountname:":		newEntry.setValue(value, forKey: "accountName")
 									case "Username:": 			newEntry.setValue(value, forKey: "username")
 									case "Password:": 			newEntry.setValue(value, forKey: "password")
 									case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
@@ -411,16 +421,18 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 										for (key, value) in self.entries {
 											switch key {
 											case "Mailaddress:": 		managedObject.setValue(value, forKey: "emailAddress")
+											case "Realname:":			managedObject.setValue(value, forKey: "realName")
+											case "Accountname:":		managedObject.setValue(value, forKey: "accountName")
 											case "Username:": 			managedObject.setValue(value, forKey: "username")
 											case "Password:": 			managedObject.setValue(value, forKey: "password")
 											case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
 											case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
 											case "IMAP Auth:":			managedObject.setValue(value, forKey: "authTypeImap")
-											case "IMAP ConType:":	managedObject.setValue(value, forKey: "connectionTypeImap")
+											case "IMAP ConType:":		managedObject.setValue(value, forKey: "connectionTypeImap")
 											case "SMTP Hostname:": 		managedObject.setValue(value, forKey: "smtpHostname")
 											case "SMTP Port:": 			managedObject.setValue(value.toInt(), forKey: "smtpPort")
 											case "SMTP Auth:": 			managedObject.setValue(value, forKey: "authTypeSmtp")
-											case "SMTP ConType:":	managedObject.setValue(value, forKey: "connectionTypeSmtp")
+											case "SMTP ConType:":		managedObject.setValue(value, forKey: "connectionTypeSmtp")
 											default: break
 											}
 										}

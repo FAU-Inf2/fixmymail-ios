@@ -144,6 +144,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gmailAccount.smtpPort = 465
 			gmailAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
 			gmailAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
+			gmailAccount.realName = "SMile_Gmail"
+			gmailAccount.accountName = "Gmail"
+			gmailAccount.isActivated = true
 				
             var gmxAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             gmxAccount.username = "fixmymail@gmx.de"
@@ -157,7 +160,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gmxAccount.smtpPort = 465
 			gmxAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
 			gmxAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
-            
+			gmxAccount.realName = "SMile_GMX"
+            gmxAccount.accountName = "GMX"
+			gmxAccount.isActivated = true
+			
             var webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             webAccount.username = "fixmymail@web.de"
             webAccount.password = "fixinginMAD2015"
@@ -167,9 +173,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			webAccount.authTypeImap = authTypeToString(MCOAuthType.SASLPlain)
 			webAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
             webAccount.smtpHostname = "smtp.web.de"
-            webAccount.smtpPort = 465
+            webAccount.smtpPort = 587
 			webAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
 			webAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
+			webAccount.realName = "SMile_WEBDE"
+			webAccount.accountName = "WEB.DE"
+			webAccount.isActivated = true
+			
+			
             
             
             /*let session = MCOIMAPSession()

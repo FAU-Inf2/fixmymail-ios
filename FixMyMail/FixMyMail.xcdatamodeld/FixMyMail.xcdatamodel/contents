@@ -11,6 +11,7 @@
         <relationship name="toAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmailAccount" inverseName="emails" inverseEntity="EmailAccount" syncable="YES"/>
     </entity>
     <entity name="EmailAccount" representedClassName="FixMyMail.EmailAccount" syncable="YES">
+        <attribute name="accountName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="active" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="authTypeImap" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="authTypeSmtp" optional="YES" attributeType="String" syncable="YES"/>
@@ -19,7 +20,9 @@
         <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imapHostname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imapPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="isActivated" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="realName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="smtpHostname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="smtpPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
@@ -27,6 +30,6 @@
     </entity>
     <elements>
         <element name="Email" positionX="-333" positionY="-309" width="128" height="165"/>
-        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="240"/>
+        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="285"/>
     </elements>
 </model>
