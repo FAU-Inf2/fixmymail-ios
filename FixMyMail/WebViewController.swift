@@ -30,6 +30,95 @@ class WebViewController: UIViewController, MCOMessageViewDelegate {
         messageView.delegate = self
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        var buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
+        var buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "reply")
+        var buttonCompose = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "compose")
+        var items = [UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), buttonDelete, UIBarButtonItem(), UIBarButtonItem(), buttonReply, UIBarButtonItem(), UIBarButtonItem(), buttonCompose]
+        self.navigationController?.visibleViewController.setToolbarItems(items, animated: animated)
+        self.navigationController?.setToolbarHidden(false, animated: false)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setToolbarHidden(true, animated: false)
+    }
+    
+    func delete() {
+        var fetchFoldersOp = self.session.fetchAllFoldersOperation()
+        fetchFoldersOp.start({ (error, folders) -> Void in
+            if error != nil {
+                NSLog("%@", error.description)
+            } else {
+                var trashFolderName: String? = nil
+                for folder in folders {
+                    if trashFolderName != nil {
+                        break
+                    }
+                    if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Trash) == MCOIMAPFolderFlag.Trash {
+                        trashFolderName = (folder as! MCOIMAPFolder).path
+                        //NSLog("found it" + self.trashFolderName!)
+                        break
+                    }
+                }
+                if trashFolderName != nil {
+                    //copy email to trash folder
+                    let localCopyMessageOperation = self.session.copyMessagesOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((self.message.mcomessage as! MCOIMAPMessage).uid)), destFolder: trashFolderName)
+                
+                    localCopyMessageOperation.start {(error, uidMapping) -> Void in
+                        if let error = error {
+                            NSLog("error in deleting email : \(error.userInfo!)")
+                        }
+                    }
+                
+                    //set deleteFlag
+                    let setDeleteFlagOP = self.session.storeFlagsOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((self.message.mcomessage as! MCOIMAPMessage).uid)), kind: MCOIMAPStoreFlagsRequestKind.Add, flags: MCOMessageFlag.Deleted)
+                
+                    setDeleteFlagOP.start({ (error) -> Void in
+                        if let error = error {
+                            NSLog("error in deleting email (flags) : \(error.userInfo)")
+                        } else {
+                            NSLog("email deleted")
+                        
+                            let expangeFolder = self.session.expungeOperation("INBOX")
+                            expangeFolder.start({ (error) -> Void in
+                                if error != nil {
+                                    NSLog("%@", error.description)
+                                }
+                            })
+                        }
+                    })
+                }
+            }
+        })
+        var managedObjectContext: NSManagedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
+        managedObjectContext.deleteObject(message)
+        
+        var error: NSError? = nil
+        managedObjectContext.save(&error)
+        if error != nil {
+            NSLog("%@", error!.description)
+        }
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func reply() {
+        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        var array = [(self.message.mcomessage as! MCOIMAPMessage).header.from]
+        sendView.replyTo = NSMutableArray(array: array)
+        sendView.activeAccount = self.message.toAccount
+        sendView.subject = "Re: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
+        var parser = MCOMessageParser(data: self.message.data)
+        var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
+        sendView.replyText = "Am \(date.day()).\(date.month()).\(date.year()) um \(date.hour()):\(date.minute()) schrieb " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + ":\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
+        self.navigationController?.pushViewController(sendView, animated: true)
+    }
+    
+    func compose() {
+        self.navigationController?.pushViewController(MailSendViewController(nibName: "MailSendViewController", bundle: nil), animated: true)
+    }
+    
     func putMessage() {
         for op in ops {
             op.cancel()

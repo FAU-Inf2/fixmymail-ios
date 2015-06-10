@@ -138,10 +138,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gmailAccount.emailAddress = "fixmymail2015@gmail.com"
             gmailAccount.imapHostname = "imap.gmail.com"
             gmailAccount.imapPort = 993
+			gmailAccount.authTypeImap = authTypeToString(MCOAuthType.SASLPlain)
+			gmailAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
             gmailAccount.smtpHostname = "smtp.gmail.com"
             gmailAccount.smtpPort = 465
+			gmailAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
+			gmailAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
+				
+            var gmxAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            gmxAccount.username = "fixmymail@gmx.de"
+            gmxAccount.password = "fixinginMAD2015"
+            gmxAccount.emailAddress = "fixmymail@gmx.de"
+            gmxAccount.imapHostname = "imap.gmx.net"
+            gmxAccount.imapPort = 993
+			gmxAccount.authTypeImap = authTypeToString(MCOAuthType.SASLPlain)
+			gmxAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
+            gmxAccount.smtpHostname = "mail.gmx.net"
+            gmxAccount.smtpPort = 465
+			gmxAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
+			gmxAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
             
-            let session = MCOIMAPSession()
+            var webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            webAccount.username = "fixmymail@web.de"
+            webAccount.password = "fixinginMAD2015"
+            webAccount.emailAddress = "fixmymail@web.de"
+            webAccount.imapHostname = "imap.web.de"
+            webAccount.imapPort = 993
+			webAccount.authTypeImap = authTypeToString(MCOAuthType.SASLPlain)
+			webAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
+            webAccount.smtpHostname = "smtp.web.de"
+            webAccount.smtpPort = 465
+			webAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
+			webAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
+            
+            
+            /*let session = MCOIMAPSession()
             session.hostname = gmailAccount.imapHostname
             session.port = gmailAccount.imapPort
             session.username = gmailAccount.username
@@ -153,7 +184,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 MCOIMAPMessagesRequestKind.InternalDate | MCOIMAPMessagesRequestKind.HeaderSubject |
                 MCOIMAPMessagesRequestKind.Flags)
             
-            /*let infoOp = session.folderInfoOperation("INBOX")
+            let infoOp = session.folderInfoOperation("INBOX")
             infoOp.start({(error, info) in
             NSLog("messages on server: %i", info.messageCount)
             })*/

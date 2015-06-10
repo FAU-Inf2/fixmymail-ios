@@ -137,24 +137,61 @@ extension ContainerViewController : ContentViewControllerProtocol {
 }
 
 extension ContainerViewController: SideBarProtocol {
-    
     func cellSelected(actionItem: ActionItem) {
+        var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
+        
         NSLog("\(self.contentVC.parentViewController)")
         self.toggleLeftPanel()
         
         var shouldChangeVC = false
         switch actionItem.viewController {
         case "EmailAll":
-            if contentVC is MailTableViewController == false {
-                contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
-                shouldChangeVC = true
+            contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+            shouldChangeVC = true
+            
+            //set all Accounts active
+            let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+            var error: NSError?
+            var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+            if error != nil {
+                NSLog("%@", error!.description)
+            } else {
+                if let emailAccounts = result {
+                    for account in emailAccounts {
+                        (account as! EmailAccount).active = true
+                    }
+                }
             }
+            managedObjectContext.save(&error)
+            if error != nil {
+                NSLog("%@", error!.description)
+            }
+
         case "EmailSpecific":
-            if contentVC is MailTableViewController == false {
-                contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
-                shouldChangeVC = true
-                //Do something to load correct mails
+            contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+            shouldChangeVC = true
+            
+            //Do something to load correct mails
+            let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+            var error: NSError?
+            var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+            if error != nil {
+                NSLog("%@", error!.description)
+            } else {
+                if let emailAccounts = result {
+                    for account in emailAccounts {
+                        (account as! EmailAccount).active = false
+                        if (account as! EmailAccount).emailAddress == actionItem.emailAddress {
+                            (account as! EmailAccount).active = true
+                        }
+                    }
+                }
             }
+            managedObjectContext.save(&error)
+            if error != nil {
+                NSLog("%@", error!.description)
+            }
+            
         //case "TODO":
             //Insert TODO VC here!
         case "KeyChain":

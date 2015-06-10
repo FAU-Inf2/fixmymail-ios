@@ -12,6 +12,7 @@ class CustomMailTableViewCell: UITableViewCell {
     
     @IBOutlet var mailFrom: UILabel!
     @IBOutlet var mailBody: UILabel!
+    @IBOutlet var unseendot: UIImageView!
     var mail: Email!
     
     
