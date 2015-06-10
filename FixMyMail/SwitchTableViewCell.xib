@@ -28,7 +28,8 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="07R-GE-74b" firstAttribute="leading" secondItem="uUy-Ml-vmr" secondAttribute="trailing" constant="36" id="CeK-2g-3N1"/>
+                    <constraint firstItem="07R-GE-74b" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="2ed-dx-FWW"/>
+                    <constraint firstItem="07R-GE-74b" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="uUy-Ml-vmr" secondAttribute="trailing" constant="36" id="CeK-2g-3N1"/>
                     <constraint firstAttribute="trailingMargin" secondItem="07R-GE-74b" secondAttribute="trailing" id="Dma-PA-sAx"/>
                     <constraint firstItem="uUy-Ml-vmr" firstAttribute="bottom" secondItem="07R-GE-74b" secondAttribute="bottom" id="HmC-RV-l7i"/>
                     <constraint firstItem="uUy-Ml-vmr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="NNk-EM-zgW"/>

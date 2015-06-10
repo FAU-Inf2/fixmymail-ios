@@ -39,7 +39,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-	
+		
 		loadAccountDetails()
 		
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
@@ -145,21 +145,25 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		var labelString = self.labels[indexPath.section][indexPath.row] as? String
-		
+		// decide witch cell must be loaded
 		if labelString == "Activate:" {
 			let cell = tableView.dequeueReusableCellWithIdentifier("SwitchTableViewCell", forIndexPath: indexPath) as! SwitchTableViewCell
 			
 			cell.label.text = labelString
 			cell.activateSwitch.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
 			
-			if emailAcc != nil {
-				cell.activateSwitch.on = emailAcc!.isActivated
-				self.isActivated = emailAcc?.isActivated
+			// get the emailAcc.isActivated value only once
+			if self.isActivated == nil {
+				if emailAcc != nil {
+					cell.activateSwitch.on = emailAcc!.isActivated
+					self.isActivated = emailAcc?.isActivated
+				} else {
+					cell.activateSwitch.on = false
+					self.isActivated = false
+				}
 			} else {
-				cell.activateSwitch.on = false
-				self.isActivated = false
+				cell.activateSwitch.on = self.isActivated!
 			}
-			
 			return cell
 			
 		} else {
@@ -217,12 +221,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			return cell
 		}
-		
-		
-		
-		
-		
-		
 		
 	}
 	
@@ -583,11 +581,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.selectedIndexPath = nil
 	}
 	
+	// return on keyboard is triggered
 	func textFieldShouldReturn(textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true
 	}
 	
+	// end editing when tapping somewhere in the view
 	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
 		self.view.endEditing(true)
 	}
@@ -619,10 +619,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		}
 	}
 	
+	// set value if switchstate has changed
 	func stateChanged(switchState: UISwitch) {
 		self.isActivated = switchState.on
-		println("switched to: \(switchState.on)")
 	}
-	
 	
 }
