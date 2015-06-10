@@ -27,11 +27,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var entries = [String: String]()
 	var entriesChecked = [String: Bool]()
 	var deleteString = [String]()
+	var isActivatedString = [String]()
 	var alert: UIAlertController?
 	var selectedTextfield: UITextField?
 	var selectedIndexPath: NSIndexPath?
 	var authConVC: AuthConTableViewController?
 	var origintableViewInsets: UIEdgeInsets?
+	var isActivated: Bool?
 	
 	
 	
@@ -41,10 +43,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		loadAccountDetails()
 		
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
+		tableView.registerNib(UINib(nibName: "SwitchTableViewCell", bundle: nil), forCellReuseIdentifier: "SwitchTableViewCell")
 		self.navigationItem.title = actionItem?.emailAddress
 		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
-		self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", ""]
+		self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", "",""]
 		
 		// set alert dialog for delete
 		alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
@@ -141,59 +144,86 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
+		var labelString = self.labels[indexPath.section][indexPath.row] as? String
 		
-		// auth or con were previously selected
-		if self.authConVC != nil {
-			self.entries[self.authConVC!.labelPreviousVC] = self.authConVC!.selectedString
-		}
-		
-		// Configure the cell...
-		cell.textfield.delegate = self
-		cell.labelCellContent.text = self.labels[indexPath.section][indexPath.row] as? String
-		cell.textfield.placeholder = self.labels[indexPath.section][indexPath.row] as? String
-		
-		// set checkmarks on cell
-		if self.entriesChecked[cell.labelCellContent.text!] == true {
-			cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-		} else {
-			cell.accessoryType = UITableViewCellAccessoryType.None
-		}
-		
-		// secure text entry for password cell
-		if cell.textfield.placeholder == "Password:" {
-			cell.textfield.secureTextEntry = true
-		} else {
-			cell.textfield.secureTextEntry = false
-		}
-		
-		// set auth and conn cells
-		if cell.textfield.placeholder == "IMAP Auth:" || cell.textfield.placeholder == "SMTP Auth:"
-		 || cell.textfield.placeholder == "IMAP ConType:" || cell.textfield.placeholder == "SMTP ConType:" {
-			cell.textfield.enabled = false
-		} else {
-			cell.textfield.enabled = true
-		}
-		
-		// fill the textfields
-		cell.textfield.text = self.entries[cell.labelCellContent.text!]
-		cell.labelCellContent.textAlignment = NSTextAlignment.Left
-		self.entriesChecked[cell.labelCellContent.text!] = false
-		
-		if emailAcc != nil {
-			// configure delete cell
-			if cell.labelCellContent.text == deleteString[0] {
-				cell.labelCellContent.textAlignment = NSTextAlignment.Center
-				cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
-				cell.textfield.text = ""
-				cell.textfield.placeholder = ""
-				cell.textfield.enabled = false
-				self.entries.removeValueForKey(self.deleteString[0])
-				self.entriesChecked.removeValueForKey(self.deleteString[0])
+		if labelString == "Activate:" {
+			let cell = tableView.dequeueReusableCellWithIdentifier("SwitchTableViewCell", forIndexPath: indexPath) as! SwitchTableViewCell
+			
+			cell.label.text = labelString
+			cell.activateSwitch.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+			
+			if emailAcc != nil {
+				cell.activateSwitch.on = emailAcc!.isActivated
+				self.isActivated = emailAcc?.isActivated
+			} else {
+				cell.activateSwitch.on = false
+				self.isActivated = false
 			}
+			
+			return cell
+			
+		} else {
+			let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
+			
+			// auth or con were previously selected
+			if self.authConVC != nil {
+				self.entries[self.authConVC!.labelPreviousVC] = self.authConVC!.selectedString
+			}
+			
+			// Configure the cell...
+			cell.textfield.delegate = self
+			cell.labelCellContent.text = self.labels[indexPath.section][indexPath.row] as? String
+			cell.textfield.placeholder = self.labels[indexPath.section][indexPath.row] as? String
+			
+			// set checkmarks on cell
+			if self.entriesChecked[cell.labelCellContent.text!] == true {
+				cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+			} else {
+				cell.accessoryType = UITableViewCellAccessoryType.None
+			}
+			
+			// secure text entry for password cell
+			if cell.textfield.placeholder == "Password:" {
+				cell.textfield.secureTextEntry = true
+			} else {
+				cell.textfield.secureTextEntry = false
+			}
+			
+			// set auth and conn cells
+			if cell.textfield.placeholder == "IMAP Auth:" || cell.textfield.placeholder == "SMTP Auth:"
+				|| cell.textfield.placeholder == "IMAP ConType:" || cell.textfield.placeholder == "SMTP ConType:" {
+					cell.textfield.enabled = false
+			} else {
+				cell.textfield.enabled = true
+			}
+			
+			// fill the textfields
+			cell.textfield.text = self.entries[cell.labelCellContent.text!]
+			cell.labelCellContent.textAlignment = NSTextAlignment.Left
+			self.entriesChecked[cell.labelCellContent.text!] = false
+			
+			if emailAcc != nil {
+				// configure delete cell
+				if cell.labelCellContent.text == deleteString[0] {
+					cell.labelCellContent.textAlignment = NSTextAlignment.Center
+					cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
+					cell.textfield.text = ""
+					cell.textfield.placeholder = ""
+					cell.textfield.enabled = false
+					self.entries.removeValueForKey(self.deleteString[0])
+					self.entriesChecked.removeValueForKey(self.deleteString[0])
+				}
+			}
+			
+			return cell
 		}
 		
-		return cell
+		
+		
+		
+		
+		
+		
 	}
 	
 	
@@ -314,15 +344,19 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.deleteString.append("DELETE")
 		}
 		
-		labels.append(self.labelAccountDetailString)
-		labels.append(self.labelImapConnectionDetailString)
-		labels.append(self.labelSmtpConnectionDetailString)
-		labels.append(self.deleteString)
+		self.isActivatedString.append("Activate:")
 		
-		textfields.append(self.cellAccountTextfielString)
-		textfields.append(self.cellImapConnectionTextfielString)
-		textfields.append(self.cellSmtpConnectionTextfielString)
-		textfields.append(self.deleteString)
+		self.labels.append(self.labelAccountDetailString)
+		self.labels.append(self.labelImapConnectionDetailString)
+		self.labels.append(self.labelSmtpConnectionDetailString)
+		self.labels.append(self.isActivatedString)
+		self.labels.append(self.deleteString)
+		
+		self.textfields.append(self.cellAccountTextfielString)
+		self.textfields.append(self.cellImapConnectionTextfielString)
+		self.textfields.append(self.cellSmtpConnectionTextfielString)
+		self.textfields.append(self.isActivatedString)
+		self.textfields.append(self.deleteString)
 		
 	}
 	
@@ -408,6 +442,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 									default: break
 									}
 								}
+								newEntry.setValue(self.isActivated, forKey: "isActivated")
+								
 							} else {
 								
 								var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
@@ -436,6 +472,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 											default: break
 											}
 										}
+										managedObject.setValue(self.isActivated, forKey: "isActivated")
 									}
 								}
 							}
@@ -459,12 +496,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			for var row = 0; row < self.tableView.numberOfRowsInSection(section); row++ {
 				var cellPath = NSIndexPath(forRow: row, inSection: section)
 				if let cell = self.tableView.cellForRowAtIndexPath(cellPath) as? PreferenceAccountTableViewCell {
-					
-					if cell.textfield.text.isEmpty {
-						cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
-					} else {
-						cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.blackColor()])
-						
+					if cell.labelCellContent.text != "Activate:" {
+						if cell.textfield.text.isEmpty {
+							cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
+						} else {
+							cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.blackColor()])
+							
+						}
 					}
 				}
 			}
@@ -473,10 +511,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func allEntriesSet() -> Bool {
 		for (key, value) in self.entries {
-			
-			if value == "" {
-				checkAllTextfieldsFilled()
-				return false
+			if key != "Activate:" {
+				if value == "" {
+					checkAllTextfieldsFilled()
+					return false
+				}
 			}
 		}
 		checkAllTextfieldsFilled()
@@ -578,6 +617,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				})
 			}
 		}
+	}
+	
+	func stateChanged(switchState: UISwitch) {
+		self.isActivated = switchState.on
+		println("switched to: \(switchState.on)")
 	}
 	
 	
