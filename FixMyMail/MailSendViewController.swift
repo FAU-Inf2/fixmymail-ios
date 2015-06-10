@@ -67,10 +67,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var builder = MCOMessageBuilder()
         var from = MCOAddress()
-        from.displayName = "Fix Me"
+        from.displayName = activeAccount!.realName
         from.mailbox = activeAccount!.emailAddress
         var sender = MCOAddress()
-        sender.displayName = "Fix Me"
+        sender.displayName = activeAccount!.realName
         sender.mailbox = activeAccount!.emailAddress
         builder.header.from = from
         builder.header.sender = sender
@@ -160,6 +160,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                 }
+                sendCell.txtTo.addTarget(self, action: "closeCC", forControlEvents: UIControlEvents.AllEditingEvents)
                 sendCell.emails = sortedEmails
                 var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 addContacts.frame = CGRectMake(0, 0, 20, 20)
@@ -193,6 +194,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             case 4:
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
                 sendCell.txtText.text = self.subject
+                sendCell.txtText.addTarget(self, action: "closeCC", forControlEvents: UIControlEvents.AllEditingEvents)
                 return sendCell
             case 5:
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellText", forIndexPath: indexPath) as! SendViewCellText
@@ -228,9 +230,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 return sendCell
             case 1:
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
-                sendCell.lblTo.text = "Cc, Bcc, From:"
+                sendCell.lblTo.text = "Cc/Bcc, From:"
                 sendCell.txtTo.text = activeAccount!.emailAddress
                 sendCell.accessoryView = nil
+                sendCell.txtTo.addTarget(self, action: "openCC", forControlEvents: UIControlEvents.AllEditingEvents)
                 return sendCell
             case 2:
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
@@ -262,14 +265,22 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                     return
                 }
                 ccOpened = false
-                tableView.reloadData()
+                tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
         } else {
             if indexPath.row == 1 {
                 ccOpened = true
-                tableView.reloadData()
+                tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
         }
+    }
+    
+    func closeCC() {
+        self.tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 0, inSection: 0))
+    }
+    
+    func openCC() {
+        self.tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 0))
     }
     
     // Addressbook functionality
