@@ -9,9 +9,10 @@
 import UIKit
 import Foundation
 
-class SendViewCellSuggestion: UITableViewCell {
+class SendViewCellTo: UITableViewCell {
     
     @IBOutlet weak var txtTo: UITextField!
+    @IBOutlet weak var lblTo: UILabel!
     @IBOutlet weak var txtSuggestion: UITextField!
     var emails: NSArray = []
     

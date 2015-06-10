@@ -28,8 +28,8 @@
 		5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */; };
 		8E1441131B1DE76F00F1A023 /* SendViewCellSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1441121B1DE76F00F1A023 /* SendViewCellSubject.swift */; };
 		8E1441151B1DE7E100F1A023 /* SendViewCellSubject.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E1441141B1DE7E100F1A023 /* SendViewCellSubject.xib */; };
-		8E1441171B1DEFFA00F1A023 /* SendViewCellSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1441161B1DEFFA00F1A023 /* SendViewCellSuggestion.swift */; };
-		8E14411C1B1DF78E00F1A023 /* SendViewCellSuggestion.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E14411B1B1DF78E00F1A023 /* SendViewCellSuggestion.xib */; };
+		8E1441171B1DEFFA00F1A023 /* SendViewCellTo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1441161B1DEFFA00F1A023 /* SendViewCellTo.swift */; };
+		8E14411C1B1DF78E00F1A023 /* SendViewCellTo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E14411B1B1DF78E00F1A023 /* SendViewCellTo.xib */; };
 		8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */; };
 		8E450BA91B15BBF0001E37B9 /* CustomMailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */; };
 		8E450BAC1B15BBF0001E37B9 /* MailSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */; };
@@ -41,6 +41,8 @@
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
 		8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E57385A1B1B19C8009AA28A /* WebViewController.swift */; };
+		8E6E35321B25C71100449DC3 /* SendViewCellText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6E35311B25C71100449DC3 /* SendViewCellText.swift */; };
+		8E6E35341B25C74C00449DC3 /* SendViewCellText.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6E35331B25C74C00449DC3 /* SendViewCellText.xib */; };
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		A963C3F91B23373800AABDE5 /* KSTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963C3F51B23373700AABDE5 /* KSTokenView.swift */; };
 		A963C3FA1B23373800AABDE5 /* KSTokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963C3F61B23373800AABDE5 /* KSTokenField.swift */; };
@@ -122,8 +124,8 @@
 		5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluedot@2x.png"; sourceTree = "<group>"; };
 		8E1441121B1DE76F00F1A023 /* SendViewCellSubject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellSubject.swift; sourceTree = "<group>"; };
 		8E1441141B1DE7E100F1A023 /* SendViewCellSubject.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellSubject.xib; sourceTree = "<group>"; };
-		8E1441161B1DEFFA00F1A023 /* SendViewCellSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellSuggestion.swift; sourceTree = "<group>"; };
-		8E14411B1B1DF78E00F1A023 /* SendViewCellSuggestion.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellSuggestion.xib; sourceTree = "<group>"; };
+		8E1441161B1DEFFA00F1A023 /* SendViewCellTo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellTo.swift; sourceTree = "<group>"; };
+		8E14411B1B1DF78E00F1A023 /* SendViewCellTo.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellTo.xib; sourceTree = "<group>"; };
 		8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMailTableViewCell.swift; sourceTree = "<group>"; };
 		8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomMailTableViewCell.xib; sourceTree = "<group>"; };
 		8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailSendViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +140,8 @@
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		8E6E35311B25C71100449DC3 /* SendViewCellText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellText.swift; sourceTree = "<group>"; };
+		8E6E35331B25C74C00449DC3 /* SendViewCellText.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellText.xib; sourceTree = "<group>"; };
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
 		A963C3F51B23373700AABDE5 /* KSTokenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSTokenView.swift; path = ../KSTokenView.swift; sourceTree = "<group>"; };
 		A963C3F61B23373800AABDE5 /* KSTokenField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KSTokenField.swift; path = ../KSTokenField.swift; sourceTree = "<group>"; };
@@ -337,8 +341,10 @@
 			children = (
 				8E1441121B1DE76F00F1A023 /* SendViewCellSubject.swift */,
 				8E1441141B1DE7E100F1A023 /* SendViewCellSubject.xib */,
-				8E1441161B1DEFFA00F1A023 /* SendViewCellSuggestion.swift */,
-				8E14411B1B1DF78E00F1A023 /* SendViewCellSuggestion.xib */,
+				8E1441161B1DEFFA00F1A023 /* SendViewCellTo.swift */,
+				8E14411B1B1DF78E00F1A023 /* SendViewCellTo.xib */,
+				8E6E35311B25C71100449DC3 /* SendViewCellText.swift */,
+				8E6E35331B25C74C00449DC3 /* SendViewCellText.xib */,
 			);
 			name = SendView;
 			sourceTree = "<group>";
@@ -500,6 +506,7 @@
 				8E450BA91B15BBF0001E37B9 /* CustomMailTableViewCell.xib in Resources */,
 				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
 				AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */,
+				8E6E35341B25C74C00449DC3 /* SendViewCellText.xib in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
 				AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */,
 				AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */,
@@ -520,7 +527,7 @@
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
 				A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */,
 				AD44E0381B1B528400751FFA /* fau-logo.png in Resources */,
-				8E14411C1B1DF78E00F1A023 /* SendViewCellSuggestion.xib in Resources */,
+				8E14411C1B1DF78E00F1A023 /* SendViewCellTo.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,6 +591,7 @@
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
 				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
+				8E6E35321B25C71100449DC3 /* SendViewCellText.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
@@ -593,7 +601,7 @@
 				AD16B2231B1C594B001645A5 /* PreferenceAccountTableViewCell.swift in Sources */,
 				A963C3FB1B23373800AABDE5 /* KSToken.swift in Sources */,
 				AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */,
-				8E1441171B1DEFFA00F1A023 /* SendViewCellSuggestion.swift in Sources */,
+				8E1441171B1DEFFA00F1A023 /* SendViewCellTo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -44,6 +44,15 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if getAccount() == nil {
+            self.title = "SMile"
+        }
+        if getAccount()?.count > 1 {
+            self.title = "All"
+        } else {
+            self.title = getAccount()?.first?.username
+        }
+        
         //self.mailTableView.contentInset = UIEdgeInsetsMake(0, 0, 35, 0)
         self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
         self.refreshControl = UIRefreshControl()
@@ -75,12 +84,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showMailSendView")
         var items = [composeButton]
         self.navigationController?.visibleViewController.setToolbarItems(items, animated: animated)
-        self.navigationController?.setToolbarHidden(false, animated: animated)
+        self.navigationController?.setToolbarHidden(false, animated: false)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.setToolbarHidden(true, animated: animated)
+        self.navigationController?.setToolbarHidden(true, animated: false)
     }
 
     override func didReceiveMemoryWarning() {

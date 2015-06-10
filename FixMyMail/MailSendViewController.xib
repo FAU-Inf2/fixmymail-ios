@@ -1,51 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MailSendViewController" customModule="FixMyMail" customModuleProvider="target">
             <connections>
-                <outlet property="sendTableView" destination="G5x-2g-j83" id="rRZ-o3-DDq"/>
-                <outlet property="tvText" destination="pBm-3a-7HE" id="D0n-kF-WFy"/>
-                <outlet property="view" destination="iN0-l3-epB" id="n5k-U4-49B"/>
+                <outlet property="sendTableView" destination="Eyr-Bs-rt0" id="t53-0K-biy"/>
+                <outlet property="view" destination="Eyr-Bs-rt0" id="l8q-w9-y2I"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Eyr-Bs-rt0">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="G5x-2g-j83">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="199"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="199" id="ZyO-Jz-eoJ"/>
-                    </constraints>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="H76-8O-SFL"/>
-                        <outlet property="delegate" destination="-1" id="OiN-IE-AwX"/>
-                    </connections>
-                </tableView>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pBm-3a-7HE">
-                    <rect key="frame" x="8" y="207" width="592" height="393"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                </textView>
-            </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstAttribute="trailing" secondItem="pBm-3a-7HE" secondAttribute="trailing" id="00v-L5-zpa"/>
-                <constraint firstAttribute="bottom" secondItem="pBm-3a-7HE" secondAttribute="bottom" id="08r-Mm-WfA"/>
-                <constraint firstItem="G5x-2g-j83" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="4jg-HT-XEd"/>
-                <constraint firstItem="pBm-3a-7HE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="JiR-EN-s7U"/>
-                <constraint firstItem="pBm-3a-7HE" firstAttribute="top" secondItem="G5x-2g-j83" secondAttribute="bottom" constant="8" symbolic="YES" id="sh0-b4-yFc"/>
-                <constraint firstItem="G5x-2g-j83" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="uii-Zw-pbu"/>
-                <constraint firstItem="pBm-3a-7HE" firstAttribute="trailing" secondItem="G5x-2g-j83" secondAttribute="trailing" id="yrv-V9-pd7"/>
-            </constraints>
-            <point key="canvasLocation" x="-108" y="369"/>
-        </view>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <connections>
+                <outlet property="dataSource" destination="-1" id="aS4-W4-Yeb"/>
+                <outlet property="delegate" destination="-1" id="0f9-Uh-Q2B"/>
+            </connections>
+            <point key="canvasLocation" x="-192" y="443"/>
+        </tableView>
     </objects>
 </document>
