@@ -38,7 +38,7 @@ platform :ios do
         -scheme 'FixMyMail' \
         -configuration Release \
         -sdk iphonesimulator \
-        clean build test"
+        clean"
   end
 
   desc "Build project with xctool"
@@ -50,7 +50,7 @@ platform :ios do
         -scheme 'FixMyMail' \
         -configuration Release \
         -sdk iphonesimulator \
-        clean build"
+        build"
   end
 
   desc "Run tests for project with xctool"
@@ -75,9 +75,6 @@ platform :ios do
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
-    if File.exist?(log.txt)
-      sh "scp log.txt mad:/var/www/fixmymail/log.txt"
-    end
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build successful for lane: " + lane.to_s,
@@ -88,9 +85,6 @@ platform :ios do
   end
 
   error do |lane, exception|
-    if File.exist?(log.txt)
-      sh "scp log.txt mad:/var/www/fixmymail/log.txt"
-    end
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build failed for lane: " + lane.to_s,
