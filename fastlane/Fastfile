@@ -32,7 +32,28 @@ platform :ios do
     end
   end
 
-  desc "Build and run all tests with xctool"
+  desc "Clean project with xctool"
+  lane :clean do
+    xctool "-project FixMyMail.xcodeproj \
+        -scheme 'FixMyMail' \
+        -configuration Release \
+        -sdk iphonesimulator \
+        clean build test"
+  end
+
+  desc "Build project with xctool"
+  lane :build do
+    carthageverbose(
+      verbose: true
+    )
+    xctool "-project FixMyMail.xcodeproj \
+        -scheme 'FixMyMail' \
+        -configuration Release \
+        -sdk iphonesimulator \
+        clean build"
+  end
+
+  desc "Run tests for project with xctool"
   lane :test do
     carthageverbose(
       verbose: true
@@ -41,8 +62,8 @@ platform :ios do
         -scheme 'FixMyMail' \
         -configuration Release \
         -sdk iphonesimulator \
-        clean build test"
-  end
+        test"
+  end  
 
   desc "Build and deploy the ipa file"
   lane :deploy do
@@ -54,6 +75,9 @@ platform :ios do
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
+    if File.exist?(log.txt)
+      sh "scp log.txt mad:/var/www/fixmymail/log.txt"
+    end
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build successful for lane: " + lane.to_s,
@@ -64,6 +88,9 @@ platform :ios do
   end
 
   error do |lane, exception|
+    if File.exist?(log.txt)
+      sh "scp log.txt mad:/var/www/fixmymail/log.txt"
+    end
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build failed for lane: " + lane.to_s,
