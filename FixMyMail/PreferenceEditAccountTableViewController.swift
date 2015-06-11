@@ -52,7 +52,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		// set alert dialog for delete
 		alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
 		self.alert!.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
-			// save data to CoreData
+			// save data to CoreData (respectively deleting data from CoreData)
 			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 			var context: NSManagedObjectContext = appDel.managedObjectContext!
 			var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
@@ -67,6 +67,22 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			}
 			
 			context.save(nil)
+			// delete Password from iOS Keychain
+			let errorLocksmith = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!, inService: "SMile")
+			if errorLocksmith == nil {
+				NSLog("deleting data")
+			}
+			
+			// ###### only for dev testing, DELETE before release!!!!!!!! #######
+			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!, inService: "SMile")
+			if error == nil {
+				var value = dictionary?.valueForKey("Password:") as! String
+				self.entries["Password:"] = value
+				NSLog("loaded value: \(value)")
+			} else {
+				NSLog("no data for userid found")
+			}
+			
 			self.navigationController?.popViewControllerAnimated(true)
 		}))
 		
@@ -124,6 +140,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		
 		var labelString = self.labels[indexPath.section][indexPath.row] as! String
 		var textfieldString = self.entries[labelString]
 		
@@ -166,6 +183,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			}
 			return cell
 			
+		// normal account cells
 		} else {
 			let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
 			
@@ -309,7 +327,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["Realname:"] = emailAcc!.realName
 			self.entries["Accountname:"] = emailAcc!.accountName
 			self.entries["Username:"] = emailAcc!.username
-			self.entries["Password:"] = emailAcc!.password
+			
+			// load password for account from iOS keychain
+			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!, inService: "SMile")
+			if error == nil {
+				var value = dictionary?.valueForKey("Password:") as! String
+				self.entries["Password:"] = value
+				NSLog("loaded value from keychain")
+			}
 			
 			self.entries["IMAP Hostname:"] = emailAcc!.imapHostname
 			self.entries["IMAP Port:"] = String(Int(emailAcc!.imapPort))
@@ -428,7 +453,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 									case "Realname:":			newEntry.setValue(value, forKey: "realName")
 									case "Accountname:":		newEntry.setValue(value, forKey: "accountName")
 									case "Username:": 			newEntry.setValue(value, forKey: "username")
-									case "Password:": 			newEntry.setValue(value, forKey: "password")
+									case "Password:":
+										newEntry.setValue("*", forKey: "password")
+										let errorLocksmith = Locksmith.saveData([key: value], forUserAccount: self.entries["Mailaddress:"]!, inService: "SMile")
+										if errorLocksmith == nil {
+											println("saving data")
+										}
 									case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
 									case "IMAP Port:": 			newEntry.setValue(value.toInt(), forKey: "imapPort")
 									case "IMAP Auth:":			newEntry.setValue(value, forKey: "authTypeImap")
@@ -458,7 +488,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 											case "Realname:":			managedObject.setValue(value, forKey: "realName")
 											case "Accountname:":		managedObject.setValue(value, forKey: "accountName")
 											case "Username:": 			managedObject.setValue(value, forKey: "username")
-											case "Password:": 			managedObject.setValue(value, forKey: "password")
+											case "Password:":
+												managedObject.setValue("*", forKey: "password")
+												let errorLocksmith = Locksmith.updateData([key: value], forUserAccount: self.entries["Mailaddress:"]!, inService: "SMile")
+												if errorLocksmith == nil {
+													NSLog("saving data")
+												}
 											case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
 											case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
 											case "IMAP Auth:":			managedObject.setValue(value, forKey: "authTypeImap")
@@ -603,7 +638,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			self.tableView.contentInset = contentInsets
 			self.tableView.scrollIndicatorInsets = contentInsets
-			self.tableView.scrollToRowAtIndexPath(self.selectedIndexPath!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+			if self.selectedIndexPath != nil {
+				self.tableView.scrollToRowAtIndexPath(self.selectedIndexPath!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+			}
 		}
 		
 	}

@@ -134,7 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if(!defaults.boolForKey("TestEntriesInserted")) {
             var gmailAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             gmailAccount.username = "fixmymail2015"
-            gmailAccount.password = "fixinginMAD2015"
+            gmailAccount.password = "*"
             gmailAccount.emailAddress = "fixmymail2015@gmail.com"
             gmailAccount.imapHostname = "imap.gmail.com"
             gmailAccount.imapPort = 993
@@ -147,10 +147,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmailAccount.realName = "SMile_Gmail"
 			gmailAccount.accountName = "Gmail"
 			gmailAccount.isActivated = true
-				
+			let errorLocksmithgmail = Locksmith.saveData(["Password:": "fix"], forUserAccount: "fixmymail2015@gmail.com", inService: "SMile")
+			if errorLocksmithgmail == nil {
+				println("saving data for \(gmailAccount.emailAddress)")
+			}
+			
             var gmxAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             gmxAccount.username = "fixmymail@gmx.de"
-            gmxAccount.password = "fixinginMAD2015"
+            gmxAccount.password = "*"
             gmxAccount.emailAddress = "fixmymail@gmx.de"
             gmxAccount.imapHostname = "imap.gmx.net"
             gmxAccount.imapPort = 993
@@ -163,10 +167,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmxAccount.realName = "SMile_GMX"
             gmxAccount.accountName = "GMX"
 			gmxAccount.isActivated = true
+			let errorLocksmithgmx = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@gmx.de", inService: "SMile")
+			if errorLocksmithgmx == nil {
+				println("saving data for \(gmailAccount.emailAddress)")
+			}
 			
             var webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             webAccount.username = "fixmymail@web.de"
-            webAccount.password = "fixinginMAD2015"
+            webAccount.password = "*"
             webAccount.emailAddress = "fixmymail@web.de"
             webAccount.imapHostname = "imap.web.de"
             webAccount.imapPort = 993
@@ -179,7 +187,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			webAccount.realName = "SMile_WEBDE"
 			webAccount.accountName = "WEB.DE"
 			webAccount.isActivated = true
-			
+			let errorLocksmithweb = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@web.de", inService: "SMile")
+			if errorLocksmithweb == nil {
+				println("saving data for \(gmailAccount.emailAddress)")
+			}
+
 			
             
             
