@@ -24,72 +24,54 @@ default_platform :ios
 platform :ios do
 
   before_all do
-    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
-
-    # cocoapods
-
-    # increment_build_number
-
-    #ipa(scheme: "FixMyMail") # Build your app - more options available
-
-    # xctool # run the tests of your app
+    ENV["HIPCHAT_API_VERSION"] = "1"
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "Starting build of iOS project...",
+        channel: "Fix my mail"
+      )
+    end
   end
 
-  desc "Do CI build"
-  lane :ci do
-    #carthage
-    ipa(scheme: "FixMyMail")
-    # xctool "-project FixMyMail.xcodeproj \
-    #     -scheme 'FixMyMail' \
-    #     -configuration Release \
-    #     -sdk iphoneos archive -archivePath ./here"
-  end
-
-  desc "Runs all the tests"
+  desc "Build and run all tests with xctool"
   lane :test do
-    # snapshot
+    carthage
+    xctool "-project FixMyMail.xcodeproj \
+        -scheme 'FixMyMail' \
+        -configuration Release \
+        -sdk iphonesimulator
+        clean build test"
+        #-sdk iphoneos
+        #archive -archivePath ./ci_archive"
   end
 
-  desc "Submit a new Beta Build to Apple TestFlight"
-  desc "This will also make sure the profile is up to date"
-  lane :beta do
-    # snapshot
-    # sigh
-    # deliver(beta: true)
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
-  desc "Deploy a new version to the App Store"
-  desc "** Full Markdown** Support: `code`"
+  desc "Build and deploy the ipa file"
   lane :deploy do
-    # snapshot
-    # sigh
-    # deliver(skip_deploy: true, force: true)
-    # frameit
+    ipa(
+      scheme: "FixMyMail"
+    )
+    #sh deploy.sh
   end
-
-  # You can define as many lanes as you want
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
     
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "App built successfully!",
+        channel: "Fix my mail",
+        success: true
+      )
+    end
   end
-
 
   error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "Failed with message: " + exception.message,
+        channel: "Fix my mail",
+        success: false
+      )
+    end
   end
-
 end
-
-
-# More information about multiple platforms in fastlane: 
-# https://github.com/KrauseFx/fastlane/blob/master/docs/Platforms.md
