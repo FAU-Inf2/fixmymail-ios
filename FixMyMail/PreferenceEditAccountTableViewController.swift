@@ -334,6 +334,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				var value = dictionary?.valueForKey("Password:") as! String
 				self.entries["Password:"] = value
 				NSLog("loaded value from keychain")
+			} else {
+				self.entries["Password:"] = ""
 			}
 			
 			self.entries["IMAP Hostname:"] = emailAcc!.imapHostname
