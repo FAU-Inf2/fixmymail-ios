@@ -67,12 +67,12 @@ platform :ios do
     ipa(
       scheme: "FixMyMail"
     )
-    sh './deploy.sh'
+    sh "sh deploy.sh"
   end
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
-    sh './uploadLog.sh'
+    sh "sh uploadLog.sh"
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build successful for lane: " + lane.to_s,
@@ -83,7 +83,7 @@ platform :ios do
   end
 
   error do |lane, exception|
-    sh './uploadLog.sh'
+    sh "sh uploadLog.sh"
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build failed for lane: " + lane.to_s,
