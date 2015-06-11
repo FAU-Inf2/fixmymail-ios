@@ -33,3 +33,5 @@ Carthage
 Carthage/Build
 MailCore.framework
 SwiftyJSON.framework
+
+.DS_Store

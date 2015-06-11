@@ -1,0 +1,77 @@
+# Customise this file, documentation can be found here:
+# https://github.com/KrauseFx/fastlane/tree/master/docs
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# By default, fastlane will send which actions are used
+# No personal data is shared, more information on https://github.com/fastlane/enhancer
+# Uncomment the following line to opt out
+# opt_out_usage
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "1.3.2"
+
+default_platform :ios
+
+
+platform :ios do
+
+  before_all do
+    ENV["HIPCHAT_API_VERSION"] = "1"
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "Starting build of iOS project...",
+        channel: "Fix my mail"
+      )
+    end
+  end
+
+  desc "Build and run all tests with xctool"
+  lane :test do
+    carthage
+    xctool "-project FixMyMail.xcodeproj \
+        -scheme 'FixMyMail' \
+        -configuration Release \
+        -sdk iphonesimulator
+        clean build test"
+        #-sdk iphoneos
+        #archive -archivePath ./ci_archive"
+  end
+
+  desc "Build and deploy the ipa file"
+  lane :deploy do
+    ipa(
+      scheme: "FixMyMail"
+    )
+    #sh deploy.sh
+  end
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+    
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "App built successfully!",
+        channel: "Fix my mail",
+        success: true
+      )
+    end
+  end
+
+  error do |lane, exception|
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "Failed with message: " + exception.message,
+        channel: "Fix my mail",
+        success: false
+      )
+    end
+  end
+end
