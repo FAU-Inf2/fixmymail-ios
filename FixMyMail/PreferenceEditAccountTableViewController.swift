@@ -68,13 +68,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			context.save(nil)
 			// delete Password from iOS Keychain
-			let errorLocksmith = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!, inService: "SMile")
+			let errorLocksmith = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
 			if errorLocksmith == nil {
 				NSLog("deleting data")
 			}
 			
 			// ###### only for dev testing, DELETE before release!!!!!!!! #######
-			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!, inService: "SMile")
+			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
 			if error == nil {
 				var value = dictionary?.valueForKey("Password:") as! String
 				self.entries["Password:"] = value
@@ -329,7 +329,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["Username:"] = emailAcc!.username
 			
 			// load password for account from iOS keychain
-			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!, inService: "SMile")
+			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
 			if error == nil {
 				var value = dictionary?.valueForKey("Password:") as! String
 				self.entries["Password:"] = value
@@ -455,7 +455,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 									case "Username:": 			newEntry.setValue(value, forKey: "username")
 									case "Password:":
 										newEntry.setValue("*", forKey: "password")
-										let errorLocksmith = Locksmith.saveData([key: value], forUserAccount: self.entries["Mailaddress:"]!, inService: "SMile")
+										let errorLocksmith = Locksmith.saveData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
 										if errorLocksmith == nil {
 											println("saving data")
 										}
@@ -490,7 +490,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 											case "Username:": 			managedObject.setValue(value, forKey: "username")
 											case "Password:":
 												managedObject.setValue("*", forKey: "password")
-												let errorLocksmith = Locksmith.updateData([key: value], forUserAccount: self.entries["Mailaddress:"]!, inService: "SMile")
+												let errorLocksmith = Locksmith.updateData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
 												if errorLocksmith == nil {
 													NSLog("saving data")
 												}

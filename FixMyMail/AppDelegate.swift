@@ -147,7 +147,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmailAccount.realName = "SMile_Gmail"
 			gmailAccount.accountName = "Gmail"
 			gmailAccount.isActivated = true
-			let errorLocksmithgmail = Locksmith.saveData(["Password:": "fix"], forUserAccount: "fixmymail2015@gmail.com", inService: "SMile")
+			let errorLocksmithgmail = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail2015@gmail.com")
 			if errorLocksmithgmail == nil {
 				println("saving data for \(gmailAccount.emailAddress)")
 			}
@@ -167,7 +167,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmxAccount.realName = "SMile_GMX"
             gmxAccount.accountName = "GMX"
 			gmxAccount.isActivated = true
-			let errorLocksmithgmx = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@gmx.de", inService: "SMile")
+			let errorLocksmithgmx = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@gmx.de")
 			if errorLocksmithgmx == nil {
 				println("saving data for \(gmailAccount.emailAddress)")
 			}
@@ -187,7 +187,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			webAccount.realName = "SMile_WEBDE"
 			webAccount.accountName = "WEB.DE"
 			webAccount.isActivated = true
-			let errorLocksmithweb = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@web.de", inService: "SMile")
+			let errorLocksmithweb = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@web.de")
 			if errorLocksmithweb == nil {
 				println("saving data for \(gmailAccount.emailAddress)")
 			}
