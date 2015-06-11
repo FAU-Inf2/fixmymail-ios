@@ -37,9 +37,12 @@ platform :ios do
 
   desc "Do CI build"
   lane :ci do
-    carthage
+    #carthage
     ipa(scheme: "FixMyMail")
-    xctool
+    # xctool "-project FixMyMail.xcodeproj \
+    #     -scheme 'FixMyMail' \
+    #     -configuration Release \
+    #     -sdk iphoneos archive -archivePath ./here"
   end
 
   desc "Runs all the tests"
