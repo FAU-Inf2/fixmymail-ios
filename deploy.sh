@@ -1,0 +1,1 @@
+scp ./FixMyMail.ipa mad:/var/www/hockey/public/de.fau.cs.mad.fixmymail.ios/fixmymail.ipa
