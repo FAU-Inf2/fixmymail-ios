@@ -55,9 +55,6 @@ platform :ios do
 
   desc "Run tests for project with xctool"
   lane :test do
-    carthageverbose(
-      verbose: true
-    )
     xctool "-project FixMyMail.xcodeproj \
         -scheme 'FixMyMail' \
         -configuration Release \
@@ -70,11 +67,12 @@ platform :ios do
     ipa(
       scheme: "FixMyMail"
     )
-    sh "scp FixMyMail.ipa mad:/var/www/hockey/public/de.fau.cs.mad.fixmymail.ios/fixmymail.ipa"
+    sh "sh deploy.sh"
   end
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
+    sh "sh uploadLog.sh"
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build successful for lane: " + lane.to_s,
@@ -85,6 +83,7 @@ platform :ios do
   end
 
   error do |lane, exception|
+    sh "sh uploadLog.sh"
     if ENV["HIPCHAT_API_TOKEN"]
       hipchat(
         message: "Build failed for lane: " + lane.to_s,
