@@ -2,4 +2,6 @@
 github "MailCore/mailcore2"
 
 #SwiftyJSON
-github "SwiftyJSON/SwiftyJSON" >= 2.2.0
+#github "SwiftyJSON/SwiftyJSON" >= 2.2.0
+#using our fork to avoid compilation problems with carthage
+github "FAU-Inf2/SwiftyJSON" >= 2.2.0
