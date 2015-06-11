@@ -40,6 +40,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                             break
                         }
                     }
+                    if activeAccount == nil {
+                        self.navigationController?.popViewControllerAnimated(true)
+                    }
                 }
             }
         }
@@ -54,7 +57,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         view.addSubview(tokenView)*/
 
     }
-    
     
     @IBAction func sendEmail(sender: AnyObject) {
         var session = MCOSMTPSession()
@@ -145,6 +147,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if activeAccount == nil {
+            self.navigationController?.popViewControllerAnimated(true)
+            return UITableViewCell()
+        }
         if ccOpened {
             switch indexPath.row {
             case 0:
