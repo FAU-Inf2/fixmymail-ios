@@ -20,76 +20,78 @@ fastlane_version "1.3.2"
 
 default_platform :ios
 
-
 platform :ios do
 
-  before_all do
-    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
-
-    # cocoapods
-
-    # increment_build_number
-
-    #ipa(scheme: "FixMyMail") # Build your app - more options available
-
-    # xctool # run the tests of your app
+  before_all do |lane|
+    ENV["HIPCHAT_API_VERSION"] = "1"
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "Starting build of lane: " + lane.to_s,
+        channel: "Fix my mail"
+      )
+    end
   end
 
-  desc "Do CI build"
-  lane :ci do
-    #carthage
-    ipa(scheme: "FixMyMail")
-    # xctool "-project FixMyMail.xcodeproj \
-    #     -scheme 'FixMyMail' \
-    #     -configuration Release \
-    #     -sdk iphoneos archive -archivePath ./here"
+  desc "Clean project with xctool"
+  lane :clean do
+    xctool "-project FixMyMail.xcodeproj \
+        -scheme 'FixMyMail' \
+        -configuration Release \
+        -sdk iphonesimulator \
+        clean"
   end
 
-  desc "Runs all the tests"
+  desc "Build project with xctool"
+  lane :build do
+    carthageverbose(
+      verbose: true
+    )
+    xctool "-project FixMyMail.xcodeproj \
+        -scheme 'FixMyMail' \
+        -configuration Release \
+        -sdk iphonesimulator \
+        build"
+  end
+
+  desc "Run tests for project with xctool"
   lane :test do
-    # snapshot
-  end
+    carthageverbose(
+      verbose: true
+    )
+    xctool "-project FixMyMail.xcodeproj \
+        -scheme 'FixMyMail' \
+        -configuration Release \
+        -sdk iphonesimulator \
+        test"
+  end  
 
-  desc "Submit a new Beta Build to Apple TestFlight"
-  desc "This will also make sure the profile is up to date"
-  lane :beta do
-    # snapshot
-    # sigh
-    # deliver(beta: true)
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
-  desc "Deploy a new version to the App Store"
-  desc "** Full Markdown** Support: `code`"
+  desc "Build and deploy the ipa file"
   lane :deploy do
-    # snapshot
-    # sigh
-    # deliver(skip_deploy: true, force: true)
-    # frameit
+    ipa(
+      scheme: "FixMyMail"
+    )
+    sh "scp FixMyMail.ipa mad:/var/www/hockey/public/de.fau.cs.mad.fixmymail.ios/fixmymail.ipa"
   end
-
-  # You can define as many lanes as you want
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
-    
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "Build successful for lane: " + lane.to_s,
+        channel: "Fix my mail",
+        success: true
+      )
+    end
   end
-
 
   error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
+    if ENV["HIPCHAT_API_TOKEN"]
+      hipchat(
+        message: "Build failed for lane: " + lane.to_s,
+        #exception.message TODO cut to 1000 chars
+        channel: "Fix my mail",
+        success: false
+      )
+    end
   end
-
 end
-
-
-# More information about multiple platforms in fastlane: 
-# https://github.com/KrauseFx/fastlane/blob/master/docs/Platforms.md
