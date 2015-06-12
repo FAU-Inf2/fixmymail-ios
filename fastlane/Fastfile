@@ -86,8 +86,13 @@ platform :ios do
     if ENV["HIPCHAT_API_TOKEN"]
       commit_sha = `git rev-parse HEAD`.strip;
 
+      the_log = ENV["LOG"]
+      if !ENV["LOG"]
+        the_log = "404"
+      end
+
       hipchatnoicon(
-        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> successful!",
+        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> successful! See <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>. (success)",
         channel: "Fix my mail",
         success: true,
         show_icon: false
@@ -97,16 +102,23 @@ platform :ios do
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
-    sh "sh uploadLog.sh"
+    if ENV["LOG"]
+      sh "sh uploadLog.sh"
+    end
   end
 
   error do |lane, exception|
-    sh "sh uploadLog.sh"
+    if ENV["LOG"]
+      sh "sh uploadLog.sh"
+    end
     if ENV["HIPCHAT_API_TOKEN"]
       commit_sha = `git rev-parse HEAD`.strip;
-      
+      the_log = ENV["LOG"]
+      if !ENV["LOG"]
+        the_log = "404"
+      end
       hipchatnoicon(
-        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> failed in lane: " + lane.to_s,
+        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> failed in lane: " + lane.to_s + ", see <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>.",
         #exception.message TODO cut to 1000 chars
         channel: "Fix my mail",
         success: false,
