@@ -16,6 +16,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+*.app.dSYM.zip
 
 # CocoaPods
 #
@@ -36,4 +37,4 @@ SwiftyJSON.framework
 
 .DS_Store
 fastlane/report.xml
-log.txt
+log_*.txt
