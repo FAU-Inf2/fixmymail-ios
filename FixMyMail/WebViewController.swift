@@ -121,13 +121,34 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     
     func reply(replyAll: Bool) {
         var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
-        var array = [(self.message.mcomessage as! MCOIMAPMessage).header.from]
-        sendView.replyTo = NSMutableArray(array: array)
+        sendView.reply = true
+        if replyAll {
+            sendView.ccOpened = true
+            var array: [MCOAddress] = [MCOAddress]()
+            var recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
+            for recipient in recipients {
+                if (recipient as! MCOAddress).mailbox != self.message.toAccount.emailAddress {
+                    array.append(recipient as! MCOAddress)
+                }
+            }
+            var ccRecipients = (self.message.mcomessage as! MCOIMAPMessage).header.cc
+            if ccRecipients != nil {
+                for ccRecipient in ccRecipients {
+                    array.append(ccRecipient as! MCOAddress)
+                }
+            }
+            if array.count == 0 {
+                sendView.ccOpened = false
+            } else {
+                sendView.replyCC = NSMutableArray(array: array)
+            }
+        }
+        sendView.replyTo = (self.message.mcomessage as! MCOIMAPMessage).header.from
         sendView.activeAccount = self.message.toAccount
         sendView.subject = "Re: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
         var parser = MCOMessageParser(data: self.message.data)
         var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
-        sendView.replyText = "Am \(date.day()).\(date.month()).\(date.year()) um \(date.hour()):\(date.minute()) schrieb " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + ":\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
+        sendView.replyText = "On \(date.day()) \(date.month()) \(date.year()), at \(date.hour()):\(date.minute()), " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + " wrote:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     

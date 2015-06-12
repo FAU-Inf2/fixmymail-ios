@@ -7,7 +7,9 @@ import AddressBookUI
 class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate {
     @IBOutlet weak var sendTableView: UITableView!
     var ccOpened: Bool = false
-    var replyTo: NSMutableArray? = nil
+    var reply: Bool = false
+    var replyCC: NSMutableArray? = nil
+    var replyTo: MCOAddress? = nil
     var subject: String = ""
     var replyText: String = ""
     var activeAccount: EmailAccount? = nil
@@ -163,13 +165,8 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
                 sendCell.lblTo.text = "To:"
                 if sendCell.txtTo.text == "" {
-                    if self.replyTo != nil {
-                        for address in self.replyTo! {
-                            sendCell.txtTo.text = sendCell.txtTo.text + (address as! MCOAddress).mailbox
-                            if self.replyTo!.lastObject!.isEqual(address) == false {
-                                sendCell.txtTo.text = sendCell.txtTo.text + ", "
-                            }
-                        }
+                    if reply {
+                        sendCell.txtTo.text = replyTo?.mailbox
                     }
                 }
                 sendCell.txtTo.addTarget(self, action: "closeCC:", forControlEvents: UIControlEvents.AllEditingEvents)
@@ -183,6 +180,17 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
                 sendCell.lblTo.text = "Cc:"
                 sendCell.txtTo.text = ""
+                if reply {
+                    if let recipients = replyCC {
+                        var count = 1
+                        for recipient in recipients {
+                            sendCell.txtTo.text = sendCell.txtTo.text + (recipient as! MCOAddress).mailbox
+                            if count++ < recipients.count {
+                                sendCell.txtTo.text = sendCell.txtTo.text + ", "
+                            }
+                        }
+                    }
+                }
                 var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 addContacts.frame = CGRectMake(0, 0, 20, 20)
                 addContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -225,13 +233,8 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
                 sendCell.lblTo.text = "To:"
                 if sendCell.txtTo.text == "" {
-                    if self.replyTo != nil {
-                        for address in self.replyTo! {
-                            sendCell.txtTo.text = sendCell.txtTo.text + (address as! MCOAddress).mailbox
-                            if self.replyTo!.lastObject!.isEqual(address) == false {
-                                sendCell.txtTo.text = sendCell.txtTo.text + ", "
-                            }
-                        }
+                    if reply {
+                        sendCell.txtTo.text = replyTo?.mailbox
                     }
                 }
                 sendCell.emails = sortedEmails
