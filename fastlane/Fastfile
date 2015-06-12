@@ -25,6 +25,8 @@ platform :ios do
 
   before_all do |lane|
     ENV["HIPCHAT_API_VERSION"] = "1"
+    ENV["LOG_URL"] = ENV["LOG_BASE_URL"] + "/" + ENV["LOG_FILE"]
+    ENV["GITHUB_COMMIT_LINK"] = ENV["GITHUB_REPO_URL"] + "/commit/" + `git rev-parse HEAD`.strip
     #["FL_HIPCHAT_SHOW_ICON"] = false
     if ENV["HIPCHAT_API_TOKEN"] && lane.to_s != 'clean'
       hipchatnoicon(
@@ -38,17 +40,15 @@ platform :ios do
   desc "Clean project with xctool"
   lane :clean do
     if ENV["HIPCHAT_API_TOKEN"]
-      commit_sha = `git rev-parse HEAD`.strip;
+      commit_sha = `git rev-parse HEAD`.strip
       commit_author = `git --no-pager show -s --format='%an <%ae>' #{commit_sha}`.strip
       commit_author = CGI.escapeHTML(commit_author)
 
-      the_log = ENV["LOG"]
-      if !ENV["LOG"]
-        the_log = "404"
-      end
+      log_url = ENV["LOG_URL"]
+      github_commit_link = ENV["GITHUB_COMMIT_LINK"]
 
       hipchatnoicon(
-        message: "Start build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> by #{commit_author}, see <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>.",
+        message: "Start build for commit <a href='#{github_commit_link}'>#{commit_sha[0..8]}</a> by #{commit_author}, see <a href='#{log_url}'>log file</a>.",
         channel: "Fix my mail",
         show_icon: false
       )
@@ -91,13 +91,11 @@ platform :ios do
     if ENV["HIPCHAT_API_TOKEN"]
       commit_sha = `git rev-parse HEAD`.strip;
 
-      the_log = ENV["LOG"]
-      if !ENV["LOG"]
-        the_log = "404"
-      end
+      log_url = ENV["LOG_URL"]
+      github_commit_link = ENV["GITHUB_COMMIT_LINK"]
 
       hipchatnoicon(
-        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> successful! See <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>. <img class='remoticon' title='(success)' alt='(success)' height='25' src='https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/success-1414025948.png'>",
+        message: "Build for commit <a href='#{github_commit_link}'>#{commit_sha[0..8]}</a> successful! See <a href='#{log_url}'>log file</a>. <img class='remoticon' title='(success)' alt='(success)' height='25' src='https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/success-1414025948.png'>",
         channel: "Fix my mail",
         success: true,
         show_icon: false
@@ -107,23 +105,21 @@ platform :ios do
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
-    if ENV["LOG"]
+    if ENV["LOG_FILE"]
       sh "sh uploadLog.sh"
     end
   end
 
   error do |lane, exception|
-    if ENV["LOG"]
+    if ENV["LOG_FILE"]
       sh "sh uploadLog.sh"
     end
     if ENV["HIPCHAT_API_TOKEN"]
       commit_sha = `git rev-parse HEAD`.strip;
-      the_log = ENV["LOG"]
-      if !ENV["LOG"]
-        the_log = "404"
-      end
+      log_url = ENV["LOG_URL"]
+      github_commit_link = ENV["GITHUB_COMMIT_LINK"]
       hipchatnoicon(
-        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> failed in lane: " + lane.to_s + ", see <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>.",
+        message: "Build for commit <a href='#{github_commit_link}'>#{commit_sha[0..8]}</a>failed in lane: " + lane.to_s + ", see <a href='#{log_url}'>log file</a>.",
         #exception.message TODO cut to 1000 chars
         channel: "Fix my mail",
         success: false,
