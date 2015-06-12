@@ -35,3 +35,5 @@ MailCore.framework
 SwiftyJSON.framework
 
 .DS_Store
+fastlane/report.xml
+log.txt
