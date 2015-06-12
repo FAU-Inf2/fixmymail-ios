@@ -147,10 +147,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmailAccount.realName = "SMile_Gmail"
 			gmailAccount.accountName = "Gmail"
 			gmailAccount.isActivated = true
-			let errorLocksmithgmail = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail2015@gmail.com")
-			if errorLocksmithgmail == nil {
-				println("saving data for \(gmailAccount.emailAddress)")
+			let errorLocksmithGmail = Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
+			if errorLocksmithGmail == nil {
+				NSLog("found old data -> deleted!")
 			}
+			let GmailSaveRequest = LocksmithRequest(userAccount: "fixmymail2015@gmail.com", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
+			GmailSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+			let (GmailDictionary, GmailRequestError) = Locksmith.performRequest(GmailSaveRequest)
+			if GmailRequestError == nil {
+				NSLog("saving data for \(gmailAccount.emailAddress)")
+			}
+			
+			
 			
             var gmxAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             gmxAccount.username = "fixmymail@gmx.de"
@@ -167,10 +175,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmxAccount.realName = "SMile_GMX"
             gmxAccount.accountName = "GMX"
 			gmxAccount.isActivated = true
-			let errorLocksmithgmx = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@gmx.de")
-			if errorLocksmithgmx == nil {
-				println("saving data for \(gmailAccount.emailAddress)")
+			let errorLocksmithGmx = Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
+			if errorLocksmithGmx == nil {
+				NSLog("found old data -> deleted!")
 			}
+			let GmxSaveRequest = LocksmithRequest(userAccount: "fixmymail@gmx.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
+			GmxSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+			let (GmxDictionary, GmxRequestError) = Locksmith.performRequest(GmxSaveRequest)
+			if GmxRequestError == nil {
+				NSLog("saving data for \(gmxAccount.emailAddress)")
+			}
+			
 			
             var webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             webAccount.username = "fixmymail@web.de"
@@ -183,18 +198,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             webAccount.smtpHostname = "smtp.web.de"
             webAccount.smtpPort = 587
 			webAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
-			webAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
+			webAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.StartTLS)
 			webAccount.realName = "SMile_WEBDE"
 			webAccount.accountName = "WEB.DE"
 			webAccount.isActivated = true
-			let errorLocksmithweb = Locksmith.saveData(["Password:": "fixinginMAD2015"], forUserAccount: "fixmymail@web.de")
-			if errorLocksmithweb == nil {
-				println("saving data for \(gmailAccount.emailAddress)")
+			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
+			if errorLocksmithWeb == nil {
+				NSLog("found old data -> deleted!")
 			}
-
+			let WebSaveRequest = LocksmithRequest(userAccount: "fixmymail@web.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
+			WebSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+			let (WebDictionary, WebRequestError) = Locksmith.performRequest(WebSaveRequest)
+			if WebRequestError == nil {
+				println("saving data for \(webAccount.emailAddress)")
+			}
 			
-            
-            
             /*let session = MCOIMAPSession()
             session.hostname = gmailAccount.imapHostname
             session.port = gmailAccount.imapPort

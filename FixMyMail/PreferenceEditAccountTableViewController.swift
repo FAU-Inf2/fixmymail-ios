@@ -70,7 +70,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			// delete Password from iOS Keychain
 			let errorLocksmith = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
 			if errorLocksmith == nil {
-				NSLog("deleting data")
+				NSLog("deleting data for " + self.entries["Mailaddress:"]!)
 			}
 			
 			// ###### only for dev testing, DELETE before release!!!!!!!! #######
@@ -457,10 +457,16 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 									case "Username:": 			newEntry.setValue(value, forKey: "username")
 									case "Password:":
 										newEntry.setValue("*", forKey: "password")
-										let errorLocksmith = Locksmith.saveData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
-										if errorLocksmith == nil {
-											println("saving data")
+										// save password to iOS keychain
+										let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
+										NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+										let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
+										if NewRequestError == nil {
+											NSLog("saving data for " + self.entries["Mailaddress:"]!)
+										} else {
+											NSLog("could not save data for " + self.entries["Mailaddress:"]!)
 										}
+					
 									case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
 									case "IMAP Port:": 			newEntry.setValue(value.toInt(), forKey: "imapPort")
 									case "IMAP Auth:":			newEntry.setValue(value, forKey: "authTypeImap")
@@ -492,9 +498,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 											case "Username:": 			managedObject.setValue(value, forKey: "username")
 											case "Password:":
 												managedObject.setValue("*", forKey: "password")
+												// update data to iOS keychain
 												let errorLocksmith = Locksmith.updateData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
 												if errorLocksmith == nil {
-													NSLog("saving data")
+													NSLog("updating data for " + self.entries["Mailaddress:"]!)
+												} else {
+													NSLog("error updating data for " + self.entries["Mailaddress:"]!)
 												}
 											case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
 											case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
