@@ -42,8 +42,13 @@ platform :ios do
       commit_author = `git --no-pager show -s --format='%an <%ae>' #{commit_sha}`.strip
       commit_author = CGI.escapeHTML(commit_author)
 
+      the_log = ENV["LOG"]
+      if !ENV["LOG"]
+        the_log = "404"
+      end
+
       hipchatnoicon(
-        message: "Start build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> by #{commit_author}.",
+        message: "Start build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> by #{commit_author}, see <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>.",
         channel: "Fix my mail",
         show_icon: false
       )
