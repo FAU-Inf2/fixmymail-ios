@@ -402,7 +402,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             self.session!.hostname = account.imapHostname
             self.session!.port = account.imapPort
             self.session!.username = account.username
-            self.session!.password = account.password
+            let (dictionary, error) = Locksmith.loadDataForUserAccount(account.emailAddress)
+            if error == nil {
+                self.session!.password = dictionary?.valueForKey("Password:") as! String
+            }
             self.session!.authType = MCOAuthType.SASLPlain
             self.session!.connectionType = MCOConnectionType.TLS
         //}

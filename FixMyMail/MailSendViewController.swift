@@ -63,7 +63,13 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         session.hostname = activeAccount!.smtpHostname
         session.port = activeAccount!.smtpPort
         session.username = activeAccount!.username
-        session.password = activeAccount!.password
+        let (dictionary, error) = Locksmith.loadDataForUserAccount(activeAccount!.emailAddress)
+        if error == nil {
+            session.password = dictionary?.valueForKey("Password:") as! String
+        } else {
+            NSLog("%@", error!.description)
+            return
+        }
         session.connectionType = StringToConnectionType(activeAccount!.connectionTypeSmtp);
         session.authType = StringToAuthType(activeAccount!.authTypeSmtp);
         
@@ -166,7 +172,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                 }
-                sendCell.txtTo.addTarget(self, action: "closeCC", forControlEvents: UIControlEvents.AllEditingEvents)
+                sendCell.txtTo.addTarget(self, action: "closeCC:", forControlEvents: UIControlEvents.AllEditingEvents)
                 sendCell.emails = sortedEmails
                 var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 addContacts.frame = CGRectMake(0, 0, 20, 20)
@@ -200,7 +206,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             case 4:
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
                 sendCell.txtText.text = self.subject
-                sendCell.txtText.addTarget(self, action: "closeCC", forControlEvents: UIControlEvents.AllEditingEvents)
+                sendCell.txtText.addTarget(self, action: "closeCC:", forControlEvents: UIControlEvents.AllEditingEvents)
                 return sendCell
             case 5:
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellText", forIndexPath: indexPath) as! SendViewCellText
@@ -239,7 +245,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 sendCell.lblTo.text = "Cc/Bcc, From:"
                 sendCell.txtTo.text = activeAccount!.emailAddress
                 sendCell.accessoryView = nil
-                sendCell.txtTo.addTarget(self, action: "openCC", forControlEvents: UIControlEvents.AllEditingEvents)
+                sendCell.txtTo.addTarget(self, action: "openCC:", forControlEvents: UIControlEvents.AllEditingEvents)
                 return sendCell
             case 2:
                 var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
