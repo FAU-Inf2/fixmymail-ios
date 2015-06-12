@@ -92,7 +92,7 @@ platform :ios do
       end
 
       hipchatnoicon(
-        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> successful! See <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>. (success)",
+        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> successful! See <a href='http://mad.cs.fau.de/hockey/public/de.fau.cs.mad.fixmymail.ios/#{the_log}'>log file</a>. <img class='remoticon' title='(success)' alt='(success)' height='25' src='https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/success-1414025948.png'>",
         channel: "Fix my mail",
         success: true,
         show_icon: false
