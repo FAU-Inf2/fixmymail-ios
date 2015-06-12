@@ -16,6 +16,7 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
+
 fastlane_version "1.3.2"
 
 default_platform :ios
@@ -24,16 +25,30 @@ platform :ios do
 
   before_all do |lane|
     ENV["HIPCHAT_API_VERSION"] = "1"
-    if ENV["HIPCHAT_API_TOKEN"]
-      hipchat(
-        message: "Starting build of lane: " + lane.to_s,
-        channel: "Fix my mail"
+    #["FL_HIPCHAT_SHOW_ICON"] = false
+    if ENV["HIPCHAT_API_TOKEN"] && lane.to_s != 'clean'
+      hipchatnoicon(
+        message: "Running lane: " + lane.to_s,
+        channel: "Fix my mail",
+        show_icon: false
       )
     end
   end
 
   desc "Clean project with xctool"
   lane :clean do
+    if ENV["HIPCHAT_API_TOKEN"]
+      commit_sha = `git rev-parse HEAD`.strip;
+      commit_author = `git --no-pager show -s --format='%an <%ae>' #{commit_sha}`.strip
+      commit_author = CGI.escapeHTML(commit_author)
+
+      hipchatnoicon(
+        message: "Start build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> by #{commit_author}.",
+        channel: "Fix my mail",
+        show_icon: false
+      )
+    end
+
     xctool "-project FixMyMail.xcodeproj \
         -scheme 'FixMyMail' \
         -configuration Release \
@@ -60,7 +75,7 @@ platform :ios do
         -configuration Release \
         -sdk iphonesimulator \
         test"
-  end  
+  end
 
   desc "Build and deploy the ipa file"
   lane :deploy do
@@ -68,28 +83,34 @@ platform :ios do
       scheme: "FixMyMail"
     )
     sh "sh deploy.sh"
+    if ENV["HIPCHAT_API_TOKEN"]
+      commit_sha = `git rev-parse HEAD`.strip;
+
+      hipchatnoicon(
+        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> successful!",
+        channel: "Fix my mail",
+        success: true,
+        show_icon: false
+      )
+    end
   end
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
     sh "sh uploadLog.sh"
-    if ENV["HIPCHAT_API_TOKEN"]
-      hipchat(
-        message: "Build successful for lane: " + lane.to_s,
-        channel: "Fix my mail",
-        success: true
-      )
-    end
   end
 
   error do |lane, exception|
     sh "sh uploadLog.sh"
     if ENV["HIPCHAT_API_TOKEN"]
-      hipchat(
-        message: "Build failed for lane: " + lane.to_s,
+      commit_sha = `git rev-parse HEAD`.strip;
+      
+      hipchatnoicon(
+        message: "Build for commit <a href='https://github.com/FAU-Inf2/fixmymail-ios/commit/#{commit_sha}'>#{commit_sha[0..8]}</a> failed in lane: " + lane.to_s,
         #exception.message TODO cut to 1000 chars
         channel: "Fix my mail",
-        success: false
+        success: false,
+        show_icon: false
       )
     end
   end
