@@ -11,7 +11,7 @@ import CoreImage
 import ImageIO
 import CoreData
 
-class WebViewController: UIViewController, MCOMessageViewDelegate {
+class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageViewDelegate {
     var messageView: MCOMessageView!
     var storage: NSMutableDictionary = NSMutableDictionary()
     var ops: NSMutableArray = NSMutableArray()
@@ -33,9 +33,9 @@ class WebViewController: UIViewController, MCOMessageViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         var buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
-        var buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "reply")
+        var buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "replyButtonPressed")
         var buttonCompose = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "compose")
-        var items = [UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), UIBarButtonItem(), buttonDelete, UIBarButtonItem(), UIBarButtonItem(), buttonReply, UIBarButtonItem(), UIBarButtonItem(), buttonCompose]
+        var items = [buttonDelete, buttonReply, buttonCompose]
         self.navigationController?.visibleViewController.setToolbarItems(items, animated: animated)
         self.navigationController?.setToolbarHidden(false, animated: false)
     }
@@ -103,7 +103,23 @@ class WebViewController: UIViewController, MCOMessageViewDelegate {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func reply() {
+    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+        switch buttonIndex {
+        case 1:
+            self.reply(false)
+        case 2:
+            self.reply(true)
+        default:
+            return
+        }
+    }
+    
+    func replyButtonPressed() {
+        var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all")
+        replyActionSheet.showInView(self.view)
+    }
+    
+    func reply(replyAll: Bool) {
         var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         var array = [(self.message.mcomessage as! MCOIMAPMessage).header.from]
         sendView.replyTo = NSMutableArray(array: array)
