@@ -24,16 +24,17 @@ default_platform :ios
 platform :ios do
 
   before_all do |lane|
-    ENV["HIPCHAT_API_VERSION"] = "1"
-    ENV["LOG_URL"] = ENV["LOG_BASE_URL"] + "/" + ENV["LOG_FILE"]
-    ENV["GITHUB_COMMIT_LINK"] = ENV["GITHUB_REPO_URL"] + "/commit/" + `git rev-parse HEAD`.strip
-    #["FL_HIPCHAT_SHOW_ICON"] = false
-    if ENV["HIPCHAT_API_TOKEN"] && lane.to_s != 'clean'
-      hipchatnoicon(
-        message: "Running lane: " + lane.to_s,
-        channel: "Fix my mail",
-        show_icon: false
-      )
+    if ENV["HIPCHAT_API_TOKEN"]
+      ENV["HIPCHAT_API_VERSION"] = "1"
+      ENV["LOG_URL"] = ENV["LOG_BASE_URL"] + "/" + ENV["LOG_FILE"]
+      ENV["GITHUB_COMMIT_LINK"] = ENV["GITHUB_REPO_URL"] + "/commit/" + `git rev-parse HEAD`.strip
+      if lane.to_s != 'clean'
+        hipchatnoicon(
+          message: "Running lane: " + lane.to_s,
+          channel: "Fix my mail",
+          show_icon: false
+        )
+      end
     end
   end
 
