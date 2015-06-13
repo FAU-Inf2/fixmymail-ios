@@ -435,6 +435,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						} else {
 							// imap and smtp connections returned valid
 							println("Smpt connection valid")
+							self.entriesChecked["IMAP Hostname:"] = true
+							self.entriesChecked["IMAP Port:"] = true
+							self.entriesChecked["Username:"] = true
+							self.entriesChecked["Password:"] = true
+							self.entriesChecked["IMAP Auth:"] = true
+							self.entriesChecked["IMAP ConType:"] = true
 							self.entriesChecked["SMTP Hostname:"] = true
 							self.entriesChecked["SMTP Port:"] = true
 							self.entriesChecked["Username:"] = true
@@ -521,7 +527,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 								}
 							}
 							context.save(nil)
-							self.navigationController?.popViewControllerAnimated(true)
+							self.delay(1.0) {
+								self.navigationController?.popViewControllerAnimated(true)
+							}
 						}
 					})
 					
@@ -670,6 +678,16 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	// set value if switchstate has changed
 	func stateChanged(switchState: UISwitch) {
 		self.isActivated = switchState.on
+	}
+	
+	// delay block for seconds
+	func delay(delay:Double, closure:()->()) {
+		dispatch_after(
+			dispatch_time(
+				DISPATCH_TIME_NOW,
+				Int64(delay * Double(NSEC_PER_SEC))
+			),
+			dispatch_get_main_queue(), closure)
 	}
 	
 }
