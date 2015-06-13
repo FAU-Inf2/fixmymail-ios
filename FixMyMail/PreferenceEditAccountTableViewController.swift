@@ -431,8 +431,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					NSLog("can't establish Imap connection: %@", error)
 					var alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
 					alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
-						//self.navigationItem.rightBarButtonItem?.enabled = true
-						
+						self.navigationItem.rightBarButtonItem?.enabled = true
 						return
 					}))
 					alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
