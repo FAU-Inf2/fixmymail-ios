@@ -34,7 +34,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var authConVC: AuthConTableViewController?
 	var origintableViewInsets: UIEdgeInsets?
 	var isActivated: Bool?
-	
+	var imapOperation: MCOIMAPOperation?
+	var smtpOperation: MCOSMTPOperation?
+	var isInImapOperation: Bool = false
+	var isInSmtpOperation: Bool = false
 	
 	
 	override func viewDidLoad() {
@@ -168,19 +171,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			cell.label.text = labelString
 			cell.activateSwitch.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+			cell.activateSwitch.on = self.isActivated!
 			
-			// get the emailAcc.isActivated value only once
-			if self.isActivated == nil {
-				if emailAcc != nil {
-					cell.activateSwitch.on = emailAcc!.isActivated
-					self.isActivated = emailAcc?.isActivated
-				} else {
-					cell.activateSwitch.on = false
-					self.isActivated = false
-				}
-			} else {
-				cell.activateSwitch.on = self.isActivated!
-			}
 			return cell
 			
 		// normal account cells
@@ -347,6 +339,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["SMTP Port:"] = String(Int(emailAcc!.smtpPort))
 			self.entries["SMTP Auth:"] = emailAcc!.authTypeSmtp
 			self.entries["SMTP ConType:"] = emailAcc!.connectionTypeSmtp
+			self.isActivated = emailAcc!.isActivated
 		} else {
 			self.entries["Mailaddress:"] = ""
 			self.entries["Realname:"] = ""
@@ -363,6 +356,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["SMTP Port:"] = ""
 			self.entries["SMTP Auth:"] = ""
 			self.entries["SMTP ConType:"] = ""
+			self.isActivated = false
 		}
 		
 		if actionItem?.emailAddress != "Add New Account" {
@@ -385,9 +379,32 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 	}
 	
+	@IBAction func cancelTapped(sender: AnyObject) -> Void {
+		NSLog("Cancel Button tapped!")
+		if self.imapOperation != nil {
+			NSLog("imapOperation is not nil")
+			if self.isInImapOperation {
+				NSLog("is in ImapOperation")
+				self.imapOperation!.cancel()
+			}
+		}
+		
+		if self.smtpOperation != nil {
+			NSLog("smtpOperation is not nil")
+			if self.isInSmtpOperation {
+				NSLog("is in SmtpOperation")
+				self.smtpOperation!.cancel()
+			}
+		}
+		
+		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
+		self.navigationItem.rightBarButtonItem = doneButton
+	}
+	
 	@IBAction func doneTapped(sender: AnyObject) -> Void {
 		
 		self.navigationItem.rightBarButtonItem?.enabled = false
+		var doneButton = self.navigationItem.rightBarButtonItem
 		
 		// check if textfields are empty
 		if (self.selectedTextfield != nil) {
@@ -399,17 +416,31 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		}
 		self.tableView.reloadData()
 		if self.allEntriesSet() {
+			
+			var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel ", style: .Plain, target: self, action: "cancelTapped:")
+			cancelButton.tintColor = UIColor.redColor()
+			self.navigationItem.rightBarButtonItem = cancelButton
+			
 			// test the imap connection
-			var imapOperation = self.getImapOperation()
-			imapOperation.start({(NSError error) in
+			self.imapOperation = self.getImapOperation()
+			self.isInImapOperation = true
+			self.imapOperation!.start({(NSError error) in
+				self.isInImapOperation = false
 				if (error != nil) {
+					self.navigationItem.rightBarButtonItem = doneButton
 					NSLog("can't establish Imap connection: %@", error)
 					var alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
-					alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
-					self.presentViewController(alert, animated: true, completion: nil)
-					self.navigationItem.rightBarButtonItem?.enabled = true
-					return
+					alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+						//self.navigationItem.rightBarButtonItem?.enabled = true
+						
+						return
+					}))
+					alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
+						self.saveEntriesToCoreData()
+						self.navigationController?.popViewControllerAnimated(true)
+					}))
 					
+					self.presentViewController(alert, animated: true, completion: nil)
 					
 				} else {
 					// imap connection valid -> test the smtp connection
@@ -421,19 +452,29 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					self.entriesChecked["IMAP Auth:"] = true
 					self.entriesChecked["IMAP ConType:"] = true
 					self.tableView.reloadData()
-					var smtpOperation = self.getSmtpOperation()
-					smtpOperation.start({(NSError error) in
+					self.smtpOperation = self.getSmtpOperation()
+					self.isInSmtpOperation = true
+					self.smtpOperation!.start({(NSError error) in
+						self.isInSmtpOperation = false
 						if (error != nil) {
+							self.navigationItem.rightBarButtonItem = doneButton
 							NSLog("can't establish Smpt connection: %@", error)
 							var alert = UIAlertController(title: "Error", message: "Your Properties for SMTP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
-							alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
+							alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+								self.navigationItem.rightBarButtonItem?.enabled = true
+								return
+							}))
+							alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
+								self.saveEntriesToCoreData()
+								self.navigationController?.popViewControllerAnimated(true)
+							}))
+							
 							self.presentViewController(alert, animated: true, completion: nil)
-							self.navigationItem.rightBarButtonItem?.enabled = true
-							return
 							
 							
 						} else {
 							// imap and smtp connections returned valid
+							self.navigationItem.rightBarButtonItem = doneButton
 							println("Smpt connection valid")
 							self.entriesChecked["IMAP Hostname:"] = true
 							self.entriesChecked["IMAP Port:"] = true
@@ -448,85 +489,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							self.entriesChecked["SMTP Auth:"] = true
 							self.entriesChecked["SMTP ConType:"] = true
 							self.tableView.reloadData()
-							// write | update entity
-							var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-							var context: NSManagedObjectContext = appDel.managedObjectContext!
 							
-							if self.actionItem?.emailAddress == "Add New Account" {
-								var newEntry = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: context) as!EmailAccount
-								
-								for (key, value) in self.entries {
-									switch key {
-									case "Mailaddress:": 		newEntry.setValue(value, forKey: "emailAddress")
-									case "Realname:":			newEntry.setValue(value, forKey: "realName")
-									case "Accountname:":		newEntry.setValue(value, forKey: "accountName")
-									case "Username:": 			newEntry.setValue(value, forKey: "username")
-									case "Password:":
-										newEntry.setValue("*", forKey: "password")
-										// save password to iOS keychain
-										let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
-										NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-										let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
-										if NewRequestError == nil {
-											NSLog("saving data for " + self.entries["Mailaddress:"]!)
-										} else {
-											NSLog("could not save data for " + self.entries["Mailaddress:"]!)
-										}
-					
-									case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
-									case "IMAP Port:": 			newEntry.setValue(value.toInt(), forKey: "imapPort")
-									case "IMAP Auth:":			newEntry.setValue(value, forKey: "authTypeImap")
-									case "IMAP ConType:":		newEntry.setValue(value, forKey: "connectionTypeImap")
-									case "SMTP Hostname:": 		newEntry.setValue(value, forKey: "smtpHostname")
-									case "SMTP Port:": 			newEntry.setValue(value.toInt(), forKey: "smtpPort")
-									case "SMTP Auth:": 			newEntry.setValue(value, forKey: "authTypeSmtp")
-									case "SMTP ConType:":		newEntry.setValue(value, forKey: "connectionTypeSmtp")
-									default: break
-									}
-								}
-								newEntry.setValue(self.isActivated, forKey: "isActivated")
-								
-							} else {
-								
-								var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
-								fetchRequest.predicate = NSPredicate(format: "emailAddress = %@", self.emailAcc!.emailAddress)
-								
-								if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
-									if fetchResults.count != 0{
-										
-										var managedObject = fetchResults[0]
-										
-										for (key, value) in self.entries {
-											switch key {
-											case "Mailaddress:": 		managedObject.setValue(value, forKey: "emailAddress")
-											case "Realname:":			managedObject.setValue(value, forKey: "realName")
-											case "Accountname:":		managedObject.setValue(value, forKey: "accountName")
-											case "Username:": 			managedObject.setValue(value, forKey: "username")
-											case "Password:":
-												managedObject.setValue("*", forKey: "password")
-												// update data to iOS keychain
-												let errorLocksmith = Locksmith.updateData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
-												if errorLocksmith == nil {
-													NSLog("updating data for " + self.entries["Mailaddress:"]!)
-												} else {
-													NSLog("error updating data for " + self.entries["Mailaddress:"]!)
-												}
-											case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
-											case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
-											case "IMAP Auth:":			managedObject.setValue(value, forKey: "authTypeImap")
-											case "IMAP ConType:":		managedObject.setValue(value, forKey: "connectionTypeImap")
-											case "SMTP Hostname:": 		managedObject.setValue(value, forKey: "smtpHostname")
-											case "SMTP Port:": 			managedObject.setValue(value.toInt(), forKey: "smtpPort")
-											case "SMTP Auth:": 			managedObject.setValue(value, forKey: "authTypeSmtp")
-											case "SMTP ConType:":		managedObject.setValue(value, forKey: "connectionTypeSmtp")
-											default: break
-											}
-										}
-										managedObject.setValue(self.isActivated, forKey: "isActivated")
-									}
-								}
-							}
-							context.save(nil)
+							// write | update entity
+							self.saveEntriesToCoreData()
+							
 							self.delay(1.0) {
 								self.navigationController?.popViewControllerAnimated(true)
 							}
@@ -536,9 +502,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				}
 			})
 			
-		}
+		} else {
 			
-		else {
+			self.navigationItem.rightBarButtonItem = doneButton
 			self.navigationItem.rightBarButtonItem?.enabled = true
 		}
 	}
@@ -560,6 +526,89 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			}
 		}
 	}
+	
+	
+	func saveEntriesToCoreData() {
+		var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+		var context: NSManagedObjectContext = appDel.managedObjectContext!
+		
+		if self.actionItem?.emailAddress == "Add New Account" {
+			var newEntry = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: context) as!EmailAccount
+			
+			for (key, value) in self.entries {
+				switch key {
+				case "Mailaddress:": 		newEntry.setValue(value, forKey: "emailAddress")
+				case "Realname:":			newEntry.setValue(value, forKey: "realName")
+				case "Accountname:":		newEntry.setValue(value, forKey: "accountName")
+				case "Username:": 			newEntry.setValue(value, forKey: "username")
+				case "Password:":
+					newEntry.setValue("*", forKey: "password")
+					// save password to iOS keychain
+					let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
+					NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+					let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
+					if NewRequestError == nil {
+						NSLog("saving data for " + self.entries["Mailaddress:"]!)
+					} else {
+						NSLog("could not save data for " + self.entries["Mailaddress:"]!)
+					}
+					
+				case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
+				case "IMAP Port:": 			newEntry.setValue(value.toInt(), forKey: "imapPort")
+				case "IMAP Auth:":			newEntry.setValue(value, forKey: "authTypeImap")
+				case "IMAP ConType:":		newEntry.setValue(value, forKey: "connectionTypeImap")
+				case "SMTP Hostname:": 		newEntry.setValue(value, forKey: "smtpHostname")
+				case "SMTP Port:": 			newEntry.setValue(value.toInt(), forKey: "smtpPort")
+				case "SMTP Auth:": 			newEntry.setValue(value, forKey: "authTypeSmtp")
+				case "SMTP ConType:":		newEntry.setValue(value, forKey: "connectionTypeSmtp")
+				default: break
+				}
+			}
+			newEntry.setValue(self.isActivated, forKey: "isActivated")
+			
+		} else {
+			
+			var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			fetchRequest.predicate = NSPredicate(format: "emailAddress = %@", self.emailAcc!.emailAddress)
+			
+			if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+				if fetchResults.count != 0{
+					
+					var managedObject = fetchResults[0]
+					
+					for (key, value) in self.entries {
+						switch key {
+						case "Mailaddress:": 		managedObject.setValue(value, forKey: "emailAddress")
+						case "Realname:":			managedObject.setValue(value, forKey: "realName")
+						case "Accountname:":		managedObject.setValue(value, forKey: "accountName")
+						case "Username:": 			managedObject.setValue(value, forKey: "username")
+						case "Password:":
+							managedObject.setValue("*", forKey: "password")
+							// update data to iOS keychain
+							let errorLocksmith = Locksmith.updateData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
+							if errorLocksmith == nil {
+								NSLog("updating data for " + self.entries["Mailaddress:"]!)
+							} else {
+								NSLog("error updating data for " + self.entries["Mailaddress:"]!)
+							}
+						case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
+						case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
+						case "IMAP Auth:":			managedObject.setValue(value, forKey: "authTypeImap")
+						case "IMAP ConType:":		managedObject.setValue(value, forKey: "connectionTypeImap")
+						case "SMTP Hostname:": 		managedObject.setValue(value, forKey: "smtpHostname")
+						case "SMTP Port:": 			managedObject.setValue(value.toInt(), forKey: "smtpPort")
+						case "SMTP Auth:": 			managedObject.setValue(value, forKey: "authTypeSmtp")
+						case "SMTP ConType:":		managedObject.setValue(value, forKey: "connectionTypeSmtp")
+						default: break
+						}
+					}
+					managedObject.setValue(self.isActivated, forKey: "isActivated")
+				}
+			}
+		}
+		context.save(nil)
+	}
+	
 	
 	func allEntriesSet() -> Bool {
 		for (key, value) in self.entries {
