@@ -88,8 +88,10 @@ platform :ios do
     ipa(
       scheme: "FixMyMail"
     )
-    sh "sh deploy.sh"
+
     if ENV["HIPCHAT_API_TOKEN"]
+      sh "sh deploy.sh"
+      
       commit_sha = `git rev-parse HEAD`.strip;
 
       log_url = ENV["LOG_URL"]
