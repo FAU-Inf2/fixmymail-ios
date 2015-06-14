@@ -28,12 +28,10 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	var selectedTextfield: UITextField?
 	var selectedIndexPath: NSIndexPath?
 	var origintableViewInsets: UIEdgeInsets?
+	var standardAccountVC: PreferenceStandardAccountTableViewController?
+//	var frame: CGRect?
 	
-/*	// check if textfields are empty
-	if (self.selectedTextfield != nil) {
-	self.textFieldShouldReturn(self.selectedTextfield!)
-	}
-*/	
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -42,7 +40,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
 		tableView.registerNib(UINib(nibName: "SwitchTableViewCell", bundle: nil), forCellReuseIdentifier: "SwitchTableViewCell")
 		self.navigationItem.title = "Accounts"
-		self.sections = ["Accounts", "", ""]
+		self.sections = ["Accounts:", "", "Options:"]
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -74,12 +72,21 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			name: UIKeyboardWillHideNotification,
 			object: nil)
 		
+		// get selection from standard account VC
+		if self.standardAccountVC != nil {
+			self.preferences?.standardAccount = self.standardAccountVC!.selectedString
+		}
+		
 		loadCoreDataAccounts()
 		self.tableView.reloadData()
 		
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
+		if (self.selectedTextfield != nil) {
+		self.textFieldShouldReturn(self.selectedTextfield!)
+		}
+		
 		var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 		var context: NSManagedObjectContext = appDel.managedObjectContext!
 		var fetchRequest = NSFetchRequest(entityName: "Preferences")
@@ -127,10 +134,11 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		
 		// Configure the cell...
 		switch cellItem.cellName {
-			case "StandardAccount:":
+			case "Standardaccount:":
 				let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
 				cell.labelCellContent.text = cellItem.cellName
 				cell.textfield.placeholder = "Standard Account"
+				cell.textfield.textAlignment = NSTextAlignment.Right
 				cell.textfield.enabled = false
 				cell.textfield.delegate = self
 				if cellItem.emailAddress != nil {
@@ -140,12 +148,15 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			case "Signature:":
 				let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
 				cell.labelCellContent.text = cellItem.cellName
-				cell.textfield.placeholder = "Enter your signature here"
+				cell.textfield.placeholder = "Enter signature here"
+				cell.textfield.textAlignment = NSTextAlignment.Right
 				cell.textfield.enabled = true
 				cell.textfield.delegate = self
 				cell.textfield.text = cellItem.emailAddress
+				//self.frame = cell.textfield.frame
+				
 				return cell
-			case "Automaticly load pictures:":
+			case "Load pictures automatically:":
 				let cell = tableView.dequeueReusableCellWithIdentifier("SwitchTableViewCell", forIndexPath: indexPath) as! SwitchTableViewCell
 				cell.label.text = cellItem.cellName
 				cell.activateSwitch.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
@@ -166,10 +177,15 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		var actionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 
-		// Select standard Account
-		if actionItem.viewController == "PreferenceStandardAccountTableView" {
-			
-		} else {
+		switch actionItem.viewController {
+		case "PreferenceStandardAccountTableViewController":
+			// Select standard Account
+			self.standardAccountVC = PreferenceStandardAccountTableViewController(nibName: "PreferenceStandardAccountTableViewController", bundle: nil)
+			self.standardAccountVC!.accounts = self.accountArr
+			self.standardAccountVC!.selectedString = self.preferences!.standardAccount
+			self.navigationController?.pushViewController(self.standardAccountVC!, animated: true)
+			tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		case "PreferenceAccountView":
 			// PreferenceAccountView
 			var editAccountVC = PreferenceEditAccountTableViewController(nibName:"PreferenceEditAccountTableViewController", bundle: nil)
 			if let emailAccountItem = self.sectionsContent[indexPath.section][indexPath.row] as? EmailAccount {
@@ -177,15 +193,20 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			}
 			
 			editAccountVC.actionItem = actionItem
-			
 			self.navigationController?.pushViewController(editAccountVC, animated: true)
-			
+			tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		default:
+		/*	if actionItem.cellName == "Signature:" {
+				let cell = self.tableView.cellForRowAtIndexPath(indexPath) as! PreferenceAccountTableViewCell
+				cell.textfield.delegate = self
+				cell.textfield.becomeFirstResponder()
+			}
+		*/
+			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		}
+
 		
-		
-		tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		tableView.reloadData()
-		
 		
 	}
 		
@@ -312,14 +333,14 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		}
 
 		// Add New Account Cell
-		newAccountItem.append(ActionItem(Name: "Add New Account", viewController: "CreateAccountView", emailAddress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
+		newAccountItem.append(ActionItem(Name: "Add New Account", viewController: "PreferenceAccountView", emailAddress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
 		
 		// Preferences
 		
-		var standardAccountItem = ActionItem(Name: "StandardAccount:", viewController: "PreferenceStandardAccountTableView", emailAddress: preferences?.standardAccount, icon: nil)
+		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: preferences?.standardAccount, icon: nil)
 		
 		var signatureItem = ActionItem(Name: "Signature:", viewController: "", emailAddress: self.preferences?.signature, icon: nil)
-		var loadPictureItem = ActionItem(Name: "Automaticly load pictures:", viewController: "", emailAddress: nil, icon: nil)
+		var loadPictureItem = ActionItem(Name: "Load pictures automatically:", viewController: "", emailAddress: nil, icon: nil)
 		if self.loadPictures == nil {
 			self.loadPictures = preferences?.loadPictures
 		}
@@ -357,7 +378,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	}
 	
 	func textFieldDidEndEditing(textField: UITextField) {
-		if textField.placeholder! == "Enter your signature here" {
+		if textField.placeholder! == "Enter signature here" {
 			self.preferences!.signature = textField.text
 		}
 		
@@ -379,7 +400,12 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	// add keyboard size to tableView size
 	func keyboardWillShow(notification: NSNotification) {
 		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-			var contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height / 2, 0.0)
+			//var contentInsets = UIEdgeInsets()
+			//if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) {
+			//	contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.width / 2, 0.0)
+			//} else {
+			//var textfieldheight = self.frame?.size.height
+			var contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
 			
 			if self.origintableViewInsets == nil {
 				self.origintableViewInsets = self.tableView.contentInset
