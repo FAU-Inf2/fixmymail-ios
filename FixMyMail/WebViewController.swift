@@ -152,7 +152,9 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     }
     
     func compose() {
-        self.navigationController?.pushViewController(MailSendViewController(nibName: "MailSendViewController", bundle: nil), animated: true)
+        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        sendView.sendingAccount = self.message.toAccount
+        self.navigationController?.pushViewController(sendView, animated: true)
     }
     
     func putMessage() {
