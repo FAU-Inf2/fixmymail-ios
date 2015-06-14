@@ -73,6 +73,7 @@
 		AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */; };
 		AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */; };
 		AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */; };
+		AD6E5DF11B2D9626008B0488 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E5DF01B2D9626008B0488 /* Preferences.swift */; };
 		AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */; };
 		AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */; };
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
@@ -175,6 +176,7 @@
 		AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewController.xib; sourceTree = "<group>"; };
 		AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewCell.swift; sourceTree = "<group>"; };
 		AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewCell.xib; sourceTree = "<group>"; };
+		AD6E5DF01B2D9626008B0488 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
 		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */,
 				3D9027611AF97313000D3E72 /* Email.swift */,
 				3D90275F1AF97313000D3E72 /* EmailAccount.swift */,
+				AD6E5DF01B2D9626008B0488 /* Preferences.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				AD24BE201B23042500804732 /* EmailAccount_Support.swift in Sources */,
+				AD6E5DF11B2D9626008B0488 /* Preferences.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,

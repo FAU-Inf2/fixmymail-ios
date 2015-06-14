@@ -144,15 +144,15 @@ class PreferenceTableViewController: UITableViewController {
 		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", emailAddress: nil, icon: nil)
 		var item5 = ActionItem(Name: "Feedback", viewController: "Feedback", emailAddress: nil, icon: nil)
 		
-		otherItem.append(item4)
-		otherItem.append(item5)
-		preferenceCellItem.append(item1)
-		preferenceCellItem.append(item2)
-		preferenceCellItem.append(item3)
+		self.otherItem.append(item4)
+		self.otherItem.append(item5)
+		self.preferenceCellItem.append(item1)
+		self.preferenceCellItem.append(item2)
+		self.preferenceCellItem.append(item3)
 		
-		rows.append(preferenceCellItem)
-		rows.append([])
-		rows.append(otherItem)
+		self.rows.append(preferenceCellItem)
+		self.rows.append([])
+		self.rows.append(otherItem)
 		
 	}
 	

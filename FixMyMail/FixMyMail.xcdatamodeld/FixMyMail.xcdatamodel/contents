@@ -28,8 +28,14 @@
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="emails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Email" inverseName="toAccount" inverseEntity="Email" syncable="YES"/>
     </entity>
+    <entity name="Preferences" representedClassName="FixMyMail.Preferences" syncable="YES">
+        <attribute name="loadPictures" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="standardAccount" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Email" positionX="-333" positionY="-309" width="128" height="165"/>
         <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="285"/>
+        <element name="Preferences" positionX="-198" positionY="-189" width="128" height="90"/>
     </elements>
 </model>
