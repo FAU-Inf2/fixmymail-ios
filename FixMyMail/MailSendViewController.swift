@@ -62,6 +62,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             var recipientsAsString: String = ""
             var count = 1
             for recipient in self.recipients {
+                NSLog("%@", (recipient as! MCOAddress).mailbox)
                 recipientsAsString = recipientsAsString + (recipient as! MCOAddress).mailbox
                 if count++ < self.recipients.count {
                     recipientsAsString = recipientsAsString + ", "
@@ -101,8 +102,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
                 cell.lblTo.text = "Cc/Bcc, From:"
                 cell.txtTo.text = self.sendingAccount.emailAddress
-                cell.txtTo.tag = 3
+                cell.txtTo.tag = 5
                 cell.txtTo.delegate = self
+                cell.accessoryView = nil
                 return cell
             }
         case 2:
@@ -129,7 +131,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             } else {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
                 cell.txtText.text = self.subject
-                cell.txtText.tag = 4
+                cell.txtText.tag = 6
                 cell.txtText.delegate = self
                 cell.txtText.addTarget(self, action: "updateSubjectAndTitle:", forControlEvents: UIControlEvents.EditingChanged)
                 return cell
@@ -206,11 +208,11 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             if self.expendTableView {
                 tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 0, inSection: 0))
             }
-        case 3:
+        case 3, 5:
             if !self.expendTableView {
                 tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 0))
             }
-        case 4:
+        case 4, 6:
             if self.expendTableView {
                 tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 4, inSection: 0))
             }
@@ -221,6 +223,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func updateRecipients(sender: AnyObject) {
+        if sender.tag != 0 {
+            return
+        }
         self.recipients.removeAllObjects()
         var recipientsAsString = (sender as! UITextField).text
         recipientsAsString = recipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -230,6 +235,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func updateCcRecipients(sender: AnyObject) {
+        if sender.tag != 1 {
+            return
+        }
         self.ccRecipients.removeAllObjects()
         var ccRecipientsAsString = (sender as! UITextField).text
         ccRecipientsAsString = ccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -239,6 +247,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func updateBccRecipients(sender: AnyObject) {
+        if sender.tag != 2 {
+            return
+        }
         self.bccRecipients.removeAllObjects()
         var bccRecipientsAsString = (sender as! UITextField).text
         bccRecipientsAsString = bccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())

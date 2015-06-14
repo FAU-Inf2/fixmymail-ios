@@ -13,24 +13,24 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x8C-1E-7Qu" id="o8e-wU-0gG">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aur-pj-0jP" customClass="TextfieldWithPadding" customModule="FixMyMail" customModuleProvider="target">
+                        <rect key="frame" x="80" y="7" width="232" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dm3-3v-h5n">
-                        <rect key="frame" x="0.0" y="11" width="64" height="21"/>
+                        <rect key="frame" x="8" y="11" width="64" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aur-pj-0jP" customClass="TextfieldWithPadding" customModule="FixMyMail" customModuleProvider="target">
-                        <rect key="frame" x="72" y="7" width="248" height="30"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="aur-pj-0jP" secondAttribute="bottom" constant="-2" id="5On-GT-Vfo"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="aur-pj-0jP" secondAttribute="trailing" constant="-8" id="5YZ-4Q-r1n"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="aur-pj-0jP" secondAttribute="trailing" id="5YZ-4Q-r1n"/>
                     <constraint firstItem="aur-pj-0jP" firstAttribute="top" secondItem="o8e-wU-0gG" secondAttribute="topMargin" constant="-1" id="CdL-sJ-wPg"/>
                     <constraint firstItem="dm3-3v-h5n" firstAttribute="top" secondItem="o8e-wU-0gG" secondAttribute="topMargin" constant="3" id="Eb6-ba-Eyf"/>
-                    <constraint firstItem="dm3-3v-h5n" firstAttribute="leading" secondItem="o8e-wU-0gG" secondAttribute="leadingMargin" constant="-8" id="TLB-Uv-EJq"/>
+                    <constraint firstItem="dm3-3v-h5n" firstAttribute="leading" secondItem="o8e-wU-0gG" secondAttribute="leadingMargin" id="TLB-Uv-EJq"/>
                     <constraint firstAttribute="bottomMargin" secondItem="dm3-3v-h5n" secondAttribute="bottom" constant="3" id="ZeN-xv-nEG"/>
                     <constraint firstItem="aur-pj-0jP" firstAttribute="leading" secondItem="dm3-3v-h5n" secondAttribute="trailing" constant="8" id="zfJ-Tu-FSs"/>
                 </constraints>
@@ -38,7 +38,7 @@
             <connections>
                 <outlet property="txtText" destination="aur-pj-0jP" id="nnE-4Z-zsD"/>
             </connections>
-            <point key="canvasLocation" x="-272" y="101"/>
+            <point key="canvasLocation" x="-193" y="95"/>
         </tableViewCell>
     </objects>
 </document>
