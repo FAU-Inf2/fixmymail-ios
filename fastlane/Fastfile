@@ -80,6 +80,9 @@ platform :ios do
         -scheme 'FixMyMail' \
         -configuration Release \
         -sdk iphonesimulator \
+        -freshSimulator \
+        -resetSimulator \
+        -freshInstall \
         test"
   end
 
