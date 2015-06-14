@@ -80,9 +80,7 @@ platform :ios do
         -scheme 'FixMyMail' \
         -configuration Release \
         -sdk iphonesimulator \
-        -resetSimulator \
-        -freshInstall \
-        test"
+        test -freshSimulator -resetSimulator -freshInstall"
   end
 
   desc "Build and deploy the ipa file"
