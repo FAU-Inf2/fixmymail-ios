@@ -4,50 +4,33 @@ import AddressBook
 import Foundation
 import AddressBookUI
 
-class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate {
+class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var sendTableView: UITableView!
-    var ccOpened: Bool = false
-    var reply: Bool = false
-    var replyCC: NSMutableArray? = nil
-    var replyTo: MCOAddress? = nil
-    var subject: String = ""
-    var replyText: String = ""
-    var activeAccount: EmailAccount? = nil
     var tokenView: KSTokenView = KSTokenView(frame: .zeroRect)
     
-
+    var expendTableView: Bool = false
+    var recipients: NSMutableArray = NSMutableArray()
+    var ccRecipients: NSMutableArray = NSMutableArray()
+    var bccRecipients: NSMutableArray = NSMutableArray()
+    var sendingAccount: EmailAccount!
+    var subject: String = ""
+    var textBody: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "New E-Mail"
+        if self.subject == "" {
+            self.title = "New Message"
+        } else {
+            self.title = subject
+        }
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellSubject", bundle: nil), forCellReuseIdentifier: "SendViewCellSubject")
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellTo", bundle: nil), forCellReuseIdentifier: "SendViewCellTo")
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellText", bundle: nil), forCellReuseIdentifier: "SendViewCellText")
         self.sendTableView.rowHeight = UITableViewAutomaticDimension
         self.sendTableView.estimatedRowHeight = self.view.bounds.height
-        var sendBut: UIBarButtonItem = UIBarButtonItem(title: "Senden", style: .Plain, target: self, action: "sendEmail:")
-        self.navigationItem.rightBarButtonItem = sendBut
-        if self.activeAccount == nil {
-            var managedObjectContext: NSManagedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
-            let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-            var error: NSError?
-            var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
-            if error != nil {
-                NSLog("%@", error!.description)
-            } else {
-                if let emailAccounts = result {
-                    for account in emailAccounts {
-                        if (account as! EmailAccount).active {
-                            activeAccount = account as? EmailAccount
-                            break
-                        }
-                    }
-                    if activeAccount == nil {
-                        self.navigationController?.popViewControllerAnimated(true)
-                    }
-                }
-            }
-        }
+        var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmail:")
+        self.navigationItem.rightBarButtonItem = buttonSend
+        
         LoadAddresses()
         /*let tokenView = KSTokenView(frame: CGRect(x: 76, y: 100, width: 250, height: 30))
         tokenView.delegate = self
@@ -60,216 +43,132 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
 
     }
     
-    @IBAction func sendEmail(sender: AnyObject) {
-        var session = MCOSMTPSession()
-        session.hostname = activeAccount!.smtpHostname
-        session.port = activeAccount!.smtpPort
-        session.username = activeAccount!.username
-        let (dictionary, error) = Locksmith.loadDataForUserAccount(activeAccount!.emailAddress)
-        if error == nil {
-            session.password = dictionary?.valueForKey("Password:") as! String
-        } else {
-            NSLog("%@", error!.description)
-            return
-        }
-        session.connectionType = StringToConnectionType(activeAccount!.connectionTypeSmtp);
-        session.authType = StringToAuthType(activeAccount!.authTypeSmtp);
-        
-        var builder = MCOMessageBuilder()
-        var from = MCOAddress()
-        from.displayName = activeAccount!.realName
-        from.mailbox = activeAccount!.emailAddress
-        var sender = MCOAddress()
-        sender.displayName = activeAccount!.realName
-        sender.mailbox = activeAccount!.emailAddress
-        builder.header.from = from
-        builder.header.sender = sender
-        var tos: NSMutableArray = NSMutableArray()
-        var toCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! SendViewCellTo
-        // toCell.txtTo.text = tokenView.descriptionText
-        var recipients: String = toCell.txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        for recipient in recipients.componentsSeparatedByString(", ") {
-            var to = MCOAddress()
-            to.mailbox = recipient
-            NSLog("%@", recipient)
-            tos.addObject(to)
-        }
-        builder.header.to = tos as [AnyObject]
-        var ccCell: SendViewCellTo = SendViewCellTo()
-        var bccCell: SendViewCellTo = SendViewCellTo()
-        var offset = 0
-        if ccOpened {
-            offset = 2
-            ccCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! SendViewCellTo
-            var ccs: NSMutableArray = NSMutableArray()
-            var ccRecipients: String = ccCell.txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            for recipient in ccRecipients.componentsSeparatedByString(", ") {
-                var to = MCOAddress()
-                to.mailbox = recipient
-                ccs.addObject(to)
-            }
-            builder.header.cc = ccs as [AnyObject]
-            bccCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! SendViewCellTo
-            var bccs: NSMutableArray = NSMutableArray()
-            var bccRecipients: String = bccCell.txtTo.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            for recipient in bccRecipients.componentsSeparatedByString(", ") {
-                var to = MCOAddress()
-                to.mailbox = recipient
-                bccs.addObject(to)
-            }
-            builder.header.bcc = bccs as [AnyObject]
-        }
-        var subCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2 + offset, inSection: 0)) as! SendViewCellSubject
-        builder.header.subject = subCell.txtText.text
-        var textCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3 + offset, inSection: 0)) as! SendViewCellText
-        builder.textBody = textCell.textViewMailBody.text
-                
-        let op = session.sendOperationWithData(builder.data())
-                
-        op.start({(NSError error) in
-            if (error != nil) {
-                NSLog("can't send message: %@", error)
-            } else {
-                toCell.txtTo.text = ""
-                subCell.txtText.text = ""
-                textCell.textViewMailBody.text = ""
-                if self.ccOpened {
-                    ccCell.txtTo.text = ""
-                    bccCell.txtTo.text = ""
-                }
-                NSLog("sent")
-            }
-        })
-    }
-    
-    // TableView
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if ccOpened {
+        if self.expendTableView {
             return 6
         }
         return 4
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if activeAccount == nil {
-            self.navigationController?.popViewControllerAnimated(true)
+        switch indexPath.row {
+        case 0:
+            var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
+            cell.lblTo.text = "To:"
+            var recipientsAsString: String = ""
+            var count = 1
+            for recipient in self.recipients {
+                recipientsAsString = recipientsAsString + (recipient as! MCOAddress).mailbox
+                if count++ < self.recipients.count {
+                    recipientsAsString = recipientsAsString + ", "
+                }
+            }
+            cell.txtTo.text = recipientsAsString
+            cell.txtTo.tag = 0
+            cell.txtTo.delegate = self
+            var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+            buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
+            buttonOpenContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
+            cell.accessoryView = buttonOpenContacts
+            cell.txtTo.addTarget(self, action: "updateRecipients:", forControlEvents: UIControlEvents.EditingDidEnd)
+            return cell
+        case 1:
+            if self.expendTableView {
+                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
+                cell.lblTo.text = "Cc:"
+                var ccRecipientsAsString: String = ""
+                var count = 1
+                for ccRecipient in self.ccRecipients {
+                    ccRecipientsAsString = ccRecipientsAsString + (ccRecipient as! MCOAddress).mailbox
+                    if count++ < self.ccRecipients.count {
+                        ccRecipientsAsString = ccRecipientsAsString + ", "
+                    }
+                }
+                cell.txtTo.text = ccRecipientsAsString
+                cell.txtTo.tag = 1
+                cell.txtTo.delegate = self
+                var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+                buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
+                buttonOpenContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.accessoryView = buttonOpenContacts
+                cell.txtTo.addTarget(self, action: "updateCcRecipients:", forControlEvents: UIControlEvents.EditingDidEnd)
+                return cell
+            } else {
+                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
+                cell.lblTo.text = "Cc/Bcc, From:"
+                cell.txtTo.text = self.sendingAccount.emailAddress
+                cell.txtTo.tag = 3
+                cell.txtTo.delegate = self
+                return cell
+            }
+        case 2:
+            if self.expendTableView {
+                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
+                cell.lblTo.text = "Bcc:"
+                var bccRecipientsAsString: String = ""
+                var count = 1
+                for bccRecipient in self.bccRecipients {
+                    bccRecipientsAsString = bccRecipientsAsString + (bccRecipient as! MCOAddress).mailbox
+                    if count++ < self.bccRecipients.count {
+                        bccRecipientsAsString = bccRecipientsAsString + ", "
+                    }
+                }
+                cell.txtTo.text = bccRecipientsAsString
+                cell.txtTo.tag = 2
+                cell.txtTo.delegate = self
+                var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+                buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
+                buttonOpenContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.accessoryView = buttonOpenContacts
+                cell.txtTo.addTarget(self, action: "updateBccRecipients:", forControlEvents: UIControlEvents.EditingDidEnd)
+                return cell
+            } else {
+                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
+                cell.txtText.text = self.subject
+                cell.txtText.tag = 4
+                cell.txtText.delegate = self
+                cell.txtText.addTarget(self, action: "updateSubjectAndTitle:", forControlEvents: UIControlEvents.EditingChanged)
+                return cell
+            }
+        case 3:
+            if self.expendTableView {
+                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
+                cell.lblTo.text = "From:"
+                cell.txtTo.text = self.sendingAccount.emailAddress
+                cell.txtTo.tag = 3
+                cell.txtTo.delegate = self
+                return cell
+            } else {
+                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellText", forIndexPath: indexPath) as! SendViewCellText
+                cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - 3 * 44))
+                cell.textViewMailBody.delegate = self
+                cell.textViewMailBody.text = self.textBody
+                return cell
+            }
+        case 4:
+            var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
+            cell.txtText.text = self.subject
+            cell.txtText.addTarget(self, action: "updateSubjectAndTitle:", forControlEvents: UIControlEvents.EditingChanged)
+            cell.txtText.tag = 4
+            cell.txtText.delegate = self
+            return cell
+        case 5:
+            var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellText", forIndexPath: indexPath) as! SendViewCellText
+            cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - 5 * 44))
+            cell.textViewMailBody.delegate = self
+            cell.textViewMailBody.text = self.textBody
+            return cell
+        default:
             return UITableViewCell()
-        }
-        if ccOpened {
-            switch indexPath.row {
-            case 0:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
-                sendCell.lblTo.text = "To:"
-                if sendCell.txtTo.text == "" {
-                    if reply {
-                        sendCell.txtTo.text = replyTo?.mailbox
-                    }
-                }
-                sendCell.txtTo.addTarget(self, action: "closeCC:", forControlEvents: UIControlEvents.AllEditingEvents)
-                sendCell.emails = sortedEmails
-                var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
-                addContacts.frame = CGRectMake(0, 0, 20, 20)
-                addContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
-                sendCell.accessoryView = addContacts
-                return sendCell
-            case 1:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
-                sendCell.lblTo.text = "Cc:"
-                sendCell.txtTo.text = ""
-                if reply {
-                    if let recipients = replyCC {
-                        var count = 1
-                        for recipient in recipients {
-                            sendCell.txtTo.text = sendCell.txtTo.text + (recipient as! MCOAddress).mailbox
-                            if count++ < recipients.count {
-                                sendCell.txtTo.text = sendCell.txtTo.text + ", "
-                            }
-                        }
-                    }
-                }
-                var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
-                addContacts.frame = CGRectMake(0, 0, 20, 20)
-                addContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
-                sendCell.accessoryView = addContacts
-                return sendCell
-            case 2:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
-                sendCell.lblTo.text = "Bcc:"
-                sendCell.txtTo.text = ""
-                var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
-                addContacts.frame = CGRectMake(0, 0, 20, 20)
-                addContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
-                sendCell.accessoryView = addContacts
-                return sendCell
-            case 3:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
-                sendCell.lblTo.text = "From:"
-                sendCell.txtTo.text = activeAccount!.emailAddress
-                sendCell.accessoryView = nil
-                return sendCell
-            case 4:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
-                sendCell.txtText.text = self.subject
-                sendCell.txtText.addTarget(self, action: "closeCC:", forControlEvents: UIControlEvents.AllEditingEvents)
-                return sendCell
-            case 5:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellText", forIndexPath: indexPath) as! SendViewCellText
-                sendCell.textViewMailBody.addConstraint(NSLayoutConstraint(item: sendCell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.bounds.height + 132))
-                if replyText != "" {
-                    sendCell.textViewMailBody.text = replyText + "\n\n"
-                }
-                return sendCell
-            default:
-                var sendCell = UITableViewCell()
-                return sendCell
-            }
-        } else {
-            switch indexPath.row {
-            case 0:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
-                sendCell.lblTo.text = "To:"
-                if sendCell.txtTo.text == "" {
-                    if reply {
-                        sendCell.txtTo.text = replyTo?.mailbox
-                    }
-                }
-                sendCell.emails = sortedEmails
-                var addContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
-                addContacts.frame = CGRectMake(0, 0, 20, 20)
-                addContacts.addTarget(self, action: "doPeoplePicker:", forControlEvents: UIControlEvents.TouchUpInside)
-                sendCell.accessoryView = addContacts
-                return sendCell
-            case 1:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellTo", forIndexPath: indexPath) as! SendViewCellTo
-                sendCell.lblTo.text = "Cc/Bcc, From:"
-                sendCell.txtTo.text = activeAccount!.emailAddress
-                sendCell.accessoryView = nil
-                sendCell.txtTo.addTarget(self, action: "openCC:", forControlEvents: UIControlEvents.AllEditingEvents)
-                return sendCell
-            case 2:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellSubject", forIndexPath: indexPath) as! SendViewCellSubject
-                sendCell.txtText.text = self.subject
-                return sendCell
-            case 3:
-                var sendCell = tableView.dequeueReusableCellWithIdentifier("SendViewCellText", forIndexPath: indexPath) as! SendViewCellText
-                sendCell.textViewMailBody.addConstraint(NSLayoutConstraint(item: sendCell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.bounds.height + 132))
-                if replyText != "" {
-                    sendCell.textViewMailBody.text = replyText + "\n\n"
-                }
-                return sendCell
-            default:
-                var sendCell = UITableViewCell()
-                return sendCell
-            }
         }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if ccOpened {
+        if self.expendTableView {
             if indexPath.row != 1 && indexPath.row != 2 && indexPath.row != 3 {
                 var cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! SendViewCellTo
                 if cell.txtTo.text != "" {
@@ -279,23 +178,124 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 if cell.txtTo.text != "" {
                     return
                 }
-                ccOpened = false
+                self.expendTableView = false
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
         } else {
             if indexPath.row == 1 {
-                ccOpened = true
+                self.expendTableView = true
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
         }
     }
     
-    func closeCC() {
-        self.tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 0, inSection: 0))
+    func textViewDidEndEditing(textView: UITextView) {
+        self.textBody = textView.text
     }
     
-    func openCC() {
-        self.tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 0))
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        if self.expendTableView {
+            tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 5, inSection: 0))
+        }
+        return true
+    }
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        switch textField.tag {
+        case 0:
+            if self.expendTableView {
+                tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 0, inSection: 0))
+            }
+        case 3:
+            if !self.expendTableView {
+                tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 0))
+            }
+        case 4:
+            if self.expendTableView {
+                tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 4, inSection: 0))
+            }
+        default:
+            NSLog("nothing to do here")
+        }
+        return true
+    }
+    
+    func updateRecipients(sender: AnyObject) {
+        self.recipients.removeAllObjects()
+        var recipientsAsString = (sender as! UITextField).text
+        recipientsAsString = recipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        for recipient in recipientsAsString.componentsSeparatedByString(", ") {
+            self.recipients.addObject(MCOAddress(mailbox: recipient))
+        }
+    }
+    
+    func updateCcRecipients(sender: AnyObject) {
+        self.ccRecipients.removeAllObjects()
+        var ccRecipientsAsString = (sender as! UITextField).text
+        ccRecipientsAsString = ccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        for recipient in ccRecipientsAsString.componentsSeparatedByString(", ") {
+            self.ccRecipients.addObject(MCOAddress(mailbox: recipient))
+        }
+    }
+    
+    func updateBccRecipients(sender: AnyObject) {
+        self.bccRecipients.removeAllObjects()
+        var bccRecipientsAsString = (sender as! UITextField).text
+        bccRecipientsAsString = bccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        for recipient in bccRecipientsAsString.componentsSeparatedByString(", ") {
+            self.bccRecipients.addObject(MCOAddress(mailbox: recipient))
+        }
+    }
+    
+    func updateSubjectAndTitle(sender: AnyObject) {
+        var subject = (sender as! UITextField).text
+        self.subject = subject
+        if subject == "" {
+            self.title = "New Message"
+        } else {
+            self.title = subject
+        }
+    }
+    
+    func sendEmail(sender: AnyObject) {
+        var session = MCOSMTPSession()
+        session.hostname = self.sendingAccount.smtpHostname
+        session.port = self.sendingAccount.smtpPort
+        session.username = self.sendingAccount.username
+        let (dictionary, error) = Locksmith.loadDataForUserAccount(self.sendingAccount.emailAddress)
+        if error == nil {
+            session.password = dictionary?.valueForKey("Password:") as! String
+        } else {
+            NSLog("%@", error!.description)
+            return
+        }
+        session.connectionType = StringToConnectionType(self.sendingAccount.connectionTypeSmtp)
+        session.authType = StringToAuthType(self.sendingAccount.authTypeSmtp)
+        
+        var builder = MCOMessageBuilder()
+        
+        builder.header.from = MCOAddress(displayName: self.sendingAccount.realName, mailbox: self.sendingAccount.emailAddress)
+        builder.header.sender = MCOAddress(displayName: self.sendingAccount.realName, mailbox: self.sendingAccount.emailAddress)
+        builder.header.to = self.recipients as [AnyObject]
+        var offset = 0
+        if self.expendTableView {
+            offset = 2
+            builder.header.cc = self.ccRecipients as [AnyObject]
+            builder.header.bcc = self.bccRecipients as [AnyObject]
+        }
+        builder.header.subject = self.subject
+        var textCell = sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3 + offset, inSection: 0)) as! SendViewCellText
+        builder.textBody = textCell.textViewMailBody.text
+        
+        let sendOp = session.sendOperationWithData(builder.data())
+        sendOp.start({(error) in
+            if error != nil {
+                NSLog("%@", error.description)
+            } else {
+                NSLog("sent")
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
     }
     
     // Addressbook functionality

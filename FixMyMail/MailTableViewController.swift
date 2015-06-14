@@ -82,7 +82,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showMailSendView")
-        var items = [composeButton]
+        var items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
         self.navigationController?.visibleViewController.setToolbarItems(items, animated: animated)
         self.navigationController?.setToolbarHidden(false, animated: false)
     }
@@ -122,7 +122,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }*/
     
     func showMailSendView() {
-        self.navigationController?.pushViewController(MailSendViewController(nibName: "MailSendViewController", bundle: nil), animated: true)
+        if self.getAccount()?.first != nil {
+            var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+            sendView.sendingAccount = self.getAccount()!.first!
+            self.navigationController?.pushViewController(sendView, animated: true)
+        }
     }
     
     func refreshTableView(/*notifaction: NSNotification*/) {

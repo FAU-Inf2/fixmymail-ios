@@ -35,7 +35,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         var buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
         var buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "replyButtonPressed")
         var buttonCompose = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "compose")
-        var items = [buttonDelete, buttonReply, buttonCompose]
+        var items = [buttonDelete, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonReply,UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonCompose]
         self.navigationController?.visibleViewController.setToolbarItems(items, animated: animated)
         self.navigationController?.setToolbarHidden(false, animated: false)
     }
@@ -121,9 +121,8 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     
     func reply(replyAll: Bool) {
         var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
-        sendView.reply = true
         if replyAll {
-            sendView.ccOpened = true
+            sendView.expendTableView = true
             var array: [MCOAddress] = [MCOAddress]()
             var recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
             for recipient in recipients {
@@ -138,17 +137,17 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
                 }
             }
             if array.count == 0 {
-                sendView.ccOpened = false
+                sendView.expendTableView = false
             } else {
-                sendView.replyCC = NSMutableArray(array: array)
+                sendView.ccRecipients.addObjectsFromArray(array)
             }
         }
-        sendView.replyTo = (self.message.mcomessage as! MCOIMAPMessage).header.from
-        sendView.activeAccount = self.message.toAccount
+        sendView.recipients.addObject((self.message.mcomessage as! MCOIMAPMessage).header.from)
+        sendView.sendingAccount = self.message.toAccount
         sendView.subject = "Re: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
         var parser = MCOMessageParser(data: self.message.data)
         var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
-        sendView.replyText = "On \(date.day()) \(date.month()) \(date.year()), at \(date.hour()):\(date.minute()), " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + " wrote:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
+        sendView.textBody = "On \(date.day()) \(date.month()) \(date.year()), at \(date.hour()):\(date.minute()), " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + " wrote:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     
