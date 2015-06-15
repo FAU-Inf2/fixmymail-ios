@@ -242,6 +242,11 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     func updateSubjectAndTitleWithSender(sender: AnyObject) {
         var subject = (sender as! UITextField).text
         self.subject = subject
