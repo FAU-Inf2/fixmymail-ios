@@ -122,7 +122,7 @@ platform :ios do
       log_url = ENV["LOG_URL"]
       github_commit_link = ENV["GITHUB_COMMIT_LINK"]
       hipchatnoicon(
-        message: "Build for commit <a href='#{github_commit_link}'>#{commit_sha[0..8]}</a>failed in lane: " + lane.to_s + ", see <a href='#{log_url}'>log file</a>.",
+        message: "Build for commit <a href='#{github_commit_link}'>#{commit_sha[0..8]}</a> failed in lane: " + lane.to_s + ", see <a href='#{log_url}'>log file</a>. <img class='remoticon' title='(fail)' alt='(fail)' height='25' src='https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/facepalm-1417752010.png'>",
         #exception.message TODO cut to 10000 chars
         channel: "Fix my mail",
         success: false,
