@@ -124,7 +124,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func showMailSendView() {
         if self.getAccount()?.first != nil {
             var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
-            sendView.sendingAccount = self.getAccount()!.first!
+            sendView.account = self.getAccount()!.first!
             self.navigationController?.pushViewController(sendView, animated: true)
         }
     }
