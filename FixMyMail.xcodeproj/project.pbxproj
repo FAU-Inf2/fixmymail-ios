@@ -75,6 +75,9 @@
 		AD6E5DF11B2D9626008B0488 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E5DF01B2D9626008B0488 /* Preferences.swift */; };
 		AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */; };
 		AD6E5DF51B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */; };
+		AD789D991B3050640001719E /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD789D971B3050640001719E /* FeedbackViewController.xib */; };
+		AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD789D981B3050640001719E /* FeedbackViewController.swift */; };
+		AD789D9D1B3054A00001719E /* Feedback.html in Resources */ = {isa = PBXBuildFile; fileRef = AD789D9C1B3054A00001719E /* Feedback.html */; };
 		AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */; };
 		AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */; };
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
@@ -179,6 +182,9 @@
 		AD6E5DF01B2D9626008B0488 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceStandardAccountTableViewController.swift; sourceTree = "<group>"; };
 		AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceStandardAccountTableViewController.xib; sourceTree = "<group>"; };
+		AD789D971B3050640001719E /* FeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedbackViewController.xib; sourceTree = "<group>"; };
+		AD789D981B3050640001719E /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		AD789D9C1B3054A00001719E /* Feedback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Feedback.html; path = HTML_Files/Feedback.html; sourceTree = "<group>"; };
 		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
 		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -297,6 +303,7 @@
 		3DF253A91AF7611D00B99BC8 /* FixMyMail */ = {
 			isa = PBXGroup;
 			children = (
+				AD789D9B1B3054420001719E /* HTML_Files */,
 				AD1255DA1B1A2207005EA5CE /* Icons */,
 				3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */,
 				3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */,
@@ -380,6 +387,8 @@
 				AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */,
 				AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */,
 				AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */,
+				AD789D971B3050640001719E /* FeedbackViewController.xib */,
+				AD789D981B3050640001719E /* FeedbackViewController.swift */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -424,6 +433,14 @@
 				AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */,
 			);
 			name = Locksmith;
+			sourceTree = "<group>";
+		};
+		AD789D9B1B3054420001719E /* HTML_Files */ = {
+			isa = PBXGroup;
+			children = (
+				AD789D9C1B3054A00001719E /* Feedback.html */,
+			);
+			name = HTML_Files;
 			sourceTree = "<group>";
 		};
 		ADD135CE1B15B5C200A9B31A /* Model */ = {
@@ -531,7 +548,9 @@
 				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
 				AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */,
 				8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */,
+				AD789D9D1B3054A00001719E /* Feedback.html in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
+				AD789D991B3050640001719E /* FeedbackViewController.xib in Resources */,
 				AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */,
 				AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */,
 				AD44E02A1B1B017900751FFA /* webde.png in Resources */,
@@ -622,6 +641,7 @@
 				8E6E35321B25C71100449DC3 /* SendViewCellWithTextView.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
+				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
 				A963C3F91B23373800AABDE5 /* KSTokenView.swift in Sources */,
