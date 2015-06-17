@@ -28,8 +28,8 @@ class CustomMailTableViewCell: UITableViewCell {
     var remindMeOnDragRelease = false
     
     var panGestureRecognizer: UIPanGestureRecognizer!
-    var crossLabel: UILabel!
-    var checkLabel: UILabel!
+    var deleteIMGView = UIImageView(image: UIImage(named: "Trash.png"))
+    var archiveIMGView = UIImageView(image: UIImage(named: "archive.png"))
     var subviewDeleteSwipeFromRightToLeft = UIView()
     var subviewArchiveSwipeFromLeftToRight = UIView()
     
@@ -39,15 +39,11 @@ class CustomMailTableViewCell: UITableViewCell {
         panGestureRecognizer.delegate = self
         addGestureRecognizer(panGestureRecognizer)
         
-        crossLabel = createCueLabel()
-        crossLabel.text = "\u{00D7}"
-        crossLabel.textAlignment = .Left
-        crossLabel.textColor = UIColor.whiteColor()
-        checkLabel = createCueLabel()
-        checkLabel.text = "\u{2713}"
-        checkLabel.textAlignment = .Right
-        checkLabel.textColor = UIColor.whiteColor()
+        deleteIMGView.frame = CGRect(x: 15, y: 22, width: 20, height: 25)
+        subviewDeleteSwipeFromRightToLeft.addSubview(deleteIMGView)
         
+        archiveIMGView.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 40, y: 15, width: 25, height: 35)
+        subviewArchiveSwipeFromLeftToRight.addSubview(archiveIMGView)
     }
     
     func createCueLabel() -> UILabel {
@@ -73,14 +69,10 @@ class CustomMailTableViewCell: UITableViewCell {
     func panHandler (recognizer: UIPanGestureRecognizer) {
         //init delete subview on the right
         subviewDeleteSwipeFromRightToLeft.frame = CGRect(x: bounds.size.width, y: 0, width: self.bounds.width, height: height)
-        crossLabel.frame = CGRect(x: 10, y: (height/2) - 14, width: 20, height: 22)
-        subviewDeleteSwipeFromRightToLeft.addSubview(crossLabel)
         addSubview(subviewDeleteSwipeFromRightToLeft)
-        
+
         //init archive subview on the left
         subviewArchiveSwipeFromLeftToRight.frame = CGRect(x: -bounds.size.width, y: 0, width: self.bounds.width, height: height)
-        checkLabel.frame = CGRect(x: bounds.size.width - 50, y: (height/2) - 12, width: 40, height: 22)
-        subviewArchiveSwipeFromLeftToRight.addSubview(checkLabel)
         addSubview(subviewArchiveSwipeFromLeftToRight)
         
         if recognizer.state == .Began {
@@ -100,10 +92,10 @@ class CustomMailTableViewCell: UITableViewCell {
             subviewArchiveSwipeFromLeftToRight.backgroundColor = archiveOnDragRelease ? UIColor.greenColor() : UIColor.grayColor()
             
             if remindMeOnDragRelease {
-                checkLabel.hidden = true
+                archiveIMGView.hidden = true
                 subviewArchiveSwipeFromLeftToRight.backgroundColor = UIColor.yellowColor()
             }else {
-                checkLabel.hidden = false
+                archiveIMGView.hidden = false
             }
         }
         
