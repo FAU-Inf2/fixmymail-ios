@@ -72,5 +72,15 @@ import AddressBook
     
 }
 
-
+class Record: NSObject{
+    let email: String
+    let lastname: String
+    let firstname: String
+    
+    init ( firstname: String, lastname: String, email: String){
+        self.email = email
+        self.lastname = lastname
+        self.firstname = firstname
+    }
+}
     

@@ -25,8 +25,10 @@ import AddressBookUI
         } else {
             self.title = subject
         }
-        self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
-        self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithTextView", bundle: nil), forCellReuseIdentifier: "SendViewCellWithTextView")
+       
+        self.sendTableView.registerNib(UINib(nibName: "SendViewCellSubject", bundle: nil), forCellReuseIdentifier: "SendViewCellSubject")
+        self.sendTableView.registerNib(UINib(nibName: "SendViewCellTo", bundle: nil), forCellReuseIdentifier: "SendViewCellTo")
+        self.sendTableView.registerNib(UINib(nibName: "SendViewCellText", bundle: nil), forCellReuseIdentifier: "SendViewCellText")
         self.sendTableView.rowHeight = UITableViewAutomaticDimension
         self.sendTableView.estimatedRowHeight = self.view.bounds.height
         var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmail:")
