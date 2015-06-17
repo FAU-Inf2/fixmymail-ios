@@ -6,6 +6,8 @@ import AddressBookUI
 
 class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var sendTableView: UITableView!
+    var selectedIndexPath: NSIndexPath?
+    var origintableViewInsets: UIEdgeInsets?
     
     var expendTableView: Bool = false
     var recipients: NSMutableArray = NSMutableArray()
@@ -34,6 +36,28 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         LoadAddresses()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // Register notification when the keyboard will appear
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "keyboardWillShow:",
+            name: UIKeyboardWillShowNotification,
+            object: nil)
+        
+        // Register notification when the keyboard will be hide
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "keyboardWillHide:",
+            name: UIKeyboardWillHideNotification,
+            object: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -49,6 +73,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         switch indexPath.row {
         case 0:
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+            cell.label.textColor = UIColor.grayColor()
             cell.label.text = "To:"
             var recipientsAsString: String = ""
             var count = 1
@@ -66,10 +91,12 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
             buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
             cell.accessoryView = buttonOpenContacts
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 1:
             if self.expendTableView {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+                cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Cc:"
                 var ccRecipientsAsString: String = ""
                 var count = 1
@@ -86,19 +113,24 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
                 cell.accessoryView = buttonOpenContacts
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             } else {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+                cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Cc/Bcc, From:"
+                cell.textField.textColor = UIColor.grayColor()
                 cell.textField.text = self.account.emailAddress
                 cell.textField.tag = 5
                 cell.textField.delegate = self
                 cell.accessoryView = nil
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             }
         case 2:
             if self.expendTableView {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+                cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Bcc:"
                 var bccRecipientsAsString: String = ""
                 var count = 1
@@ -115,19 +147,23 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
                 cell.accessoryView = buttonOpenContacts
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             } else {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+                cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Subject:"
                 cell.textField.text = self.subject
                 cell.textField.tag = 6
                 cell.textField.delegate = self
                 cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             }
         case 3:
             if self.expendTableView {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+                cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "From:"
                 cell.textField.text = self.account.emailAddress
                 cell.textField.tag = 3
@@ -138,21 +174,25 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - 3 * 44))
                 cell.textViewMailBody.delegate = self
                 cell.textViewMailBody.text = self.textBody
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             }
         case 4:
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+            cell.label.textColor = UIColor.grayColor()
             cell.label.text = "Subject:"
             cell.textField.text = self.subject
             cell.textField.tag = 4
             cell.textField.delegate = self
             cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 5:
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
             cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - 5 * 44))
             cell.textViewMailBody.delegate = self
             cell.textViewMailBody.text = self.textBody
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         default:
             return UITableViewCell()
@@ -172,11 +212,23 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
                 self.expendTableView = false
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+                if indexPath.row == 5 {
+                    (tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.becomeFirstResponder()
+                } else {
+                    var newIndexPath: NSIndexPath? = nil
+                    if indexPath.row == 0 {
+                        newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+                    } else {
+                        newIndexPath = NSIndexPath(forRow: 2, inSection: 0)
+                    }
+                    (tableView.cellForRowAtIndexPath(newIndexPath!) as! SendViewCellWithLabelAndTextField).textField.becomeFirstResponder()
+                }
             }
         } else {
             if indexPath.row == 1 {
                 self.expendTableView = true
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+                (tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithLabelAndTextField).textField.becomeFirstResponder()
             }
         }
     }
@@ -184,10 +236,16 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     func textViewDidEndEditing(textView: UITextView) {
         self.textBody = textView.text
         self.isResponder = nil
+        self.selectedIndexPath = nil
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
         self.isResponder = textView
+        var cellView = textView.superview
+        var cell = cellView?.superview as! SendViewCellWithTextView
+        var indexPath = self.sendTableView.indexPathForCell(cell)
+        self.selectedIndexPath = indexPath
+        
         if self.expendTableView {
             tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 5, inSection: 0))
         }
@@ -220,10 +278,16 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         }
         self.isResponder = nil
+        self.selectedIndexPath = nil
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
         self.isResponder = textField
+        var cellView = textField.superview
+        var cell = cellView?.superview as! SendViewCellWithLabelAndTextField
+        var indexPath = self.sendTableView.indexPathForCell(cell)
+        self.selectedIndexPath = indexPath
+        
         switch textField.tag {
         case 0:
             if self.expendTableView {
@@ -298,6 +362,40 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
+    }
+    
+    // add keyboard size to tableView size
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
+            //var contentInsets = UIEdgeInsets()
+            //if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) {
+            //	contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.width / 2, 0.0)
+            //} else {
+            //var textfieldheight = self.frame?.size.height
+            var contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+            
+            if self.origintableViewInsets == nil {
+                self.origintableViewInsets = self.sendTableView.contentInset
+            }
+            
+            self.sendTableView.contentInset = contentInsets
+            self.sendTableView.scrollIndicatorInsets = contentInsets
+            if self.selectedIndexPath != nil {
+                self.sendTableView.scrollToRowAtIndexPath(self.selectedIndexPath!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            }
+        }
+        
+    }
+    // bring tableview size back to origin
+    func keyboardWillHide(notification: NSNotification) {
+        if let animationDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double) {
+            if self.origintableViewInsets != nil {
+                UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+                    self.sendTableView.contentInset = self.origintableViewInsets!
+                    self.sendTableView.scrollIndicatorInsets = self.origintableViewInsets!
+                })
+            }
+        }
     }
     
     // Addressbook functionality

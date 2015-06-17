@@ -104,19 +104,35 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     }
     
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+        var replyAll: Bool = !((self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
+                             (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil)
         switch buttonIndex {
         case 1:
             self.reply(false)
         case 2:
-            self.reply(true)
+            if replyAll {
+                self.reply(true)
+            } else {
+                self.forward()
+            }
+        case 3:
+            if replyAll {
+                self.forward()
+            }
         default:
             return
         }
     }
     
     func replyButtonPressed() {
-        var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all")
-        replyActionSheet.showInView(self.view)
+        if (self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
+           (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil {
+                var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Forward")
+                replyActionSheet.showInView(self.view)
+        } else {
+            var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all", "Forward")
+            replyActionSheet.showInView(self.view)
+        }
     }
     
     func reply(replyAll: Bool) {
@@ -148,6 +164,15 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         var parser = MCOMessageParser(data: self.message.data)
         var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
         sendView.textBody = "On \(date.day()) \(date.month()) \(date.year()), at \(date.hour()):\(date.minute()), " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + " wrote:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
+        self.navigationController?.pushViewController(sendView, animated: true)
+    }
+    
+    func forward() {
+        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        sendView.account = self.message.toAccount
+        sendView.subject = "Fwd: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
+        var parser = MCOMessageParser(data: self.message.data)
+        sendView.textBody = "\n\nBegin forwarded message:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     
