@@ -83,6 +83,9 @@ class PreferenceTableViewController: UITableViewController {
 		case "Feedback":
 			var feedbackVC = FeedbackViewController(nibName: actionItem.viewController, bundle: nil)
 			self.navigationController?.pushViewController(feedbackVC, animated: true)
+		case "About Us":
+			var aboutUsVC = AboutUsViewController(nibName: actionItem.viewController, bundle: nil)
+			self.navigationController?.pushViewController(aboutUsVC, animated: true)
 		default:
 			break
 		}
@@ -144,7 +147,7 @@ class PreferenceTableViewController: UITableViewController {
 		var item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", emailAddress: nil, icon: nil)
 		var item2 = ActionItem(Name: "REMIND ME!", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
 		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", emailAddress: nil, icon: nil)
-		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", emailAddress: nil, icon: nil)
+		var item4 = ActionItem(Name: "About Us", viewController: "AboutUsViewController", emailAddress: nil, icon: nil)
 		var item5 = ActionItem(Name: "Feedback", viewController: "FeedbackViewController", emailAddress: nil, icon: nil)
 		
 		self.otherItem.append(item4)
