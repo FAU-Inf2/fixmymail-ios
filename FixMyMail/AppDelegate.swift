@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 import AddressBook
 
-
 var addressBook : ABAddressBookRef?
 
 @UIApplicationMain
