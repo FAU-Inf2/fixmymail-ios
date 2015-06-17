@@ -4,9 +4,9 @@ import AddressBook
 import Foundation
 import AddressBookUI
 
-
-@objc class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
+class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var sendTableView: UITableView!
+    var tokenView: KSTokenView = KSTokenView(frame: .zeroRect)
     
     var expendTableView: Bool = false
     var recipients: NSMutableArray = NSMutableArray()
@@ -25,7 +25,6 @@ import AddressBookUI
         } else {
             self.title = subject
         }
-       
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellSubject", bundle: nil), forCellReuseIdentifier: "SendViewCellSubject")
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellTo", bundle: nil), forCellReuseIdentifier: "SendViewCellTo")
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellText", bundle: nil), forCellReuseIdentifier: "SendViewCellText")
@@ -33,6 +32,16 @@ import AddressBookUI
         self.sendTableView.estimatedRowHeight = self.view.bounds.height
         var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmail:")
         self.navigationItem.rightBarButtonItem = buttonSend
+        
+        LoadAddresses()
+        /*let tokenView = KSTokenView(frame: CGRect(x: 76, y: 100, width: 250, height: 30))
+        tokenView.delegate = self
+        tokenView.placeholder = "Email"
+        tokenView.descriptionText = "Emails"
+        tokenView.maxTokenLimit = -1
+        tokenView.searchResultBackgroundColor = UIColor.lightGrayColor()
+        tokenView.removesTokensOnEndEditing = false
+        view.addSubview(tokenView)*/
 
     }
     
@@ -160,14 +169,6 @@ import AddressBookUI
             return UITableViewCell()
         }
     }
-    
-    func showTestView() {
-        
-            var sendView = CLTokenInputViewController(nibName: "CLTokenInputViewController", bundle: nil)
-            self.navigationController?.pushViewController(sendView, animated: true)
-        
-    }
-
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if self.expendTableView {
@@ -310,6 +311,54 @@ import AddressBookUI
         })
     }
     
+    // Addressbook functionality
+    //
+    //Collect Contacts from Addressbook and order Emails Ascending
+    //
+    
+    var allEmail: NSMutableArray = []
+    var sortedEmails: NSArray = []
+    func addRecord(Entry: Record){
+        allEmail.addObject(Entry)
+    }
+    
+    func orderEmails(){
+        var allEmailIDs:NSArray = allEmail
+        println("ordering")
+        let descriptor = NSSortDescriptor(key: "email", ascending: true, selector: "localizedStandardCompare:")
+        var sortedResults: NSArray = allEmail.sortedArrayUsingDescriptors([descriptor])
+        for results in sortedResults {
+            println ("contactEmail : \(results.email as String)")
+        }
+        
+        sortedEmails = sortedResults
+    }
+    
+    func LoadAddresses() {
+        var source: ABRecord = ABAddressBookCopyDefaultSource(addressBook).takeRetainedValue()
+        var contactList: NSArray = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, ABPersonSortOrdering(kABPersonEmailProperty )).takeRetainedValue()
+        
+        println("records in the array \(contactList.count)")
+        
+        for record:ABRecordRef in contactList{
+            if !record.isEqual(nil){
+                var contactPerson: ABRecordRef = record
+                let emailProperty: ABMultiValueRef = ABRecordCopyValue(record, kABPersonEmailProperty).takeRetainedValue() as ABMultiValueRef
+                if ABMultiValueGetCount(emailProperty) > 0 {
+                    let allEmailIDs : NSArray = ABMultiValueCopyArrayOfAllValues(emailProperty).takeUnretainedValue() as NSArray
+                    for email in allEmailIDs {
+                        let emailID = email as! String
+                        let contactFirstName: String = ABRecordCopyValue(contactPerson, kABPersonFirstNameProperty)?.takeRetainedValue() as? String ?? ""
+                        let contactLastName: String = ABRecordCopyValue(contactPerson, kABPersonLastNameProperty)?.takeRetainedValue() as? String ?? ""
+                        addRecord(Record(firstname:contactFirstName, lastname: contactLastName, email:emailID as String))
+                        println ("contactEmail : \(emailID) :=>")
+                    }
+                }
+            }
+        }
+        orderEmails()
+    }
+    
     //
     //   öffnet das Telefonbuch in App
     //
@@ -320,7 +369,12 @@ import AddressBookUI
         picker.predicateForSelectionOfPerson = NSPredicate(value:false)
         picker.predicateForSelectionOfProperty = NSPredicate(value:true)
         self.presentViewController(picker, animated:true, completion:nil)
-        
+        var tok: Array<KSToken>= tokenView.tokens()!
+        /*var emailaddr: NSMutableArray = []
+        for var index = 0; index < tok.count-1; ++index {
+            emailaddr.addObject(tokenView(tokenView, displayTitleForObject: ))
+        }
+        println ("contactEmail :\( emailaddr.firstObject as! String)")*/
     }
     
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!) {
@@ -335,12 +389,40 @@ import AddressBookUI
         let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
         println(email)
         //TODO
-        //Email einbinden
-        
+        //Email in KSTokenView einbinden
      }
     
    
+    
+}
+extension MailSendViewController: KSTokenViewDelegate {
+    func tokenView(token: KSTokenView, performSearchWithString string: String, completion: ((results: Array<AnyObject>) -> Void)?) {
+        token.searchResultBackgroundColor = UIColor.lightGrayColor()
+        var data: Array<String> = []
+        for value in sortedEmails {
+            var emailaddress:String = value.email
+            if emailaddress.lowercaseString.rangeOfString(string.lowercaseString) != nil {
+                data.append(emailaddress as String)
+            }
+        }
+        completion!(results: data)
+    }
+    
+    func tokenView(token: KSTokenView, displayTitleForObject object: AnyObject) -> String {
+        
+        return object as! String
+    }
 }
 
-
-
+class Record: NSObject{
+    let email: String
+    let lastname: String
+    let firstname: String
+    
+    init ( firstname: String, lastname: String, email: String){
+        self.email = email
+        self.lastname = lastname
+        self.firstname = firstname
+    }
+    
+}
