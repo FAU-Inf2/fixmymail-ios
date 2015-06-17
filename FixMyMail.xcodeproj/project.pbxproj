@@ -78,6 +78,9 @@
 		AD789D991B3050640001719E /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD789D971B3050640001719E /* FeedbackViewController.xib */; };
 		AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD789D981B3050640001719E /* FeedbackViewController.swift */; };
 		AD789D9D1B3054A00001719E /* Feedback.html in Resources */ = {isa = PBXBuildFile; fileRef = AD789D9C1B3054A00001719E /* Feedback.html */; };
+		AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD789DA01B319BC30001719E /* AboutUsViewController.swift */; };
+		AD789DA31B319BC30001719E /* AboutUsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD789DA11B319BC30001719E /* AboutUsViewController.xib */; };
+		AD789DA51B31A4420001719E /* AboutUs.html in Resources */ = {isa = PBXBuildFile; fileRef = AD789DA41B31A4420001719E /* AboutUs.html */; };
 		AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */; };
 		AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */; };
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
@@ -185,6 +188,9 @@
 		AD789D971B3050640001719E /* FeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedbackViewController.xib; sourceTree = "<group>"; };
 		AD789D981B3050640001719E /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		AD789D9C1B3054A00001719E /* Feedback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Feedback.html; path = HTML_Files/Feedback.html; sourceTree = "<group>"; };
+		AD789DA01B319BC30001719E /* AboutUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutUsViewController.swift; sourceTree = "<group>"; };
+		AD789DA11B319BC30001719E /* AboutUsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutUsViewController.xib; sourceTree = "<group>"; };
+		AD789DA41B31A4420001719E /* AboutUs.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = AboutUs.html; path = HTML_Files/AboutUs.html; sourceTree = "<group>"; };
 		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
 		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -389,6 +395,8 @@
 				AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */,
 				AD789D971B3050640001719E /* FeedbackViewController.xib */,
 				AD789D981B3050640001719E /* FeedbackViewController.swift */,
+				AD789DA01B319BC30001719E /* AboutUsViewController.swift */,
+				AD789DA11B319BC30001719E /* AboutUsViewController.xib */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -438,6 +446,7 @@
 		AD789D9B1B3054420001719E /* HTML_Files */ = {
 			isa = PBXGroup;
 			children = (
+				AD789DA41B31A4420001719E /* AboutUs.html */,
 				AD789D9C1B3054A00001719E /* Feedback.html */,
 			);
 			name = HTML_Files;
@@ -547,6 +556,7 @@
 				8E450BA91B15BBF0001E37B9 /* CustomMailTableViewCell.xib in Resources */,
 				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
 				AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */,
+				AD789DA31B319BC30001719E /* AboutUsViewController.xib in Resources */,
 				8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */,
 				AD789D9D1B3054A00001719E /* Feedback.html in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
@@ -564,6 +574,7 @@
 				AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */,
 				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
+				AD789DA51B31A4420001719E /* AboutUs.html in Resources */,
 				5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */,
 				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
@@ -616,6 +627,7 @@
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				AD24BE201B23042500804732 /* EmailAccountSupport.swift in Sources */,
 				AD6E5DF11B2D9626008B0488 /* Preferences.swift in Sources */,
+				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
 				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
