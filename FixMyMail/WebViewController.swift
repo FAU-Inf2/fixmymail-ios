@@ -143,7 +143,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
             }
         }
         sendView.recipients.addObject((self.message.mcomessage as! MCOIMAPMessage).header.from)
-        sendView.sendingAccount = self.message.toAccount
+        sendView.account = self.message.toAccount
         sendView.subject = "Re: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
         var parser = MCOMessageParser(data: self.message.data)
         var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
@@ -153,7 +153,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     
     func compose() {
         var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
-        sendView.sendingAccount = self.message.toAccount
+        sendView.account = self.message.toAccount
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     

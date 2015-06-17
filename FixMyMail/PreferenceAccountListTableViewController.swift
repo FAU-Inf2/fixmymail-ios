@@ -336,7 +336,17 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		newAccountItem.append(ActionItem(Name: "Add New Account", viewController: "PreferenceAccountView", emailAddress: "Add New Account", icon: UIImage(named: "ios7-plus.png")))
 		
 		// Preferences
-		
+		var standardAccountMatch = false
+		for account: EmailAccount in accountArr {
+			if account.accountName == preferences!.standardAccount {
+				standardAccountMatch = true
+				break
+			}
+		}
+		if standardAccountMatch == false {
+			preferences!.standardAccount = ""
+		}
+	
 		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: preferences?.standardAccount, icon: nil)
 		
 		var signatureItem = ActionItem(Name: "Signature:", viewController: "", emailAddress: self.preferences?.signature, icon: nil)

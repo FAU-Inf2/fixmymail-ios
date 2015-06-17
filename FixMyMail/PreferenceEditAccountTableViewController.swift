@@ -53,7 +53,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", "",""]
 		
 		// set alert dialog for delete
-		alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
+		self.alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
 		self.alert!.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 			// save data to CoreData (respectively deleting data from CoreData)
 			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)

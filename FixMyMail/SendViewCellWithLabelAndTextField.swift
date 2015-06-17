@@ -1,5 +1,5 @@
 //
-//  SendViewTableCell.swift
+//  SendViewCellSuggestion.swift
 //  FixMyMail
 //
 //  Created by Moritz Müller on 02.06.15.
@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import Foundation
 
-class SendViewCellSubject: UITableViewCell {
-    @IBOutlet weak var txtText: TextfieldWithPadding!
+class SendViewCellWithLabelAndTextField: UITableViewCell {
+    
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var label: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
