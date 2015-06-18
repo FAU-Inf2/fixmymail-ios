@@ -75,6 +75,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
             cell.label.textColor = UIColor.grayColor()
             cell.label.text = "To:"
+            cell.textField.textColor = UIColor.blackColor()
             var recipientsAsString: String = ""
             var count = 1
             for recipient in self.recipients {
@@ -367,12 +368,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     // add keyboard size to tableView size
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-            //var contentInsets = UIEdgeInsets()
-            //if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) {
-            //	contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.width / 2, 0.0)
-            //} else {
-            //var textfieldheight = self.frame?.size.height
-            var contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+            var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
             
             if self.origintableViewInsets == nil {
                 self.origintableViewInsets = self.sendTableView.contentInset

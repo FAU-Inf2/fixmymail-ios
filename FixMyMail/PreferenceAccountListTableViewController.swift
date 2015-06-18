@@ -415,7 +415,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			//	contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.width / 2, 0.0)
 			//} else {
 			//var textfieldheight = self.frame?.size.height
-			var contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+            var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
 			
 			if self.origintableViewInsets == nil {
 				self.origintableViewInsets = self.tableView.contentInset
