@@ -4,8 +4,9 @@ import AddressBook
 import Foundation
 import AddressBookUI
 
-class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
+class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     @IBOutlet weak var sendTableView: UITableView!
+    var emailAddressPicker: UIPickerView!
     var selectedIndexPath: NSIndexPath?
     var origintableViewInsets: UIEdgeInsets?
     
@@ -16,11 +17,32 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     var account: EmailAccount!
     var subject: String = ""
     var textBody: String = ""
+    var allAccounts: [EmailAccount]!
     
     var isResponder: AnyObject? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.emailAddressPicker = UIPickerView()
+        self.emailAddressPicker.delegate = self
+        self.emailAddressPicker.dataSource = self
+        self.emailAddressPicker.backgroundColor = UIColor.whiteColor()
+        self.allAccounts = [EmailAccount]()
+        self.allAccounts.append(self.account)
+        let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+        var error: NSError?
+        var result = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!.executeFetchRequest(fetchRequest, error: &error)
+        if error != nil {
+            NSLog("%@", error!.description)
+        } else {
+            if let emailAccounts = result {
+                for account in emailAccounts {
+                    if (!account.isEqual(self.account)) {
+                        self.allAccounts.append(account as! EmailAccount)
+                    }
+                }
+            }
+        }
         if self.subject == "" {
             self.title = "New Message"
         } else {
@@ -169,10 +191,12 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.text = self.account.emailAddress
                 cell.textField.tag = 3
                 cell.textField.delegate = self
+                cell.textField.tintColor = UIColor.whiteColor()
+                cell.textField.inputView = self.emailAddressPicker
                 return cell
             } else {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-                cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - 3 * 44))
+                cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (3 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
                 cell.textViewMailBody.delegate = self
                 cell.textViewMailBody.text = self.textBody
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -190,7 +214,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             return cell
         case 5:
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-            cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - 5 * 44))
+            cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (5 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
             cell.textViewMailBody.delegate = self
             cell.textViewMailBody.text = self.textBody
             cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -232,6 +256,23 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 (tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithLabelAndTextField).textField.becomeFirstResponder()
             }
         }
+    }
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return self.allAccounts.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+        return self.allAccounts[row].emailAddress
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.account = self.allAccounts[row]
+        (self.isResponder as! UITextField).text = self.account.emailAddress
     }
     
     func textViewDidEndEditing(textView: UITextView) {
@@ -294,7 +335,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             if self.expendTableView {
                 tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 0, inSection: 0))
             }
-        case 3, 5:
+        case 5:
             if !self.expendTableView {
                 tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 0))
             }
@@ -380,7 +421,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 self.sendTableView.scrollToRowAtIndexPath(self.selectedIndexPath!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
             }
         }
-        
     }
     // bring tableview size back to origin
     func keyboardWillHide(notification: NSNotification) {
