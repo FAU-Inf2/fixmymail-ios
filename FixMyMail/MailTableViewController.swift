@@ -557,7 +557,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             selectedEmails.addObject(cell.mail)
         }
         allCellsSelected = true
-        viewActionSheet()
+        viewActionSheetWithDeleteAll()
     }
     
     func markButtonAction(){
@@ -575,12 +575,20 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         endEditing()
     }
     
-    func viewActionSheet(){
+    func viewActionSheetWithDeleteAll(){
+        var actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Mark as Read", "Mark as Unread", "Delete All")
+        actionSheet.destructiveButtonIndex = 3
+        actionSheet.showInView(self.view)
+    }
+    
+    func viewActionSheet() {
         var actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Mark as Read", "Mark as Unread")
         actionSheet.showInView(self.view)
     }
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        var actionSheetWithDeleteAll = (actionSheet.destructiveButtonIndex == 3)
+
         switch buttonIndex {
         case 1: //Mark as Read
             for var i = 0; i < selectedEmails.count; i++ {
@@ -592,6 +600,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 setEmailToUnSeen(selectedEmails[i] as! Email)
             }
             endEditing()
+        case 3: //Delete All
+            deleteButtonAction()
         case 0: //Cancel
             if allCellsSelected {
                 selectedEmails.removeAllObjects()
@@ -600,6 +610,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         default:
             break
         }
+        
+        
     }
     
     func endEditing() {
