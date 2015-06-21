@@ -22,6 +22,7 @@ class SidebarTableViewController: UITableViewController {
     var rows = [AnyObject]()
     var managedObjectContext: NSManagedObjectContext!
     var delegate: SideBarProtocol?
+    var emailAccounts: [EmailAccount] = [EmailAccount]()
 
     
     override func viewDidLoad() {
@@ -49,9 +50,11 @@ class SidebarTableViewController: UITableViewController {
         var inboxRows: [ActionItem] = [ActionItem]()
         inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll"))
         for emailAcc: EmailAccount in accountArr {
-            var actionItem = ActionItem(Name: emailAcc.username, viewController: "EmailSpecific", emailAddress: emailAcc.emailAddress)
+            var actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAddress: emailAcc.emailAddress)
             inboxRows.append(actionItem)
         }
+        
+        
         
         var settingsArr: [ActionItem] = [ActionItem]()
         settingsArr.append(ActionItem(Name: "TODO", viewController: "TODO"))
@@ -59,10 +62,11 @@ class SidebarTableViewController: UITableViewController {
         settingsArr.append(ActionItem(Name: "Preferences", viewController: "Preferences"))
 
         self.rows.append(inboxRows)
-        self.rows.append([])
+        self.rows.append(self.getIMAPFoldersFromCoreData(WithEmailAccounts: accountArr))
         self.rows.append(settingsArr)
         
-        
+        self.emailAccounts = accountArr
+        self.fetchIMAPFolders()
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,6 +109,36 @@ class SidebarTableViewController: UITableViewController {
                 } else {
                     let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     sideBarCell.menuLabel.text = mailAcc.cellName
+                }
+                return sideBarCell
+            }
+        } else if indexPath.section == 1 {
+            var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
+            if let cell = inboxCell {
+                let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+                if actionItem.viewController == "NoVC" {
+                    cell.selectionStyle = UITableViewCellSelectionStyle.None
+                } else {
+                    //cell.menuLabel.frame.origin.x += 20.0
+                    //cell.menuImg.frame.origin.x += 20.0
+                    
+                }
+                cell.menuLabel.text = actionItem.cellName
+                if let icon = actionItem.cellIcon {
+                    cell.menuImg.image = icon
+                }
+                return cell
+            } else {
+                NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
+                var sideBarCell: SideBarTableViewCell = self.sidebarCell
+                self.sidebarCell = nil
+                let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+                if actionItem.viewController == "NoVC" {
+                    sideBarCell.selectionStyle = UITableViewCellSelectionStyle.None
+                }
+                sideBarCell.menuLabel.text = actionItem.cellName
+                if let icon = actionItem.cellIcon {
+                    sideBarCell.menuImg.image = icon
                 }
                 return sideBarCell
             }
@@ -183,5 +217,109 @@ class SidebarTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    //MARK: - IMAPFolder fetch
+    
+    func fetchIMAPFolders() -> Void {
+        IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess) -> Void in
+            if sucess == true {
+                var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
+                let accItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                var indexOfAccount: Int? = find(actionItems, accItem)
+                if let index = indexOfAccount {
+                    if index == 0 {
+                        var indexTo: Int!
+                        for var i = index; i < actionItems.count; i++ {
+                            let item = actionItems[i]
+                            if item.viewController == "NoVC" {
+                                indexTo = i
+                                break
+                            }
+                        }
+                        var subArr = Array(actionItems[index...indexTo])
+                        var newAccItemArr = [ActionItem]()
+                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                        newAccItemArr.append(actionItem)
+                        for fol in folders! {
+                            var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
+                            newAccItemArr.append(item)
+                        }
+                        for item in subArr {
+                            newAccItemArr.append(item)
+                        }
+                        self.rows[1] = newAccItemArr
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.tableView.reloadData()
+                        })
+                    } else {
+                        var firstPart = Array(actionItems[0...index])
+                        var indexTo: Int? = nil
+                        for var i = index; i < actionItems.count; i++ {
+                            let item = actionItems[i]
+                            if item.viewController == "NoVC" {
+                                indexTo = i
+                                break
+                            }
+                        }
+                        if indexTo == nil {
+                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                            firstPart.append(actionItem)
+                            for fol in folders! {
+                                var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
+                                firstPart.append(item)
+                            }
+                            self.rows[1] = firstPart
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.tableView.reloadData()
+                            })
+                        } else {
+                            var lastPart = Array(actionItems[indexTo!...actionItems.count - 1])
+                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                            firstPart.append(actionItem)
+                            for fol in folders! {
+                                var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
+                                firstPart.append(item)
+                            }
+                            for item in lastPart {
+                                firstPart.append(item)
+                            }
+                            self.rows[1] = firstPart
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.tableView.reloadData()
+                            })
+                        }
+                    }
+                } else {
+                    var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                    actionItems.append(actionItem)
+                    for fol in folders! {
+                        var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
+                        actionItems.append(item)
+                    }
+                    self.rows[1] = actionItems
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.tableView.reloadData()
+                    })
+                }
+            }
+        }
+    }
+    
+    func getIMAPFoldersFromCoreData(WithEmailAccounts emailAccounts: [EmailAccount]) -> [ActionItem] {
+        var actionItems = [ActionItem]()
+        for account in emailAccounts {
+            if account.folders.count > 0 {
+                var actionItem = ActionItem(Name: account.accountName, viewController: "NoVC", emailAddress: account.emailAddress)
+                actionItems.append(actionItem)
+                for imapFolder in account.folders {
+                    var imapFol: ImapFolder = imapFolder as! ImapFolder
+                    let fol: MCOIMAPFolder = imapFol.mcoimapfolder as MCOIMAPFolder
+                    var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account.emailAddress, emailFolder: fol)
+                    actionItems.append(item)
+                }
+            }
+        }
+        return actionItems
+    }
 
 }

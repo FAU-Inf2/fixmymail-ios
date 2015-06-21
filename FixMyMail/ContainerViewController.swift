@@ -28,6 +28,7 @@ class ContainerViewController: UIViewController {
     let contentPanelExpandedOffset: CGFloat = UIScreen.mainScreen().bounds.width / 3
     var leftSwipeGesture: UISwipeGestureRecognizer!
     var rightSwipeGesture: UISwipeGestureRecognizer!
+    var tapGesture: UITapGestureRecognizer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,10 +103,23 @@ extension ContainerViewController : ContentViewControllerProtocol {
     
     func animateLeftPanel(#shouldExpand: Bool) {
         if(shouldExpand) {
+            for view in self.subNavController!.view!.subviews {
+                if let v: UIView = view as? UIView {
+                    v.userInteractionEnabled = false
+                }
+            }
+            self.tapGesture = UITapGestureRecognizer(target: self, action: "tapToToggle:")
+            self.subNavController!.view!.addGestureRecognizer(self.tapGesture)
             currentState = SlideOutState.LeftPanelExpanded
             
             animateContentPanelXPosition(targetPosition: CGRectGetWidth(contentVC.view.frame) - contentPanelExpandedOffset)
         } else {
+            for view in self.subNavController!.view!.subviews {
+                if let v: UIView = view as? UIView {
+                    v.userInteractionEnabled = true
+                }
+            }
+            self.subNavController!.view!.removeGestureRecognizer(self.tapGesture)
             animateContentPanelXPosition(targetPosition: 0) {
                 finished in
                 self.currentState = SlideOutState.PanelCollapsed
@@ -128,9 +142,9 @@ extension ContainerViewController : ContentViewControllerProtocol {
     
     func showShadowForContentViewController(shouldShowShadow: Bool) {
         if (shouldShowShadow) {
-            self.contentVC.view.layer.shadowOpacity = 0.8
+            self.subNavController!.view.layer.shadowOpacity = 0.8
         } else {
-            self.contentVC.view.layer.shadowOpacity = 0.0
+            self.subNavController!.view.layer.shadowOpacity = 0.0
         }
     }
     
@@ -213,6 +227,10 @@ extension ContainerViewController: SideBarProtocol {
             self.contentVC.view.frame = self.view.frame
             self.subNavController.pushViewController(contentVC, animated: false)
         }
+    }
+    
+    func tapToToggle(sender: AnyObject) -> Void {
+        self.toggleLeftPanel()
     }
     
 }

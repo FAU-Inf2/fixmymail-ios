@@ -29,6 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         //WARNING: This is method is only for adding dummy entries to CoreData!!!*/
         initCoreDataTestEntries()
+        
+//        IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess) -> Void in
+//            if sucess == true {
+//                println(folders!)
+//            }
+//        }
 
 //		window = UIWindow(frame: UIScreen.mainScreen().bounds)
 //		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainListTableViewController",bundle:nil)

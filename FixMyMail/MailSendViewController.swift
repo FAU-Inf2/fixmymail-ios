@@ -260,7 +260,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     func sendEmail(sender: AnyObject) {
         var session = MCOSMTPSession()
         session.hostname = self.sendingAccount.smtpHostname
-        session.port = self.sendingAccount.smtpPort
+        session.port = UInt32(self.sendingAccount.smtpPort.unsignedIntegerValue)
         session.username = self.sendingAccount.username
         let (dictionary, error) = Locksmith.loadDataForUserAccount(self.sendingAccount.emailAddress)
         if error == nil {

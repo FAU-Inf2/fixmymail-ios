@@ -13,11 +13,13 @@ class ActionItem: NSObject {
 	var cellName: String
 	var viewController: String
 	var emailAddress: String?
+    var emailFolder: MCOIMAPFolder?
 	
-	init(Name: String, viewController: String, emailAddress: String? = nil, icon: UIImage? = nil) {
+    init(Name: String, viewController: String, emailAddress: String? = nil, icon: UIImage? = nil, emailFolder: MCOIMAPFolder? = nil) {
 		self.cellName = Name
 		self.cellIcon = icon
 		self.viewController = viewController
 		self.emailAddress = emailAddress
+        self.emailFolder = emailFolder
 	}
 }

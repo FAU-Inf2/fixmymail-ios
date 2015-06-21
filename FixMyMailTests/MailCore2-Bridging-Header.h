@@ -13,6 +13,7 @@
 #import "MCOCIDURLProtocol.h"
 #import "MCOMessageView.h"
 #import "MCTMsgViewController.h"
+#import "MCOIMAPFolderWrapper.h"
 
 
 //#endif

@@ -404,7 +404,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             self.session = MCOIMAPSession()
         
             self.session!.hostname = account.imapHostname
-            self.session!.port = account.imapPort
+            self.session!.port = UInt32(account.imapPort.unsignedIntegerValue)
             self.session!.username = account.username
             let (dictionary, error) = Locksmith.loadDataForUserAccount(account.emailAddress)
             if error == nil {

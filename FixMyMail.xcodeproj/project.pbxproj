@@ -10,6 +10,8 @@
 		3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */; };
 		3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */; };
 		3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */; };
+		3D21286E1B2DF57100C9FC4C /* Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D21286D1B2DF57100C9FC4C /* Email.swift */; };
+		3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2128711B2DF57200C9FC4C /* EmailAccount.swift */; };
 		3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37FFA81B01DBC200388F81 /* ContentViewController.swift */; };
 		3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */; };
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
@@ -17,8 +19,8 @@
 		3D9027541AF96D0D000D3E72 /* MailCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9027521AF96D0D000D3E72 /* MailCore.framework */; };
 		3D9027551AF96D0D000D3E72 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */; };
 		3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D90275D1AF97167000D3E72 /* CoreData.framework */; };
-		3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D90275F1AF97313000D3E72 /* EmailAccount.swift */; };
-		3D9027621AF97313000D3E72 /* Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9027611AF97313000D3E72 /* Email.swift */; };
+		3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA302941B2ED122003CE16A /* ImapFolder.swift */; };
+		3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */; };
 		3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */; };
 		3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */; };
 		3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */; };
@@ -104,6 +106,8 @@
 		3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SidebarTableViewController.xib; sourceTree = "<group>"; };
 		3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SideBarTableViewCell.xib; sourceTree = "<group>"; };
 		3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContentViewController.xib; sourceTree = "<group>"; };
+		3D21286D1B2DF57100C9FC4C /* Email.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Email.swift; path = ../Email.swift; sourceTree = "<group>"; };
+		3D2128711B2DF57200C9FC4C /* EmailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailAccount.swift; path = ../EmailAccount.swift; sourceTree = "<group>"; };
 		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPFolderFetcher.swift; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
@@ -111,8 +115,9 @@
 		3D9027521AF96D0D000D3E72 /* MailCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MailCore.framework; path = ../Carthage/Build/iOS/MailCore.framework; sourceTree = "<group>"; };
 		3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = ../Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D90275D1AF97167000D3E72 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		3D90275F1AF97313000D3E72 /* EmailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccount.swift; sourceTree = "<group>"; };
-		3D9027611AF97313000D3E72 /* Email.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Email.swift; sourceTree = "<group>"; };
+		3DA302941B2ED122003CE16A /* ImapFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImapFolder.swift; path = ../ImapFolder.swift; sourceTree = "<group>"; };
+		3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCOIMAPFolderWrapper.h; sourceTree = "<group>"; };
+		3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCOIMAPFolderWrapper.m; sourceTree = "<group>"; };
 		3DF253A71AF7611D00B99BC8 /* FixMyMail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FixMyMail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DF253AB1AF7611D00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -265,10 +270,33 @@
 			isa = PBXGroup;
 			children = (
 				3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */,
-				3D9027611AF97313000D3E72 /* Email.swift */,
-				3D90275F1AF97313000D3E72 /* EmailAccount.swift */,
+				3D2128711B2DF57200C9FC4C /* EmailAccount.swift */,
+				3D21286D1B2DF57100C9FC4C /* Email.swift */,
+				3DA302941B2ED122003CE16A /* ImapFolder.swift */,
+				3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */,
+				3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */,
 			);
 			name = CoreData;
+			sourceTree = "<group>";
+		};
+		3DA3029D1B3215C0003CE16A /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */,
+				A963C3F51B23373700AABDE5 /* KSTokenView.swift */,
+				A963C3F61B23373800AABDE5 /* KSTokenField.swift */,
+				A963C3F71B23373800AABDE5 /* KSToken.swift */,
+				A963C3F81B23373800AABDE5 /* KSUtils.swift */,
+				AD24BE1F1B23042500804732 /* EmailAccount_Support.swift */,
+				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
+				8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */,
+				8E450BA01B15BBF0001E37B9 /* MCOCIDURLProtocol.mm */,
+				8E450BA11B15BBF0001E37B9 /* MCOMessageView.h */,
+				8E450BA21B15BBF0001E37B9 /* MCOMessageView.mm */,
+				8E450BA31B15BBF0001E37B9 /* MCTMsgViewController.h */,
+				8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 		3DF2539E1AF7611D00B99BC8 = {
@@ -294,11 +322,11 @@
 			children = (
 				AD1255DA1B1A2207005EA5CE /* Icons */,
 				3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */,
-				3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */,
 				3D8D90E21B00A2AF00D5135D /* UI */,
 				3D9027561AF970A2000D3E72 /* CoreData */,
 				ADD135CE1B15B5C200A9B31A /* Model */,
 				3D8D90DF1B00A1DE00D5135D /* ViewController */,
+				3DA3029D1B3215C0003CE16A /* Utility */,
 				3DF253B31AF7611D00B99BC8 /* Main.storyboard */,
 				3DF253B61AF7611D00B99BC8 /* Images.xcassets */,
 				3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */,
@@ -310,25 +338,13 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A963C3F51B23373700AABDE5 /* KSTokenView.swift */,
-				A963C3F61B23373800AABDE5 /* KSTokenField.swift */,
-				A963C3F71B23373800AABDE5 /* KSToken.swift */,
-				A963C3F81B23373800AABDE5 /* KSUtils.swift */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				3D9027521AF96D0D000D3E72 /* MailCore.framework */,
 				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
 				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
-				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
-				AD24BE1F1B23042500804732 /* EmailAccount_Support.swift */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
-				8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */,
-				8E450BA01B15BBF0001E37B9 /* MCOCIDURLProtocol.mm */,
-				8E450BA11B15BBF0001E37B9 /* MCOMessageView.h */,
-				8E450BA21B15BBF0001E37B9 /* MCOMessageView.mm */,
-				8E450BA31B15BBF0001E37B9 /* MCTMsgViewController.h */,
-				8E450BA41B15BBF0001E37B9 /* MCTMsgViewController.mm */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -587,13 +603,15 @@
 				A963C3FC1B23373800AABDE5 /* KSUtils.swift in Sources */,
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
+				3D21286E1B2DF57100C9FC4C /* Email.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
+				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
 				AD24BE201B23042500804732 /* EmailAccount_Support.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
-				3D9027621AF97313000D3E72 /* Email.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
 				ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */,
+				3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */,
 				8E1441131B1DE76F00F1A023 /* SendViewCellSubject.swift in Sources */,
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */,
@@ -610,13 +628,13 @@
 				A963C3FA1B23373800AABDE5 /* KSTokenField.swift in Sources */,
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
-				3D9027601AF97313000D3E72 /* EmailAccount.swift in Sources */,
 				8E6E35321B25C71100449DC3 /* SendViewCellText.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
 				A963C3F91B23373800AABDE5 /* KSTokenView.swift in Sources */,
+				3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
 				AD16B2231B1C594B001645A5 /* PreferenceAccountTableViewCell.swift in Sources */,
 				A963C3FB1B23373800AABDE5 /* KSToken.swift in Sources */,

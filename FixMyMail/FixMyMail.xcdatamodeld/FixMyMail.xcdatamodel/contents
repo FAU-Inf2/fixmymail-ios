@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14D136" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D136" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Email" representedClassName="FixMyMail.Email" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="mcomessage" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -27,9 +27,15 @@
         <attribute name="smtpPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="emails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Email" inverseName="toAccount" inverseEntity="Email" syncable="YES"/>
+        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ImapFolder" inverseName="toEmailAccount" inverseEntity="ImapFolder" syncable="YES"/>
+    </entity>
+    <entity name="ImapFolder" representedClassName="FixMyMail.ImapFolder" syncable="YES">
+        <attribute name="mcoimapfolder" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="toEmailAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmailAccount" inverseName="folders" inverseEntity="EmailAccount" syncable="YES"/>
     </entity>
     <elements>
         <element name="Email" positionX="-333" positionY="-309" width="128" height="165"/>
-        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="285"/>
+        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="300"/>
+        <element name="ImapFolder" positionX="-180" positionY="-171" width="128" height="75"/>
     </elements>
 </model>
