@@ -83,7 +83,7 @@ class CustomMailTableViewCell: UITableViewCell {
         if recognizer.state == .Changed {
             let translation = recognizer.translationInView(self)
             center = CGPointMake(originalCenter.x + translation.x, originalCenter.y)
-            deleteOnDragRelease = frame.origin.x < -frame.size.width / 7.0
+            deleteOnDragRelease = frame.origin.x < -frame.size.width / 5.0
             archiveOnDragRelease = frame.origin.x > frame.size.width / 7.0
             remindMeOnDragRelease = frame.origin.x > frame.size.width / 1.5
             

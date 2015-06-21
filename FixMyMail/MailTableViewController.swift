@@ -17,6 +17,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var session: MCOIMAPSession?
     var trashFolderName: String?
     var selectedEmails = NSMutableArray()
+    var allCellsSelected = false
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
@@ -546,9 +547,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             setToolbarWhileEditingAndNothingSelected()
             mailTableView.setEditing(true, animated: true)
         } else {
-            self.navigationItem.rightBarButtonItem?.title = "Edit"
-            setToolbarWithComposeButton()
-            mailTableView.setEditing(false, animated: true)
+            endEditing()
         }
     }
     
@@ -557,6 +556,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             var cell = tableView(mailTableView, cellForRowAtIndexPath: NSIndexPath(forRow: i, inSection: 0)) as! CustomMailTableViewCell
             selectedEmails.addObject(cell.mail)
         }
+        allCellsSelected = true
         viewActionSheet()
     }
     
@@ -572,10 +572,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         for var i = 0; i < selectedEmails.count; i++ {
             deleteEmail(selectedEmails[i] as! Email)
         }
-        self.navigationItem.rightBarButtonItem?.title = "Edit"
-        setToolbarWithComposeButton()
-        mailTableView.setEditing(false, animated: true)
-        self.refreshTableView()
+        endEditing()
     }
     
     func viewActionSheet(){
@@ -589,17 +586,28 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             for var i = 0; i < selectedEmails.count; i++ {
                 setEmailToSeen(selectedEmails[i] as! Email)
             }
-            
+            endEditing()
         case 2: //Mark as Unread
             for var i = 0; i < selectedEmails.count; i++ {
                 setEmailToUnSeen(selectedEmails[i] as! Email)
             }
-        default: break
+            endEditing()
+        case 0: //Cancel
+            if allCellsSelected {
+                selectedEmails.removeAllObjects()
+            }
+            allCellsSelected = false
+        default:
+            break
         }
+    }
+    
+    func endEditing() {
         self.navigationItem.rightBarButtonItem?.title = "Edit"
         setToolbarWithComposeButton()
-        mailTableView.setEditing(false, animated: true)
         self.refreshTableView()
+        mailTableView.layoutIfNeeded()
+        mailTableView.setEditing(false, animated: true)
     }
     
     func setToolbarWithComposeButton() {
@@ -612,8 +620,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func setToolbarWhileEditingAndNothingSelected() {
         var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         var markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
-        var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
-        var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
+        var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: nil, action: "")
+        var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: nil, action: "")
         moveButton.enabled = false
         deleteButton.enabled = false
         var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
