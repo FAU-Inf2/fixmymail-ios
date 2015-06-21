@@ -16,14 +16,14 @@ class IMAPFolderFetcher: NSObject {
     static let sharedInstance: IMAPFolderFetcher = IMAPFolderFetcher()
      let managedContext: NSManagedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
    
-    func getAllIMAPFoldersWithAccounts(completion: (account: EmailAccount?, folders: [MCOIMAPFolder]?, sucess: Bool) -> Void) -> Void {
+    func getAllIMAPFoldersWithAccounts(completion: (account: EmailAccount?, folders: [MCOIMAPFolder]?, sucess: Bool, newFolders: Bool) -> Void) -> Void {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             var fetchReq: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
             var error: NSError?
             var accounts: [EmailAccount] = self.managedContext.executeFetchRequest(fetchReq, error: &error) as! [EmailAccount]
             if error != nil {
                 println(error!.userInfo)
-                completion(account: nil, folders: nil, sucess: false)
+                completion(account: nil, folders: nil, sucess: false, newFolders: false)
                 return
             } else {
 //                var semaphore = dispatch_semaphore_create(1)
@@ -39,7 +39,7 @@ class IMAPFolderFetcher: NSObject {
                         session.password = dictionary?.valueForKey("Password:") as! String
                     } else {
                         NSLog("%@", error!.description)
-                        completion(account: nil, folders: nil, sucess: false)
+                        completion(account: nil, folders: nil, sucess: false, newFolders: false)
                         return
                     }
                     session.authType = StringToAuthType(acc.authTypeImap)
@@ -49,9 +49,10 @@ class IMAPFolderFetcher: NSObject {
                     folderFetch.start({ (error, folders) -> Void in
                         if error != nil {
                             println(error!.userInfo)
-                            completion(account: nil, folders: nil, sucess: false)
+                            completion(account: nil, folders: nil, sucess: false, newFolders: false)
                             return
                         } else {
+                             var newFolders: Bool = false
                             for item in folders {
                                 let fol: MCOIMAPFolder = item as! MCOIMAPFolder
                                 var folWrapper: MCOIMAPFolderWrapper = MCOIMAPFolderWrapper()
@@ -67,6 +68,7 @@ class IMAPFolderFetcher: NSObject {
                                     folderEntity.toEmailAccount = acc
                                     self.foldercount = self.foldercount + 1;
                                     println(folWrapper.description)
+                                    newFolders = true
                                 }
                                 if error != nil {
                                     println(error!.userInfo)
@@ -79,7 +81,7 @@ class IMAPFolderFetcher: NSObject {
                             }
                             
                             println(self.foldercount)
-                            completion(account: acc, folders: folders as! [MCOIMAPFolder]?, sucess: true)
+                            completion(account: acc, folders: folders as! [MCOIMAPFolder]?, sucess: true, newFolders: newFolders)
 //                            dispatch_semaphore_signal(semaphore)
                         }
                     })

@@ -14,6 +14,8 @@
 		3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2128711B2DF57200C9FC4C /* EmailAccount.swift */; };
 		3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37FFA81B01DBC200388F81 /* ContentViewController.swift */; };
 		3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */; };
+		3D848A2D1B3768C90039A162 /* SendViewCellWithTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */; };
+		3D848A2E1B376A010039A162 /* EmailAccountSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */; };
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
 		3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */; };
 		3D9027541AF96D0D000D3E72 /* MailCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9027521AF96D0D000D3E72 /* MailCore.framework */; };
@@ -45,7 +47,6 @@
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
 		8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E57385A1B1B19C8009AA28A /* WebViewController.swift */; };
-		8E6E35321B25C71100449DC3 /* SendViewCellWithTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */; };
 		8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */; };
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		A963C3F91B23373800AABDE5 /* KSTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963C3F51B23373700AABDE5 /* KSTokenView.swift */; };
@@ -63,7 +64,6 @@
 		AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */; };
 		AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */; };
 		AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */; };
-		AD24BE201B23042500804732 /* EmailAccountSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */; };
 		AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0211B1AFE0300751FFA /* smile-gray.png */; };
 		AD44E0271B1B017900751FFA /* outlook.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0231B1B017900751FFA /* outlook.png */; };
 		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
@@ -310,8 +310,6 @@
 				A963C3F61B23373800AABDE5 /* KSTokenField.swift */,
 				A963C3F71B23373800AABDE5 /* KSToken.swift */,
 				A963C3F81B23373800AABDE5 /* KSUtils.swift */,
-				AD24BE1F1B23042500804732 /* EmailAccount_Support.swift */,
-				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
 				8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */,
 				8E450BA01B15BBF0001E37B9 /* MCOCIDURLProtocol.mm */,
 				8E450BA11B15BBF0001E37B9 /* MCOMessageView.h */,
@@ -638,7 +636,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n/usr/local/bin/carthage copy-frameworks";
+			shellScript = "#/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n#/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -647,6 +645,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D848A2E1B376A010039A162 /* EmailAccountSupport.swift in Sources */,
+				3D848A2D1B3768C90039A162 /* SendViewCellWithTextView.swift in Sources */,
 				AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */,
 				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,
@@ -664,7 +664,6 @@
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
 				ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */,
 				3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */,
-				8E1441131B1DE76F00F1A023 /* SendViewCellSubject.swift in Sources */,
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */,
 				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
@@ -681,8 +680,6 @@
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
 				AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
-				8E6E35321B25C71100449DC3 /* SendViewCellText.swift in Sources */,
-				8E6E35321B25C71100449DC3 /* SendViewCellWithTextView.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,

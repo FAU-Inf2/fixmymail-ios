@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = self.navigationController!
         self.window?.makeKeyAndVisible()
         //WARNING: This is method is only for adding dummy entries to CoreData!!!*/
+        //self.registerUserDefaults()
         initCoreDataTestEntries()
         
 //        IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess) -> Void in
@@ -217,7 +218,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if WebRequestError == nil {
 				println("saving data for \(webAccount.emailAddress)")
 			}
-			
+            
 			
 			// create preferences entries
 			var preferences = NSEntityDescription.insertNewObjectForEntityForName("Preferences", inManagedObjectContext: self.managedObjectContext!) as! Preferences
@@ -325,6 +326,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func createAddressBook(){
         var error: Unmanaged<CFError>?
         addressBook = ABAddressBookCreateWithOptions(nil, &error).takeRetainedValue()
+    }
+    
+    func registerUserDefaults() -> Void {
+        NSUserDefaults.standardUserDefaults().registerDefaults(["standardAccount" : "",
+                                                                "signature" : "Sent with SMile!",
+                                                                "loadPictures" : true])
     }
 }
 

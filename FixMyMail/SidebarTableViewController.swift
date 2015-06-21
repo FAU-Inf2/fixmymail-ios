@@ -221,7 +221,7 @@ class SidebarTableViewController: UITableViewController {
     //MARK: - IMAPFolder fetch
     
     func fetchIMAPFolders() -> Void {
-        IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess) -> Void in
+        IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess, newFolders) -> Void in
             if sucess == true {
                 var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
                 let accItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
@@ -290,16 +290,18 @@ class SidebarTableViewController: UITableViewController {
                         }
                     }
                 } else {
-                    var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
-                    actionItems.append(actionItem)
-                    for fol in folders! {
-                        var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
-                        actionItems.append(item)
+                    if newFolders == true {
+                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                        actionItems.append(actionItem)
+                        for fol in folders! {
+                            var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
+                            actionItems.append(item)
+                        }
+                        self.rows[1] = actionItems
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.tableView.reloadData()
+                        })
                     }
-                    self.rows[1] = actionItems
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.tableView.reloadData()
-                    })
                 }
             }
         }

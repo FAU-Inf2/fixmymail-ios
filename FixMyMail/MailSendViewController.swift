@@ -393,10 +393,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             responder.resignFirstResponder()
         }
         var session = MCOSMTPSession()
-        session.hostname = self.sendingAccount.smtpHostname
-        session.port = UInt32(self.sendingAccount.smtpPort.unsignedIntegerValue)
-        session.username = self.sendingAccount.username
-        let (dictionary, error) = Locksmith.loadDataForUserAccount(self.sendingAccount.emailAddress)
+        session.hostname = self.account.smtpHostname
+        session.port = UInt32(self.account.smtpPort.unsignedIntegerValue)
+        session.username = self.account.username
+        let (dictionary, error) = Locksmith.loadDataForUserAccount(self.account.emailAddress)
         if error == nil {
             session.password = dictionary?.valueForKey("Password:") as! String
         } else {
