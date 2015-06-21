@@ -78,8 +78,14 @@ class PreferenceTableViewController: UITableViewController {
 		let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 		switch actionItem.cellName {
 		case "Accounts":
-			var prefAccountVC = PreferenceAccountListTableViewController(nibName:"PreferenceAccountListTableViewController", bundle: nil)
+			var prefAccountVC = PreferenceAccountListTableViewController(nibName: actionItem.viewController, bundle: nil)
 			self.navigationController?.pushViewController(prefAccountVC, animated: true)
+		case "Feedback":
+			var feedbackVC = FeedbackViewController(nibName: actionItem.viewController, bundle: nil)
+			self.navigationController?.pushViewController(feedbackVC, animated: true)
+		case "About Us":
+			var aboutUsVC = AboutUsViewController(nibName: actionItem.viewController, bundle: nil)
+			self.navigationController?.pushViewController(aboutUsVC, animated: true)
 		default:
 			break
 		}
@@ -139,20 +145,20 @@ class PreferenceTableViewController: UITableViewController {
 	func loadPreferenceCells() {
 		
 		var item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", emailAddress: nil, icon: nil)
-		var item2 = ActionItem(Name: "TODO", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
+		var item2 = ActionItem(Name: "REMIND ME!", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
 		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", emailAddress: nil, icon: nil)
-		var item4 = ActionItem(Name: "About Us", viewController: "AboutUs", emailAddress: nil, icon: nil)
-		var item5 = ActionItem(Name: "Feedback", viewController: "Feedback", emailAddress: nil, icon: nil)
+		var item4 = ActionItem(Name: "About Us", viewController: "AboutUsViewController", emailAddress: nil, icon: nil)
+		var item5 = ActionItem(Name: "Feedback", viewController: "FeedbackViewController", emailAddress: nil, icon: nil)
 		
-		otherItem.append(item4)
-		otherItem.append(item5)
-		preferenceCellItem.append(item1)
-		preferenceCellItem.append(item2)
-		preferenceCellItem.append(item3)
+		self.otherItem.append(item4)
+		self.otherItem.append(item5)
+		self.preferenceCellItem.append(item1)
+		self.preferenceCellItem.append(item2)
+		self.preferenceCellItem.append(item3)
 		
-		rows.append(preferenceCellItem)
-		rows.append([])
-		rows.append(otherItem)
+		self.rows.append(preferenceCellItem)
+		self.rows.append([])
+		self.rows.append(otherItem)
 		
 	}
 	

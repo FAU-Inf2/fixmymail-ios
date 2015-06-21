@@ -53,7 +53,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", "",""]
 		
 		// set alert dialog for delete
-		alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
+		self.alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
 		self.alert!.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 			// save data to CoreData (respectively deleting data from CoreData)
 			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
@@ -542,6 +542,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				case "Username:": 			newEntry.setValue(value, forKey: "username")
 				case "Password:":
 					newEntry.setValue("*", forKey: "password")
+					// assure to create key for useraccount
+					let errorLocksmithNewAccount = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+					if errorLocksmithNewAccount == nil {
+						NSLog("found old data -> deleted!")
+					}
 					// save password to iOS keychain
 					let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
 					NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
@@ -583,13 +588,21 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						case "Username:": 			managedObject.setValue(value, forKey: "username")
 						case "Password:":
 							managedObject.setValue("*", forKey: "password")
-							// update data to iOS keychain
-							let errorLocksmith = Locksmith.updateData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
-							if errorLocksmith == nil {
-								NSLog("updating data for " + self.entries["Mailaddress:"]!)
-							} else {
-								NSLog("error updating data for " + self.entries["Mailaddress:"]!)
+							// assure to create key for useraccount
+							let errorLocksmithUpdateAccount = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+							if errorLocksmithUpdateAccount == nil {
+								NSLog("found old data -> deleted!")
 							}
+							// save data to iOS keychain
+							let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
+							NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+							let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
+							if NewRequestError == nil {
+								NSLog("saving data for " + self.entries["Mailaddress:"]!)
+							} else {
+								NSLog("could not save data for " + self.entries["Mailaddress:"]!)
+							}
+
 						case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
 						case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
 						case "IMAP Auth:":			managedObject.setValue(value, forKey: "authTypeImap")
@@ -697,7 +710,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	// add keyboard size to tableView size
 	func keyboardWillShow(notification: NSNotification) {
 		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-			var contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+			var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
 			
 			if self.origintableViewInsets == nil {
 				self.origintableViewInsets = self.tableView.contentInset

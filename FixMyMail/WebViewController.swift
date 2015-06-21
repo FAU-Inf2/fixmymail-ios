@@ -104,25 +104,41 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     }
     
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+        var replyAll: Bool = !((self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
+                             (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil)
         switch buttonIndex {
         case 1:
             self.reply(false)
         case 2:
-            self.reply(true)
+            if replyAll {
+                self.reply(true)
+            } else {
+                self.forward()
+            }
+        case 3:
+            if replyAll {
+                self.forward()
+            }
         default:
             return
         }
     }
     
     func replyButtonPressed() {
-        var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all")
-        replyActionSheet.showInView(self.view)
+        if (self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
+           (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil {
+                var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Forward")
+                replyActionSheet.showInView(self.view)
+        } else {
+            var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all", "Forward")
+            replyActionSheet.showInView(self.view)
+        }
     }
     
     func reply(replyAll: Bool) {
         var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         if replyAll {
-            sendView.expendTableView = true
+            sendView.tableViewIsExpanded = true
             var array: [MCOAddress] = [MCOAddress]()
             var recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
             for recipient in recipients {
@@ -137,13 +153,13 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
                 }
             }
             if array.count == 0 {
-                sendView.expendTableView = false
+                sendView.tableViewIsExpanded = false
             } else {
                 sendView.ccRecipients.addObjectsFromArray(array)
             }
         }
         sendView.recipients.addObject((self.message.mcomessage as! MCOIMAPMessage).header.from)
-        sendView.sendingAccount = self.message.toAccount
+        sendView.account = self.message.toAccount
         sendView.subject = "Re: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
         var parser = MCOMessageParser(data: self.message.data)
         var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
@@ -151,9 +167,18 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     
+    func forward() {
+        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        sendView.account = self.message.toAccount
+        sendView.subject = "Fwd: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
+        var parser = MCOMessageParser(data: self.message.data)
+        sendView.textBody = "\n\nBegin forwarded message:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
+        self.navigationController?.pushViewController(sendView, animated: true)
+    }
+    
     func compose() {
         var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
-        sendView.sendingAccount = self.message.toAccount
+        sendView.account = self.message.toAccount
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     

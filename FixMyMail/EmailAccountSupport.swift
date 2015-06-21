@@ -6,7 +6,9 @@
 //  Copyright (c) 2015 FixMymail. All rights reserved.
 //
 
+
 import Foundation
+
 
 func authTypeToString(authtype: MCOAuthType) -> String {
 	switch authtype {
@@ -56,3 +58,7 @@ func StringToConnectionType(connectionType: String) -> MCOConnectionType {
 	default: return MCOConnectionType.Clear
 	}
 }
+
+
+
+

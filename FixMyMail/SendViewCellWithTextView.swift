@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SendViewCellText: UITableViewCell {
+class SendViewCellWithTextView: UITableViewCell {
     
     @IBOutlet weak var textViewMailBody: UITextView!
     

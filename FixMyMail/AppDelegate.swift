@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 import AddressBook
 
-
 var addressBook : ABAddressBookRef?
 
 @UIApplicationMain
@@ -218,6 +217,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if WebRequestError == nil {
 				println("saving data for \(webAccount.emailAddress)")
 			}
+			
+			
+			// create preferences entries
+			var preferences = NSEntityDescription.insertNewObjectForEntityForName("Preferences", inManagedObjectContext: self.managedObjectContext!) as! Preferences
+			preferences.standardAccount = ""
+			preferences.signature = "Sent with SMile!"
+			preferences.loadPictures = true
+			
+			
 			
             /*let session = MCOIMAPSession()
             session.hostname = gmailAccount.imapHostname

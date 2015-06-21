@@ -77,6 +77,7 @@ white-space: pre-wrap;\
     self = [super initWithFrame:frame];
     
     _webView = [[UIWebView alloc] initWithFrame:[self bounds]];
+    _webView.scalesPageToFit = YES;
     [_webView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
     [_webView setDelegate:self];
     [self addSubview:_webView];

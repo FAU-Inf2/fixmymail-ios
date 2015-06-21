@@ -33,9 +33,15 @@
         <attribute name="mcoimapfolder" optional="YES" attributeType="Transformable" syncable="YES"/>
         <relationship name="toEmailAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmailAccount" inverseName="folders" inverseEntity="EmailAccount" syncable="YES"/>
     </entity>
+    <entity name="Preferences" representedClassName="FixMyMail.Preferences" syncable="YES">
+        <attribute name="loadPictures" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="standardAccount" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Email" positionX="-333" positionY="-309" width="128" height="165"/>
         <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="300"/>
         <element name="ImapFolder" positionX="-180" positionY="-171" width="128" height="75"/>
+        <element name="Preferences" positionX="-198" positionY="-189" width="128" height="90"/>
     </elements>
 </model>
