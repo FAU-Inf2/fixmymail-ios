@@ -138,7 +138,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     func reply(replyAll: Bool) {
         var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         if replyAll {
-            sendView.expendTableView = true
+            sendView.tableViewIsExpanded = true
             var array: [MCOAddress] = [MCOAddress]()
             var recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
             for recipient in recipients {
@@ -153,7 +153,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
                 }
             }
             if array.count == 0 {
-                sendView.expendTableView = false
+                sendView.tableViewIsExpanded = false
             } else {
                 sendView.ccRecipients.addObjectsFromArray(array)
             }
