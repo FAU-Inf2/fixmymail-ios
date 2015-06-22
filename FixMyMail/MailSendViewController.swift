@@ -189,6 +189,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.delegate = self
                 cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
                 cell.textField.enabled = false
+                cell.accessoryView = nil
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             }
@@ -202,6 +203,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.delegate = self
                 cell.textField.tintColor = UIColor.whiteColor()
                 cell.textField.inputView = self.emailAddressPicker
+                cell.accessoryView = nil
                 cell.textField.enabled = false
                 return cell
             } else {
@@ -221,6 +223,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.textField.delegate = self
             cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
             cell.textField.enabled = false
+            cell.accessoryView = nil
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 5:
