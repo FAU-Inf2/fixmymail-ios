@@ -18,6 +18,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var trashFolderName: String?
     var selectedEmails = NSMutableArray()
     var allCellsSelected = false
+    var folderToQuery: String?
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
@@ -231,7 +232,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers)
                 
-                let fetchAllOp = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
+                if self.folderToQuery == nil {
+                    self.folderToQuery = "INBOX"
+                }
+                
+                let fetchAllOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
                 
                 fetchAllOp.start({ (error, messages, range) -> Void in
                     if error != nil {
@@ -253,7 +258,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 }
                                 newEmail.title = (message as! MCOIMAPMessage).header.subject
                                 
-                                let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
+                                let fetchOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: (message as! MCOIMAPMessage).uid)
                                 
                                 fetchOp.start({(error, data) in
                                     if error != nil {

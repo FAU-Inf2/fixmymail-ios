@@ -12,6 +12,8 @@
 		3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */; };
 		3D21286E1B2DF57100C9FC4C /* Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D21286D1B2DF57100C9FC4C /* Email.swift */; };
 		3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2128711B2DF57200C9FC4C /* EmailAccount.swift */; };
+		3D3654E31B385566003B38F0 /* SideBarSubFolderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3654E11B385566003B38F0 /* SideBarSubFolderTableViewCell.swift */; };
+		3D3654E41B385566003B38F0 /* SideBarSubFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3654E21B385566003B38F0 /* SideBarSubFolderTableViewCell.xib */; };
 		3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37FFA81B01DBC200388F81 /* ContentViewController.swift */; };
 		3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */; };
 		3D848A2D1B3768C90039A162 /* SendViewCellWithTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */; };
@@ -119,6 +121,8 @@
 		3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContentViewController.xib; sourceTree = "<group>"; };
 		3D21286D1B2DF57100C9FC4C /* Email.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Email.swift; path = ../Email.swift; sourceTree = "<group>"; };
 		3D2128711B2DF57200C9FC4C /* EmailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailAccount.swift; path = ../EmailAccount.swift; sourceTree = "<group>"; };
+		3D3654E11B385566003B38F0 /* SideBarSubFolderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarSubFolderTableViewCell.swift; sourceTree = "<group>"; };
+		3D3654E21B385566003B38F0 /* SideBarSubFolderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SideBarSubFolderTableViewCell.xib; sourceTree = "<group>"; };
 		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPFolderFetcher.swift; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
@@ -242,6 +246,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D3654E01B3854A4003B38F0 /* SideBarItems */ = {
+			isa = PBXGroup;
+			children = (
+				3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */,
+				3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */,
+				3D3654E11B385566003B38F0 /* SideBarSubFolderTableViewCell.swift */,
+				3D3654E21B385566003B38F0 /* SideBarSubFolderTableViewCell.xib */,
+			);
+			name = SideBarItems;
+			sourceTree = "<group>";
+		};
 		3D58BC451B1CCE0C00CCA5F0 /* Sidebar */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,12 +292,11 @@
 			children = (
 				ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */,
 				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
-				3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */,
-				3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */,
 				8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */,
 				8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */,
 				AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */,
 				8E1441181B1DF00500F1A023 /* SendView */,
+				3D3654E01B3854A4003B38F0 /* SideBarItems */,
 				AD0100A11B19ECC4009E4E18 /* Preferences */,
 			);
 			name = UI;
@@ -608,6 +622,7 @@
 				3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */,
 				A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */,
 				AD6E5DF51B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib in Resources */,
+				3D3654E41B385566003B38F0 /* SideBarSubFolderTableViewCell.xib in Resources */,
 				AD44E0381B1B528400751FFA /* fau-logo.png in Resources */,
 				8E14411C1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib in Resources */,
 			);
@@ -654,6 +669,7 @@
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
 				3D21286E1B2DF57100C9FC4C /* Email.swift in Sources */,
+				3D3654E31B385566003B38F0 /* SideBarSubFolderTableViewCell.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
 				8E0AAB661B2F1BAD002C4CDA /* Record.swift in Sources */,

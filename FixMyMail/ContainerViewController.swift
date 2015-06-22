@@ -167,6 +167,9 @@ extension ContainerViewController: SideBarProtocol {
         case "EmailSpecific":
             contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
             shouldChangeVC = true
+            if actionItem.emailFolder != nil {
+                contentVC.setValue(actionItem.emailFolder!.path, forKey: "folderToQuery")
+            }
             
             //Do something to load correct mails
             let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
