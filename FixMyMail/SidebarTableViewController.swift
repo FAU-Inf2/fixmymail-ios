@@ -48,9 +48,9 @@ class SidebarTableViewController: UITableViewController {
         
         self.sections = ["Inboxes", "Accounts", ""]
         var inboxRows: [ActionItem] = [ActionItem]()
-        inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll"))
+        inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll", icon: UIImage(named: "smile-gray.png")))
         for emailAcc: EmailAccount in accountArr {
-            var actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAddress: emailAcc.emailAddress)
+            var actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAddress: emailAcc.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc))
             inboxRows.append(actionItem)
         }
         
@@ -92,11 +92,16 @@ class SidebarTableViewController: UITableViewController {
         if indexPath.section == 0 {
             var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
             if let cell = inboxCell {
+                let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                 if(indexPath.row == 0) {
                     cell.menuLabel.text = "All"
                 } else {
-                    let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     cell.menuLabel.text = mailAcc.cellName
+                }
+                if let icon = mailAcc.cellIcon {
+                    cell.menuImg.image = icon
+                } else {
+                    cell.menuImg.image = nil
                 }
                 
                 return cell
@@ -104,12 +109,18 @@ class SidebarTableViewController: UITableViewController {
                 NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
                 var sideBarCell: SideBarTableViewCell = self.sidebarCell
                 self.sidebarCell = nil
+                let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                 if(indexPath.row == 0) {
                     sideBarCell.menuLabel.text = "All"
                 } else {
-                    let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     sideBarCell.menuLabel.text = mailAcc.cellName
                 }
+                if let icon = mailAcc.cellIcon {
+                    sideBarCell.menuImg.image = icon
+                } else {
+                    sideBarCell.menuImg.image = nil
+                }
+                
                 return sideBarCell
             }
         } else if indexPath.section == 1 {
@@ -126,6 +137,8 @@ class SidebarTableViewController: UITableViewController {
                 cell.menuLabel.text = actionItem.cellName
                 if let icon = actionItem.cellIcon {
                     cell.menuImg.image = icon
+                } else {
+                    cell.menuImg.image = nil
                 }
                 return cell
             } else {
@@ -139,6 +152,8 @@ class SidebarTableViewController: UITableViewController {
                 sideBarCell.menuLabel.text = actionItem.cellName
                 if let icon = actionItem.cellIcon {
                     sideBarCell.menuImg.image = icon
+                } else {
+                    sideBarCell.menuImg.image = nil
                 }
                 return sideBarCell
             }
@@ -149,6 +164,8 @@ class SidebarTableViewController: UITableViewController {
                 cell.menuLabel.text = actionItem.cellName
                 if let icon = actionItem.cellIcon {
                     cell.menuImg.image = icon
+                } else {
+                    cell.menuImg.image = nil
                 }
                 return cell
             } else {
@@ -159,6 +176,8 @@ class SidebarTableViewController: UITableViewController {
                 sideBarCell.menuLabel.text = actionItem.cellName
                 if let icon = actionItem.cellIcon {
                     sideBarCell.menuImg.image = icon
+                } else {
+                    sideBarCell.menuImg.image = nil
                 }
                 return sideBarCell
             }
@@ -224,7 +243,7 @@ class SidebarTableViewController: UITableViewController {
         IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess, newFolders) -> Void in
             if sucess == true {
                 var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
-                let accItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                let accItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
                 var indexOfAccount: Int? = find(actionItems, accItem)
                 if let index = indexOfAccount {
                     if index == 0 {
@@ -238,7 +257,7 @@ class SidebarTableViewController: UITableViewController {
                         }
                         var subArr = Array(actionItems[index...indexTo])
                         var newAccItemArr = [ActionItem]()
-                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
                         newAccItemArr.append(actionItem)
                         for fol in folders! {
                             var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
@@ -262,7 +281,7 @@ class SidebarTableViewController: UITableViewController {
                             }
                         }
                         if indexTo == nil {
-                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
                             firstPart.append(actionItem)
                             for fol in folders! {
                                 var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
@@ -274,7 +293,7 @@ class SidebarTableViewController: UITableViewController {
                             })
                         } else {
                             var lastPart = Array(actionItems[indexTo!...actionItems.count - 1])
-                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
                             firstPart.append(actionItem)
                             for fol in folders! {
                                 var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
@@ -291,7 +310,7 @@ class SidebarTableViewController: UITableViewController {
                     }
                 } else {
                     if newFolders == true {
-                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress)
+                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
                         actionItems.append(actionItem)
                         for fol in folders! {
                             var item = ActionItem(Name: fol.path, viewController: "EmailFolder", emailAddress: account!.emailAddress, emailFolder: fol)
@@ -311,7 +330,7 @@ class SidebarTableViewController: UITableViewController {
         var actionItems = [ActionItem]()
         for account in emailAccounts {
             if account.folders.count > 0 {
-                var actionItem = ActionItem(Name: account.accountName, viewController: "NoVC", emailAddress: account.emailAddress)
+                var actionItem = ActionItem(Name: account.accountName, viewController: "NoVC", emailAddress: account.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account))
                 actionItems.append(actionItem)
                 for imapFolder in account.folders {
                     var imapFol: ImapFolder = imapFolder as! ImapFolder

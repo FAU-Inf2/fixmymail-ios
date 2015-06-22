@@ -26,8 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.navigationController = UINavigationController(rootViewController: self.viewController!)
         self.window?.rootViewController = self.navigationController!
         self.window?.makeKeyAndVisible()
-        //WARNING: This is method is only for adding dummy entries to CoreData!!!*/
-        //self.registerUserDefaults()
+        //WARNING: This method is only for adding dummy entries to CoreData!!!*/
+        self.registerUserDefaults()
         initCoreDataTestEntries()
         
 //        IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess) -> Void in
@@ -218,14 +218,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if WebRequestError == nil {
 				println("saving data for \(webAccount.emailAddress)")
 			}
-            
-			
-			// create preferences entries
-			var preferences = NSEntityDescription.insertNewObjectForEntityForName("Preferences", inManagedObjectContext: self.managedObjectContext!) as! Preferences
-			preferences.standardAccount = ""
-			preferences.signature = "Sent with SMile!"
-			preferences.loadPictures = true
-			
 			
 			
             /*let session = MCOIMAPSession()

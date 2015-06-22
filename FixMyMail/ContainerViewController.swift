@@ -46,28 +46,11 @@ class ContainerViewController: UIViewController {
         window.makeKeyAndVisible()
         self.view.addSubview(self.subNavController.view)
         //(self.contentVC as! MailTableViewController).subNavController = self.subNavController
-        
-        self.leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: "swipeForSidebar:")
-        self.leftSwipeGesture.direction = .Left
-        self.view.addGestureRecognizer(self.leftSwipeGesture)
-        
-        self.rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: "swipeForSidebar:")
-        self.rightSwipeGesture.direction = .Right
-        self.view.addGestureRecognizer(self.rightSwipeGesture)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func swipeForSidebar(sender: UISwipeGestureRecognizer) {
-        if(sender.isEqual(leftSwipeGesture) && self.currentState == SlideOutState.LeftPanelExpanded) {
-            self.toggleLeftPanel()
-        }
-        if(sender.isEqual(rightSwipeGesture) && self.currentState == SlideOutState.PanelCollapsed) {
-            self.toggleLeftPanel()
-        }
     }
 
 }

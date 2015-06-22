@@ -24,7 +24,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	var rows = [AnyObject]()
 	var sectionsContent = [AnyObject]()
 	var loadPictures: Bool?
-	var preferences: Preferences?
+//	var preferences: Preferences?
 	var selectedTextfield: UITextField?
 	var selectedIndexPath: NSIndexPath?
 	var origintableViewInsets: UIEdgeInsets?
@@ -74,7 +74,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		
 		// get selection from standard account VC
 		if self.standardAccountVC != nil {
-			self.preferences?.standardAccount = self.standardAccountVC!.selectedString
+            NSUserDefaults.standardUserDefaults().setObject(self.standardAccountVC!.selectedString, forKey: "standardAccount")
 		}
 		
 		loadCoreDataAccounts()
@@ -86,23 +86,23 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		if (self.selectedTextfield != nil) {
 		self.textFieldShouldReturn(self.selectedTextfield!)
 		}
-		
-		var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-		var context: NSManagedObjectContext = appDel.managedObjectContext!
-		var fetchRequest = NSFetchRequest(entityName: "Preferences")
-		
-		if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
-			if fetchResults.count != 0{
-				
-				var managedObject = fetchResults[0]
-				
-				managedObject.setValue(self.preferences!.standardAccount , forKey: "standardAccount")
-				managedObject.setValue(self.preferences!.signature, forKey: "signature")
-				managedObject.setValue(self.loadPictures, forKey: "loadPictures")
-				
-			}
-		}
-		context.save(nil)
+        
+//		var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+//		var context: NSManagedObjectContext = appDel.managedObjectContext!
+//		var fetchRequest = NSFetchRequest(entityName: "Preferences")
+//		
+//		if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+//			if fetchResults.count != 0{
+//				
+//				var managedObject = fetchResults[0]
+//				
+//				managedObject.setValue(self.preferences!.standardAccount , forKey: "standardAccount")
+//				managedObject.setValue(self.preferences!.signature, forKey: "signature")
+//				managedObject.setValue(self.loadPictures, forKey: "loadPictures")
+//				
+//			}
+//		}
+//		context.save(nil)
 		
 		
 		NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -182,7 +182,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			// Select standard Account
 			self.standardAccountVC = PreferenceStandardAccountTableViewController(nibName: "PreferenceStandardAccountTableViewController", bundle: nil)
 			self.standardAccountVC!.accounts = self.accountArr
-			self.standardAccountVC!.selectedString = self.preferences!.standardAccount
+			self.standardAccountVC!.selectedString = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")! //self.preferences!.standardAccount
 			self.navigationController?.pushViewController(self.standardAccountVC!, animated: true)
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		case "PreferenceAccountView":
@@ -264,7 +264,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		if let appDelegate = appDel {
 			managedObjectContext = appDelegate.managedObjectContext
 			var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-			var preferencesFetchRequest = NSFetchRequest(entityName: "Preferences")
 			var error: NSError?
 			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
 			if let account = acc {
@@ -277,56 +276,12 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 				}
 			}
 			
-			let fetchedPreferences: [Preferences]? = managedObjectContext.executeFetchRequest(preferencesFetchRequest, error: &error) as? [Preferences]
-			
-			if let preferences = fetchedPreferences {
-				self.preferences = preferences[0]
-			} else {
-				if((error) != nil) {
-					NSLog(error!.description)
-				}
-			}
-			
 		}
 		
 		// create ActionItems for mail accounts
 		for emailAcc: EmailAccount in accountArr {
-			var accountImage: UIImage?
 			
-			// set icons
-			switch emailAcc.emailAddress {
-			case let s where s.rangeOfString("@gmail.com") != nil:
-				accountImage = UIImage(named: "Gmail-128.png")
-				
-			case let s where s.rangeOfString("@outlook") != nil:
-				accountImage = UIImage(named: "outlook.png")
-				
-			case let s where s.rangeOfString("@yahoo") != nil:
-				accountImage = UIImage(named: "Yahoo-icon.png")
-				
-			case let s where s.rangeOfString("@web.de") != nil:
-				accountImage = UIImage(named: "webde.png")
-				
-			case let s where s.rangeOfString("@gmx") != nil:
-				accountImage = UIImage(named: "gmx.png")
-				
-			case let s where s.rangeOfString("@me.com") != nil:
-				accountImage = UIImage(named: "icloud-icon.png")
-				
-			case let s where s.rangeOfString("@icloud.com") != nil:
-				accountImage = UIImage(named: "icloud-icon.png")
-				
-			case let s where s.rangeOfString("@fau.de") != nil:
-				accountImage = UIImage(named: "fau-logo.png")
-				
-			case let s where s.rangeOfString("@studium.fau.de") != nil:
-				accountImage = UIImage(named: "fau-logo.png")
-
-			default:
-				accountImage = UIImage(named: "smile-gray.png")
-				
-			}
-			
+            var accountImage: UIImage? = PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc)
 			
 			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView",emailAddress: emailAcc.emailAddress, icon: accountImage)
 			accountPreferenceCellItem.append(actionItem)
@@ -338,21 +293,21 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		// Preferences
 		var standardAccountMatch = false
 		for account: EmailAccount in accountArr {
-			if account.accountName == preferences!.standardAccount {
+			if account.accountName == NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")! {
 				standardAccountMatch = true
 				break
 			}
 		}
 		if standardAccountMatch == false {
-			preferences!.standardAccount = ""
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "standardAccount")
 		}
 	
-		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: preferences?.standardAccount, icon: nil)
+		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!, icon: nil)
 		
-		var signatureItem = ActionItem(Name: "Signature:", viewController: "", emailAddress: self.preferences?.signature, icon: nil)
+		var signatureItem = ActionItem(Name: "Signature:", viewController: "", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("signature"), icon: nil)
 		var loadPictureItem = ActionItem(Name: "Load pictures automatically:", viewController: "", emailAddress: nil, icon: nil)
 		if self.loadPictures == nil {
-			self.loadPictures = preferences?.loadPictures
+			self.loadPictures = NSUserDefaults.standardUserDefaults().boolForKey("loadPictures")
 		}
 		
 		self.otherItem.append(standardAccountItem)
@@ -377,6 +332,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	// set value if switchstate has changed
 	func stateChanged(switchState: UISwitch) {
 		self.loadPictures = switchState.on
+        NSUserDefaults.standardUserDefaults().setBool(switchState.on, forKey: "loadPictures")
 	}
 	
 	func textFieldDidBeginEditing(textField: UITextField) {
@@ -389,7 +345,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	
 	func textFieldDidEndEditing(textField: UITextField) {
 		if textField.placeholder! == "Enter signature here" {
-			self.preferences!.signature = textField.text
+            NSUserDefaults.standardUserDefaults().setObject(textField.text, forKey: "signature")
 		}
 		
 		self.selectedTextfield = nil
@@ -440,5 +396,45 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			}
 		}
 	}
+    
+    static func getImageFromEmailAccount(emailAccount: EmailAccount) -> UIImage? {
+        var accountImage: UIImage?
+        
+        // set icons
+        switch emailAccount.emailAddress {
+        case let s where s.rangeOfString("@gmail.com") != nil:
+            accountImage = UIImage(named: "Gmail-128.png")
+            
+        case let s where s.rangeOfString("@outlook") != nil:
+            accountImage = UIImage(named: "outlook.png")
+            
+        case let s where s.rangeOfString("@yahoo") != nil:
+            accountImage = UIImage(named: "Yahoo-icon.png")
+            
+        case let s where s.rangeOfString("@web.de") != nil:
+            accountImage = UIImage(named: "webde.png")
+            
+        case let s where s.rangeOfString("@gmx") != nil:
+            accountImage = UIImage(named: "gmx.png")
+            
+        case let s where s.rangeOfString("@me.com") != nil:
+            accountImage = UIImage(named: "icloud-icon.png")
+            
+        case let s where s.rangeOfString("@icloud.com") != nil:
+            accountImage = UIImage(named: "icloud-icon.png")
+            
+        case let s where s.rangeOfString("@fau.de") != nil:
+            accountImage = UIImage(named: "fau-logo.png")
+            
+        case let s where s.rangeOfString("@studium.fau.de") != nil:
+            accountImage = UIImage(named: "fau-logo.png")
+            
+        default:
+            accountImage = UIImage(named: "smile-gray.png")
+            
+        }
+        
+        return accountImage
+    }
 	
 }

@@ -27,10 +27,11 @@ class ContentViewController: UIViewController {
         
         self.view.addSubview(navigationBar)
         
-        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "Menu", style: .Plain, target: self, action: "menuTapped:")
+        var flexSpaceItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         
         var navItem: UINavigationItem = UINavigationItem(title: "")
-        navItem.leftBarButtonItems = [menuItem]
+        navItem.leftBarButtonItems = [flexSpaceItem, menuItem, flexSpaceItem]
         
         navigationBar.pushNavigationItem(navItem, animated: true)
         

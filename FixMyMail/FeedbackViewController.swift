@@ -14,7 +14,6 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
 	@IBOutlet weak var textView: UITextView!
 	@IBOutlet weak var buttonFeedback: UIButton!
 	
-	var preferences: Preferences?
 	var accounts: [EmailAccount]?
 
 	
@@ -26,7 +25,7 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
 			self.textView.attributedText = attributedString
 		}
 		
-		self.loadData()
+		self.accounts = self.getAccount()
 		
 
         // Do any additional setup after loading the view.
@@ -46,10 +45,9 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
 		sendView.subject = subject
 		
 		if self.accounts!.count != 0 {
-			if self.preferences != nil {
-				if self.preferences?.standardAccount != "" {
+				if NSUserDefaults.standardUserDefaults().stringForKey("standardAccount") != "" {
 					for account in self.accounts! {
-						if account.accountName == self.preferences?.standardAccount {
+						if account.accountName == NSUserDefaults.standardUserDefaults().stringForKey("standardAccount") {
 							standardAccount = account
 						}
 					}
@@ -66,12 +64,6 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
 					sendView.account = self.accounts?.first
 					self.navigationController?.pushViewController(sendView, animated: true)
 				}
-			} else {
-				// got accounts but no preferences
-				
-				sendView.account = self.accounts?.first
-				self.navigationController?.pushViewController(sendView, animated: true)
-			}
 			
 		} else {
 			// user has no accounts declared
@@ -81,38 +73,7 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
 			
 		}
 	}
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-	
-	func loadData() {
-		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
-		if let appDelegate = appDel {
-			var managedObjectContext = appDelegate.managedObjectContext
-			var preferencesFetchRequest = NSFetchRequest(entityName: "Preferences")
-			var error: NSError?
-			let fetchedPreferences: [Preferences]? = managedObjectContext!.executeFetchRequest(preferencesFetchRequest, error: &error) as? [Preferences]
-			
-			if let preferences = fetchedPreferences {
-				self.preferences = preferences[0]
-			} else {
-				if((error) != nil) {
-					NSLog(error!.description)
-				}
-			}
-		}
-		
-		self.accounts = self.getAccount()
-		
-	}
+    
 	
 	func getAccount() -> [EmailAccount]? {
 		var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
