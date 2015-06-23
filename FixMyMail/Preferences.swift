@@ -12,7 +12,6 @@ import CoreData
 class Preferences: NSManagedObject {
 	
 	@NSManaged var loadPictures: Bool
-	@NSManaged var signature: String
 	@NSManaged var standardAccount: String
 
 }

@@ -28,5 +28,6 @@ class EmailAccount: NSManagedObject {
     @NSManaged var username: String
     @NSManaged var emails: NSSet
     @NSManaged var folders: NSSet
+	@NSManaged var signature: String
 
 }

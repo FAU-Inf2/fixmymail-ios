@@ -304,14 +304,14 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	
 		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!, icon: nil)
 		
-		var signatureItem = ActionItem(Name: "Signature:", viewController: "", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("signature"), icon: nil)
+//		var signatureItem = ActionItem(Name: "Signature:", viewController: "", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("signature"), icon: nil)
 		var loadPictureItem = ActionItem(Name: "Load pictures automatically:", viewController: "", emailAddress: nil, icon: nil)
 		if self.loadPictures == nil {
 			self.loadPictures = NSUserDefaults.standardUserDefaults().boolForKey("loadPictures")
 		}
 		
 		self.otherItem.append(standardAccountItem)
-		self.otherItem.append(signatureItem)
+//		self.otherItem.append(signatureItem)
 		self.otherItem.append(loadPictureItem)
 		
 		
@@ -344,10 +344,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	}
 	
 	func textFieldDidEndEditing(textField: UITextField) {
-		if textField.placeholder! == "Enter signature here" {
-            NSUserDefaults.standardUserDefaults().setObject(textField.text, forKey: "signature")
-		}
-		
 		self.selectedTextfield = nil
 		self.selectedIndexPath = nil
 	}
