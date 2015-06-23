@@ -511,6 +511,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         orderEmails()
+		addSignature()
     }
     
     //
@@ -538,5 +539,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         println(email)
         //TODO
     }
+	
+	func addSignature() {
+		self.textBody = self.textBody + "\n\n\n" + self.account.signature
+	}
     
 }
