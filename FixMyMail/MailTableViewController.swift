@@ -326,6 +326,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         mailcell.mailBody.text = mail.title
         mailcell.height = mailTableView.rowHeight
         mailcell.delegate = self
+		var header = mail.mcomessage.header!
+		mailcell.dateLabel.text = header.receivedDate.toEuropeanShortDateString()
         
         if (mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Seen == MCOMessageFlag.Seen{
             mailcell.unseendot.hidden = true
