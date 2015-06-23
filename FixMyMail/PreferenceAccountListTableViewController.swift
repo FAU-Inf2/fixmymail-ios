@@ -15,8 +15,8 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	var delegate: ContentViewControllerProtocol?
 	var navController: UINavigationController!
 	var managedObjectContext: NSManagedObjectContext!
-	var accountArr: [EmailAccount] = [EmailAccount]();
-	var otherArr: [EmailAccount] = [EmailAccount]();
+	var allAccounts: [EmailAccount] = [EmailAccount]()
+	var otherArr: [EmailAccount] = [EmailAccount]()
 	var accountPreferenceCellItem: [ActionItem] = [ActionItem]()
 	var newAccountItem: [ActionItem] = [ActionItem]()
 	var otherItem: [ActionItem] = [ActionItem]()
@@ -51,7 +51,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(true)
-		self.accountArr.removeAll(keepCapacity: false)
+		self.allAccounts.removeAll(keepCapacity: false)
 		self.otherArr.removeAll(keepCapacity: false)
 		self.accountPreferenceCellItem.removeAll(keepCapacity: false)
 		self.newAccountItem.removeAll(keepCapacity: false)
@@ -181,7 +181,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		case "PreferenceStandardAccountTableViewController":
 			// Select standard Account
 			self.standardAccountVC = PreferenceStandardAccountTableViewController(nibName: "PreferenceStandardAccountTableViewController", bundle: nil)
-			self.standardAccountVC!.accounts = self.accountArr
+			self.standardAccountVC!.accounts = self.allAccounts
 			self.standardAccountVC!.selectedString = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")! //self.preferences!.standardAccount
 			self.navigationController?.pushViewController(self.standardAccountVC!, animated: true)
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
@@ -193,6 +193,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			}
 			
 			editAccountVC.actionItem = actionItem
+			editAccountVC.allAccounts = self.allAccounts
 			self.navigationController?.pushViewController(editAccountVC, animated: true)
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		default:
@@ -268,7 +269,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
 			if let account = acc {
 				for emailAcc: EmailAccount in account {
-					accountArr.append(emailAcc)
+					allAccounts.append(emailAcc)
 				}
 			} else {
 				if((error) != nil) {
@@ -279,7 +280,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		}
 		
 		// create ActionItems for mail accounts
-		for emailAcc: EmailAccount in accountArr {
+		for emailAcc: EmailAccount in allAccounts {
 			
             var accountImage: UIImage? = PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc)
 			
@@ -292,7 +293,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		
 		// Preferences
 		var standardAccountMatch = false
-		for account: EmailAccount in accountArr {
+		for account: EmailAccount in allAccounts {
 			if account.accountName == NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")! {
 				standardAccountMatch = true
 				break
@@ -304,14 +305,12 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	
 		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!, icon: nil)
 		
-//		var signatureItem = ActionItem(Name: "Signature:", viewController: "", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("signature"), icon: nil)
 		var loadPictureItem = ActionItem(Name: "Load pictures automatically:", viewController: "", emailAddress: nil, icon: nil)
 		if self.loadPictures == nil {
 			self.loadPictures = NSUserDefaults.standardUserDefaults().boolForKey("loadPictures")
 		}
 		
 		self.otherItem.append(standardAccountItem)
-//		self.otherItem.append(signatureItem)
 		self.otherItem.append(loadPictureItem)
 		
 		
@@ -319,7 +318,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		self.rows.append(newAccountItem)
 		self.rows.append(otherItem)
 		
-		self.sectionsContent.append(accountArr)
+		self.sectionsContent.append(allAccounts)
 		self.sectionsContent.append(newAccountItem)
 		self.sectionsContent.append(otherItem)
 

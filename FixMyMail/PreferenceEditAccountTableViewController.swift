@@ -14,6 +14,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var emailAcc: EmailAccount?
 	var newEmailAcc: EmailAccount?
 	var actionItem: ActionItem?
+	var allAccounts: [EmailAccount] = [EmailAccount]()
 	var managedObjectContext: NSManagedObjectContext!
 	var sections = [String]()
 	var labelAccountDetailString = [String]()
@@ -421,6 +422,16 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.tableView.reloadData()
 		if self.allEntriesSet() {
 			
+			// check if duplicate account and return if so
+			if self.checkIfDuplicateAccounts() {
+				var alert = UIAlertController(title: "Duplicate", message: "An account with address: \"" + self.entries["Mailaddress:"]!.lowercaseString + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
+				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
+				
+				self.presentViewController(alert, animated: true, completion: nil)
+				self.navigationItem.rightBarButtonItem?.enabled = true
+				return
+			}
+			
 			var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel ", style: .Plain, target: self, action: "cancelTapped:")
 			cancelButton.tintColor = UIColor.redColor()
 			self.navigationItem.rightBarButtonItem = cancelButton
@@ -439,6 +450,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						return
 					}))
 					alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
+						self.isActivated = false
 						self.saveEntriesToCoreData()
 						self.navigationController?.popViewControllerAnimated(true)
 					}))
@@ -468,6 +480,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 								return
 							}))
 							alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
+								self.isActivated = false
 								self.saveEntriesToCoreData()
 								self.navigationController?.popViewControllerAnimated(true)
 							}))
@@ -544,7 +557,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			for (key, value) in self.entries {
 				switch key {
-				case "Mailaddress:": 		newEntry.setValue(value, forKey: "emailAddress")
+				case "Mailaddress:": 		newEntry.setValue(value.lowercaseString, forKey: "emailAddress")
 				case "Realname:":			newEntry.setValue(value, forKey: "realName")
 				case "Accountname:":		newEntry.setValue(value, forKey: "accountName")
 				case "Username:": 			newEntry.setValue(value, forKey: "username")
@@ -591,7 +604,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					
 					for (key, value) in self.entries {
 						switch key {
-						case "Mailaddress:": 		managedObject.setValue(value, forKey: "emailAddress")
+						case "Mailaddress:": 		managedObject.setValue(value.lowercaseString, forKey: "emailAddress")
 						case "Realname:":			managedObject.setValue(value, forKey: "realName")
 						case "Accountname:":		managedObject.setValue(value, forKey: "accountName")
 						case "Username:": 			managedObject.setValue(value, forKey: "username")
@@ -645,6 +658,22 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		}
 		checkAllTextfieldsFilled()
 		return true
+	}
+	
+	func checkIfDuplicateAccounts() -> Bool {
+		if !self.allAccounts.isEmpty {
+			for account in self.allAccounts {
+				// save if same account is just edited
+				if account.emailAddress == emailAcc?.emailAddress {
+					return false
+				}
+				
+				if account.emailAddress == self.entries["Mailaddress:"]!.lowercaseString {
+					return true
+				}
+			}
+		}
+		return false
 	}
 	
 
