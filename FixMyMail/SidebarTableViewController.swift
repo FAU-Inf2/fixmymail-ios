@@ -36,6 +36,8 @@ class SidebarTableViewController: UITableViewController {
             var error: NSError?
             let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
             if let account = acc {
+                //For fist expand comand
+                self.currAccountName = self.currAccountName == nil ? account[0].accountName : self.currAccountName
                 for emailAcc: EmailAccount in account {
                     accountArr.append(emailAcc)
                 }
@@ -50,7 +52,7 @@ class SidebarTableViewController: UITableViewController {
         var inboxRows: [ActionItem] = [ActionItem]()
         inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll", icon: UIImage(named: "smile-gray.png")))
         for emailAcc: EmailAccount in accountArr {
-            var actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAddress: emailAcc.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc))
+            var actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAccount: emailAcc, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc))
             inboxRows.append(actionItem)
         }
         
@@ -298,7 +300,7 @@ class SidebarTableViewController: UITableViewController {
         IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess, newFolders) -> Void in
             if sucess == true {
                 var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
-                let accItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
+                let accItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAccount: account!, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
                 var indexOfAccount: Int? = find(actionItems, accItem)
                 if let index = indexOfAccount {
                     if index == 0 {
@@ -372,18 +374,18 @@ class SidebarTableViewController: UITableViewController {
     }
     
     private func getActionItemsFromEmailAccount(emailAccount: EmailAccount, andFolders folders: [MCOIMAPFolder]?) -> ActionItem {
-        var actionItem = ActionItem(Name: emailAccount.accountName, viewController: "NoVC", emailAddress: emailAccount.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAccount))
+        var actionItem = ActionItem(Name: emailAccount.accountName, viewController: "NoVC", emailAccount: emailAccount, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAccount))
         var subItems = [ActionItem]()
         if folders != nil {
             for fol in folders! {
-                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: emailAccount.emailAddress, emailFolder: fol, icon: UIImage(named: "folder.png"))
+                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
                 subItems.append(item)
             }
         } else {
             for imapFolder in emailAccount.folders {
                 var imapFol: ImapFolder = imapFolder as! ImapFolder
                 let fol: MCOIMAPFolder = imapFol.mcoimapfolder as MCOIMAPFolder
-                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: emailAccount.emailAddress, emailFolder: fol, icon: UIImage(named: "folder.png"))
+                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
                 subItems.append(item)
             }
         }

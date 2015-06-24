@@ -143,7 +143,7 @@ extension ContainerViewController: SideBarProtocol {
         self.toggleLeftPanel()
         
         var shouldChangeVC = false
-        self.lastSelectedMailAccountName = actionItem.cellName != "All" ? actionItem.cellName : nil
+        self.lastSelectedMailAccountName = actionItem.cellName != "All" ? actionItem.emailAccount?.accountName : nil
         switch actionItem.viewController {
         case "EmailAll":
             contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
