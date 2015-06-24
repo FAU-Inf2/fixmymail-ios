@@ -20,7 +20,7 @@
                         <rect key="frame" x="8" y="0.0" width="43" height="43"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="43" id="VlN-nn-Wpa"/>
-                            <constraint firstAttribute="height" constant="43" id="eu5-tg-m8l"/>
+                            <constraint firstAttribute="height" constant="43" id="zT5-7f-9fA"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OPd-Uz-cJc">
@@ -31,12 +31,11 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="lda-wR-7PT" secondAttribute="bottom" id="5PQ-Ou-khG"/>
                     <constraint firstItem="lda-wR-7PT" firstAttribute="top" secondItem="EQj-94-ZN2" secondAttribute="top" id="F3y-b9-aTS"/>
                     <constraint firstAttribute="trailing" secondItem="OPd-Uz-cJc" secondAttribute="trailing" constant="20" symbolic="YES" id="Q9Y-Vq-t27"/>
                     <constraint firstItem="OPd-Uz-cJc" firstAttribute="leading" secondItem="lda-wR-7PT" secondAttribute="trailing" constant="8" symbolic="YES" id="TDI-cr-oKU"/>
-                    <constraint firstItem="OPd-Uz-cJc" firstAttribute="centerY" secondItem="lda-wR-7PT" secondAttribute="centerY" id="Ztf-IK-U9g"/>
                     <constraint firstItem="lda-wR-7PT" firstAttribute="leading" secondItem="EQj-94-ZN2" secondAttribute="leading" constant="8" id="d7f-0M-y3l"/>
+                    <constraint firstItem="OPd-Uz-cJc" firstAttribute="top" secondItem="EQj-94-ZN2" secondAttribute="top" constant="11" id="uGl-fP-KPE"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

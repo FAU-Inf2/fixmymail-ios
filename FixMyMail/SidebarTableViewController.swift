@@ -118,9 +118,9 @@ class SidebarTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
+                let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                 var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
                 if let cell = inboxCell {
-                    let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     if(indexPath.row == 0) {
                         cell.menuLabel.text = "All"
                     } else {
@@ -291,46 +291,10 @@ class SidebarTableViewController: UITableViewController {
             }
         }
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-    
     
     //MARK: - IMAPFolder fetch
     
-    func fetchIMAPFolders() -> Void {
+    private func fetchIMAPFolders() -> Void {
         IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess, newFolders) -> Void in
             if sucess == true {
                 var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
@@ -348,12 +312,7 @@ class SidebarTableViewController: UITableViewController {
                         }
                         var subArr = Array(actionItems[index...indexTo])
                         var newAccItemArr = [ActionItem]()
-                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
-                        newAccItemArr.append(actionItem)
-                        for fol in folders! {
-                            var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: account!.emailAddress, emailFolder: fol)
-                            newAccItemArr.append(item)
-                        }
+                        newAccItemArr.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
                         for item in subArr {
                             newAccItemArr.append(item)
                         }
@@ -372,24 +331,14 @@ class SidebarTableViewController: UITableViewController {
                             }
                         }
                         if indexTo == nil {
-                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
-                            firstPart.append(actionItem)
-                            for fol in folders! {
-                                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: account!.emailAddress, emailFolder: fol)
-                                firstPart.append(item)
-                            }
+                            firstPart.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
                             self.rows[1] = firstPart
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 self.tableView.reloadData()
                             })
                         } else {
                             var lastPart = Array(actionItems[indexTo!...actionItems.count - 1])
-                            var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
-                            firstPart.append(actionItem)
-                            for fol in folders! {
-                                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: account!.emailAddress, emailFolder: fol)
-                                firstPart.append(item)
-                            }
+                            firstPart.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
                             for item in lastPart {
                                 firstPart.append(item)
                             }
@@ -401,12 +350,7 @@ class SidebarTableViewController: UITableViewController {
                     }
                 } else {
                     if newFolders == true {
-                        var actionItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAddress: account!.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
-                        actionItems.append(actionItem)
-                        for fol in folders! {
-                            var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: account!.emailAddress, emailFolder: fol)
-                            actionItems.append(item)
-                        }
+                        actionItems.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
                         self.rows[1] = actionItems
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             self.tableView.reloadData()
@@ -417,28 +361,35 @@ class SidebarTableViewController: UITableViewController {
         }
     }
     
-    func getIMAPFoldersFromCoreData(WithEmailAccounts emailAccounts: [EmailAccount]) -> [ActionItem] {
-        var actionItems = [ActionItem]()
-        var resultItem = [ActionItem]()
+    private func getIMAPFoldersFromCoreData(WithEmailAccounts emailAccounts: [EmailAccount]) -> [ActionItem] {
+        var resultItems = [ActionItem]()
         for account in emailAccounts {
             if account.folders.count > 0 {
-                var actionItem = ActionItem(Name: account.accountName, viewController: "NoVC", emailAddress: account.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account))
-                actionItems.append(actionItem)
-                for imapFolder in account.folders {
-                    var imapFol: ImapFolder = imapFolder as! ImapFolder
-                    let fol: MCOIMAPFolder = imapFol.mcoimapfolder as MCOIMAPFolder
-                    var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: account.emailAddress, emailFolder: fol, icon: UIImage(named: "folder.png"))
-                    actionItems.append(item)
-                }
-                var unsortedItems = Array(actionItems[1...(actionItems.count - 1)])
-                var sortedItems = unsortedItems.sorted { $0.cellName < $1.cellName }
-                actionItem.actionItems = sortedItems
-                actionItem.folderExpanded = false
-                resultItem.append(actionItem)
-                actionItems.removeAll(keepCapacity: false)
+                resultItems.append(self.getActionItemsFromEmailAccount(account, andFolders: nil))
             }
         }
-        return resultItem
+        return resultItems
+    }
+    
+    private func getActionItemsFromEmailAccount(emailAccount: EmailAccount, andFolders folders: [MCOIMAPFolder]?) -> ActionItem {
+        var actionItem = ActionItem(Name: emailAccount.accountName, viewController: "NoVC", emailAddress: emailAccount.emailAddress, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAccount))
+        var subItems = [ActionItem]()
+        if folders != nil {
+            for fol in folders! {
+                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: emailAccount.emailAddress, emailFolder: fol, icon: UIImage(named: "folder.png"))
+                subItems.append(item)
+            }
+        } else {
+            for imapFolder in emailAccount.folders {
+                var imapFol: ImapFolder = imapFolder as! ImapFolder
+                let fol: MCOIMAPFolder = imapFol.mcoimapfolder as MCOIMAPFolder
+                var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAddress: emailAccount.emailAddress, emailFolder: fol, icon: UIImage(named: "folder.png"))
+                subItems.append(item)
+            }
+        }
+        actionItem.actionItems = subItems.sorted { $0.cellName < $1.cellName }
+        actionItem.folderExpanded = false
+        return actionItem
     }
 
 }

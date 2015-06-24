@@ -20,28 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-    /*    self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.viewController = ViewController(nibName: "ViewController", bundle: NSBundle.mainBundle())
-        self.viewController?.title = "INBOX"
-        self.navigationController = UINavigationController(rootViewController: self.viewController!)
-        self.window?.rootViewController = self.navigationController!
-        self.window?.makeKeyAndVisible()
+        
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
         initCoreDataTestEntries()
-        
-//        IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess) -> Void in
-//            if sucess == true {
-//                println(folders!)
-//            }
-//        }
-
-//		window = UIWindow(frame: UIScreen.mainScreen().bounds)
-//		var mainViewController = KeyChainListTableViewController(nibName: "KeyChainListTableViewController",bundle:nil)
-//		mainViewController.title = "KeyChain"
-//		var navigationController = UINavigationController(rootViewController: mainViewController)
-//		window?.rootViewController = navigationController
-//		window?.makeKeyAndVisible()
         
         return true
     }
@@ -222,59 +204,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				println("saving data for \(webAccount.emailAddress)")
 			}
 			
-			
-            /*let session = MCOIMAPSession()
-            session.hostname = gmailAccount.imapHostname
-            session.port = gmailAccount.imapPort
-            session.username = gmailAccount.username
-            session.password = gmailAccount.password
-            session.authType = MCOAuthType.SASLPlain
-            session.connectionType = MCOConnectionType.TLS
-            
-            let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure |
-                MCOIMAPMessagesRequestKind.InternalDate | MCOIMAPMessagesRequestKind.HeaderSubject |
-                MCOIMAPMessagesRequestKind.Flags)
-            
-            let infoOp = session.folderInfoOperation("INBOX")
-            infoOp.start({(error, info) in
-            NSLog("messages on server: %i", info.messageCount)
-            })*/
-            
-            /*let fetchallOp = session.fetchMessagesByNumberOperationWithFolder("INBOX", requestKind: requestKind, numbers: MCOIndexSet(range: MCORangeMake(1, UINT64_MAX)))
-            
-            fetchallOp.start({(error, messages, range) in
-                if error != nil {
-                    NSLog("Could not load messages: %@", error)
-                } else {
-                    self.managedObjectContext!.performBlockAndWait({ () -> Void in
-                        NSLog("mailcount:%i", messages.count)
-                        for message in messages {
-                            var email: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                            email.mcomessage = message
-                            email.sender = ""
-                            email.title = ""
-                            
-                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
-                            
-                            fetchOp.start({(error, data) in
-                                if error != nil {
-                                    NSLog("Could not recieve mail: %@", error)
-                                } else {
-                                    email.data = data
-                                    let parser: MCOMessageParser! = MCOMessageParser(data: data)
-                                    email.sender = parser.header.from.displayName
-                                    email.title = parser.header.subject
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "notification", object: nil))
-                                    })
-                                }
-                            })
-                            email.toAccount = gmailAccount
-                        }
-                    })
-                }
-            })*/
-            
             var error: NSError?
             self.managedObjectContext!.save(&error)
       
@@ -285,6 +214,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    //MARK: - AdressBook
     
    func AccessAddressBook() {
         switch ABAddressBookGetAuthorizationStatus(){
@@ -323,7 +254,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         addressBook = ABAddressBookCreateWithOptions(nil, &error).takeRetainedValue()
     }
     
-    func registerUserDefaults() -> Void {
+    //MARK: - UserDefaults
+    
+    private func registerUserDefaults() -> Void {
         NSUserDefaults.standardUserDefaults().registerDefaults(["standardAccount" : "",
                                                                 "loadPictures" : true])
     }
