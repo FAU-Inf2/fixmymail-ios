@@ -23,6 +23,7 @@
         <attribute name="isActivated" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="realName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="smtpHostname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="smtpPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
@@ -35,7 +36,7 @@
     </entity>
     <elements>
         <element name="Email" positionX="-333" positionY="-309" width="128" height="165"/>
-        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="300"/>
+        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="315"/>
         <element name="ImapFolder" positionX="-180" positionY="-171" width="128" height="75"/>
     </elements>
 </model>
