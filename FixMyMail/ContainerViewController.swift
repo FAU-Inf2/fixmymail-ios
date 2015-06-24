@@ -29,6 +29,7 @@ class ContainerViewController: UIViewController {
     var leftSwipeGesture: UISwipeGestureRecognizer!
     var rightSwipeGesture: UISwipeGestureRecognizer!
     var tapGesture: UITapGestureRecognizer!
+    var lastSelectedMailAccountName: String? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +72,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
         if (self.sideBarVC == nil) {
             var sidebarVC : SidebarTableViewController = SidebarTableViewController(nibName: "SidebarTableViewController", bundle: NSBundle.mainBundle())
             self.sideBarVC = sidebarVC
+            self.sideBarVC?.currAccountName = self.lastSelectedMailAccountName
             self.sideBarVC?.delegate = self
             self.sideBarVC?.view.frame = CGRectMake(self.sideBarVC!.view.frame.origin.x, self.sideBarVC!.view.frame.origin.y, self.sideBarVC!.view.frame.width, self.view.frame.height)
             addChildSidePanelController(sideBarVC!)
@@ -141,6 +143,7 @@ extension ContainerViewController: SideBarProtocol {
         self.toggleLeftPanel()
         
         var shouldChangeVC = false
+        self.lastSelectedMailAccountName = actionItem.cellName != "All" ? actionItem.cellName : nil
         switch actionItem.viewController {
         case "EmailAll":
             contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())

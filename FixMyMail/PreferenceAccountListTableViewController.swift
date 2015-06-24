@@ -24,7 +24,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	var rows = [AnyObject]()
 	var sectionsContent = [AnyObject]()
 	var loadPictures: Bool?
-//	var preferences: Preferences?
 	var selectedTextfield: UITextField?
 	var selectedIndexPath: NSIndexPath?
 	var origintableViewInsets: UIEdgeInsets?
@@ -86,24 +85,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		if (self.selectedTextfield != nil) {
 		self.textFieldShouldReturn(self.selectedTextfield!)
 		}
-        
-//		var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-//		var context: NSManagedObjectContext = appDel.managedObjectContext!
-//		var fetchRequest = NSFetchRequest(entityName: "Preferences")
-//		
-//		if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
-//			if fetchResults.count != 0{
-//				
-//				var managedObject = fetchResults[0]
-//				
-//				managedObject.setValue(self.preferences!.standardAccount , forKey: "standardAccount")
-//				managedObject.setValue(self.preferences!.signature, forKey: "signature")
-//				managedObject.setValue(self.loadPictures, forKey: "loadPictures")
-//				
-//			}
-//		}
-//		context.save(nil)
-		
 		
 		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
@@ -182,7 +163,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			// Select standard Account
 			self.standardAccountVC = PreferenceStandardAccountTableViewController(nibName: "PreferenceStandardAccountTableViewController", bundle: nil)
 			self.standardAccountVC!.accounts = self.accountArr
-			self.standardAccountVC!.selectedString = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")! //self.preferences!.standardAccount
+			self.standardAccountVC!.selectedString = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!
 			self.navigationController?.pushViewController(self.standardAccountVC!, animated: true)
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		case "PreferenceAccountView":

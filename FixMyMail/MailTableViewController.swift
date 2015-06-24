@@ -75,8 +75,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
-        self.navigationItem.leftBarButtonItem = menuItem
+        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "Menu", style: .Plain, target: self, action: "menuTapped:")
+        self.navigationItem.leftBarButtonItems = [menuItem]
         var editButton: UIBarButtonItem = UIBarButtonItem(title: "Edit", style: .Plain, target: self, action: "editToggled:")
         self.navigationItem.rightBarButtonItem = editButton
         mailTableView.allowsMultipleSelectionDuringEditing = true

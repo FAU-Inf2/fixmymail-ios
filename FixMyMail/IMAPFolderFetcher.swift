@@ -26,7 +26,6 @@ class IMAPFolderFetcher: NSObject {
                 completion(account: nil, folders: nil, sucess: false, newFolders: false)
                 return
             } else {
-//                var semaphore = dispatch_semaphore_create(1)
                 dispatch_apply(accounts.count, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { (i: Int) -> Void in
                     let acc = accounts[i]
                     
@@ -82,12 +81,8 @@ class IMAPFolderFetcher: NSObject {
                             
                             println(self.foldercount)
                             completion(account: acc, folders: folders as! [MCOIMAPFolder]?, sucess: true, newFolders: newFolders)
-//                            dispatch_semaphore_signal(semaphore)
                         }
                     })
-//                    for var i: Int = 0; i < accounts.count; i++ {
-//                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-//                    }
                 }
             }
         })
