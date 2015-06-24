@@ -153,6 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmailAccount.realName = "SMile_Gmail"
 			gmailAccount.accountName = "Gmail"
 			gmailAccount.isActivated = true
+			gmailAccount.signature = ""
 			let errorLocksmithGmail = Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
 			if errorLocksmithGmail == nil {
 				NSLog("found old data -> deleted!")
@@ -181,6 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmxAccount.realName = "SMile_GMX"
             gmxAccount.accountName = "GMX"
 			gmxAccount.isActivated = true
+			gmxAccount.signature = "Sent with GMX!"
 			let errorLocksmithGmx = Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
 			if errorLocksmithGmx == nil {
 				NSLog("found old data -> deleted!")
@@ -208,6 +210,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			webAccount.realName = "SMile_WEBDE"
 			webAccount.accountName = "WEB.DE"
 			webAccount.isActivated = true
+			webAccount.signature = "Sent with WEB.DE!"
 			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
 			if errorLocksmithWeb == nil {
 				NSLog("found old data -> deleted!")
@@ -322,7 +325,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func registerUserDefaults() -> Void {
         NSUserDefaults.standardUserDefaults().registerDefaults(["standardAccount" : "",
-                                                                "signature" : "Sent with SMile!",
                                                                 "loadPictures" : true])
     }
 }

@@ -94,15 +94,40 @@ extension NSDate
 	
 	func toLongDateString() -> String
 	{
-	//Get Short Time String
+	//Get Long Date String
 	let formatter = NSDateFormatter()
 	formatter.dateStyle = .LongStyle
 	let dateString = formatter.stringFromDate(self)
 	
-	//Return Short Time String
+	//Return Long Date String
 	return dateString
 	}
 	
+	func toShortDateString() -> String
+	{
+		//Get Short Date String
+		let formatter = NSDateFormatter()
+		formatter.dateStyle = .ShortStyle
+		let dateString = formatter.stringFromDate(self)
+		
+		//Return Short Date String
+		return dateString
+	}
+	
+	// EU date string
+	func toEuropeanShortDateString() -> String
+	{
+		//Get Short Date String
+		let dateStringFormatter = NSDateFormatter()
+		dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+		dateStringFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+		let dateString = dateStringFormatter.stringFromDate(self)
+		
+		//Return Short Date String
+		return dateString
+	}
+	
+
 	
 	
 }

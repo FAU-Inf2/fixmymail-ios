@@ -14,6 +14,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var emailAcc: EmailAccount?
 	var newEmailAcc: EmailAccount?
 	var actionItem: ActionItem?
+	var allAccounts: [EmailAccount] = [EmailAccount]()
 	var managedObjectContext: NSManagedObjectContext!
 	var sections = [String]()
 	var labelAccountDetailString = [String]()
@@ -287,6 +288,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.labelAccountDetailString.append("Accountname:")
 		self.labelAccountDetailString.append("Username:")
 		self.labelAccountDetailString.append("Password:")
+		self.labelAccountDetailString.append("Signature:")
 		
 		self.labelImapConnectionDetailString.append("IMAP Hostname:")
 		self.labelImapConnectionDetailString.append("IMAP Port:")
@@ -304,6 +306,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.cellAccountTextfielString.append(emailAcc!.accountName)
 			self.cellAccountTextfielString.append(emailAcc!.username)
 			self.cellAccountTextfielString.append(emailAcc!.password)
+			self.cellAccountTextfielString.append(emailAcc!.signature)
 			
 			self.cellImapConnectionTextfielString.append(emailAcc!.imapHostname)
 			self.cellImapConnectionTextfielString.append(String(Int(emailAcc!.imapPort)))
@@ -319,6 +322,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["Realname:"] = emailAcc!.realName
 			self.entries["Accountname:"] = emailAcc!.accountName
 			self.entries["Username:"] = emailAcc!.username
+			self.entries["Signature:"] = emailAcc!.signature
 			
 			// load password for account from iOS keychain
 			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
@@ -346,6 +350,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.entries["Accountname:"] = ""
 			self.entries["Username:"] = ""
 			self.entries["Password:"] = ""
+			self.entries["Signature:"] = ""
 			
 			self.entries["IMAP Hostname:"] = ""
 			self.entries["IMAP Port:"] = ""
@@ -417,6 +422,16 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.tableView.reloadData()
 		if self.allEntriesSet() {
 			
+			// check if duplicate account and return if so
+			if self.checkIfDuplicateAccounts() {
+				var alert = UIAlertController(title: "Duplicate", message: "An account with address: \"" + self.entries["Mailaddress:"]!.lowercaseString + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
+				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
+				
+				self.presentViewController(alert, animated: true, completion: nil)
+				self.navigationItem.rightBarButtonItem?.enabled = true
+				return
+			}
+			
 			var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel ", style: .Plain, target: self, action: "cancelTapped:")
 			cancelButton.tintColor = UIColor.redColor()
 			self.navigationItem.rightBarButtonItem = cancelButton
@@ -435,6 +450,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						return
 					}))
 					alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
+						self.isActivated = false
 						self.saveEntriesToCoreData()
 						self.navigationController?.popViewControllerAnimated(true)
 					}))
@@ -464,6 +480,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 								return
 							}))
 							alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
+								self.isActivated = false
 								self.saveEntriesToCoreData()
 								self.navigationController?.popViewControllerAnimated(true)
 							}))
@@ -513,20 +530,24 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			for var row = 0; row < self.tableView.numberOfRowsInSection(section); row++ {
 				var cellPath = NSIndexPath(forRow: row, inSection: section)
 				if let cell = self.tableView.cellForRowAtIndexPath(cellPath) as? PreferenceAccountTableViewCell {
-					if cell.labelCellContent.text != "Activate:" {
-						if cell.textfield.text.isEmpty {
+					
+					if cell.textfield.text.isEmpty {
+						if cell.labelCellContent.text == "Signature:" {}
+						else if cell.labelCellContent.text == "Activate:" {}
+						else {
 							cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
-						} else {
-							cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.blackColor()])
-							
 						}
+					}
+					else {
+						cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.blackColor()])
+						
 					}
 				}
 			}
 		}
 	}
-	
-	
+
+
 	func saveEntriesToCoreData() {
 		var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 		var context: NSManagedObjectContext = appDel.managedObjectContext!
@@ -536,10 +557,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			for (key, value) in self.entries {
 				switch key {
-				case "Mailaddress:": 		newEntry.setValue(value, forKey: "emailAddress")
+				case "Mailaddress:": 		newEntry.setValue(value.lowercaseString, forKey: "emailAddress")
 				case "Realname:":			newEntry.setValue(value, forKey: "realName")
 				case "Accountname:":		newEntry.setValue(value, forKey: "accountName")
 				case "Username:": 			newEntry.setValue(value, forKey: "username")
+				case "Signature:":			newEntry.setValue(value, forKey: "signature")
 				case "Password:":
 					newEntry.setValue("*", forKey: "password")
 					// assure to create key for useraccount
@@ -582,10 +604,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					
 					for (key, value) in self.entries {
 						switch key {
-						case "Mailaddress:": 		managedObject.setValue(value, forKey: "emailAddress")
+						case "Mailaddress:": 		managedObject.setValue(value.lowercaseString, forKey: "emailAddress")
 						case "Realname:":			managedObject.setValue(value, forKey: "realName")
 						case "Accountname:":		managedObject.setValue(value, forKey: "accountName")
 						case "Username:": 			managedObject.setValue(value, forKey: "username")
+						case "Signature:":			managedObject.setValue(value, forKey: "signature")
 						case "Password:":
 							managedObject.setValue("*", forKey: "password")
 							// assure to create key for useraccount
@@ -624,7 +647,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func allEntriesSet() -> Bool {
 		for (key, value) in self.entries {
-			if key != "Activate:" {
+			if key == "Activate:" || key == "Signature:" {
+				
+			} else {
 				if value == "" {
 					checkAllTextfieldsFilled()
 					return false
@@ -635,6 +660,23 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		return true
 	}
 	
+	func checkIfDuplicateAccounts() -> Bool {
+		if !self.allAccounts.isEmpty {
+			for account in self.allAccounts {
+				// save if same account is just edited
+				if account.emailAddress == emailAcc?.emailAddress {
+					return false
+				}
+				
+				if account.emailAddress == self.entries["Mailaddress:"]!.lowercaseString {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	
+
 	func getImapOperation() -> MCOIMAPOperation {
 		
 		var session = MCOIMAPSession()

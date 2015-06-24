@@ -313,8 +313,12 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+		var oldAccount = self.account
         self.account = self.allAccounts[row]
         (self.isResponder as! UITextField).text = self.account.emailAddress
+		self.textBody = self.replaceSignature(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
+		self.sendTableView.reloadData()
+		
     }
     
     func shouldContractTableView() -> Bool {
@@ -511,6 +515,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         orderEmails()
+		addSignature()
     }
     
     //
@@ -538,5 +543,21 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         println(email)
         //TODO
     }
+	
+	func addSignature() {
+		if self.account.signature != "" {
+			self.textBody = self.textBody + "\n" + self.account.signature
+		}
+		
+	}
+
+	func replaceSignature(text: String, toDelete: String, toInsert: String) -> String {
+		if let range = text.rangeOfString(toDelete) {
+			var newtext = text.substringToIndex(range.startIndex) + toInsert + text.substringFromIndex(range.endIndex)
+			return newtext
+		} else {
+			return text + "\n" + toInsert
+		}
+	}
     
 }

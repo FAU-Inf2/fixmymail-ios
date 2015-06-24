@@ -14,17 +14,17 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     @IBOutlet weak var mailTableView: UITableView!
     var refreshControl: UIRefreshControl!
     var delegate: ContentViewControllerProtocol?
-    var session: MCOIMAPSession?
     var trashFolderName: String?
     var selectedEmails = NSMutableArray()
     var allCellsSelected = false
     var folderToQuery: String?
+    var sessionDictionary = [String: MCOIMAPSession]()
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let mailFetchRequest = NSFetchRequest(entityName: "Email")
-        let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.date", ascending: true)
+        let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.date", ascending: false)
         mailFetchRequest.sortDescriptors = [primarySortDescriptor];
         if let acc = self.getAccount() {
             if acc.count == 1 {
@@ -43,7 +43,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         return frc
         }()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -97,9 +96,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         // Dispose of any resources that can be recreated.
     }
     
-    /*override func viewDidDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }*/
+    override func viewDidDisappear(animated: Bool) {
+        for (key, session) in sessionDictionary {
+            NSLog("disconnect!!!")
+            session.disconnectOperation()
+        }
+    }
     
     func showMailSendView() {
         if self.getAccount()?.first != nil {
@@ -119,8 +121,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if error != nil {
             NSLog("%@", error!.description)
         }
-
-        self.mailTableView.reloadData()
+        mailTableView.layoutIfNeeded()
+        self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func getMaxUID(account: EmailAccount) -> UInt32 {
@@ -326,6 +328,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         mailcell.mailBody.text = mail.title
         mailcell.height = mailTableView.rowHeight
         mailcell.delegate = self
+		var header = mail.mcomessage.header!
+		mailcell.dateLabel.text = header.receivedDate.toEuropeanShortDateString()
         
         if (mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Seen == MCOMessageFlag.Seen{
             mailcell.unseendot.hidden = true
@@ -433,21 +437,25 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func getSession(account: EmailAccount) -> MCOIMAPSession {
-        //if self.session == nil {
-            self.session = MCOIMAPSession()
-        
-            self.session!.hostname = account.imapHostname
-            self.session!.port = UInt32(account.imapPort.unsignedIntegerValue)
-            self.session!.username = account.username
+        if sessionDictionary[account.accountName] == nil {
+            //Neue Session
+            let session = MCOIMAPSession()
+            session.hostname = account.imapHostname
+            session.port = UInt32(account.imapPort.unsignedIntegerValue)
+            session.username = account.username
+            
             let (dictionary, error) = Locksmith.loadDataForUserAccount(account.emailAddress)
             if error == nil {
-                self.session!.password = dictionary?.valueForKey("Password:") as! String
+                session.password = dictionary?.valueForKey("Password:") as! String
             }
-            self.session!.authType = MCOAuthType.SASLPlain
-            self.session!.connectionType = MCOConnectionType.TLS
-        //}
-        
-        return self.session!
+            
+            session.authType = StringToAuthType(account.authTypeImap)
+            session.connectionType = StringToConnectionType(account.connectionTypeImap)
+            
+            sessionDictionary[account.accountName] = session
+        }
+
+        return sessionDictionary[account.accountName]!
     }
 
     func getAccount() -> [EmailAccount]? {
@@ -512,13 +520,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 })
                 
                 self.managedObjectContext.deleteObject(mail)
-                
-                var error: NSError? = nil
-                self.managedObjectContext!.save(&error)
-                if error != nil {
-                    NSLog("%@", error!.description)
-                }
-                self.mailTableView.reloadData()
+                self.refreshTableView()
                 
             } else {
                 NSLog("error: trashFolderName == nil")

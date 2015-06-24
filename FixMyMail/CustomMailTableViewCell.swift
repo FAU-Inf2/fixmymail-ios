@@ -18,6 +18,8 @@ class CustomMailTableViewCell: UITableViewCell {
     @IBOutlet var mailFrom: UILabel!
     @IBOutlet var mailBody: UILabel!
     @IBOutlet var unseendot: UIImageView!
+	@IBOutlet weak var dateLabel: UILabel!
+	
     var mail: Email!
     var delegate: TableViewCellDelegate?
     var height: CGFloat!
