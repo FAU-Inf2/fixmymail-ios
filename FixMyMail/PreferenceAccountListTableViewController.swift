@@ -162,7 +162,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		case "PreferenceStandardAccountTableViewController":
 			// Select standard Account
 			self.standardAccountVC = PreferenceStandardAccountTableViewController(nibName: "PreferenceStandardAccountTableViewController", bundle: nil)
-			self.standardAccountVC!.accounts = self.accountArr
+			self.standardAccountVC!.accounts = self.allAccounts
 			self.standardAccountVC!.selectedString = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!
 			self.navigationController?.pushViewController(self.standardAccountVC!, animated: true)
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
