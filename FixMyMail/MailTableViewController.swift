@@ -98,8 +98,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewDidDisappear(animated: Bool) {
         for (key, session) in sessionDictionary {
-            NSLog("disconnect!!!")
-            session.disconnectOperation()
+            session.disconnectOperation().start({ (error) -> Void in
+                if error != nil {
+                    NSLog("%@", error!.description)
+                }else {
+                    NSLog("disconnect!!!")
+                }
+            })
         }
     }
     
@@ -138,7 +143,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //PullToRefresh
     func pullToRefresh() {
-        /*if let accounts = getAccount(){
+        if let accounts = getAccount(){
             for account in accounts {
                 NSLog("emailAdresse in pullToRefresh:  " + account.emailAddress)
                 let session = getSession(account)
@@ -147,8 +152,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 //Check for new Emails
                 var currentMaxUID = self.getMaxUID(account)
-                var localEmails = account.emails
-                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX)))
+                var localEmails = account.emails.allObjects
+                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
                 
                 fetchNewEmailsOp.start({ (error, messages, range) -> Void in
                     if error != nil {
@@ -189,44 +194,41 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                     }
                 })
                 
-                //Check for deleted Emails and update Flags
-                let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID))))
-                
-                fetchMessageInfoForLocalEmails.start({ (error, messages, range) -> Void in
-                    if currentMaxUID == 0 {
-                        return
-                    }
-                    if error != nil {
-                        NSLog("Could not update local Emails: %@", error)
-                    }else {
-                        NSLog(String(localEmails.count) + " LocalEmails   " + account.emailAddress)
-                        NSLog(String(messages.count) + " EmailsOnServer   " + account.emailAddress)
-                        for mail in localEmails {
-                            var deleted = true
-                            for message in messages {
-                                if (message as! MCOIMAPMessage).uid == ((mail as! Email).mcomessage as! MCOIMAPMessage).uid {
-                                    if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags{
-                                        NSLog("Updated Flags " + String(((mail as! Email).mcomessage as! MCOIMAPMessage).uid))
-                                        (mail as! Email).mcomessage = (message as! MCOIMAPMessage)
+                //Check for deleted or moved Emails and update Flags
+                if currentMaxUID > 0 {
+                    let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID - 1))))
+                    
+                    fetchMessageInfoForLocalEmails.start({ (error, messages, range) -> Void in
+                        if error != nil {
+                            NSLog("Could not update local Emails: %@", error)
+                        }else {
+                            for mail in localEmails {
+                                var deleted = true
+                                for message in messages {1
+                                    if (message as! MCOIMAPMessage).uid == ((mail as! Email).mcomessage as! MCOIMAPMessage).uid {
+                                        if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags{
+                                            NSLog("Updated Flags " + String(((mail as! Email).mcomessage as! MCOIMAPMessage).uid))
+                                            (mail as! Email).mcomessage = (message as! MCOIMAPMessage)
+                                        }
+                                        deleted = false
+                                        break
                                     }
-                                    deleted = false
-                                    continue
+                                }
+                                
+                                if deleted {
+                                    NSLog("email has been deleted or moved")
+                                    self.managedObjectContext.deleteObject(mail as! NSManagedObject)
+                                    self.refreshTableView()
                                 }
                             }
-                            
-                            if deleted {
-                                NSLog("email has been deleted by another device")
-                                self.managedObjectContext.deleteObject(mail as! NSManagedObject)
-                                self.refreshTableView()
-                            }
                         }
-                    }
-                    self.refreshTableView()
-                })
+                        self.refreshTableView()
+                    })
+                }
             }
-        }*/
+        }
         
-        
+        /*
         if let accounts = getAccount() {
             for account in accounts {
                 NSLog("emailAdresse in pullToRefresh:  " + account.emailAddress)
@@ -295,7 +297,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                     }
                 })
             }
-        }
+        }*/
         
         NSLog("refeshing..")
         self.refreshControl.endRefreshing()
@@ -468,7 +470,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         } else {
             if let emailAccounts = result {
                 for account in emailAccounts {
-                    if (account as! EmailAccount).active {
+                    if (account as! EmailAccount).active && (account as! EmailAccount).isActivated {
                         retaccount.append(account as! EmailAccount)
                     }
                 }
