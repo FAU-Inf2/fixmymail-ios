@@ -153,7 +153,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 //Check for new Emails
                 var currentMaxUID = self.getMaxUID(account)
                 var localEmails = account.emails.allObjects
-                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
+                if self.folderToQuery == nil {
+                    self.folderToQuery = "INBOX"
+                }
+                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
                 
                 fetchNewEmailsOp.start({ (error, messages, range) -> Void in
                     if error != nil {
@@ -175,10 +178,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             }
                             
                             //Set Title
-                            newEmail.title = (message as! MCOIMAPMessage).header.subject
+                            newEmail.title = (message as! MCOIMAPMessage).header.subject ?? " "
                             
                             //Fetch data
-                            let fetchOp = session.fetchMessageOperationWithFolder("INBOX", uid: (message as! MCOIMAPMessage).uid)
+                            let fetchOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: (message as! MCOIMAPMessage).uid)
                             
                             fetchOp.start({(error, data) in
                                 if error != nil {
@@ -196,7 +199,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 //Check for deleted or moved Emails and update Flags
                 if currentMaxUID > 0 {
-                    let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder("INBOX", requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID - 1))))
+                    if self.folderToQuery == nil {
+                        self.folderToQuery = "INBOX"
+                    }
+                    let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID - 1))))
                     
                     fetchMessageInfoForLocalEmails.start({ (error, messages, range) -> Void in
                         if error != nil {
