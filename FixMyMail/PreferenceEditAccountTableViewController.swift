@@ -77,16 +77,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				NSLog("deleting data for " + self.entries["Mailaddress:"]!)
 			}
 			
-			// ###### only for dev testing, DELETE before release!!!!!!!! #######
-			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
-			if error == nil {
-				var value = dictionary?.valueForKey("Password:") as! String
-				self.entries["Password:"] = value
-				NSLog("loaded value: \(value)")
-			} else {
-				NSLog("no data for userid found")
-			}
-			
 			self.navigationController?.popViewControllerAnimated(true)
 		}))
 		
@@ -148,6 +138,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		var labelString = self.labels[indexPath.section][indexPath.row] as! String
 		var textfieldString = self.entries[labelString]
 		
+		
+		
+		
+		
 		// if auth or con cell -> load AuthConTableViewController
 		if labelString == "IMAP Auth:" || labelString == "SMTP Auth:"  ||
 			labelString == "IMAP ConType:" ||  labelString == "SMTP ConType:" {
@@ -155,11 +149,17 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				self.authConVC!.labelPreviousVC = labelString
 				self.authConVC!.selectedString = textfieldString!
 				self.navigationController?.pushViewController(self.authConVC!, animated: true)
+		} else {
+			if labelString != "DELETE" && labelString != "Activate:" {
+				var cell = tableView.cellForRowAtIndexPath(indexPath) as! PreferenceAccountTableViewCell
+				cell.textfield.becomeFirstResponder()
+			}
+			
 		}
 		tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		
 		// show alert dialog if delete is tapped
-		if self.labels[indexPath.section][indexPath.row] as? String == "DELETE" {
+		if labelString == "DELETE" {
 			self.presentViewController(self.alert!, animated: true, completion: nil)
 		}
 	}
@@ -235,51 +235,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 	}
 	
-	
-	/*
-	// Override to support conditional editing of the table view.
-	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-	// Return NO if you do not want the specified item to be editable.
-	return true
-	}
-	*/
-	
-	/*
-	// Override to support editing the table view.
-	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-	if editingStyle == .Delete {
-	// Delete the row from the data source
-	tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-	} else if editingStyle == .Insert {
-	// Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-	}
-	}
-	*/
-	
-	/*
-	// Override to support rearranging the table view.
-	override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-	
-	}
-	*/
-	
-	/*
-	// Override to support conditional rearranging of the table view.
-	override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-	// Return NO if you do not want the item to be re-orderable.
-	return true
-	}
-	*/
-	
-	/*
-	// MARK: - Navigation
-	
-	// In a storyboard-based application, you will often want to do a little preparation before navigation
-	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-	// Get the new view controller using [segue destinationViewController].
-	// Pass the selected object to the new view controller.
-	}
-	*/
 	
 	func loadAccountDetails() {
 		

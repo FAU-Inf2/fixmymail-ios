@@ -16,7 +16,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	var navController: UINavigationController!
 	var managedObjectContext: NSManagedObjectContext!
 	var allAccounts: [EmailAccount] = [EmailAccount]()
-	var otherArr: [EmailAccount] = [EmailAccount]()
 	var accountPreferenceCellItem: [ActionItem] = [ActionItem]()
 	var newAccountItem: [ActionItem] = [ActionItem]()
 	var otherItem: [ActionItem] = [ActionItem]()
@@ -28,7 +27,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	var selectedIndexPath: NSIndexPath?
 	var origintableViewInsets: UIEdgeInsets?
 	var standardAccountVC: PreferenceStandardAccountTableViewController?
-//	var frame: CGRect?
 	
 	
     override func viewDidLoad() {
@@ -51,7 +49,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(true)
 		self.allAccounts.removeAll(keepCapacity: false)
-		self.otherArr.removeAll(keepCapacity: false)
 		self.accountPreferenceCellItem.removeAll(keepCapacity: false)
 		self.newAccountItem.removeAll(keepCapacity: false)
 		self.rows.removeAll(keepCapacity: false)
@@ -94,7 +91,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
 	
 	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
 		// Return the number of sections.
@@ -134,8 +130,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 				cell.textfield.enabled = true
 				cell.textfield.delegate = self
 				cell.textfield.text = cellItem.emailAddress
-				//self.frame = cell.textfield.frame
-				
 				return cell
 			case "Load pictures automatically:":
 				let cell = tableView.dequeueReusableCellWithIdentifier("SwitchTableViewCell", forIndexPath: indexPath) as! SwitchTableViewCell
@@ -152,7 +146,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			
 		}
     }
-	
 	
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -178,68 +171,15 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			self.navigationController?.pushViewController(editAccountVC, animated: true)
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		default:
-		/*	if actionItem.cellName == "Signature:" {
-				let cell = self.tableView.cellForRowAtIndexPath(indexPath) as! PreferenceAccountTableViewCell
-				cell.textfield.delegate = self
-				cell.textfield.becomeFirstResponder()
-			}
-		*/
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		}
 
-		
 		tableView.reloadData()
 		
 	}
-		
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
+	
 	
 	func loadCoreDataAccounts() {
-		
-		
 		// get mail accounts from coredata
 		
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
@@ -294,7 +234,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		self.otherItem.append(standardAccountItem)
 		self.otherItem.append(loadPictureItem)
 		
-		
 		self.rows.append(accountPreferenceCellItem)
 		self.rows.append(newAccountItem)
 		self.rows.append(otherItem)
@@ -303,10 +242,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		self.sectionsContent.append(newAccountItem)
 		self.sectionsContent.append(otherItem)
 
-	}
-	
-	@IBAction func menuTapped(sender: AnyObject) -> Void {
-		self.delegate?.toggleLeftPanel()
 	}
 	
 	// set value if switchstate has changed
@@ -342,11 +277,6 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	// add keyboard size to tableView size
 	func keyboardWillShow(notification: NSNotification) {
 		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-			//var contentInsets = UIEdgeInsets()
-			//if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) {
-			//	contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.width / 2, 0.0)
-			//} else {
-			//var textfieldheight = self.frame?.size.height
             var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
 			
 			if self.origintableViewInsets == nil {
