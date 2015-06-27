@@ -117,5 +117,4 @@ class PreferenceTableViewController: UITableViewController {
 	@IBAction func menuTapped(sender: AnyObject) -> Void {
 		self.delegate?.toggleLeftPanel()
 	}
-	
 }
