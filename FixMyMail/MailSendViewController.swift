@@ -115,6 +115,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.textField.text = recipientsAsString
             cell.textField.tag = 0
             cell.textField.delegate = self
+            cell.textField.inputView = nil
             cell.textField.enabled = false
             
             var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
@@ -141,6 +142,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.text = ccRecipientsAsString
                 cell.textField.tag = 1
                 cell.textField.delegate = self
+                cell.textField.inputView = nil
                 cell.textField.enabled = false
                 
                 var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
@@ -180,6 +182,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.text = bccRecipientsAsString
                 cell.textField.tag = 2
                 cell.textField.delegate = self
+                cell.textField.inputView = nil
                 cell.textField.enabled = false
                 
                 var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
@@ -197,6 +200,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.text = self.subject
                 cell.textField.tag = 6
                 cell.textField.delegate = self
+                cell.textField.inputView = nil
                 cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
                 cell.textField.enabled = false
                 cell.accessoryView = nil
@@ -223,6 +227,8 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
                 cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (3 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
                 cell.textViewMailBody.delegate = self
+                cell.textViewMailBody.inputView = nil
+                cell.textViewMailBody.userInteractionEnabled = false
                 cell.textViewMailBody.text = self.textBody
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
@@ -235,6 +241,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.textField.text = self.subject
             cell.textField.tag = 4
             cell.textField.delegate = self
+            cell.textField.inputView = nil
             cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
             cell.textField.enabled = false
             cell.accessoryView = nil
@@ -244,6 +251,8 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
             cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (5 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
             cell.textViewMailBody.delegate = self
+            cell.textViewMailBody.inputView = nil
+            cell.textViewMailBody.userInteractionEnabled = false
             cell.textViewMailBody.text = self.textBody
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
@@ -349,9 +358,11 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     func textViewDidEndEditing(textView: UITextView) {
         self.textBody = textView.text
         self.isResponder = nil
+        textView.userInteractionEnabled = false
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
+        textView.userInteractionEnabled = true
         self.isResponder = textView
         if self.tableViewIsExpanded {
             tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 5, inSection: 0))
