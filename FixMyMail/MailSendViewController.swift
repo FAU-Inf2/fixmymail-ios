@@ -98,7 +98,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.row {
-        case 0:
+        case 0: // Cell for To
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
             cell.label.textColor = UIColor.grayColor()
             cell.label.text = "To:"
@@ -125,7 +125,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 1:
-            if self.tableViewIsExpanded {
+            if self.tableViewIsExpanded { // Cell for CC
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Cc:"
@@ -150,7 +150,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessoryView = buttonOpenContacts
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
-            } else {
+            } else { // Cell for closed CC/BCC/From
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Cc/Bcc, From:"
@@ -164,7 +164,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 return cell
             }
         case 2:
-            if self.tableViewIsExpanded {
+            if self.tableViewIsExpanded { // Cell for BCC
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Bcc:"
@@ -189,7 +189,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessoryView = buttonOpenContacts
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
-            } else {
+            } else { // Cell for Subject
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Subject:"
@@ -204,7 +204,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 return cell
             }
         case 3:
-            if self.tableViewIsExpanded {
+            if self.tableViewIsExpanded { // Cell for From
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "From:"
@@ -219,7 +219,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.accessoryView = nil
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
-            } else {
+            } else { // Cell for TextBody
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
                 cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (3 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
                 cell.textViewMailBody.delegate = self
@@ -227,7 +227,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             }
-        case 4:
+        case 4: // Cell for Subject
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
             cell.label.textColor = UIColor.grayColor()
             cell.label.text = "Subject:"
@@ -240,7 +240,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.accessoryView = nil
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
-        case 5:
+        case 5: // Cell for TextBody
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
             cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (5 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
             cell.textViewMailBody.delegate = self
@@ -255,21 +255,21 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var selectIndexPath: NSIndexPath? = nil
         switch indexPath.row {
-        case 0:
+        case 0: // Cell for To
             if tableViewIsExpanded && self.shouldContractTableView() {
                 tableViewIsExpanded = false
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
             selectIndexPath = indexPath
-        case 1:
+        case 1: // Cell for CC
             if !tableViewIsExpanded {
                 tableViewIsExpanded = true
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
             selectIndexPath = indexPath
-        case 2:
+        case 2: // Cell for BCC or Subject
             selectIndexPath = indexPath
-        case 3:
+        case 3: // Cell for From or TextBody
             if tableViewIsExpanded {
                 selectIndexPath = indexPath
             } else {
@@ -279,7 +279,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var textView = (tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithTextView).textViewMailBody
                 textView.becomeFirstResponder()
             }
-        case 4:
+        case 4: // Cell for Subject
             if self.shouldContractTableView() {
                 tableViewIsExpanded = false
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
@@ -287,17 +287,11 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             } else {
                 selectIndexPath = indexPath
             }
-        case 5:
+        case 5: // Cell for TextBody
             if self.shouldContractTableView() {
                 tableViewIsExpanded = false
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
                 var textView = (tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody
-                if let responder: AnyObject = self.isResponder {
-                    responder.resignFirstResponder()
-                }
-                textView.becomeFirstResponder()
-            } else {
-                var textView = (tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithTextView).textViewMailBody
                 if let responder: AnyObject = self.isResponder {
                     responder.resignFirstResponder()
                 }
