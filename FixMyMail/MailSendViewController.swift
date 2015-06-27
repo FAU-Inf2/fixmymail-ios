@@ -119,6 +119,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             
             var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
             buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
+			buttonOpenContacts.tag = 0
             buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
             cell.accessoryView = buttonOpenContacts
             cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -144,6 +145,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
+				buttonOpenContacts.tag = 1
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
                 cell.accessoryView = buttonOpenContacts
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -182,6 +184,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
+				buttonOpenContacts.tag = 2
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
                 cell.accessoryView = buttonOpenContacts
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -576,6 +579,12 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         picker.displayedProperties = [Int(kABPersonEmailProperty)]
         picker.predicateForSelectionOfPerson = NSPredicate(value:false)
         picker.predicateForSelectionOfProperty = NSPredicate(value:true)
+		switch sender.tag {
+		case 0: picker.title = "To:"
+		case 1: picker.title = "Cc:"
+		case 2: picker.title = "Bcc:"
+		default: picker.title = ""
+		}
         self.presentViewController(picker, animated:true, completion:nil)
     }
     
@@ -584,13 +593,24 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         println(person)
     }
     
-    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
-        println("person and property")
-        let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
-        let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
-        let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
-        println(email)
-        //TODO
-    }
-    
+
+	func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
+		println("person and property")
+		let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
+		let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
+		let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
+		println(email)
+		//TODO
+		var address = MCOAddress(mailbox: email)
+		
+		switch peoplePicker.title! {
+		case "To:": self.recipients.addObject(address)
+		case "Cc:": self.ccRecipients.addObject(address)
+		case "Bcc:": self.bccRecipients.addObject(address)
+		default: break
+		}
+		
+		self.sendTableView.reloadData()
+	}
+	
 }
