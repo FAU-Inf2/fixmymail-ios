@@ -305,6 +305,12 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                     responder.resignFirstResponder()
                 }
                 textView.becomeFirstResponder()
+            } else {
+                var textView = (tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody
+                if let responder: AnyObject = self.isResponder {
+                    responder.resignFirstResponder()
+                }
+                textView.becomeFirstResponder()
             }
         default:
             break
@@ -364,9 +370,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     func textViewDidBeginEditing(textView: UITextView) {
         textView.userInteractionEnabled = true
         self.isResponder = textView
-        if self.tableViewIsExpanded {
-            tableView(sendTableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 5, inSection: 0))
-        }
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
