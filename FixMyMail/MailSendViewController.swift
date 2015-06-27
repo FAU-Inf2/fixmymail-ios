@@ -22,6 +22,23 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.initPickerView()
+        if self.subject == "" {
+            self.title = "New Message"
+        } else {
+            self.title = subject
+        }
+        self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
+        self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithTextView", bundle: nil), forCellReuseIdentifier: "SendViewCellWithTextView")
+        self.sendTableView.rowHeight = UITableViewAutomaticDimension
+        self.sendTableView.estimatedRowHeight = self.view.bounds.height
+        var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmail:")
+        self.navigationItem.rightBarButtonItem = buttonSend
+        
+        LoadAddresses()
+    }
+    
+    func initPickerView() {
         self.emailAddressPicker = UIPickerView()
         self.emailAddressPicker.delegate = self
         self.emailAddressPicker.dataSource = self
@@ -44,19 +61,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
         }
-        if self.subject == "" {
-            self.title = "New Message"
-        } else {
-            self.title = subject
-        }
-        self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
-        self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithTextView", bundle: nil), forCellReuseIdentifier: "SendViewCellWithTextView")
-        self.sendTableView.rowHeight = UITableViewAutomaticDimension
-        self.sendTableView.estimatedRowHeight = self.view.bounds.height
-        var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmail:")
-        self.navigationItem.rightBarButtonItem = buttonSend
-        
-        LoadAddresses()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -132,6 +136,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         ccRecipientsAsString = ccRecipientsAsString + ", "
                     }
                 }
+                cell.textField.textColor = UIColor.blackColor()
                 cell.textField.text = ccRecipientsAsString
                 cell.textField.tag = 1
                 cell.textField.delegate = self
@@ -151,9 +156,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.text = self.account.emailAddress
                 cell.textField.tag = 5
                 cell.textField.delegate = self
+                cell.textField.enabled = false
                 cell.accessoryView = nil
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
-                cell.textField.enabled = false
                 return cell
             }
         case 2:
@@ -169,6 +174,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         bccRecipientsAsString = bccRecipientsAsString + ", "
                     }
                 }
+                cell.textField.textColor = UIColor.blackColor()
                 cell.textField.text = bccRecipientsAsString
                 cell.textField.tag = 2
                 cell.textField.delegate = self
@@ -184,6 +190,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Subject:"
+                cell.textField.textColor = UIColor.blackColor()
                 cell.textField.text = self.subject
                 cell.textField.tag = 6
                 cell.textField.delegate = self
@@ -198,13 +205,16 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "From:"
+                cell.textField.textColor = UIColor.blackColor()
                 cell.textField.text = self.account.emailAddress
                 cell.textField.tag = 3
                 cell.textField.delegate = self
                 cell.textField.tintColor = UIColor.whiteColor()
                 cell.textField.inputView = self.emailAddressPicker
-                cell.accessoryView = nil
+                cell.textField.addTarget(self, action: "togglePickerView:", forControlEvents: UIControlEvents.TouchDown)
                 cell.textField.enabled = false
+                cell.accessoryView = nil
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell
             } else {
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
@@ -218,6 +228,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
             cell.label.textColor = UIColor.grayColor()
             cell.label.text = "Subject:"
+            cell.textField.textColor = UIColor.blackColor()
             cell.textField.text = self.subject
             cell.textField.tag = 4
             cell.textField.delegate = self
@@ -278,9 +289,15 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 tableViewIsExpanded = false
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
                 var textView = (tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody
+                if let responder: AnyObject = self.isResponder {
+                    responder.resignFirstResponder()
+                }
                 textView.becomeFirstResponder()
             } else {
                 var textView = (tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithTextView).textViewMailBody
+                if let responder: AnyObject = self.isResponder {
+                    responder.resignFirstResponder()
+                }
                 textView.becomeFirstResponder()
             }
         default:
@@ -317,8 +334,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         self.account = self.allAccounts[row]
         (self.isResponder as! UITextField).text = self.account.emailAddress
 		self.textBody = self.replaceSignature(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
-		self.sendTableView.reloadData()
-		
+		(self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.text = self.textBody
     }
     
     func shouldContractTableView() -> Bool {
@@ -354,21 +370,30 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             var recipientsAsString = textField.text
             recipientsAsString = recipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             for recipient in recipientsAsString.componentsSeparatedByString(", ") {
-                self.recipients.addObject(MCOAddress(mailbox: recipient))
+                if recipient != "" {
+                    self.recipients.addObject(MCOAddress(mailbox: recipient))
+                }
+            }
+            for recipient in self.recipients {
+                NSLog("recipient: %@", recipient.mailbox)
             }
         case 1:
             self.ccRecipients.removeAllObjects()
             var ccRecipientsAsString = textField.text
             ccRecipientsAsString = ccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             for recipient in ccRecipientsAsString.componentsSeparatedByString(", ") {
-                self.ccRecipients.addObject(MCOAddress(mailbox: recipient))
+                if recipient != "" {
+                    self.ccRecipients.addObject(MCOAddress(mailbox: recipient))
+                }
             }
         case 2:
             self.bccRecipients.removeAllObjects()
             var bccRecipientsAsString = textField.text
             bccRecipientsAsString = bccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             for recipient in bccRecipientsAsString.componentsSeparatedByString(", ") {
-                self.bccRecipients.addObject(MCOAddress(mailbox: recipient))
+                if recipient != "" {
+                    self.bccRecipients.addObject(MCOAddress(mailbox: recipient))
+                }
             }
         default:
             break
@@ -384,6 +409,14 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         return true
     }
     
+    func togglePickerView(sender: AnyObject) {
+        if sender.isFirstResponder() {
+            sender.resignFirstResponder()
+        } else {
+            sender.becomeFirstResponder()
+        }
+    }
+    
     func updateSubjectAndTitleWithSender(sender: AnyObject) {
         var subject = (sender as! UITextField).text
         self.subject = subject
@@ -391,6 +424,22 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             self.title = "New Message"
         } else {
             self.title = subject
+        }
+    }
+    
+    func addSignature() {
+        if self.account.signature != "" {
+            self.textBody = self.textBody + "\n" + self.account.signature
+        }
+        
+    }
+    
+    func replaceSignature(text: String, toDelete: String, toInsert: String) -> String {
+        if let range = text.rangeOfString(toDelete) {
+            var newtext = text.substringToIndex(range.startIndex) + toInsert + text.substringFromIndex(range.endIndex)
+            return newtext
+        } else {
+            return text + "\n" + toInsert
         }
     }
     
@@ -543,21 +592,5 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         println(email)
         //TODO
     }
-	
-	func addSignature() {
-		if self.account.signature != "" {
-			self.textBody = self.textBody + "\n" + self.account.signature
-		}
-		
-	}
-
-	func replaceSignature(text: String, toDelete: String, toInsert: String) -> String {
-		if let range = text.rangeOfString(toDelete) {
-			var newtext = text.substringToIndex(range.startIndex) + toInsert + text.substringFromIndex(range.endIndex)
-			return newtext
-		} else {
-			return text + "\n" + toInsert
-		}
-	}
     
 }
