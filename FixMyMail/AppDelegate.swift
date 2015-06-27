@@ -258,7 +258,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func registerUserDefaults() -> Void {
         NSUserDefaults.standardUserDefaults().registerDefaults(["standardAccount" : "",
-                                                                "loadPictures" : true])
+            "loadPictures" : true, "previewLines" : 1])
     }
 }
 

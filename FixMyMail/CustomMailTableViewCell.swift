@@ -16,9 +16,10 @@ protocol TableViewCellDelegate {
 class CustomMailTableViewCell: UITableViewCell {
     
     @IBOutlet var mailFrom: UILabel!
-    @IBOutlet var mailBody: UILabel!
+    @IBOutlet var mailSubject: UILabel!
     @IBOutlet var unseendot: UIImageView!
 	@IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet var mailBody: UILabel!
 	
     var mail: Email!
     var delegate: TableViewCellDelegate?
@@ -40,20 +41,6 @@ class CustomMailTableViewCell: UITableViewCell {
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "panHandler:")
         panGestureRecognizer.delegate = self
         addGestureRecognizer(panGestureRecognizer)
-        
-        deleteIMGView.frame = CGRect(x: 15, y: 22, width: 20, height: 25)
-        subviewDeleteSwipeFromRightToLeft.addSubview(deleteIMGView)
-        
-        archiveIMGView.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 40, y: 15, width: 25, height: 35)
-        subviewArchiveSwipeFromLeftToRight.addSubview(archiveIMGView)
-    }
-    
-    func createCueLabel() -> UILabel {
-        let label = UILabel(frame: CGRect.nullRect)
-        label.textColor = UIColor.whiteColor()
-        label.font = UIFont.boldSystemFontOfSize(32.0)
-        label.backgroundColor = UIColor.clearColor()
-        return label
     }
     
     override func awakeFromNib() {
@@ -70,11 +57,15 @@ class CustomMailTableViewCell: UITableViewCell {
     //horizontal swipe gesture methods
     func panHandler (recognizer: UIPanGestureRecognizer) {
         //init delete subview on the right
+        deleteIMGView.frame = CGRect(x: 15, y: (height-25)/2, width: 20, height: 25)
         subviewDeleteSwipeFromRightToLeft.frame = CGRect(x: bounds.size.width, y: 0, width: self.bounds.width, height: height)
+        subviewDeleteSwipeFromRightToLeft.addSubview(deleteIMGView)
         addSubview(subviewDeleteSwipeFromRightToLeft)
 
         //init archive subview on the left
+        archiveIMGView.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 40, y: (height-35)/2, width: 25, height: 35)
         subviewArchiveSwipeFromLeftToRight.frame = CGRect(x: -bounds.size.width, y: 0, width: self.bounds.width, height: height)
+        subviewArchiveSwipeFromLeftToRight.addSubview(archiveIMGView)
         addSubview(subviewArchiveSwipeFromLeftToRight)
         
         if recognizer.state == .Began {

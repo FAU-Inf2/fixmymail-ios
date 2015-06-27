@@ -45,7 +45,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        mailTableView.rowHeight = 55 + (NSUserDefaults.standardUserDefaults().valueForKey("previewLines") as! CGFloat) * 18
+
         if getAccount() == nil {
             self.title = "SMile"
         }
@@ -333,7 +334,15 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
         
         mailcell.mailFrom.text = mail.sender
-        mailcell.mailBody.text = mail.title
+        mailcell.mailSubject.text = mail.title
+        var parser = MCOMessageParser(data: mail.data)
+        mailcell.mailBody.text = parser.plainTextBodyRendering()
+        if (NSUserDefaults.standardUserDefaults().valueForKey("previewLines") as! Int) == 0 {
+            mailcell.mailBody.hidden = true
+        } else {
+            mailcell.mailBody.hidden = false
+        }
+        
         mailcell.height = mailTableView.rowHeight
         mailcell.delegate = self
 		var header = mail.mcomessage.header!
