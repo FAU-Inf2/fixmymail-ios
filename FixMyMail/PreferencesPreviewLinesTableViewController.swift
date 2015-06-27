@@ -1,14 +1,14 @@
 //
-//  PreferenceStandardAccountTableViewController.swift
+//  PreferencesPreviewLinesTableViewController.swift
 //  FixMyMail
 //
-//  Created by Sebastian Thürauf on 14.06.15.
+//  Created by Sebastian Thürauf on 27.06.15.
 //  Copyright (c) 2015 FixMymail. All rights reserved.
 //
 
 import UIKit
 
-class PreferenceStandardAccountTableViewController: UITableViewController {
+class PreferencesPreviewLinesTableViewController: UITableViewController {
         
 	var selectedString: String = ""
 	var options: [String] = [String]()
@@ -20,7 +20,7 @@ class PreferenceStandardAccountTableViewController: UITableViewController {
 		super.viewDidLoad()
 		
 		tableView.registerNib(UINib(nibName: "AuthConTableViewCell", bundle: nil),forCellReuseIdentifier:"AuthConTableViewCell")
-		self.navigationItem.title = "Select Standard Account"
+		self.navigationItem.title = "Number of Preview lines"
 		
 		
 		loadCellData()
@@ -56,13 +56,7 @@ class PreferenceStandardAccountTableViewController: UITableViewController {
 		}
 		
 		self.isChecked[indexPath.row] = true
-		
-		if self.options[indexPath.row] != "None" {
-			self.selectedString = self.options[indexPath.row]
-		} else {
-			self.selectedString = ""
-		}
-		
+		self.selectedString = self.options[indexPath.row]
 		
 		// uncheck previous
 		if self.lastTappedIndexPath != nil {
@@ -93,21 +87,16 @@ class PreferenceStandardAccountTableViewController: UITableViewController {
 	
 	
 	func loadCellData() {
-
-		self.options.append("None")
-		if self.selectedString == "" {
-			self.isChecked.append(true)
-		} else {
-			self.isChecked.append(false)
-		}
-		for account in self.accounts {
-			self.options.append(account.accountName)
-			if account.accountName == self.selectedString {
+		//load numbers
+		for i in 0...5 {
+			var entry: String = String(i)
+			self.options.append(entry)
+			if self.selectedString == entry {
 				self.isChecked.append(true)
 			} else {
 				self.isChecked.append(false)
 			}
 		}
 	}
-	
+    
 }

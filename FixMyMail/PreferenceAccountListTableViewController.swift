@@ -27,6 +27,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	var selectedIndexPath: NSIndexPath?
 	var origintableViewInsets: UIEdgeInsets?
 	var standardAccountVC: PreferenceStandardAccountTableViewController?
+	var previewLinesVC: PreferencesPreviewLinesTableViewController?
 	
 	
     override func viewDidLoad() {
@@ -71,6 +72,11 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		// get selection from standard account VC
 		if self.standardAccountVC != nil {
             NSUserDefaults.standardUserDefaults().setObject(self.standardAccountVC!.selectedString, forKey: "standardAccount")
+		}
+		
+		// get selection from preview lines VC
+		if self.previewLinesVC != nil {
+			NSUserDefaults.standardUserDefaults().setInteger(self.previewLinesVC!.selectedString.toInt()!, forKey: "previewLines")
 		}
 		
 		loadCoreDataAccounts()
@@ -122,14 +128,16 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 					cell.textfield.text = cellItem.emailAddress
 				}
 				return cell
-			case "Signature:":
+			case "Preview lines:":
 				let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
 				cell.labelCellContent.text = cellItem.cellName
-				cell.textfield.placeholder = "Enter signature here"
+				cell.textfield.placeholder = ""
 				cell.textfield.textAlignment = NSTextAlignment.Right
-				cell.textfield.enabled = true
+				cell.textfield.enabled = false
 				cell.textfield.delegate = self
-				cell.textfield.text = cellItem.emailAddress
+				if cellItem.emailAddress != nil {
+					cell.textfield.text = cellItem.emailAddress
+				}
 				return cell
 			case "Load pictures automatically:":
 				let cell = tableView.dequeueReusableCellWithIdentifier("SwitchTableViewCell", forIndexPath: indexPath) as! SwitchTableViewCell
@@ -152,6 +160,12 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		var actionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 
 		switch actionItem.viewController {
+		case "PreferencesPreviewLinesTableViewController":
+			// Select preview lines
+			self.previewLinesVC = PreferencesPreviewLinesTableViewController(nibName: "PreferencesPreviewLinesTableViewController", bundle: nil)
+			self.previewLinesVC!.selectedString = String(NSUserDefaults.standardUserDefaults().integerForKey("previewLines"))
+			self.navigationController?.pushViewController(self.previewLinesVC!, animated: true)
+			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		case "PreferenceStandardAccountTableViewController":
 			// Select standard Account
 			self.standardAccountVC = PreferenceStandardAccountTableViewController(nibName: "PreferenceStandardAccountTableViewController", bundle: nil)
@@ -226,12 +240,16 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	
 		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!, icon: nil)
 		
+		var previewLinesItem = ActionItem(Name: "Preview lines:", viewController: "PreferencesPreviewLinesTableViewController", emailAddress: String(NSUserDefaults.standardUserDefaults().integerForKey("previewLines")), icon: nil)
+		
+		
 		var loadPictureItem = ActionItem(Name: "Load pictures automatically:", viewController: "", emailAddress: nil, icon: nil)
 		if self.loadPictures == nil {
 			self.loadPictures = NSUserDefaults.standardUserDefaults().boolForKey("loadPictures")
 		}
 		
 		self.otherItem.append(standardAccountItem)
+		self.otherItem.append(previewLinesItem)
 		self.otherItem.append(loadPictureItem)
 		
 		self.rows.append(accountPreferenceCellItem)
