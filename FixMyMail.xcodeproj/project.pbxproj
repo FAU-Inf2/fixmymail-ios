@@ -88,6 +88,8 @@
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
 		AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */; };
 		AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85401C1B186A7C003F9C92 /* ActionItem.swift */; };
+		ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */; };
+		ADCAB63C1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */; };
 		ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */; };
 		ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */; };
 		ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */; };
@@ -202,6 +204,8 @@
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
 		AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewCell.xib; sourceTree = "<group>"; };
 		AD85401C1B186A7C003F9C92 /* ActionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItem.swift; sourceTree = "<group>"; };
+		ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesPreviewLinesTableViewController.swift; sourceTree = "<group>"; };
+		ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesPreviewLinesTableViewController.xib; sourceTree = "<group>"; };
 		ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
 		ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailViewController.swift; sourceTree = "<group>"; };
 		ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailViewController.xib; sourceTree = "<group>"; };
@@ -420,6 +424,8 @@
 				AD789D981B3050640001719E /* FeedbackViewController.swift */,
 				AD789DA01B319BC30001719E /* AboutUsViewController.swift */,
 				AD789DA11B319BC30001719E /* AboutUsViewController.xib */,
+				ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */,
+				ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -576,6 +582,7 @@
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
 				5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */,
+				ADCAB63C1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib in Resources */,
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
 				AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */,
 				8E450BAF1B15BBF0001E37B9 /* MailTableViewController.xib in Resources */,
@@ -682,6 +689,7 @@
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
 				AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
+				ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,
