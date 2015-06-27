@@ -593,7 +593,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         println(person)
     }
     
-<<<<<<< HEAD
+
 	func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
 		println("person and property")
 		let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
@@ -613,20 +613,4 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.sendTableView.reloadData()
 	}
 	
-	func addSignature() {
-		if self.account.signature != "" {
-			self.textBody = self.textBody + "\n" + self.account.signature
-		}
-		
-	}
-
-	func replaceSignature(text: String, toDelete: String, toInsert: String) -> String {
-		if let range = text.rangeOfString(toDelete) {
-			var newtext = text.substringToIndex(range.startIndex) + toInsert + text.substringFromIndex(range.endIndex)
-			return newtext
-		} else {
-			return text + "\n" + toInsert
-		}
-	}
-    
 }
