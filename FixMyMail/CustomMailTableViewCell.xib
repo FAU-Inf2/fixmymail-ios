@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MailCell" rowHeight="183" id="HRE-r7-g9f" customClass="CustomMailTableViewCell" customModule="FixMyMail" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="153"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="73"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HRE-r7-g9f" id="ehC-7H-pd0">
                 <autoresizingMask key="autoresizingMask"/>
@@ -19,7 +19,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMk-Lq-lDu">
                         <rect key="frame" x="208" y="13" width="79" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="79" id="BPX-E8-4WK"/>
+                            <constraint firstAttribute="width" constant="79" id="07w-RN-hJj"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="9"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -32,32 +32,32 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KWe-ro-R86">
-                        <rect key="frame" x="20" y="28" width="258" height="18"/>
+                        <rect key="frame" x="20" y="28" width="259" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Body" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aLa-ps-40v">
-                        <rect key="frame" x="20" y="46" width="258" height="18"/>
+                        <rect key="frame" x="20" y="46" width="259" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="YlV-f1-Pw4" firstAttribute="leading" secondItem="KWe-ro-R86" secondAttribute="leading" id="1Xi-i4-sZI"/>
-                    <constraint firstItem="KWe-ro-R86" firstAttribute="trailing" secondItem="aLa-ps-40v" secondAttribute="trailing" id="9Mp-6b-fkw"/>
-                    <constraint firstItem="caB-mD-B5R" firstAttribute="top" secondItem="ehC-7H-pd0" secondAttribute="topMargin" constant="5" id="C26-Gp-9pD"/>
-                    <constraint firstItem="rMk-Lq-lDu" firstAttribute="leading" secondItem="YlV-f1-Pw4" secondAttribute="trailing" constant="9" id="IfM-Id-w6E"/>
-                    <constraint firstItem="caB-mD-B5R" firstAttribute="top" secondItem="rMk-Lq-lDu" secondAttribute="top" id="LvR-HW-7p4"/>
-                    <constraint firstAttribute="trailing" secondItem="rMk-Lq-lDu" secondAttribute="trailing" id="NwQ-0F-e6i"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="rMk-Lq-lDu" secondAttribute="bottom" constant="111" id="Sfb-G7-z7q"/>
-                    <constraint firstItem="KWe-ro-R86" firstAttribute="top" secondItem="YlV-f1-Pw4" secondAttribute="bottom" id="VLo-ho-Lwe"/>
-                    <constraint firstItem="aLa-ps-40v" firstAttribute="top" secondItem="KWe-ro-R86" secondAttribute="bottom" id="W4b-6G-pNi"/>
-                    <constraint firstItem="KWe-ro-R86" firstAttribute="leading" secondItem="aLa-ps-40v" secondAttribute="leading" id="YvE-IJ-ZJq"/>
-                    <constraint firstItem="YlV-f1-Pw4" firstAttribute="top" secondItem="ehC-7H-pd0" secondAttribute="topMargin" id="bVG-sC-KIN"/>
-                    <constraint firstItem="KWe-ro-R86" firstAttribute="leading" secondItem="ehC-7H-pd0" secondAttribute="leadingMargin" constant="12" id="bau-57-KSd"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="KWe-ro-R86" secondAttribute="trailing" constant="1" id="gSc-DM-IGs"/>
-                    <constraint firstItem="YlV-f1-Pw4" firstAttribute="leading" secondItem="caB-mD-B5R" secondAttribute="trailing" constant="7" id="noM-aA-IYX"/>
+                    <constraint firstAttribute="trailing" secondItem="rMk-Lq-lDu" secondAttribute="trailing" id="CHg-Hl-m9o"/>
+                    <constraint firstItem="KWe-ro-R86" firstAttribute="leading" secondItem="YlV-f1-Pw4" secondAttribute="leading" id="CKU-IK-Jt1"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="KWe-ro-R86" secondAttribute="trailing" id="J1Q-u7-7SY"/>
+                    <constraint firstItem="KWe-ro-R86" firstAttribute="top" secondItem="YlV-f1-Pw4" secondAttribute="bottom" id="Twz-4J-hWG"/>
+                    <constraint firstItem="rMk-Lq-lDu" firstAttribute="leading" secondItem="YlV-f1-Pw4" secondAttribute="trailing" constant="9" id="WFd-Eo-hhp"/>
+                    <constraint firstItem="caB-mD-B5R" firstAttribute="top" secondItem="rMk-Lq-lDu" secondAttribute="top" id="ZrS-sd-Jsx"/>
+                    <constraint firstItem="KWe-ro-R86" firstAttribute="trailing" secondItem="aLa-ps-40v" secondAttribute="trailing" id="cBY-oa-IV1"/>
+                    <constraint firstItem="aLa-ps-40v" firstAttribute="leading" secondItem="KWe-ro-R86" secondAttribute="leading" id="dhv-Kf-Nj5"/>
+                    <constraint firstItem="YlV-f1-Pw4" firstAttribute="leading" secondItem="caB-mD-B5R" secondAttribute="trailing" constant="7" id="hHm-7M-9Ug"/>
+                    <constraint firstItem="aLa-ps-40v" firstAttribute="top" secondItem="KWe-ro-R86" secondAttribute="bottom" id="ieo-2k-Ul4"/>
+                    <constraint firstItem="aLa-ps-40v" firstAttribute="top" secondItem="rMk-Lq-lDu" secondAttribute="bottom" constant="13" id="kTz-kG-2n2"/>
+                    <constraint firstItem="KWe-ro-R86" firstAttribute="leading" secondItem="ehC-7H-pd0" secondAttribute="leadingMargin" constant="12" id="ltR-xV-xEl"/>
+                    <constraint firstItem="YlV-f1-Pw4" firstAttribute="top" secondItem="ehC-7H-pd0" secondAttribute="topMargin" id="qku-fg-2dc"/>
+                    <constraint firstItem="caB-mD-B5R" firstAttribute="top" secondItem="ehC-7H-pd0" secondAttribute="topMargin" constant="5" id="tNs-V2-fBt"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

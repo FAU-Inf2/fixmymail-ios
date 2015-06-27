@@ -328,6 +328,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         return 0
     }
+    
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var mailcell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
@@ -337,10 +338,14 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         mailcell.mailSubject.text = mail.title
         var parser = MCOMessageParser(data: mail.data)
         mailcell.mailBody.text = parser.plainTextBodyRendering()
-        if (NSUserDefaults.standardUserDefaults().valueForKey("previewLines") as! Int) == 0 {
+        
+        var previewLines = NSUserDefaults.standardUserDefaults().valueForKey("previewLines") as! Int
+        if previewLines == 0 {
             mailcell.mailBody.hidden = true
         } else {
             mailcell.mailBody.hidden = false
+            mailcell.mailBody.lineBreakMode = .ByWordWrapping
+            mailcell.mailBody.numberOfLines = previewLines
         }
         
         mailcell.height = mailTableView.rowHeight
