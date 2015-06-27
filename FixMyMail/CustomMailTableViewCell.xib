@@ -16,15 +16,6 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bluedot.png" translatesAutoresizingMaskIntoConstraints="NO" id="caB-mD-B5R">
                         <rect key="frame" x="4" y="13" width="9" height="9"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMk-Lq-lDu">
-                        <rect key="frame" x="208" y="13" width="79" height="20"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="79" id="07w-RN-hJj"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="9"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YlV-f1-Pw4">
                         <rect key="frame" x="20" y="8" width="179" height="20"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
@@ -42,19 +33,28 @@
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMk-Lq-lDu">
+                        <rect key="frame" x="200" y="8" width="79" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="79" id="07w-RN-hJj"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="9"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="rMk-Lq-lDu" secondAttribute="trailing" id="CHg-Hl-m9o"/>
+                    <constraint firstAttribute="trailing" secondItem="rMk-Lq-lDu" secondAttribute="trailing" constant="8" id="CHg-Hl-m9o"/>
                     <constraint firstItem="KWe-ro-R86" firstAttribute="leading" secondItem="YlV-f1-Pw4" secondAttribute="leading" id="CKU-IK-Jt1"/>
                     <constraint firstAttribute="trailingMargin" secondItem="KWe-ro-R86" secondAttribute="trailing" id="J1Q-u7-7SY"/>
                     <constraint firstItem="KWe-ro-R86" firstAttribute="top" secondItem="YlV-f1-Pw4" secondAttribute="bottom" id="Twz-4J-hWG"/>
-                    <constraint firstItem="rMk-Lq-lDu" firstAttribute="leading" secondItem="YlV-f1-Pw4" secondAttribute="trailing" constant="9" id="WFd-Eo-hhp"/>
-                    <constraint firstItem="caB-mD-B5R" firstAttribute="top" secondItem="rMk-Lq-lDu" secondAttribute="top" id="ZrS-sd-Jsx"/>
+                    <constraint firstItem="rMk-Lq-lDu" firstAttribute="leading" secondItem="YlV-f1-Pw4" secondAttribute="trailing" constant="1" id="WFd-Eo-hhp"/>
+                    <constraint firstItem="caB-mD-B5R" firstAttribute="top" secondItem="rMk-Lq-lDu" secondAttribute="top" constant="5" id="ZrS-sd-Jsx"/>
                     <constraint firstItem="KWe-ro-R86" firstAttribute="trailing" secondItem="aLa-ps-40v" secondAttribute="trailing" id="cBY-oa-IV1"/>
                     <constraint firstItem="aLa-ps-40v" firstAttribute="leading" secondItem="KWe-ro-R86" secondAttribute="leading" id="dhv-Kf-Nj5"/>
                     <constraint firstItem="YlV-f1-Pw4" firstAttribute="leading" secondItem="caB-mD-B5R" secondAttribute="trailing" constant="7" id="hHm-7M-9Ug"/>
                     <constraint firstItem="aLa-ps-40v" firstAttribute="top" secondItem="KWe-ro-R86" secondAttribute="bottom" id="ieo-2k-Ul4"/>
-                    <constraint firstItem="aLa-ps-40v" firstAttribute="top" secondItem="rMk-Lq-lDu" secondAttribute="bottom" constant="13" id="kTz-kG-2n2"/>
+                    <constraint firstItem="aLa-ps-40v" firstAttribute="top" secondItem="rMk-Lq-lDu" secondAttribute="bottom" constant="18" id="kTz-kG-2n2"/>
                     <constraint firstItem="KWe-ro-R86" firstAttribute="leading" secondItem="ehC-7H-pd0" secondAttribute="leadingMargin" constant="12" id="ltR-xV-xEl"/>
                     <constraint firstItem="YlV-f1-Pw4" firstAttribute="top" secondItem="ehC-7H-pd0" secondAttribute="topMargin" id="qku-fg-2dc"/>
                     <constraint firstItem="caB-mD-B5R" firstAttribute="top" secondItem="ehC-7H-pd0" secondAttribute="topMargin" constant="5" id="tNs-V2-fBt"/>
