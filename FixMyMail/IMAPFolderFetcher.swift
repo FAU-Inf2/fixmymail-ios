@@ -51,26 +51,63 @@ class IMAPFolderFetcher: NSObject {
                             completion(account: nil, folders: nil, sucess: false, newFolders: false)
                             return
                         } else {
-                             var newFolders: Bool = false
-                            for item in folders {
-                                let fol: MCOIMAPFolder = item as! MCOIMAPFolder
-                                var folWrapper: MCOIMAPFolderWrapper = MCOIMAPFolderWrapper()
-                                folWrapper.path = fol.path
-                                folWrapper.delimiter = fol.delimiter
-                                folWrapper.flags = fol.flags
-                                var fetchreq: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
-                                fetchreq.predicate = NSPredicate(format: "mcoimapfolder == %@", folWrapper)
-                                var error: NSError?
-                                if self.managedContext.countForFetchRequest(fetchreq, error: &error) == 0 {
-                                    var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
-                                    folderEntity.mcoimapfolder = folWrapper
-                                    folderEntity.toEmailAccount = acc
-                                    self.foldercount = self.foldercount + 1;
-                                    println(folWrapper.description)
-                                    newFolders = true
+                            var newFolders: Bool = false
+                            
+                            var request: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
+                            request.predicate = NSPredicate(format: "toEmailAccount == %@", acc)
+                            var e: NSError?
+                            var results = self.managedContext.executeFetchRequest(request, error: &e) as! [ImapFolder]?
+                            if error != nil {
+                                println(e!.userInfo)
+                                completion(account: acc, folders: nil, sucess: false, newFolders: newFolders)
+                            }
+                            let foldercount: Int!
+                            if let res = results {
+                                foldercount = res.count
+                            } else {
+                                foldercount = 0
+                            }
+                            
+                            var fetchedFolderCount = folders.count
+                            if fetchedFolderCount == foldercount {
+                                for item in folders {
+                                    let fol: MCOIMAPFolder = item as! MCOIMAPFolder
+                                    var folWrapper: MCOIMAPFolderWrapper = MCOIMAPFolderWrapper()
+                                    folWrapper.path = fol.path
+                                    folWrapper.delimiter = fol.delimiter
+                                    folWrapper.flags = fol.flags
+                                    var fetchreq: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
+                                    fetchreq.predicate = NSPredicate(format: "mcoimapfolder == %@", folWrapper)
+                                    var error: NSError?
+                                    if self.managedContext.countForFetchRequest(fetchreq, error: &error) == 0 {
+                                        var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
+                                        folderEntity.mcoimapfolder = folWrapper
+                                        folderEntity.toEmailAccount = acc
+                                        self.foldercount = self.foldercount + 1;
+                                        println(folWrapper.description)
+                                        newFolders = true
+                                    }
+                                    if error != nil {
+                                        println(error!.userInfo)
+                                    }
                                 }
-                                if error != nil {
-                                    println(error!.userInfo)
+                            } else {
+                                if let res = results {
+                                    for item: ImapFolder in res {
+                                        self.managedContext.deleteObject(item)
+                                    }
+                                    for item in folders {
+                                        let fol: MCOIMAPFolder = item as! MCOIMAPFolder
+                                        var folWrapper: MCOIMAPFolderWrapper = MCOIMAPFolderWrapper()
+                                        folWrapper.path = fol.path
+                                        folWrapper.delimiter = fol.delimiter
+                                        folWrapper.flags = fol.flags
+                                        
+                                        var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
+                                        folderEntity.mcoimapfolder = folWrapper
+                                        folderEntity.toEmailAccount = acc
+                                        println(folWrapper.description)
+                                    }
                                 }
                             }
                             var err: NSError?
@@ -113,23 +150,60 @@ class IMAPFolderFetcher: NSObject {
                     completion(folders: nil, sucess: false)
                     return
                 } else {
-                    for item in folders {
-                        let fol: MCOIMAPFolder = item as! MCOIMAPFolder
-                        var folWrapper: MCOIMAPFolderWrapper = MCOIMAPFolderWrapper()
-                        folWrapper.path = fol.path
-                        folWrapper.delimiter = fol.delimiter
-                        folWrapper.flags = fol.flags
-                        
-                        var fetchReq: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
-                        fetchReq.predicate = NSPredicate(format: "mcoimapfolder == %@", folWrapper)
-                        var error: NSError?
-                        if self.managedContext.countForFetchRequest(fetchReq, error: &error) == 0 {
-                            var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
-                            folderEntity.mcoimapfolder = folWrapper
-                            folderEntity.toEmailAccount = account
-                            println(folWrapper.description)
+                    var request: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
+                    request.predicate = NSPredicate(format: "toEmailAccount == %@", account)
+                    var e: NSError?
+                    var results = self.managedContext.executeFetchRequest(request, error: &e) as! [ImapFolder]?
+                    if error != nil {
+                        println(e!.userInfo)
+                        completion(folders: nil, sucess: false)
+                    }
+                    let foldercount: Int!
+                    if let res = results {
+                        foldercount = res.count
+                    } else {
+                        foldercount = 0
+                    }
+                    
+                    var fetchedFolderCount = folders.count
+                    if foldercount == fetchedFolderCount {
+                        for item in folders {
+                            let fol: MCOIMAPFolder = item as! MCOIMAPFolder
+                            var folWrapper: MCOIMAPFolderWrapper = MCOIMAPFolderWrapper()
+                            folWrapper.path = fol.path
+                            folWrapper.delimiter = fol.delimiter
+                            folWrapper.flags = fol.flags
+                            
+                            var fetchReq: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
+                            fetchReq.predicate = NSPredicate(format: "mcoimapfolder == %@", folWrapper)
+                            var error: NSError?
+                            if self.managedContext.countForFetchRequest(fetchReq, error: &error) == 0 {
+                                var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
+                                folderEntity.mcoimapfolder = folWrapper
+                                folderEntity.toEmailAccount = account
+                                println(folWrapper.description)
+                            }
+                        }
+                    } else {
+                        if let res = results {
+                            for item: ImapFolder in res {
+                                self.managedContext.deleteObject(item)
+                            }
+                            for item in folders {
+                                let fol: MCOIMAPFolder = item as! MCOIMAPFolder
+                                var folWrapper: MCOIMAPFolderWrapper = MCOIMAPFolderWrapper()
+                                folWrapper.path = fol.path
+                                folWrapper.delimiter = fol.delimiter
+                                folWrapper.flags = fol.flags
+                                
+                                var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
+                                folderEntity.mcoimapfolder = folWrapper
+                                folderEntity.toEmailAccount = account
+                                println(folWrapper.description)
+                            }
                         }
                     }
+                    
                     
                     var err: NSError?
                     self.managedContext.save(&err)
