@@ -79,7 +79,7 @@ class CustomMailTableViewCell: UITableViewCell {
             center = CGPointMake(originalCenter.x + translation.x, originalCenter.y)
             deleteOnDragRelease = frame.origin.x < -frame.size.width / 5.0
             archiveOnDragRelease = frame.origin.x > frame.size.width / 7.0
-            remindMeOnDragRelease = false //frame.origin.x > frame.size.width / 1.5
+            remindMeOnDragRelease = frame.origin.x > frame.size.width / 2
             
             // indicate when the user has pulled the item far enough to invoke the given action
             subviewDeleteSwipeFromRightToLeft.backgroundColor = deleteOnDragRelease ? UIColor.redColor() : UIColor.grayColor()

@@ -94,6 +94,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setToolbarHidden(true, animated: false)
+        
+        var error: NSError? = nil
+        self.managedObjectContext!.save(&error)
+        if error != nil {
+            NSLog("%@", error!.description)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -127,10 +133,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             print("An error occurred: \(error?.localizedDescription)")
         }
         
-        self.managedObjectContext!.save(&error)
-        if error != nil {
-            NSLog("%@", error!.description)
-        }
         mailTableView.layoutIfNeeded()
         self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
     }

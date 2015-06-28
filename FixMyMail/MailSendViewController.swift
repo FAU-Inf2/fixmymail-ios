@@ -493,6 +493,48 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 NSLog("%@", error.description)
             } else {
                 NSLog("sent")
+                
+                //Move Email to sent Folder
+                //Neue Session
+                let imapSession = MCOIMAPSession()
+                imapSession.hostname = self.account.imapHostname
+                imapSession.port = UInt32(self.account.imapPort.unsignedIntegerValue)
+                imapSession.username = self.account.username
+                
+                let (dictionary, error) = Locksmith.loadDataForUserAccount(self.account.emailAddress)
+                if error == nil {
+                    imapSession.password = dictionary?.valueForKey("Password:") as! String
+                }
+                
+                imapSession.authType = StringToAuthType(self.account.authTypeImap)
+                imapSession.connectionType = StringToConnectionType(self.account.connectionTypeImap)
+                
+                //get sentFolderName
+                var sentFolderName: String?
+                let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
+                var folders = [MCOIMAPFolder]()
+                fetchFoldersOp.start({ (error, folders) -> Void in
+                    for folder in folders {
+                        if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.SentMail) == MCOIMAPFolderFlag.SentMail {
+                            sentFolderName = (folder as! MCOIMAPFolder).path
+                            NSLog("found sentFolderName: " + sentFolderName!)
+                            break
+                        }
+                    }
+                })
+                
+                //append Email to sent Folder
+                if sentFolderName != nil {
+                    var appendMsgOp = imapSession.appendMessageOperationWithFolder(sentFolderName, messageData: builder.data(), flags: MCOMessageFlag.None)
+                    appendMsgOp.start({ (error, uid) -> Void in
+                        if error != nil {
+                            NSLog("error in appenMsgOp")
+                        }
+                    })
+                } else {
+                    NSLog("error: sentFolderName = nil")
+                }
+
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
