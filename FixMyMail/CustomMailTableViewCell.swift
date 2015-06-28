@@ -113,7 +113,7 @@ class CustomMailTableViewCell: UITableViewCell {
             }
 
             if remindMeOnDragRelease {
-                UIView.animateWithDuration(0.2, animations: {self.frame = fullRightFrame})
+                UIView.animateWithDuration(0.2, animations: {self.frame = originalFrame})
                 NSLog("REMIND ME")
             } else if archiveOnDragRelease {
                 if delegate != nil {
