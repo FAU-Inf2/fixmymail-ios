@@ -15,6 +15,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var refreshControl: UIRefreshControl!
     var delegate: ContentViewControllerProtocol?
     var trashFolderName: String?
+    var archiveFolderName: String?
     var selectedEmails = NSMutableArray()
     var allCellsSelected = false
     var folderToQuery: String?
@@ -24,11 +25,15 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let mailFetchRequest = NSFetchRequest(entityName: "Email")
-        let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.date", ascending: false)
+        let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.receivedDate", ascending: false)
         mailFetchRequest.sortDescriptors = [primarySortDescriptor];
+        if self.folderToQuery == nil {
+            self.folderToQuery = "INBOX"
+        }
+        NSLog(self.folderToQuery!)
         if let acc = self.getAccount() {
             if acc.count == 1 {
-              mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@", acc[0].emailAddress)
+              mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@ && folder == %@", acc[0].emailAddress, self.folderToQuery!)
             }
         }
         
@@ -45,6 +50,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if self.folderToQuery == nil {
+            self.folderToQuery = "INBOX"
+        }
         mailTableView.rowHeight = 55 + (NSUserDefaults.standardUserDefaults().valueForKey("previewLines") as! CGFloat) * 18
 
         if getAccount() == nil {
@@ -53,7 +61,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if getAccount()?.count > 1 {
             self.title = "All"
         } else {
-            self.title = getAccount()?.first?.username
+            self.title = folderToQuery //getAccount()?.first?.username
         }
         
         //self.mailTableView.contentInset = UIEdgeInsetsMake(0, 0, 35, 0)
@@ -90,6 +98,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setToolbarHidden(true, animated: false)
+        
+        var error: NSError? = nil
+        self.managedObjectContext!.save(&error)
+        if error != nil {
+            NSLog("%@", error!.description)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -123,10 +137,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             print("An error occurred: \(error?.localizedDescription)")
         }
         
-        self.managedObjectContext!.save(&error)
-        if error != nil {
-            NSLog("%@", error!.description)
-        }
         mailTableView.layoutIfNeeded()
         self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
     }
@@ -134,8 +144,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func getMaxUID(account: EmailAccount) -> UInt32 {
         var maxUID : UInt32 = 0
         for email in account.emails {
-            if ((email as! Email).mcomessage as! MCOIMAPMessage).uid > maxUID {
-                maxUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
+            if (email as! Email).folder == self.folderToQuery {
+                if ((email as! Email).mcomessage as! MCOIMAPMessage).uid > maxUID {
+                    maxUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
+                }
             }
         }
         
@@ -153,10 +165,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 //Check for new Emails
                 var currentMaxUID = self.getMaxUID(account)
-                var localEmails = account.emails.allObjects
-                if self.folderToQuery == nil {
-                    self.folderToQuery = "INBOX"
+                var localEmails: NSMutableArray = NSMutableArray(array: account.emails.allObjects)
+                for localEmail in localEmails {
+                    if (localEmail as! Email).folder != self.folderToQuery {
+                        localEmails.removeObject(localEmail)
+                    }
                 }
+                
                 let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
                 
                 fetchNewEmailsOp.start({ (error, messages, range) -> Void in
@@ -181,6 +196,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             //Set Title
                             newEmail.title = (message as! MCOIMAPMessage).header.subject ?? " "
                             
+                            //Set folder
+                            newEmail.folder = self.folderToQuery!
+                            
                             //Fetch data
                             let fetchOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: (message as! MCOIMAPMessage).uid)
                             
@@ -200,9 +218,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 //Check for deleted or moved Emails and update Flags
                 if currentMaxUID > 0 {
-                    if self.folderToQuery == nil {
-                        self.folderToQuery = "INBOX"
-                    }
                     let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID - 1))))
                     
                     fetchMessageInfoForLocalEmails.start({ (error, messages, range) -> Void in
@@ -348,17 +363,17 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             mailcell.mailBody.numberOfLines = previewLines
         }
         
-        mailcell.height = mailTableView.rowHeight
-        mailcell.delegate = self
-		var header = mail.mcomessage.header!
-		mailcell.dateLabel.text = header.receivedDate.toEuropeanShortDateString()
-        
         if (mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Seen == MCOMessageFlag.Seen{
             mailcell.unseendot.hidden = true
         } else {
             mailcell.unseendot.hidden = false
         }
+        
+        var header = mail.mcomessage.header!
+        mailcell.dateLabel.text = header.receivedDate.toEuropeanShortDateString()
         mailcell.mail = mail
+        mailcell.height = mailTableView.rowHeight
+        mailcell.delegate = self
         
         return mailcell
     }
@@ -378,8 +393,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 if let error = error {
                     NSLog("error in setSeenFlagOP: \(error.userInfo)")
                 } else {
-                    let expangeFolder = session.expungeOperation("INBOX")
-                    expangeFolder.start({ (error) -> Void in })
+                    let expungeFolder = session.expungeOperation("INBOX")
+                    expungeFolder.start({ (error) -> Void in })
                 }
             })
         }
@@ -400,8 +415,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 if let error = error {
                     NSLog("error in removeSeenFlagOP: \(error.userInfo)")
                 }else {
-                    let expangeFolder = session.expungeOperation("INBOX")
-                    expangeFolder.start({ (error) -> Void in })
+                    let expungeFolder = session.expungeOperation("INBOX")
+                    expungeFolder.start({ (error) -> Void in })
                 }
             })
         }
@@ -504,6 +519,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let session = getSession(mail.toAccount)
         
         //get trashFolderName
+        /* How it should work
+            if trashFolderName == nil {
+                self.trashFolderName = getFolderPathWithMCOIMAPFolderFlag(mail.toAccount, folderFlag: MCOIMAPFolderFlag.Trash)
+            }
+        */
+        
         let fetchFoldersOp = session.fetchAllFoldersOperation()
         var folders = [MCOIMAPFolder]()
         fetchFoldersOp.start({ (error, folders) -> Void in
@@ -518,38 +539,106 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 }
             }
             if self.trashFolderName != nil {
-                //copy email to trash folder
-                let localCopyMessageOperation = session.copyMessagesOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: self.trashFolderName)
-                
-                localCopyMessageOperation.start {(error, uidMapping) -> Void in
-                    if let error = error {
-                        NSLog("error in deleting email : \(error.userInfo!)")
-                    }
+                if self.folderToQuery == self.trashFolderName {
+                    self.setDeleteFlagToEmail(mail, session: session)
+                } else {
+                    self.moveEmailToFolder(self.folderToQuery, destFolder: self.trashFolderName, mail: mail, session: session)
                 }
-                
-                //set deleteFlag
-                let setDeleteFlagOP = session.storeFlagsOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), kind: MCOIMAPStoreFlagsRequestKind.Add, flags: MCOMessageFlag.Deleted)
-                
-                setDeleteFlagOP.start({ (error) -> Void in
-                    if let error = error {
-                        NSLog("error in deleting email (flags) : \(error.userInfo)")
-                    } else {
-                        NSLog("email deleted")
-                        
-                        let expangeFolder = session.expungeOperation("INBOX")
-                        expangeFolder.start({ (error) -> Void in })
-                    }
-                })
-                
                 self.managedObjectContext.deleteObject(mail)
-                self.refreshTableView()
-                
             } else {
                 NSLog("error: trashFolderName == nil")
+            }
+            
+            self.refreshTableView()
+        })
+    }
+    
+    func archiveEmail(mail: Email) {
+        let session = getSession(mail.toAccount)
+        
+        //get archiveFolderName
+        /* How it should work
+        if archiveFolderName == nil {
+        self.archiveFolderName = getFolderPathWithMCOIMAPFolderFlag(mail.toAccount, folderFlag: MCOIMAPFolderFlag.Archive)
+        }
+        */
+        let fetchFoldersOp = session.fetchAllFoldersOperation()
+        var folders = [MCOIMAPFolder]()
+        fetchFoldersOp.start({ (error, folders) -> Void in
+            for folder in folders {
+                if self.archiveFolderName != nil {
+                    break
+                }
+                if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Archive) == MCOIMAPFolderFlag.Archive {
+                    self.archiveFolderName = (folder as! MCOIMAPFolder).path
+                    NSLog("found archiveFolderName: " + self.archiveFolderName!)
+                    break
+                }
+            }
+            if self.archiveFolderName != nil {
+                if self.folderToQuery != self.archiveFolderName {
+                    self.moveEmailToFolder(self.folderToQuery, destFolder: self.archiveFolderName, mail: mail, session: session)
+                    self.managedObjectContext.deleteObject(mail)
+                }
+            } else {
+                NSLog("error: archiveFolderName == nil")
+            }
+            self.refreshTableView()
+        })
+    }
+    
+    //Dont work
+    func getFolderPathWithMCOIMAPFolderFlag (account: EmailAccount, folderFlag: MCOIMAPFolderFlag) -> String? {
+        for folder in account.folders {
+            var imapFolder: ImapFolder = folder as! ImapFolder
+            let curFolder: MCOIMAPFolder = imapFolder.mcoimapfolder as MCOIMAPFolder
+
+            if curFolder.flags & folderFlag == folderFlag {
+                return curFolder.path
+            }
+        }
+        return nil
+    }
+    
+    func setDeleteFlagToEmail (mail: Email, session: MCOIMAPSession) {
+        let setDeleteFlagOP = session.storeFlagsOperationWithFolder(folderToQuery, uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), kind: MCOIMAPStoreFlagsRequestKind.Add, flags: MCOMessageFlag.Deleted)
+        
+        setDeleteFlagOP.start({ (error) -> Void in
+            if let error = error {
+                NSLog("error in setDeleteFlagToMail : \(error.userInfo)")
+            } else {
+                NSLog("email deleted")
+                
+                let expungeFolder = session.expungeOperation(self.folderToQuery)
+                expungeFolder.start({ (error) -> Void in })
             }
         })
     }
     
+    func moveEmailToFolder (originFolder: String!, destFolder: String!, mail: Email!, session: MCOIMAPSession!) {
+        //copy email to destFolder
+        let localCopyMessageOp = session.copyMessagesOperationWithFolder(originFolder, uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: destFolder)
+        
+        localCopyMessageOp.start {(error, uidMapping) -> Void in
+            if let error = error {
+                NSLog("error in moveEmailToFolder in localCopyMessageOp: \(error.userInfo!)")
+            }
+        }
+        
+        //set deleteFlag
+        let setDeleteFlagOP = session.storeFlagsOperationWithFolder(originFolder, uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), kind: MCOIMAPStoreFlagsRequestKind.Add, flags: MCOMessageFlag.Deleted)
+        
+        setDeleteFlagOP.start({ (error) -> Void in
+            if let error = error {
+                NSLog("error in moveEmailToFolder in setDeleteFlagOp : \(error.userInfo)")
+            } else {
+                NSLog("email moved/deleted")
+                
+                let expungeFolder = session.expungeOperation(originFolder)
+                expungeFolder.start({ (error) -> Void in })
+            }
+        })
+    }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return NO if you do not want the specified item to be editable.

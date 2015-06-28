@@ -12,6 +12,7 @@ import CoreData
 class Email: NSManagedObject {
 
     @NSManaged var data: NSData
+    @NSManaged var folder: String
     @NSManaged var mcomessage: AnyObject
     @NSManaged var message: String
     @NSManaged var pgp: NSNumber
@@ -19,5 +20,5 @@ class Email: NSManagedObject {
     @NSManaged var smime: NSNumber
     @NSManaged var title: String
     @NSManaged var toAccount: EmailAccount
-
+    
 }
