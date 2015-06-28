@@ -27,9 +27,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let mailFetchRequest = NSFetchRequest(entityName: "Email")
         let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.receivedDate", ascending: false)
         mailFetchRequest.sortDescriptors = [primarySortDescriptor];
+        if self.folderToQuery == nil {
+            self.folderToQuery = "INBOX"
+        }
+        NSLog(self.folderToQuery!)
         if let acc = self.getAccount() {
             if acc.count == 1 {
-              mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@", acc[0].emailAddress)
+              mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@ && folder == %@", acc[0].emailAddress, self.folderToQuery!)
             }
         }
         
@@ -140,8 +144,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func getMaxUID(account: EmailAccount) -> UInt32 {
         var maxUID : UInt32 = 0
         for email in account.emails {
-            if ((email as! Email).mcomessage as! MCOIMAPMessage).uid > maxUID {
-                maxUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
+            if (email as! Email).folder == self.folderToQuery {
+                if ((email as! Email).mcomessage as! MCOIMAPMessage).uid > maxUID {
+                    maxUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
+                }
             }
         }
         
@@ -159,10 +165,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 //Check for new Emails
                 var currentMaxUID = self.getMaxUID(account)
-                var localEmails = account.emails.allObjects
-                if self.folderToQuery == nil {
-                    self.folderToQuery = "INBOX"
+                var localEmails: NSMutableArray = NSMutableArray(array: account.emails.allObjects)
+                for localEmail in localEmails {
+                    if (localEmail as! Email).folder != self.folderToQuery {
+                        localEmails.removeObject(localEmail)
+                    }
                 }
+                
                 let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
                 
                 fetchNewEmailsOp.start({ (error, messages, range) -> Void in
@@ -187,6 +196,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             //Set Title
                             newEmail.title = (message as! MCOIMAPMessage).header.subject ?? " "
                             
+                            //Set folder
+                            newEmail.folder = self.folderToQuery!
+                            
                             //Fetch data
                             let fetchOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: (message as! MCOIMAPMessage).uid)
                             
@@ -206,9 +218,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 //Check for deleted or moved Emails and update Flags
                 if currentMaxUID > 0 {
-                    if self.folderToQuery == nil {
-                        self.folderToQuery = "INBOX"
-                    }
                     let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID - 1))))
                     
                     fetchMessageInfoForLocalEmails.start({ (error, messages, range) -> Void in
