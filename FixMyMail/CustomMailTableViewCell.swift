@@ -11,6 +11,7 @@ import UIKit
 
 protocol TableViewCellDelegate {
     func deleteEmail(mail: Email)
+    func archiveEmail(mail: Email)
 }
 
 class CustomMailTableViewCell: UITableViewCell {
@@ -78,7 +79,7 @@ class CustomMailTableViewCell: UITableViewCell {
             center = CGPointMake(originalCenter.x + translation.x, originalCenter.y)
             deleteOnDragRelease = frame.origin.x < -frame.size.width / 5.0
             archiveOnDragRelease = frame.origin.x > frame.size.width / 7.0
-            remindMeOnDragRelease = frame.origin.x > frame.size.width / 1.5
+            remindMeOnDragRelease = false //frame.origin.x > frame.size.width / 1.5
             
             // indicate when the user has pulled the item far enough to invoke the given action
             subviewDeleteSwipeFromRightToLeft.backgroundColor = deleteOnDragRelease ? UIColor.redColor() : UIColor.grayColor()
@@ -94,8 +95,8 @@ class CustomMailTableViewCell: UITableViewCell {
         
         if recognizer.state == .Ended {
             let originalFrame = CGRect(x: 0, y: frame.origin.y, width: bounds.size.width, height: bounds.size.height)
-            let deleteFrame = CGRect(x: -bounds.size.width, y: frame.origin.y, width: bounds.size.width, height: bounds.size.height)
-            let showButtonsFrame = CGRect(x: bounds.size.width, y: frame.origin.y, width: bounds.size.width, height: bounds.size.height)
+            let fullLeftFrame = CGRect(x: -bounds.size.width, y: frame.origin.y, width: bounds.size.width, height: bounds.size.height)
+            let fullRightFrame = CGRect(x: bounds.size.width, y: frame.origin.y, width: bounds.size.width, height: bounds.size.height)
             
             if !deleteOnDragRelease && !archiveOnDragRelease && !remindMeOnDragRelease {
                 //snap back to original location
@@ -105,18 +106,21 @@ class CustomMailTableViewCell: UITableViewCell {
             
             if deleteOnDragRelease {
                 if delegate != nil {
-                    //delete this mail
-                    UIView.animateWithDuration(0.2, animations: {self.frame = deleteFrame})
+                    //delete this email
+                    UIView.animateWithDuration(0.2, animations: {self.frame = fullLeftFrame})
                     delegate!.deleteEmail(mail)
                 }
             }
 
             if remindMeOnDragRelease {
-                UIView.animateWithDuration(0.2, animations: {self.frame = originalFrame})
+                UIView.animateWithDuration(0.2, animations: {self.frame = fullRightFrame})
                 NSLog("REMIND ME")
             } else if archiveOnDragRelease {
-                    UIView.animateWithDuration(0.2, animations: {self.frame = originalFrame})
-                    NSLog("archive this email")
+                if delegate != nil {
+                    //archive this email
+                    UIView.animateWithDuration(0.2, animations: {self.frame = fullRightFrame})
+                    delegate!.archiveEmail(mail)
+                }
             }
         }
     }
