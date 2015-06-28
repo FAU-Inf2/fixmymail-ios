@@ -11,7 +11,7 @@ import UIKit
 // http://www.codingexplorer.com/swiftly-getting-human-readable-date-nsdateformatter/
 // for convenient creation of NSDate Objects: expl: NSDate(dateString:"2014-06-06")
 // let currentDate = NSDate()
-extension NSDate
+extension NSDate: Comparable
 {
 	convenience
 	init(dateString:String) {
@@ -127,9 +127,13 @@ extension NSDate
 		return dateString
 	}
 	
+}
 
-	
-	
+public func ==(lhs: NSDate, rhs: NSDate) -> Bool {
+	return lhs === rhs || lhs.compare(rhs) == .OrderedSame
+}
+public func <(lhs: NSDate, rhs: NSDate) -> Bool {
+	return lhs.compare(rhs) == .OrderedAscending
 }
 
 
