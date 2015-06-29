@@ -124,13 +124,43 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func showMailSendView() {
-        if self.getAccount()?.first != nil {
+        /*if self.getAccount()?.first != nil {
             var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
             sendView.account = self.getAccount()!.first!
             self.navigationController?.pushViewController(sendView, animated: true)
-        }
+        }*/
+	var sendAccount: EmailAccount? = nil
+	if self.getAccount()?.count > 1 {
+	    var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+	    if accountName == "" {
+		sendAccount = self.getAccount()?.first
+	    } else {
+		let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+		var error: NSError?
+		var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+		if error != nil {
+			NSLog("%@", error!.description)
+		} else {
+			if let emailAccounts = result {
+				for account in emailAccounts {
+					if (account as! EmailAccount).accountName == accountName {
+						sendAccount = account as? EmailAccount
+						break
+					}
+				}
+			}
+		}
+		}
+	} else if let account = self.getAccount()?.first {
+	    sendAccount = account
+	}
+	if let account = sendAccount {
+	    var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+	    sendView.account = account
+	    self.navigationController?.pushViewController(sendView, animated: true)
+	}
     }
-    
+	
     func refreshTableView(/*notifaction: NSNotification*/) {
         var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
