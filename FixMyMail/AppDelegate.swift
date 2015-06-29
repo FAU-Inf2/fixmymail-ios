@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
- //       initCoreDataTestEntries()
+        initCoreDataTestEntries()
         
         return true
     }
@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-/*    //WARNING: This is method is only for adding dummy entries to CoreData!!!
+    //WARNING: This is method is only for adding dummy entries to CoreData!!!
     private func initCoreDataTestEntries() {
         let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if(!defaults.boolForKey("TestEntriesInserted")) {
@@ -214,7 +214,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-*/
+
     //MARK: - AdressBook
     
    func AccessAddressBook() {
