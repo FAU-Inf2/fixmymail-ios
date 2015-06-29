@@ -30,13 +30,16 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if self.folderToQuery == nil {
             self.folderToQuery = "INBOX"
         }
-        NSLog(self.folderToQuery!)
-        if let acc = self.getAccount() {
-            if acc.count == 1 {
-              mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@ && folder == %@", acc[0].emailAddress, self.folderToQuery!)
-            }
-        }
-        
+	NSLog(self.folderToQuery!)
+	if let acc = self.getAccount() {
+		if acc.count == 0 {
+			mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@", "alwaysFalse")
+		}
+		if acc.count == 1 {
+			mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@ && folder == %@", acc[0].emailAddress, self.folderToQuery!)
+		}
+	}
+	
         let frc = NSFetchedResultsController(
             fetchRequest: mailFetchRequest,
             managedObjectContext: self.managedObjectContext,
