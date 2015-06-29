@@ -28,26 +28,30 @@ class SidebarTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var accountArr: [EmailAccount] = [EmailAccount]();
-        let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
-        if let appDelegate = appDel {
-            managedObjectContext = appDelegate.managedObjectContext
-            var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-            var error: NSError?
-            let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
-            if let account = acc {
-                //For fist expand comand
-                self.currAccountName = self.currAccountName == nil ? account[0].accountName : self.currAccountName
-                for emailAcc: EmailAccount in account {
-                    accountArr.append(emailAcc)
-                }
-            } else {
-                if((error) != nil) {
-                    NSLog(error!.description)
-                }
-            }
-        }
-        
+		var accountArr: [EmailAccount] = [EmailAccount]();
+		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
+		if let appDelegate = appDel {
+			managedObjectContext = appDelegate.managedObjectContext
+			var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			var error: NSError?
+			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
+			
+			if let account = acc {
+				//For fist expand comand
+				if account.count > 0 {
+					self.currAccountName = self.currAccountName == nil ? account[0].accountName : self.currAccountName
+					for emailAcc: EmailAccount in account {
+						accountArr.append(emailAcc)
+					}
+				}
+			} else {
+				if((error) != nil) {
+					NSLog(error!.description)
+				}
+			}
+			
+		}
+		
         self.sections = ["Inboxes", "Accounts", ""]
         var inboxRows: [ActionItem] = [ActionItem]()
         inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll", icon: UIImage(named: "smile-gray.png")))
