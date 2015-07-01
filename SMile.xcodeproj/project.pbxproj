@@ -27,12 +27,12 @@
 		3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */; };
 		3DB242141B38BADB00095634 /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB242131B38BADB00095634 /* folder.png */; };
 		3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */; };
-		3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */; };
+		3DF253B01AF7611D00B99BC8 /* SMile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */; };
 		3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */; };
 		3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B31AF7611D00B99BC8 /* Main.storyboard */; };
 		3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B61AF7611D00B99BC8 /* Images.xcassets */; };
 		3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */; };
-		3DF253C61AF7611E00B99BC8 /* FixMyMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */; };
+		3DF253C61AF7611E00B99BC8 /* SMileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253C51AF7611E00B99BC8 /* SMileTests.swift */; };
 		5B7EAB081B31870800B888BD /* archive.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B7EAB071B31870800B888BD /* archive.png */; };
 		5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8948FA1B317DAA0064F3C0 /* Trash.png */; };
 		5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */; };
@@ -109,7 +109,7 @@
 			containerPortal = 3DF2539F1AF7611D00B99BC8 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 3DF253A61AF7611D00B99BC8;
-			remoteInfo = FixMyMail;
+			remoteInfo = SMile;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -132,18 +132,18 @@
 		3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCOIMAPFolderWrapper.h; sourceTree = "<group>"; };
 		3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCOIMAPFolderWrapper.m; sourceTree = "<group>"; };
 		3DB242131B38BADB00095634 /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
-		3DF253A71AF7611D00B99BC8 /* FixMyMail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FixMyMail.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DF253A71AF7611D00B99BC8 /* SMile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SMile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DF253AB1AF7611D00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3DF253AF1AF7611D00B99BC8 /* FixMyMail.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FixMyMail.xcdatamodel; sourceTree = "<group>"; };
+		3DF253AF1AF7611D00B99BC8 /* SMile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SMile.xcdatamodel; sourceTree = "<group>"; };
 		3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		3DF253B41AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3DF253B61AF7611D00B99BC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3DF253B91AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		3DF253BF1AF7611D00B99BC8 /* FixMyMailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FixMyMailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DF253BF1AF7611D00B99BC8 /* SMileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SMileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DF253C41AF7611E00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixMyMailTests.swift; sourceTree = "<group>"; };
-		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "FixMyMailTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		3DF253C51AF7611E00B99BC8 /* SMileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMileTests.swift; sourceTree = "<group>"; };
+		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "SMileTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		5B7EAB071B31870800B888BD /* archive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archive.png; sourceTree = "<group>"; };
 		5B8948FA1B317DAA0064F3C0 /* Trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trash.png; sourceTree = "<group>"; };
 		5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluedot@2x.png"; sourceTree = "<group>"; };
@@ -301,7 +301,7 @@
 		3D9027561AF970A2000D3E72 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */,
+				3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */,
 				3D2128711B2DF57200C9FC4C /* EmailAccount.swift */,
 				3D21286D1B2DF57100C9FC4C /* Email.swift */,
 				3DA302941B2ED122003CE16A /* ImapFolder.swift */,
@@ -328,8 +328,8 @@
 		3DF2539E1AF7611D00B99BC8 = {
 			isa = PBXGroup;
 			children = (
-				3DF253A91AF7611D00B99BC8 /* FixMyMail */,
-				3DF253C21AF7611E00B99BC8 /* FixMyMailTests */,
+				3DF253A91AF7611D00B99BC8 /* SMile */,
+				3DF253C21AF7611E00B99BC8 /* SMileTests */,
 				3DF253A81AF7611D00B99BC8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -337,13 +337,13 @@
 		3DF253A81AF7611D00B99BC8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3DF253A71AF7611D00B99BC8 /* FixMyMail.app */,
-				3DF253BF1AF7611D00B99BC8 /* FixMyMailTests.xctest */,
+				3DF253A71AF7611D00B99BC8 /* SMile.app */,
+				3DF253BF1AF7611D00B99BC8 /* SMileTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3DF253A91AF7611D00B99BC8 /* FixMyMail */ = {
+		3DF253A91AF7611D00B99BC8 /* SMile */ = {
 			isa = PBXGroup;
 			children = (
 				AD789D9B1B3054420001719E /* HTML_Files */,
@@ -359,7 +359,7 @@
 				3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */,
 				3DF253AA1AF7611D00B99BC8 /* Supporting Files */,
 			);
-			path = FixMyMail;
+			path = SMile;
 			sourceTree = "<group>";
 		};
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
@@ -379,13 +379,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3DF253C21AF7611E00B99BC8 /* FixMyMailTests */ = {
+		3DF253C21AF7611E00B99BC8 /* SMileTests */ = {
 			isa = PBXGroup;
 			children = (
-				3DF253C51AF7611E00B99BC8 /* FixMyMailTests.swift */,
+				3DF253C51AF7611E00B99BC8 /* SMileTests.swift */,
 				3DF253C31AF7611E00B99BC8 /* Supporting Files */,
 			);
-			path = FixMyMailTests;
+			path = SMileTests;
 			sourceTree = "<group>";
 		};
 		3DF253C31AF7611E00B99BC8 /* Supporting Files */ = {
@@ -498,9 +498,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3DF253A61AF7611D00B99BC8 /* FixMyMail */ = {
+		3DF253A61AF7611D00B99BC8 /* SMile */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3DF253C91AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "FixMyMail" */;
+			buildConfigurationList = 3DF253C91AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "SMile" */;
 			buildPhases = (
 				3DF253A31AF7611D00B99BC8 /* Sources */,
 				3DF253A41AF7611D00B99BC8 /* Frameworks */,
@@ -511,14 +511,14 @@
 			);
 			dependencies = (
 			);
-			name = FixMyMail;
-			productName = FixMyMail;
-			productReference = 3DF253A71AF7611D00B99BC8 /* FixMyMail.app */;
+			name = SMile;
+			productName = SMile;
+			productReference = 3DF253A71AF7611D00B99BC8 /* SMile.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3DF253BE1AF7611D00B99BC8 /* FixMyMailTests */ = {
+		3DF253BE1AF7611D00B99BC8 /* SMileTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3DF253CC1AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "FixMyMailTests" */;
+			buildConfigurationList = 3DF253CC1AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "SMileTests" */;
 			buildPhases = (
 				3DF253BB1AF7611D00B99BC8 /* Sources */,
 				3DF253BC1AF7611D00B99BC8 /* Frameworks */,
@@ -529,9 +529,9 @@
 			dependencies = (
 				3DF253C11AF7611D00B99BC8 /* PBXTargetDependency */,
 			);
-			name = FixMyMailTests;
-			productName = FixMyMailTests;
-			productReference = 3DF253BF1AF7611D00B99BC8 /* FixMyMailTests.xctest */;
+			name = SMileTests;
+			productName = SMileTests;
+			productReference = 3DF253BF1AF7611D00B99BC8 /* SMileTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -541,7 +541,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0630;
-				ORGANIZATIONNAME = FixMymail;
+				ORGANIZATIONNAME = SMile;
 				TargetAttributes = {
 					3DF253A61AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -553,7 +553,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3DF253A21AF7611D00B99BC8 /* Build configuration list for PBXProject "FixMyMail" */;
+			buildConfigurationList = 3DF253A21AF7611D00B99BC8 /* Build configuration list for PBXProject "SMile" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -566,8 +566,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3DF253A61AF7611D00B99BC8 /* FixMyMail */,
-				3DF253BE1AF7611D00B99BC8 /* FixMyMailTests */,
+				3DF253A61AF7611D00B99BC8 /* SMile */,
+				3DF253BE1AF7611D00B99BC8 /* SMileTests */,
 			);
 		};
 /* End PBXProject section */
@@ -681,7 +681,7 @@
 				8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */,
 				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
 				AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */,
-				3DF253B01AF7611D00B99BC8 /* FixMyMail.xcdatamodeld in Sources */,
+				3DF253B01AF7611D00B99BC8 /* SMile.xcdatamodeld in Sources */,
 				3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */,
 				AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */,
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
@@ -707,7 +707,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DF253C61AF7611E00B99BC8 /* FixMyMailTests.swift in Sources */,
+				3DF253C61AF7611E00B99BC8 /* SMileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -716,7 +716,7 @@
 /* Begin PBXTargetDependency section */
 		3DF253C11AF7611D00B99BC8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3DF253A61AF7611D00B99BC8 /* FixMyMail */;
+			target = 3DF253A61AF7611D00B99BC8 /* SMile */;
 			targetProxy = 3DF253C01AF7611D00B99BC8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -835,14 +835,14 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/FixMyMail",
+					"$(PROJECT_DIR)/SMile",
 				);
-				INFOPLIST_FILE = FixMyMail/Info.plist;
+				INFOPLIST_FILE = SMile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/FixMyMailTests/MailCore2-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -857,13 +857,13 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/FixMyMail",
+					"$(PROJECT_DIR)/SMile",
 				);
-				INFOPLIST_FILE = FixMyMail/Info.plist;
+				INFOPLIST_FILE = SMile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/FixMyMailTests/MailCore2-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -879,10 +879,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = FixMyMailTests/Info.plist;
+				INFOPLIST_FILE = SMileTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FixMyMail.app/FixMyMail";
+				PRODUCT_NAME = SMileTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SMile.app/SMile";
 			};
 			name = Debug;
 		};
@@ -894,17 +894,17 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = FixMyMailTests/Info.plist;
+				INFOPLIST_FILE = SMileTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FixMyMail.app/FixMyMail";
+				PRODUCT_NAME = SMileTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SMile.app/SMile";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3DF253A21AF7611D00B99BC8 /* Build configuration list for PBXProject "FixMyMail" */ = {
+		3DF253A21AF7611D00B99BC8 /* Build configuration list for PBXProject "SMile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3DF253C71AF7611E00B99BC8 /* Debug */,
@@ -913,7 +913,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3DF253C91AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "FixMyMail" */ = {
+		3DF253C91AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "SMile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3DF253CA1AF7611E00B99BC8 /* Debug */,
@@ -922,7 +922,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3DF253CC1AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "FixMyMailTests" */ = {
+		3DF253CC1AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "SMileTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3DF253CD1AF7611E00B99BC8 /* Debug */,
@@ -934,13 +934,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		3DF253AE1AF7611D00B99BC8 /* FixMyMail.xcdatamodeld */ = {
+		3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				3DF253AF1AF7611D00B99BC8 /* FixMyMail.xcdatamodel */,
+				3DF253AF1AF7611D00B99BC8 /* SMile.xcdatamodel */,
 			);
-			currentVersion = 3DF253AF1AF7611D00B99BC8 /* FixMyMail.xcdatamodel */;
-			path = FixMyMail.xcdatamodeld;
+			currentVersion = 3DF253AF1AF7611D00B99BC8 /* SMile.xcdatamodel */;
+			path = SMile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
