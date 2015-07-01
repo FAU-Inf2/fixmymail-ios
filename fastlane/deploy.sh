@@ -1,7 +1,7 @@
-if [ -f "../FixMyMail.ipa" ]
+if [ -f "../SMile.ipa" ]
 then
   echo "Uploading ipa"
-  scp ../FixMyMail.ipa mad:/var/www/hockey/public/de.fau.cs.mad.fixmymail.ios/fixmymail.ipa
+  scp ../SMile.ipa mad:/var/www/hockey/public/de.fau.cs.mad.SMile.ios/SMile.ipa
 else
   echo "Ipa file not found! :-("
 fi

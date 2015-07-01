@@ -55,8 +55,8 @@ platform :ios do
       )
     end
 
-    xctool "-project FixMyMail.xcodeproj \
-        -scheme 'FixMyMail' \
+    xctool "-project SMile.xcodeproj \
+        -scheme 'SMile' \
         -configuration Release \
         -sdk iphonesimulator \
         clean"
@@ -67,8 +67,8 @@ platform :ios do
     carthageverbose(
       verbose: true
     )
-    xctool "-project FixMyMail.xcodeproj \
-        -scheme 'FixMyMail' \
+    xctool "-project SMile.xcodeproj \
+        -scheme 'SMile' \
         -configuration Release \
         -sdk iphonesimulator \
         build"
@@ -76,8 +76,8 @@ platform :ios do
 
   desc "Run tests for project with xctool"
   lane :test do
-    xctool "-project FixMyMail.xcodeproj \
-        -scheme 'FixMyMail' \
+    xctool "-project SMile.xcodeproj \
+        -scheme 'SMile' \
         -configuration Release \
         -sdk iphonesimulator \
         test -freshSimulator -resetSimulator -freshInstall"
@@ -86,7 +86,7 @@ platform :ios do
   desc "Build and deploy the ipa file"
   lane :deploy do
     ipa(
-      scheme: "FixMyMail"
+      scheme: "SMile"
     )
 
     if ENV["HIPCHAT_API_TOKEN"]
