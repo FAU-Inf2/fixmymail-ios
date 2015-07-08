@@ -601,7 +601,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             fetchFoldersOp.start({ (error, folders) -> Void in
                 for folder in folders {
                     if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
-                        var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen)
+                        var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
                         appendMsgOp.start({ (error, uid) -> Void in
                             if error != nil {
                                 NSLog("error in appenMsgOp")

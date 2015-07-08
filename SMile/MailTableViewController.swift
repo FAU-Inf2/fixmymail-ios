@@ -163,14 +163,27 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         if !(cell.editing) {
             //open Email
-            var mailView: WebViewController = WebViewController()
-            mailView.putMessage()
-            mailView.message = cell.mail
-            mailView.session = getSession(mailView.message.toAccount)
-            self.navigationController?.pushViewController(mailView, animated: true)
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            
-            setEmailToSeen(mailView.message)
+            if ((cell.mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Draft) == MCOMessageFlag.Draft {
+                //open sendview
+                var mail = (cell.mail.mcomessage as! MCOIMAPMessage)
+                var parser = MCOMessageParser(data: cell.mail.data)
+                self.setDeleteFlagToEmail(cell.mail, session: self.getSession(cell.mail.toAccount))
+                self.imapSynchronize()
+                self.showMailSendView(mail.header.to == nil ? nil : NSMutableArray(array: mail.header.to),
+                        ccRecipients: mail.header.cc == nil ? nil : NSMutableArray(array: mail.header.cc),
+                       bccRecipients: mail.header.bcc == nil ? nil : NSMutableArray(array: mail.header.bcc),
+                             subject: mail.header.subject,
+                            textBody: parser.plainTextBodyRenderingAndStripWhitespace(false))
+            } else {
+                var mailView: WebViewController = WebViewController()
+                mailView.putMessage()
+                mailView.message = cell.mail
+                mailView.session = getSession(mailView.message.toAccount)
+                self.navigationController?.pushViewController(mailView, animated: true)
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                
+                setEmailToSeen(mailView.message)
+            }
             self.refreshTableView()
         } else {
             //select Email
@@ -412,7 +425,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     // MARK: - Toolbar
     func setToolbarWithComposeButton() {
-        var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showMailSendView")
+        var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showEmptyMailSendView")
         var items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
         self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
         self.navigationController?.setToolbarHidden(false, animated: false)
@@ -441,7 +454,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationController?.setToolbarHidden(false, animated: false)
     }
     
-    func showMailSendView() {
+    func showEmptyMailSendView() {
+        self.showMailSendView(nil, ccRecipients: nil, bccRecipients: nil, subject: nil, textBody: nil)
+    }
+    
+    func showMailSendView(recipients: NSMutableArray?, ccRecipients: NSMutableArray?, bccRecipients: NSMutableArray?, subject: String?, textBody: String?) {
         var sendAccount: EmailAccount? = nil
         if self.getAccount()?.count > 1 {
             var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
@@ -470,6 +487,21 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if let account = sendAccount {
             var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
             sendView.account = account
+            if let array = recipients {
+                sendView.recipients = array
+            }
+            if let array = ccRecipients {
+                sendView.ccRecipients = array
+            }
+            if let array = bccRecipients {
+                sendView.bccRecipients = array
+            }
+            if let string = subject {
+                sendView.subject = string
+            }
+            if let string = textBody {
+                sendView.textBody = string
+            }
             self.navigationController?.pushViewController(sendView, animated: true)
         }
     }
