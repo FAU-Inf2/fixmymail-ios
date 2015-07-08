@@ -4,7 +4,7 @@ import AddressBook
 import Foundation
 import AddressBookUI
 
-class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIActionSheetDelegate {
     @IBOutlet weak var sendTableView: UITableView!
     var emailAddressPicker: UIPickerView!
     var origintableViewInsets: UIEdgeInsets?
@@ -30,10 +30,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithTextView", bundle: nil), forCellReuseIdentifier: "SendViewCellWithTextView")
-        self.sendTableView.rowHeight = UITableViewAutomaticDimension
-        self.sendTableView.estimatedRowHeight = self.view.bounds.height
         var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmail:")
         self.navigationItem.rightBarButtonItem = buttonSend
+        var buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancel:")
+        self.navigationItem.leftBarButtonItem = buttonCancel
         
         LoadAddresses()
     }
@@ -96,6 +96,21 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         return 4
     }
     
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        var offset = 0
+        if self.tableViewIsExpanded {
+            offset = 2
+        }
+        if indexPath.row == 3 + offset {
+            return tableView.frame.height - (3 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)
+        }
+        return 44
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0: // Cell for To
@@ -103,6 +118,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.label.textColor = UIColor.grayColor()
             cell.label.text = "To:"
             cell.textField.textColor = UIColor.blackColor()
+            cell.textField.tintColor = self.view.tintColor
             var recipientsAsString: String = ""
             var count = 1
             for recipient in self.recipients {
@@ -130,6 +146,8 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Cc:"
+                cell.textField.textColor = UIColor.blackColor()
+                cell.textField.tintColor = self.view.tintColor
                 var ccRecipientsAsString: String = ""
                 var count = 1
                 for ccRecipient in self.ccRecipients {
@@ -157,6 +175,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Cc/Bcc, From:"
                 cell.textField.textColor = UIColor.grayColor()
+                cell.textField.tintColor = self.view.tintColor
                 cell.textField.text = self.account.emailAddress
                 cell.textField.tag = 5
                 cell.textField.delegate = self
@@ -170,6 +189,8 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Bcc:"
+                cell.textField.textColor = UIColor.blackColor()
+                cell.textField.tintColor = self.view.tintColor
                 var bccRecipientsAsString: String = ""
                 var count = 1
                 for bccRecipient in self.bccRecipients {
@@ -197,6 +218,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.label.textColor = UIColor.grayColor()
                 cell.label.text = "Subject:"
                 cell.textField.textColor = UIColor.blackColor()
+                cell.textField.tintColor = self.view.tintColor
                 cell.textField.text = self.subject
                 cell.textField.tag = 6
                 cell.textField.delegate = self
@@ -225,9 +247,11 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 return cell
             } else { // Cell for TextBody
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-                cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (3 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
+                cell.textViewMailBody.textColor = UIColor.blackColor()
+                cell.textViewMailBody.tintColor = self.view.tintColor
                 cell.textViewMailBody.delegate = self
                 cell.textViewMailBody.inputView = nil
+                cell.textViewMailBody.tag = 8
                 cell.textViewMailBody.userInteractionEnabled = false
                 cell.textViewMailBody.text = self.textBody
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -238,6 +262,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.label.textColor = UIColor.grayColor()
             cell.label.text = "Subject:"
             cell.textField.textColor = UIColor.blackColor()
+            cell.textField.tintColor = self.view.tintColor
             cell.textField.text = self.subject
             cell.textField.tag = 4
             cell.textField.delegate = self
@@ -249,9 +274,11 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             return cell
         case 5: // Cell for TextBody
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-            cell.textViewMailBody.addConstraint(NSLayoutConstraint(item: cell.textViewMailBody, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 0, constant: tableView.frame.height - (5 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)))
+            cell.textViewMailBody.textColor = UIColor.blackColor()
+            cell.textViewMailBody.tintColor = self.view.tintColor
             cell.textViewMailBody.delegate = self
             cell.textViewMailBody.inputView = nil
+            cell.textViewMailBody.tag = 7
             cell.textViewMailBody.userInteractionEnabled = false
             cell.textViewMailBody.text = self.textBody
             cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -473,21 +500,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         session.connectionType = StringToConnectionType(self.account.connectionTypeSmtp)
         session.authType = StringToAuthType(self.account.authTypeSmtp)
         
-        var builder = MCOMessageBuilder()
+        var data = self.buildEmail()
         
-        builder.header.from = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
-        builder.header.sender = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
-        builder.header.to = self.recipients as [AnyObject]
-        var offset = 0
-        if self.tableViewIsExpanded {
-            offset = 2
-            builder.header.cc = self.ccRecipients as [AnyObject]
-            builder.header.bcc = self.bccRecipients as [AnyObject]
-        }
-        builder.header.subject = self.subject
-        builder.textBody = self.textBody
-        
-        let sendOp = session.sendOperationWithData(builder.data())
+        let sendOp = session.sendOperationWithData(data)
         sendOp.start({(error) in
             if error != nil {
                 NSLog("%@", error.description)
@@ -495,7 +510,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 NSLog("sent")
                 
                 //Move Email to sent Folder
-                //Neue Session
                 let imapSession = MCOIMAPSession()
                 imapSession.hostname = self.account.imapHostname
                 imapSession.port = UInt32(self.account.imapPort.unsignedIntegerValue)
@@ -510,34 +524,100 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 imapSession.connectionType = StringToConnectionType(self.account.connectionTypeImap)
                 
                 //get sentFolderName
-                var sentFolderName: String?
                 let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
-                var folders = [MCOIMAPFolder]()
                 fetchFoldersOp.start({ (error, folders) -> Void in
                     for folder in folders {
                         if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.SentMail) == MCOIMAPFolderFlag.SentMail {
-                            sentFolderName = (folder as! MCOIMAPFolder).path
-                            NSLog("found sentFolderName: " + sentFolderName!)
+                            //append Email to sent Folder
+                            var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: data, flags: MCOMessageFlag.Seen)
+                            appendMsgOp.start({ (error, uid) -> Void in
+                                if error != nil {
+                                    NSLog("error in appenMsgOp")
+                                }
+                            })
                             break
                         }
                     }
                 })
-                
-                //append Email to sent Folder
-                if sentFolderName != nil {
-                    var appendMsgOp = imapSession.appendMessageOperationWithFolder(sentFolderName, messageData: builder.data(), flags: MCOMessageFlag.None)
-                    appendMsgOp.start({ (error, uid) -> Void in
-                        if error != nil {
-                            NSLog("error in appenMsgOp")
-                        }
-                    })
-                } else {
-                    NSLog("error: sentFolderName = nil")
-                }
 
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
+    }
+    
+    func buildEmail() -> NSData {
+        var builder = MCOMessageBuilder()
+        
+        builder.header.from = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
+        builder.header.sender = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
+        builder.header.to = self.recipients as [AnyObject]
+        var offset = 0
+        if self.tableViewIsExpanded {
+            offset = 2
+            builder.header.cc = self.ccRecipients as [AnyObject]
+            builder.header.bcc = self.bccRecipients as [AnyObject]
+        }
+        builder.header.subject = self.subject
+        builder.textBody = self.textBody
+        
+        return builder.data()
+    }
+    
+    func cancel(sender: AnyObject) {
+        if let responder: AnyObject = self.isResponder {
+            responder.resignFirstResponder()
+        }
+        var text = self.textBody
+        text = self.replaceSignature(text, toDelete: self.account.signature, toInsert: "")
+        if self.recipients.count != 0 || self.ccRecipients.count != 0 || self.bccRecipients.count != 0 || self.subject != "" || text != "\n" {
+            var cancelActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Delete Draft", otherButtonTitles: "Save Draft")
+            cancelActionSheet.showInView(self.view)
+        } else {
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+    }
+    
+    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+        switch buttonIndex {
+        case 0:
+            self.navigationController?.popViewControllerAnimated(true)
+        case 2:
+            //Move Email to drafts Folder
+            let imapSession = MCOIMAPSession()
+            imapSession.hostname = self.account.imapHostname
+            imapSession.port = UInt32(self.account.imapPort.unsignedIntegerValue)
+            imapSession.username = self.account.username
+            
+            let (dictionary, error) = Locksmith.loadDataForUserAccount(self.account.emailAddress)
+            if error == nil {
+                imapSession.password = dictionary?.valueForKey("Password:") as! String
+            }
+            
+            imapSession.authType = StringToAuthType(self.account.authTypeImap)
+            imapSession.connectionType = StringToConnectionType(self.account.connectionTypeImap)
+            
+            //get draftsFolderName
+            let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
+            fetchFoldersOp.start({ (error, folders) -> Void in
+                for folder in folders {
+                    if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
+                        var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen)
+                        appendMsgOp.start({ (error, uid) -> Void in
+                            if error != nil {
+                                NSLog("error in appenMsgOp")
+                            } else {
+                                NSLog("Draft saved")
+                            }
+                        })
+                        break
+                    }
+                }
+            })
+            
+            self.navigationController?.popViewControllerAnimated(true)
+        default:
+            break
+        }
     }
     
     // add keyboard size to tableView size

@@ -17,8 +17,4 @@ class SendViewCellWithTextView: UITableViewCell {
         super.awakeFromNib()
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(false, animated: false)
-    }
-    
 }
