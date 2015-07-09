@@ -5,21 +5,27 @@ import Foundation
 import AddressBookUI
 
 class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIActionSheetDelegate {
+    
+    //MARK: - Variables
     @IBOutlet weak var sendTableView: UITableView!
     var emailAddressPicker: UIPickerView!
+    
     var origintableViewInsets: UIEdgeInsets?
     
     var tableViewIsExpanded: Bool = false
+    
     var recipients: NSMutableArray = NSMutableArray()
     var ccRecipients: NSMutableArray = NSMutableArray()
     var bccRecipients: NSMutableArray = NSMutableArray()
-    var account: EmailAccount!
     var subject: String = ""
     var textBody: String = ""
+    
+    var account: EmailAccount!
     var allAccounts: [EmailAccount]!
     
     var isResponder: AnyObject? = nil
     
+    //MARK: - Initialisation
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initPickerView()
@@ -30,12 +36,12 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithTextView", bundle: nil), forCellReuseIdentifier: "SendViewCellWithTextView")
-        var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmail:")
+        var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmailWithSender:")
         self.navigationItem.rightBarButtonItem = buttonSend
-        var buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancel:")
+        var buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "performCancelWithSender:")
         self.navigationItem.leftBarButtonItem = buttonCancel
         
-        LoadAddresses()
+        self.addSignature()
     }
     
     func initPickerView() {
@@ -85,6 +91,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    //MARK: - TableViewDelegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -240,7 +247,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textField.delegate = self
                 cell.textField.tintColor = UIColor.whiteColor()
                 cell.textField.inputView = self.emailAddressPicker
-                cell.textField.addTarget(self, action: "togglePickerView:", forControlEvents: UIControlEvents.TouchDown)
+                cell.textField.addTarget(self, action: "togglePickerViewWithSender:", forControlEvents: UIControlEvents.TouchDown)
                 cell.textField.enabled = false
                 cell.accessoryView = nil
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -356,6 +363,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    //MARK: - PickerViewDelegate
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -372,20 +380,14 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
 		var oldAccount = self.account
         self.account = self.allAccounts[row]
         (self.isResponder as! UITextField).text = self.account.emailAddress
-		self.textBody = self.replaceSignature(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
+		self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
 		(self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.text = self.textBody
     }
     
-    func shouldContractTableView() -> Bool {
-        var cell = self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! SendViewCellWithLabelAndTextField
-        if cell.textField.text != "" {
-            return false
-        }
-        cell = self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! SendViewCellWithLabelAndTextField
-        if cell.textField.text != "" {
-            return false
-        }
-        return true
+    //MARK: - TextViewDelegate
+    func textViewDidBeginEditing(textView: UITextView) {
+        textView.userInteractionEnabled = true
+        self.isResponder = textView
     }
     
     func textViewDidEndEditing(textView: UITextView) {
@@ -394,9 +396,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         textView.userInteractionEnabled = false
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
-        textView.userInteractionEnabled = true
-        self.isResponder = textView
+    //MARK: - TextFieldDelegate
+    func textFieldDidBeginEditing(textField: UITextField) {
+        self.isResponder = textField
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
@@ -438,21 +440,66 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
-        self.isResponder = textField
-    }
-    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
-    func togglePickerView(sender: AnyObject) {
-        if sender.isFirstResponder() {
-            sender.resignFirstResponder()
-        } else {
-            sender.becomeFirstResponder()
+   
+    //MARK: - ActionSheetDelegate
+    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+        switch buttonIndex {
+        case 0:
+            self.navigationController?.popViewControllerAnimated(true)
+        case 2:
+            //Move Email to drafts Folder
+            let imapSession = MCOIMAPSession()
+            imapSession.hostname = self.account.imapHostname
+            imapSession.port = UInt32(self.account.imapPort.unsignedIntegerValue)
+            imapSession.username = self.account.username
+            
+            let (dictionary, error) = Locksmith.loadDataForUserAccount(self.account.emailAddress)
+            if error == nil {
+                imapSession.password = dictionary?.valueForKey("Password:") as! String
+            }
+            
+            imapSession.authType = StringToAuthType(self.account.authTypeImap)
+            imapSession.connectionType = StringToConnectionType(self.account.connectionTypeImap)
+            
+            //get draftsFolderName
+            let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
+            fetchFoldersOp.start({ (error, folders) -> Void in
+                for folder in folders {
+                    if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
+                        var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
+                        appendMsgOp.start({ (error, uid) -> Void in
+                            if error != nil {
+                                NSLog("error in appenMsgOp")
+                            } else {
+                                NSLog("Draft saved")
+                            }
+                        })
+                        break
+                    }
+                }
+            })
+            
+            self.navigationController?.popViewControllerAnimated(true)
+        default:
+            break
         }
+    }
+    
+    //MARK: - Supportive methods
+    func shouldContractTableView() -> Bool {
+        var cell = self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! SendViewCellWithLabelAndTextField
+        if cell.textField.text != "" {
+            return false
+        }
+        cell = self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! SendViewCellWithLabelAndTextField
+        if cell.textField.text != "" {
+            return false
+        }
+        return true
     }
     
     func updateSubjectAndTitleWithSender(sender: AnyObject) {
@@ -465,6 +512,28 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    func togglePickerViewWithSender(sender: AnyObject) {
+        if sender.isFirstResponder() {
+            sender.resignFirstResponder()
+        } else {
+            sender.becomeFirstResponder()
+        }
+    }
+    
+    func performCancelWithSender(sender: AnyObject) {
+        if let responder: AnyObject = self.isResponder {
+            responder.resignFirstResponder()
+        }
+        var text = self.textBody
+        text = self.replaceSignatureWithText(text, toDelete: self.account.signature, toInsert: "")
+        if self.recipients.count != 0 || self.ccRecipients.count != 0 || self.bccRecipients.count != 0 || self.subject != "" || text != "\n" {
+            var cancelActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Delete Draft", otherButtonTitles: "Save Draft")
+            cancelActionSheet.showInView(self.view)
+        } else {
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+    }
+    
     func addSignature() {
         if self.account.signature != "" {
             self.textBody = self.textBody + "\n" + self.account.signature
@@ -472,7 +541,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    func replaceSignature(text: String, toDelete: String, toInsert: String) -> String {
+    func replaceSignatureWithText(text: String, toDelete: String, toInsert: String) -> String {
         if let range = text.rangeOfString(toDelete) {
             var newtext = text.substringToIndex(range.startIndex) + toInsert + text.substringFromIndex(range.endIndex)
             return newtext
@@ -481,7 +550,26 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func sendEmail(sender: AnyObject) {
+    //MARK: - Build and send E-Mail
+    func buildEmail() -> NSData {
+        var builder = MCOMessageBuilder()
+        
+        builder.header.from = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
+        builder.header.sender = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
+        builder.header.to = self.recipients as [AnyObject]
+        var offset = 0
+        if self.tableViewIsExpanded {
+            offset = 2
+            builder.header.cc = self.ccRecipients as [AnyObject]
+            builder.header.bcc = self.bccRecipients as [AnyObject]
+        }
+        builder.header.subject = self.subject
+        builder.textBody = self.textBody
+        
+        return builder.data()
+    }
+    
+    func sendEmailWithSender(sender: AnyObject) {
         (sender as! UIBarButtonItem).enabled = false
         if let responder: AnyObject = self.isResponder {
             responder.resignFirstResponder()
@@ -545,82 +633,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         })
     }
     
-    func buildEmail() -> NSData {
-        var builder = MCOMessageBuilder()
-        
-        builder.header.from = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
-        builder.header.sender = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
-        builder.header.to = self.recipients as [AnyObject]
-        var offset = 0
-        if self.tableViewIsExpanded {
-            offset = 2
-            builder.header.cc = self.ccRecipients as [AnyObject]
-            builder.header.bcc = self.bccRecipients as [AnyObject]
-        }
-        builder.header.subject = self.subject
-        builder.textBody = self.textBody
-        
-        return builder.data()
-    }
-    
-    func cancel(sender: AnyObject) {
-        if let responder: AnyObject = self.isResponder {
-            responder.resignFirstResponder()
-        }
-        var text = self.textBody
-        text = self.replaceSignature(text, toDelete: self.account.signature, toInsert: "")
-        if self.recipients.count != 0 || self.ccRecipients.count != 0 || self.bccRecipients.count != 0 || self.subject != "" || text != "\n" {
-            var cancelActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Delete Draft", otherButtonTitles: "Save Draft")
-            cancelActionSheet.showInView(self.view)
-        } else {
-            self.navigationController?.popViewControllerAnimated(true)
-        }
-    }
-    
-    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
-        switch buttonIndex {
-        case 0:
-            self.navigationController?.popViewControllerAnimated(true)
-        case 2:
-            //Move Email to drafts Folder
-            let imapSession = MCOIMAPSession()
-            imapSession.hostname = self.account.imapHostname
-            imapSession.port = UInt32(self.account.imapPort.unsignedIntegerValue)
-            imapSession.username = self.account.username
-            
-            let (dictionary, error) = Locksmith.loadDataForUserAccount(self.account.emailAddress)
-            if error == nil {
-                imapSession.password = dictionary?.valueForKey("Password:") as! String
-            }
-            
-            imapSession.authType = StringToAuthType(self.account.authTypeImap)
-            imapSession.connectionType = StringToConnectionType(self.account.connectionTypeImap)
-            
-            //get draftsFolderName
-            let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
-            fetchFoldersOp.start({ (error, folders) -> Void in
-                for folder in folders {
-                    if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
-                        var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
-                        appendMsgOp.start({ (error, uid) -> Void in
-                            if error != nil {
-                                NSLog("error in appenMsgOp")
-                            } else {
-                                NSLog("Draft saved")
-                            }
-                        })
-                        break
-                    }
-                }
-            })
-            
-            self.navigationController?.popViewControllerAnimated(true)
-        default:
-            break
-        }
-    }
-    
-    // add keyboard size to tableView size
+    //MARK: - Methods to show/hide keyboard
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
             var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
@@ -639,7 +652,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
     }
-    // bring tableview size back to origin
+    
     func keyboardWillHide(notification: NSNotification) {
         if let animationDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double) {
             if self.origintableViewInsets != nil {
@@ -651,58 +664,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    // Addressbook functionality
-    //
-    //Collect Contacts from Addressbook and order Emails Ascending
-    //
-    
-    var allEmail: NSMutableArray = []
-    var sortedEmails: NSArray = []
-    func addRecord(Entry: Record){
-        allEmail.addObject(Entry)
-    }
-    
-    func orderEmails(){
-        var allEmailIDs:NSArray = allEmail
-        println("ordering")
-        let descriptor = NSSortDescriptor(key: "email", ascending: true, selector: "localizedStandardCompare:")
-        var sortedResults: NSArray = allEmail.sortedArrayUsingDescriptors([descriptor])
-        for results in sortedResults {
-            println ("contactEmail : \(results.email as String)")
-        }
-        
-        sortedEmails = sortedResults
-    }
-    
-    func LoadAddresses() {
-        var source: ABRecord = ABAddressBookCopyDefaultSource(addressBook).takeRetainedValue()
-        var contactList: NSArray = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, ABPersonSortOrdering(kABPersonEmailProperty )).takeRetainedValue()
-        
-        println("records in the array \(contactList.count)")
-        
-        for record:ABRecordRef in contactList{
-            if !record.isEqual(nil){
-                var contactPerson: ABRecordRef = record
-                let emailProperty: ABMultiValueRef = ABRecordCopyValue(record, kABPersonEmailProperty).takeRetainedValue() as ABMultiValueRef
-                if ABMultiValueGetCount(emailProperty) > 0 {
-                    let allEmailIDs : NSArray = ABMultiValueCopyArrayOfAllValues(emailProperty).takeUnretainedValue() as NSArray
-                    for email in allEmailIDs {
-                        let emailID = email as! String
-                        let contactFirstName: String = ABRecordCopyValue(contactPerson, kABPersonFirstNameProperty)?.takeRetainedValue() as? String ?? ""
-                        let contactLastName: String = ABRecordCopyValue(contactPerson, kABPersonLastNameProperty)?.takeRetainedValue() as? String ?? ""
-                        addRecord(Record(firstname:contactFirstName, lastname: contactLastName, email:emailID as String))
-                        println ("contactEmail : \(emailID) :=>")
-                    }
-                }
-            }
-        }
-        orderEmails()
-		addSignature()
-    }
-    
-    //
-    //   öffnet das Telefonbuch in App
-    //
+    //MARK: - Methods to show Addressbook
     func openPeoplePickerWithSender(sender:AnyObject!) {
         let picker = ABPeoplePickerNavigationController()
         picker.peoplePickerDelegate = self
@@ -717,12 +679,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
 		}
         self.presentViewController(picker, animated:true, completion:nil)
     }
-    
-    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!) {
-        println("person")
-        println(person)
-    }
-    
 
 	func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
 		println("person and property")
@@ -730,7 +686,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
 		let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
 		let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
 		println(email)
-		//TODO
 		var address = MCOAddress(mailbox: email)
 		
 		switch peoplePicker.title! {

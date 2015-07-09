@@ -36,7 +36,6 @@
 		5B7EAB081B31870800B888BD /* archive.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B7EAB071B31870800B888BD /* archive.png */; };
 		5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8948FA1B317DAA0064F3C0 /* Trash.png */; };
 		5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */; };
-		8E0AAB661B2F1BAD002C4CDA /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AAB651B2F1BAD002C4CDA /* Record.swift */; };
 		8E1441171B1DEFFA00F1A023 /* SendViewCellWithLabelAndTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1441161B1DEFFA00F1A023 /* SendViewCellWithLabelAndTextField.swift */; };
 		8E14411C1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E14411B1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib */; };
 		8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */; };
@@ -147,7 +146,6 @@
 		5B7EAB071B31870800B888BD /* archive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archive.png; sourceTree = "<group>"; };
 		5B8948FA1B317DAA0064F3C0 /* Trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trash.png; sourceTree = "<group>"; };
 		5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluedot@2x.png"; sourceTree = "<group>"; };
-		8E0AAB651B2F1BAD002C4CDA /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		8E1441161B1DEFFA00F1A023 /* SendViewCellWithLabelAndTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellWithLabelAndTextField.swift; sourceTree = "<group>"; };
 		8E14411B1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellWithLabelAndTextField.xib; sourceTree = "<group>"; };
 		8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMailTableViewCell.swift; sourceTree = "<group>"; };
@@ -490,7 +488,6 @@
 			children = (
 				ADD135C31B15B56300A9B31A /* KeyItem.swift */,
 				AD85401C1B186A7C003F9C92 /* ActionItem.swift */,
-				8E0AAB651B2F1BAD002C4CDA /* Record.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -667,7 +664,6 @@
 				3D3654E31B385566003B38F0 /* SideBarSubFolderTableViewCell.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
-				8E0AAB661B2F1BAD002C4CDA /* Record.swift in Sources */,
 				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
