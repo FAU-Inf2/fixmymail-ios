@@ -122,10 +122,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         switch indexPath.row {
         case 0: // Cell for To
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-            cell.label.textColor = UIColor.grayColor()
-            cell.label.text = "To:"
-            cell.textField.textColor = UIColor.blackColor()
-            cell.textField.tintColor = self.view.tintColor
+            
             var recipientsAsString: String = ""
             var count = 1
             for recipient in self.recipients {
@@ -135,26 +132,19 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                     recipientsAsString = recipientsAsString + ", "
                 }
             }
-            cell.textField.text = recipientsAsString
-            cell.textField.tag = 0
-            cell.textField.delegate = self
-            cell.textField.inputView = nil
-            cell.textField.enabled = false
             
             var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
             buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
-			buttonOpenContacts.tag = 0
+            buttonOpenContacts.tag = 0
             buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
-            cell.accessoryView = buttonOpenContacts
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "To:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: recipientsAsString, textFieldTag: 0, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonOpenContacts)
+            
             return cell
         case 1:
             if self.tableViewIsExpanded { // Cell for CC
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-                cell.label.textColor = UIColor.grayColor()
-                cell.label.text = "Cc:"
-                cell.textField.textColor = UIColor.blackColor()
-                cell.textField.tintColor = self.view.tintColor
+                
                 var ccRecipientsAsString: String = ""
                 var count = 1
                 for ccRecipient in self.ccRecipients {
@@ -163,41 +153,26 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         ccRecipientsAsString = ccRecipientsAsString + ", "
                     }
                 }
-                cell.textField.textColor = UIColor.blackColor()
-                cell.textField.text = ccRecipientsAsString
-                cell.textField.tag = 1
-                cell.textField.delegate = self
-                cell.textField.inputView = nil
-                cell.textField.enabled = false
                 
                 var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
-				buttonOpenContacts.tag = 1
+                buttonOpenContacts.tag = 1
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
-                cell.accessoryView = buttonOpenContacts
-                cell.selectionStyle = UITableViewCellSelectionStyle.None
+                
+                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Cc:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: ccRecipientsAsString, textFieldTag: 1, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonOpenContacts)
+                
                 return cell
             } else { // Cell for closed CC/BCC/From
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-                cell.label.textColor = UIColor.grayColor()
-                cell.label.text = "Cc/Bcc, From:"
-                cell.textField.textColor = UIColor.grayColor()
-                cell.textField.tintColor = self.view.tintColor
-                cell.textField.text = self.account.emailAddress
-                cell.textField.tag = 5
-                cell.textField.delegate = self
-                cell.textField.enabled = false
-                cell.accessoryView = nil
-                cell.selectionStyle = UITableViewCellSelectionStyle.None
+                
+                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Cc/Bcc, From:", textFieldTextColor: UIColor.grayColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.account.emailAddress, textFieldTag: 4, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
+                
                 return cell
             }
         case 2:
             if self.tableViewIsExpanded { // Cell for BCC
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-                cell.label.textColor = UIColor.grayColor()
-                cell.label.text = "Bcc:"
-                cell.textField.textColor = UIColor.blackColor()
-                cell.textField.tintColor = self.view.tintColor
+                
                 var bccRecipientsAsString: String = ""
                 var count = 1
                 for bccRecipient in self.bccRecipients {
@@ -206,89 +181,51 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         bccRecipientsAsString = bccRecipientsAsString + ", "
                     }
                 }
-                cell.textField.textColor = UIColor.blackColor()
-                cell.textField.text = bccRecipientsAsString
-                cell.textField.tag = 2
-                cell.textField.delegate = self
-                cell.textField.inputView = nil
-                cell.textField.enabled = false
                 
                 var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
 				buttonOpenContacts.tag = 2
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
-                cell.accessoryView = buttonOpenContacts
-                cell.selectionStyle = UITableViewCellSelectionStyle.None
+                
+                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Bcc:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: bccRecipientsAsString, textFieldTag: 2, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonOpenContacts)
+                
                 return cell
             } else { // Cell for Subject
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-                cell.label.textColor = UIColor.grayColor()
-                cell.label.text = "Subject:"
-                cell.textField.textColor = UIColor.blackColor()
-                cell.textField.tintColor = self.view.tintColor
-                cell.textField.text = self.subject
-                cell.textField.tag = 6
-                cell.textField.delegate = self
-                cell.textField.inputView = nil
+                
+                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
+                
                 cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
-                cell.textField.enabled = false
-                cell.accessoryView = nil
-                cell.selectionStyle = UITableViewCellSelectionStyle.None
+                
                 return cell
             }
         case 3:
             if self.tableViewIsExpanded { // Cell for From
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-                cell.label.textColor = UIColor.grayColor()
-                cell.label.text = "From:"
-                cell.textField.textColor = UIColor.blackColor()
-                cell.textField.text = self.account.emailAddress
-                cell.textField.tag = 3
-                cell.textField.delegate = self
-                cell.textField.tintColor = UIColor.whiteColor()
-                cell.textField.inputView = self.emailAddressPicker
-                cell.textField.addTarget(self, action: "togglePickerViewWithSender:", forControlEvents: UIControlEvents.TouchDown)
-                cell.textField.enabled = false
-                cell.accessoryView = nil
-                cell.selectionStyle = UITableViewCellSelectionStyle.None
+                
+                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "From:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: UIColor.clearColor(), textFieldText: self.account.emailAddress, textFieldTag: 3, textFieldDelegate: self, textFieldInputView: self.emailAddressPicker, cellAccessoryView: nil)
+                
                 return cell
             } else { // Cell for TextBody
                 var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-                cell.textViewMailBody.textColor = UIColor.blackColor()
-                cell.textViewMailBody.tintColor = self.view.tintColor
-                cell.textViewMailBody.delegate = self
-                cell.textViewMailBody.inputView = nil
-                cell.textViewMailBody.tag = 8
-                cell.textViewMailBody.userInteractionEnabled = false
-                cell.textViewMailBody.text = self.textBody
-                cell.selectionStyle = UITableViewCellSelectionStyle.None
+                
+                self.initSendViewCellWithTextViewWithCell(cell, textColor: UIColor.blackColor(), tintColor: self.view.tintColor, delegate: self, inputView: nil, tag: 6, text: self.textBody)
+                
                 return cell
             }
         case 4: // Cell for Subject
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-            cell.label.textColor = UIColor.grayColor()
-            cell.label.text = "Subject:"
-            cell.textField.textColor = UIColor.blackColor()
-            cell.textField.tintColor = self.view.tintColor
-            cell.textField.text = self.subject
-            cell.textField.tag = 4
-            cell.textField.delegate = self
-            cell.textField.inputView = nil
+            
+            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
+            
             cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
-            cell.textField.enabled = false
-            cell.accessoryView = nil
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            
             return cell
         case 5: // Cell for TextBody
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-            cell.textViewMailBody.textColor = UIColor.blackColor()
-            cell.textViewMailBody.tintColor = self.view.tintColor
-            cell.textViewMailBody.delegate = self
-            cell.textViewMailBody.inputView = nil
-            cell.textViewMailBody.tag = 7
-            cell.textViewMailBody.userInteractionEnabled = false
-            cell.textViewMailBody.text = self.textBody
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            self.initSendViewCellWithTextViewWithCell(cell, textColor: UIColor.blackColor(), tintColor: self.view.tintColor, delegate: self, inputView: nil, tag: 6, text: self.textBody)
+            
             return cell
         default:
             return UITableViewCell()
@@ -314,7 +251,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             selectIndexPath = indexPath
         case 3: // Cell for From or TextBody
             if tableViewIsExpanded {
-                selectIndexPath = indexPath
+                self.togglePickerViewWithSender((tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithLabelAndTextField).textField)
             } else {
                 if let responder: AnyObject = self.isResponder {
                     responder.resignFirstResponder()
@@ -397,6 +334,13 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     //MARK: - TextFieldDelegate
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        if textField.tag == 3 {
+            textField.userInteractionEnabled = false
+        }
+        return true
+    }
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         self.isResponder = textField
     }
@@ -404,6 +348,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     func textFieldDidEndEditing(textField: UITextField) {
         self.isResponder = nil
         textField.enabled = false
+        if textField.tag == 3 {
+            textField.userInteractionEnabled = true
+        }
         switch textField.tag {
         case 0:
             self.recipients.removeAllObjects()
@@ -490,6 +437,31 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     //MARK: - Supportive methods
+    func initSendViewCellWithLabelAndTextFieldWithCell(cell: SendViewCellWithLabelAndTextField, labelColor: UIColor, labelText: String, textFieldTextColor: UIColor, textFieldTintColor: UIColor, textFieldText: String, textFieldTag: Int, textFieldDelegate: UITextFieldDelegate, textFieldInputView: UIView?, cellAccessoryView: UIView?) {
+        cell.label.textColor = labelColor
+        cell.label.text = labelText
+        cell.textField.textColor = textFieldTextColor
+        cell.textField.tintColor = textFieldTintColor
+        cell.textField.text = textFieldText
+        cell.textField.tag = textFieldTag
+        cell.textField.delegate = textFieldDelegate
+        cell.textField.inputView = textFieldInputView
+        cell.textField.enabled = false
+        cell.accessoryView = cellAccessoryView
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+    }
+    
+    func initSendViewCellWithTextViewWithCell(cell: SendViewCellWithTextView, textColor: UIColor, tintColor: UIColor, delegate: UITextViewDelegate, inputView: UIView?, tag: Int, text: String) {
+        cell.textViewMailBody.textColor = textColor
+        cell.textViewMailBody.tintColor = tintColor
+        cell.textViewMailBody.delegate = delegate
+        cell.textViewMailBody.inputView = inputView
+        cell.textViewMailBody.tag = tag
+        cell.textViewMailBody.userInteractionEnabled = false
+        cell.textViewMailBody.text = text
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+    }
+    
     func shouldContractTableView() -> Bool {
         var cell = self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! SendViewCellWithLabelAndTextField
         if cell.textField.text != "" {
@@ -516,6 +488,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         if sender.isFirstResponder() {
             sender.resignFirstResponder()
         } else {
+            (sender as! UITextField).enabled = true
+            if let responder: AnyObject = self.isResponder {
+                responder.resignFirstResponder()
+            }
             sender.becomeFirstResponder()
         }
     }
