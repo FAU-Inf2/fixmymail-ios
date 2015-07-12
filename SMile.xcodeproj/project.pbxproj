@@ -33,6 +33,7 @@
 		3DF253B71AF7611D00B99BC8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B61AF7611D00B99BC8 /* Images.xcassets */; };
 		3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF253B81AF7611D00B99BC8 /* LaunchScreen.xib */; };
 		3DF253C61AF7611E00B99BC8 /* SMileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF253C51AF7611E00B99BC8 /* SMileTests.swift */; };
+		5B66C33E1B4E660600BDF3D6 /* IMAPFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */; };
 		5B7EAB081B31870800B888BD /* archive.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B7EAB071B31870800B888BD /* archive.png */; };
 		5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8948FA1B317DAA0064F3C0 /* Trash.png */; };
 		5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */; };
@@ -144,6 +145,7 @@
 		3DF253C41AF7611E00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253C51AF7611E00B99BC8 /* SMileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMileTests.swift; sourceTree = "<group>"; };
 		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "SMileTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPFunctions.swift; sourceTree = "<group>"; };
 		5B7EAB071B31870800B888BD /* archive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archive.png; sourceTree = "<group>"; };
 		5B8948FA1B317DAA0064F3C0 /* Trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trash.png; sourceTree = "<group>"; };
 		5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluedot@2x.png"; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */,
 				A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */,
 				8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */,
+				5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */,
 				8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
 				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
@@ -677,6 +680,7 @@
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */,
 				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
+				5B66C33E1B4E660600BDF3D6 /* IMAPFunctions.swift in Sources */,
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
 				8E450BB21B15BBF0001E37B9 /* MCOCIDURLProtocol.mm in Sources */,
 				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
