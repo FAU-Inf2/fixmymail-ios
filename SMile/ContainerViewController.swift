@@ -149,6 +149,7 @@ extension ContainerViewController: SideBarProtocol {
             contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
             shouldChangeVC = true
             
+            var allAccounts: [EmailAccount] = [EmailAccount]()
             //set all Accounts active
             let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
             var error: NSError?
@@ -158,7 +159,8 @@ extension ContainerViewController: SideBarProtocol {
             } else {
                 if let emailAccounts = result {
                     for account in emailAccounts {
-                        (account as! EmailAccount).active = true
+                        (account as! EmailAccount).recentlyUsed = true
+                        allAccounts.append(account as! EmailAccount)
                     }
                 }
             }
@@ -166,6 +168,8 @@ extension ContainerViewController: SideBarProtocol {
             if error != nil {
                 NSLog("%@", error!.description)
             }
+            
+            contentVC.setValue(allAccounts, forKey: "accounts")
 
         case "EmailSpecific":
             contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
@@ -183,9 +187,13 @@ extension ContainerViewController: SideBarProtocol {
             } else {
                 if let emailAccounts = result {
                     for account in emailAccounts {
-                        (account as! EmailAccount).active = false
+                        (account as! EmailAccount).recentlyUsed = false
                         if (account as! EmailAccount).emailAddress == actionItem.emailAddress {
-                            (account as! EmailAccount).active = true
+                            (account as! EmailAccount).recentlyUsed = true
+                            
+                            var specificAccount: [EmailAccount] = [EmailAccount]()
+                            specificAccount.append(account as! EmailAccount)
+                            contentVC.setValue(specificAccount, forKey: "accounts")
                         }
                     }
                 }
