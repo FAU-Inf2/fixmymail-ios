@@ -12,7 +12,7 @@ import CoreData
 class EmailAccount: NSManagedObject {
 
     @NSManaged var accountName: String
-    @NSManaged var active: Bool
+    @NSManaged var recentlyUsed: Bool
     @NSManaged var authTypeImap: String
     @NSManaged var authTypeSmtp: String
     @NSManaged var connectionTypeImap: String
@@ -23,6 +23,7 @@ class EmailAccount: NSManagedObject {
     @NSManaged var isActivated: Bool
     @NSManaged var password: String
     @NSManaged var realName: String
+    @NSManaged var session: MCOIMAPSession
     @NSManaged var smtpHostname: String
     @NSManaged var smtpPort: NSNumber
     @NSManaged var username: String

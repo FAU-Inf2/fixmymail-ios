@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 protocol TableViewCellDelegate {
     func deleteEmail(mail: Email)
     func archiveEmail(mail: Email)
@@ -18,10 +17,10 @@ class CustomMailTableViewCell: UITableViewCell {
     
     @IBOutlet var mailFrom: UILabel!
     @IBOutlet var mailSubject: UILabel!
-    @IBOutlet var unseendot: UIImageView!
 	@IBOutlet weak var dateLabel: UILabel!
     @IBOutlet var mailBody: UILabel!
-	
+	@IBOutlet var unseendot: UIImageView!
+    
     var mail: Email!
     var delegate: TableViewCellDelegate?
     var height: CGFloat!
@@ -105,22 +104,18 @@ class CustomMailTableViewCell: UITableViewCell {
             }
             
             if deleteOnDragRelease {
-                if delegate != nil {
-                    //delete this email
-                    UIView.animateWithDuration(0.2, animations: {self.frame = fullLeftFrame})
-                    delegate!.deleteEmail(mail)
-                }
+                //delete this email
+                UIView.animateWithDuration(0.2, animations: {self.frame = fullLeftFrame})
+                delegate!.deleteEmail(mail)
             }
-
+            
             if remindMeOnDragRelease {
                 UIView.animateWithDuration(0.2, animations: {self.frame = originalFrame})
                 NSLog("REMIND ME")
             } else if archiveOnDragRelease {
-                if delegate != nil {
-                    //archive this email
-                    UIView.animateWithDuration(0.2, animations: {self.frame = fullRightFrame})
-                    delegate!.archiveEmail(mail)
-                }
+                //archive this email
+                UIView.animateWithDuration(0.2, animations: {self.frame = fullRightFrame})
+                delegate!.archiveEmail(mail)
             }
         }
     }

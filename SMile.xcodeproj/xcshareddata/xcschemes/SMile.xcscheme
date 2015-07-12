@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3DF253A61AF7611D00B99BC8"
-               BuildableName = "FixMyMail.app"
-               BlueprintName = "FixMyMail"
-               ReferencedContainer = "container:FixMyMail.xcodeproj">
+               BuildableName = "SMile.app"
+               BlueprintName = "SMile"
+               ReferencedContainer = "container:SMile.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3DF253BE1AF7611D00B99BC8"
-               BuildableName = "FixMyMailTests.xctest"
-               BlueprintName = "FixMyMailTests"
-               ReferencedContainer = "container:FixMyMail.xcodeproj">
+               BuildableName = "SMileTests.xctest"
+               BlueprintName = "SMileTests"
+               ReferencedContainer = "container:SMile.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3DF253BE1AF7611D00B99BC8"
-               BuildableName = "FixMyMailTests.xctest"
-               BlueprintName = "FixMyMailTests"
-               ReferencedContainer = "container:FixMyMail.xcodeproj">
+               BuildableName = "SMileTests.xctest"
+               BlueprintName = "SMileTests"
+               ReferencedContainer = "container:SMile.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3DF253A61AF7611D00B99BC8"
-            BuildableName = "FixMyMail.app"
-            BlueprintName = "FixMyMail"
-            ReferencedContainer = "container:FixMyMail.xcodeproj">
+            BuildableName = "SMile.app"
+            BlueprintName = "SMile"
+            ReferencedContainer = "container:SMile.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -77,9 +77,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3DF253A61AF7611D00B99BC8"
-            BuildableName = "FixMyMail.app"
-            BlueprintName = "FixMyMail"
-            ReferencedContainer = "container:FixMyMail.xcodeproj">
+            BuildableName = "SMile.app"
+            BlueprintName = "SMile"
+            ReferencedContainer = "container:SMile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,9 +96,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3DF253A61AF7611D00B99BC8"
-            BuildableName = "FixMyMail.app"
-            BlueprintName = "FixMyMail"
-            ReferencedContainer = "container:FixMyMail.xcodeproj">
+            BuildableName = "SMile.app"
+            BlueprintName = "SMile"
+            ReferencedContainer = "container:SMile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

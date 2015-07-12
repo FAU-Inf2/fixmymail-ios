@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class FixMyMailTests: XCTestCase {
+class SMileTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

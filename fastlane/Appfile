@@ -1,4 +1,4 @@
-app_identifier "de.fau.cs.mad.fixmymail.ios" # The bundle identifier of your app
+app_identifier "de.fau.cs.mad.SMile.ios" # The bundle identifier of your app
 apple_id "mad@i2.informatik.uni-erlangen.de" # Your Apple email address
 
 # You can uncomment any of the lines below and add your own

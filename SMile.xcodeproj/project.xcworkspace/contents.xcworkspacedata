@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:FixMyMail.xcodeproj">
+      location = "self:/Users/mcqueen666/Documents/Projekt_fixmymail/fixmymail-ios/SMile.xcodeproj">
    </FileRef>
 </Workspace>
