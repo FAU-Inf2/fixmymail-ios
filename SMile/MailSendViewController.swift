@@ -399,18 +399,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
             self.navigationController?.popViewControllerAnimated(true)
         case 2:
             //Move Email to drafts Folder
-            let imapSession = MCOIMAPSession()
-            imapSession.hostname = self.account.imapHostname
-            imapSession.port = UInt32(self.account.imapPort.unsignedIntegerValue)
-            imapSession.username = self.account.username
-            
-            let (dictionary, error) = Locksmith.loadDataForUserAccount(self.account.emailAddress)
-            if error == nil {
-                imapSession.password = dictionary?.valueForKey("Password:") as! String
-            }
-            
-            imapSession.authType = StringToAuthType(self.account.authTypeImap)
-            imapSession.connectionType = StringToConnectionType(self.account.connectionTypeImap)
+            let imapSession = getSession(self.account)
             
             //get draftsFolderName
             let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
@@ -574,18 +563,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 NSLog("sent")
                 
                 //Move Email to sent Folder
-                let imapSession = MCOIMAPSession()
-                imapSession.hostname = self.account.imapHostname
-                imapSession.port = UInt32(self.account.imapPort.unsignedIntegerValue)
-                imapSession.username = self.account.username
-                
-                let (dictionary, error) = Locksmith.loadDataForUserAccount(self.account.emailAddress)
-                if error == nil {
-                    imapSession.password = dictionary?.valueForKey("Password:") as! String
-                }
-                
-                imapSession.authType = StringToAuthType(self.account.authTypeImap)
-                imapSession.connectionType = StringToConnectionType(self.account.connectionTypeImap)
+                let imapSession = getSession(self.account)
                 
                 //get sentFolderName
                 let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
