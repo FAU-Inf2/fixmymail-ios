@@ -16,6 +16,8 @@
 		3D3654E41B385566003B38F0 /* SideBarSubFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3654E21B385566003B38F0 /* SideBarSubFolderTableViewCell.xib */; };
 		3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D37FFA81B01DBC200388F81 /* ContentViewController.swift */; };
 		3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */; };
+		3D65A4CC1B53014E00E88CC7 /* triangle_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D65A4CA1B53014E00E88CC7 /* triangle_bottom.png */; };
+		3D65A4CD1B53014E00E88CC7 /* triangle_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D65A4CB1B53014E00E88CC7 /* triangle_right.png */; };
 		3D848A2D1B3768C90039A162 /* SendViewCellWithTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */; };
 		3D848A2E1B376A010039A162 /* EmailAccountSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */; };
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
@@ -123,6 +125,8 @@
 		3D3654E21B385566003B38F0 /* SideBarSubFolderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SideBarSubFolderTableViewCell.xib; sourceTree = "<group>"; };
 		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPFolderFetcher.swift; sourceTree = "<group>"; };
+		3D65A4CA1B53014E00E88CC7 /* triangle_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = triangle_bottom.png; sourceTree = "<group>"; };
+		3D65A4CB1B53014E00E88CC7 /* triangle_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = triangle_right.png; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
 		3D9027521AF96D0D000D3E72 /* MailCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MailCore.framework; path = ../Carthage/Build/iOS/MailCore.framework; sourceTree = "<group>"; };
@@ -463,6 +467,8 @@
 				5B7EAB071B31870800B888BD /* archive.png */,
 				AD1255DF1B1A302F005EA5CE /* sources.txt */,
 				3DB242131B38BADB00095634 /* folder.png */,
+				3D65A4CA1B53014E00E88CC7 /* triangle_bottom.png */,
+				3D65A4CB1B53014E00E88CC7 /* triangle_right.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -593,6 +599,7 @@
 				AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */,
 				AD789DA31B319BC30001719E /* AboutUsViewController.xib in Resources */,
 				8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */,
+				3D65A4CD1B53014E00E88CC7 /* triangle_right.png in Resources */,
 				5B7EAB081B31870800B888BD /* archive.png in Resources */,
 				AD789D9D1B3054A00001719E /* Feedback.html in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
@@ -611,6 +618,7 @@
 				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
 				AD789DA51B31A4420001719E /* AboutUs.html in Resources */,
+				3D65A4CC1B53014E00E88CC7 /* triangle_bottom.png in Resources */,
 				5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */,
 				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
 				ADE770FF1B35E1C50008B449 /* smile_icon_blue.png in Resources */,
@@ -647,7 +655,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n/usr/local/bin/carthage copy-frameworks";
+			shellScript = "#/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n#/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 

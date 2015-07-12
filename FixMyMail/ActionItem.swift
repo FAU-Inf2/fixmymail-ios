@@ -17,6 +17,7 @@ class ActionItem: NSObject {
     var actionItems: [ActionItem]?
     var emailAccount: EmailAccount?
     var folderExpanded: Bool!
+    var pathComponentNumber: Int
 	
     init(Name: String, viewController: String, emailAddress: String? = nil, icon: UIImage? = nil, emailFolder: MCOIMAPFolder? = nil, actionItems: [ActionItem]? = nil) {
 		self.cellName = Name
@@ -26,6 +27,7 @@ class ActionItem: NSObject {
         self.emailFolder = emailFolder
         self.actionItems = actionItems
         self.folderExpanded = false
+        self.pathComponentNumber = 0
 	}
     
     init(Name: String, viewController: String, emailAccount: EmailAccount, icon: UIImage? = nil, actionItems: [ActionItem]? = nil, emailFolder: MCOIMAPFolder? = nil) {
@@ -37,5 +39,6 @@ class ActionItem: NSObject {
         self.actionItems = actionItems
         self.emailAccount = emailAccount
         self.folderExpanded = false
+        self.pathComponentNumber = 0
     }
 }
