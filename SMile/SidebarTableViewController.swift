@@ -24,7 +24,6 @@ class SidebarTableViewController: UITableViewController {
     var delegate: SideBarProtocol?
     var emailAccounts: [EmailAccount] = [EmailAccount]()
     var currAccountName: String?
-    @IBOutlet weak var subFolderLeftSpaceConstraint: NSLayoutConstraint!
     let leftSpaceIncrement: Float = 20.0
     
     override func viewDidLoad() {
@@ -128,25 +127,9 @@ class SidebarTableViewController: UITableViewController {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-                var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
-                if let cell = inboxCell {
-                    if(indexPath.row == 0) {
-                        cell.menuLabel.text = "All"
-                    } else {
-                        cell.menuLabel.text = mailAcc.cellName
-                    }
-                    if let icon = mailAcc.cellIcon {
-                        cell.menuImg.image = icon
-                    } else {
-                        cell.menuImg.image = nil
-                    }
-                    
-                    return cell
-                } else {
                     NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
                     var sideBarCell: SideBarTableViewCell = self.sidebarCell
                     self.sidebarCell = nil
-                    let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     if(indexPath.row == 0) {
                         sideBarCell.menuLabel.text = "All"
                     } else {
@@ -159,20 +142,7 @@ class SidebarTableViewController: UITableViewController {
                     }
                     
                     return sideBarCell
-                }
             } else {
-                var accCell: AnyObject? = self.tableView.dequeueReusableCellWithIdentifier("SideBarSubFolder")
-                if accCell != nil {
-                    var cell = accCell as! SideBarSubFolderTableViewCell
-                    let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
-                    cell.menuLabel.text = mailAcc.cellName
-                    if let icon = mailAcc.cellIcon {
-                        cell.menuImg.image = icon
-                    } else {
-                        cell.menuImg.image = nil
-                    }
-                    return cell
-                } else {
                     var viewArr = NSBundle.mainBundle().loadNibNamed("SideBarSubFolderTableViewCell", owner: self, options: nil)
                     var cell = viewArr[0] as! SideBarSubFolderTableViewCell
                     let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
@@ -184,7 +154,6 @@ class SidebarTableViewController: UITableViewController {
                     }
                     return cell
                 }
-            }
         } else if indexPath.section == 1 {
             let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
             if actionItem.viewController == "NoVC" {
@@ -275,6 +244,7 @@ class SidebarTableViewController: UITableViewController {
         if actionItem.viewController != "NoVC" && actionItem.viewController != "SubFolder" {
             delegate?.cellSelected!(actionItem)
         } else {
+            self.removeExpandedSubItemsWithActionItem(actionItem)
             if actionItem.actionItems != nil {
                 if actionItem.folderExpanded == false {
                     var sectionItems: [ActionItem] = self.rows[indexPath.section] as! [ActionItem]
@@ -437,6 +407,7 @@ class SidebarTableViewController: UITableViewController {
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                                 if contains(subItemArr, acItem) == false {
                                     subItemArr.append(acItem)
+                                    subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
                                     acItem.actionItems = subItemArr
                                 }
                             } else {
@@ -445,6 +416,7 @@ class SidebarTableViewController: UITableViewController {
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                                 if contains(subItemArr, acItem) == false {
                                     subItemArr.append(acItem)
+                                    subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
                                     parItem.actionItems = subItemArr
                                 }
                             }
@@ -487,10 +459,8 @@ class SidebarTableViewController: UITableViewController {
     
     private func setConstraintsForSubFolderCell(cell: SideBarSubFolderTableViewCell, andPathComponentNumber pathComponentNumber: Int) -> Void {
         
-        var constraints = cell.contentView.constraints() as? [NSLayoutConstraint]
-        if let constArr = constraints {
-            cell.removeConstraints(constArr)
-        }
+        cell.menuImg.removeConstraints(cell.menuImg.constraints())
+        cell.contentView.removeConstraints(cell.contentView.constraints())
         
         var constraint1: NSLayoutConstraint = NSLayoutConstraint(item: cell.menuImg, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: cell.contentView, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: (CGFloat(pathComponentNumber) * CGFloat(self.leftSpaceIncrement) + 33.0))
         cell.addConstraint(constraint1)
@@ -508,12 +478,32 @@ class SidebarTableViewController: UITableViewController {
         cell.addConstraint(constraint5)
         
         var constraint6 = NSLayoutConstraint(item: cell.menuImg, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 43.0)
-        cell.addConstraint(constraint6)
+        cell.menuImg.addConstraint(constraint6)
         
         var constraint7 = NSLayoutConstraint(item: cell.menuImg, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 43.0)
-        cell.addConstraint(constraint7)
+        cell.menuImg.addConstraint(constraint7)
         
         cell.updateConstraints()
+    }
+    
+    private func removeExpandedSubItemsWithActionItem(actionItem: ActionItem) -> Void {
+        if actionItem.actionItems != nil && actionItem.actionItems?.count > 0 {
+            for item in actionItem.actionItems! {
+                if item.actionItems != nil && item.actionItems?.count > 0 {
+                    self.removeExpandedSubItemsWithActionItem(item)
+                }
+                if item.folderExpanded == true {
+                    var section: [ActionItem] = self.rows[1] as! [ActionItem]
+                    let index: Int? = find(section, item)
+                    if let i = index {
+                        section.removeRange((i + 1)...(item.actionItems!.count + i))
+                        item.folderExpanded = false
+                        self.rows[1] = section
+                        self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.Automatic)
+                    }
+                }
+            }
+        }
     }
 
 }

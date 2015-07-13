@@ -4,29 +4,37 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SidebarTableViewController" customModule="FixMyMail" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SidebarTableViewController" customModule="SMile" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SideBarSubFolder" id="KGk-i7-Jjw" customClass="SideBarSubFolderTableViewCell" customModule="FixMyMail" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SideBarSubFolder" id="KGk-i7-Jjw" customClass="SideBarSubFolderTableViewCell" customModule="SMile" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rOs-Ac-Dja">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rOs-Ac-Dja">
                         <rect key="frame" x="33" y="0.0" width="43" height="43"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="43" id="Cw9-UF-CMK"/>
-                            <constraint firstAttribute="width" constant="43" id="DuI-Ut-Wez"/>
+                            <constraint firstAttribute="height" constant="43" id="0ND-kd-kqM"/>
+                            <constraint firstAttribute="width" constant="43" id="SR1-Ty-O65"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYb-wM-7aM">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYb-wM-7aM">
                         <rect key="frame" x="84" y="11" width="216" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="rOs-Ac-Dja" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="33" id="6x4-ud-Ae4"/>
+                    <constraint firstAttribute="trailing" secondItem="bYb-wM-7aM" secondAttribute="trailing" constant="20" id="AKf-g1-KM0"/>
+                    <constraint firstItem="bYb-wM-7aM" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="BKN-M4-cth"/>
+                    <constraint firstItem="bYb-wM-7aM" firstAttribute="leading" secondItem="rOs-Ac-Dja" secondAttribute="trailing" constant="8" id="Es6-0k-foO"/>
+                    <constraint firstAttribute="bottom" secondItem="bYb-wM-7aM" secondAttribute="bottom" constant="11" id="LZi-aI-ZZM"/>
+                    <constraint firstItem="rOs-Ac-Dja" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ci7-LB-QN7"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="menuImg" destination="rOs-Ac-Dja" id="lXb-wR-QBB"/>
