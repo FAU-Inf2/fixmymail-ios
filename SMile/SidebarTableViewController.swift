@@ -400,6 +400,17 @@ class SidebarTableViewController: UITableViewController {
                                 break;
                             }
                         }
+                        if parentItem == nil {
+                            var acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                            acItem.pathComponentNumber = i
+                            acItem.actionItems = [ActionItem]()
+                            parentItem = acItem
+                            if i == 0 {
+                                subItems.append(acItem)
+                            } else {
+                                //TODO
+                            }
+                        }
                         if let parItem = parentItem {
                             parItem.viewController = "SubFolder"
                             if pathComponents[i + 1] != fol.path.lastPathComponent {
@@ -420,15 +431,26 @@ class SidebarTableViewController: UITableViewController {
                                     parItem.actionItems = subItemArr
                                 }
                             }
-                        } else {
-                            var acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
-                            acItem.pathComponentNumber = i
-                            acItem.actionItems = [ActionItem]()
                         }
                     }
                 } else {
-                    var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
-                    if contains(subItems, item) == false {
+                    var isParentFolder = false
+                    for imapFolder in emailAccount.folders {
+                        var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
+                        var folPath: NSString = NSString(string: fol.path)
+                        var range: NSRange = folPath.rangeOfString(NSString(format: "%@/", fol.path) as String)
+                        if range.length != NSNotFound {
+                            isParentFolder = true
+                            break;
+                        }
+                    }
+                    var item: ActionItem!
+                    if isParentFolder == true {
+                        item = ActionItem(Name: fol.path, viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                    } else {
+                        item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
+                    }
+                    if self.containsActionItem(item, inActionItemArray: subItems) == false {
                         subItems.append(item)
                     }
                 }
@@ -440,6 +462,8 @@ class SidebarTableViewController: UITableViewController {
         actionItem.folderExpanded = false
         return actionItem
     }
+    
+    //MARK: - Folder helper operations
     
     private func getParentItemFromItems(items: [ActionItem], andParentFolderName parentFolderName: String) -> ActionItem? {
         var parentItem: ActionItem?
@@ -504,6 +528,16 @@ class SidebarTableViewController: UITableViewController {
                 }
             }
         }
+    }
+    
+    private func containsActionItem(actionItem: ActionItem, inActionItemArray actionItemArray: [ActionItem]) -> Bool {
+        for item in actionItemArray {
+            if actionItem.cellName == item.cellName && actionItem.viewController == item.viewController &&
+                actionItem.emailAccount == item.emailAccount && actionItem.cellIcon == item.cellIcon {
+                    return true
+            }
+        }
+        return false
     }
 
 }
