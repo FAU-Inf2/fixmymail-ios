@@ -88,6 +88,8 @@ func moveEmailToFolder(mail: Email!, destFolder: String!) {
     localCopyMessageOp.start {(error, uidMapping) -> Void in
         if let error = error {
             NSLog("error in moveEmailToFolder in localCopyMessageOp: \(error.userInfo!)")
+        } else {
+            mail.folder = destFolder
         }
     }
     
