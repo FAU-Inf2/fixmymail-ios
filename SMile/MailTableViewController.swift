@@ -477,7 +477,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func moveButtonAction(){
-        
+        var moveViewController = MoveEmailViewController(nibName: "MoveEmailViewController", bundle: nil)
+        moveViewController.emailsToMove = self.selectedEmails
+        self.navigationController?.pushViewController(moveViewController, animated: true)
+        //endEditing()
     }
     
     func deleteButtonAction(){
