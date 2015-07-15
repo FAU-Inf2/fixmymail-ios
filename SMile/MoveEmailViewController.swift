@@ -196,10 +196,10 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
                 } else {
                     var isParentFolder = false
                     for imapFolder in emailAccount.folders {
-                        var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-                        var folPath: NSString = NSString(string: fol.path)
+                        var folder: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
+                        var folPath: NSString = NSString(string: folder.path)
                         var range: NSRange = folPath.rangeOfString(NSString(format: "%@/", fol.path) as String)
-                        if range.length != NSNotFound {
+                        if range.location != NSNotFound {
                             isParentFolder = true
                             break;
                         }
@@ -216,6 +216,7 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
                 }
             }
         }
+        
         
         actionItem.actionItems = subItems.sorted { $0.cellName < $1.cellName }
         actionItem.folderExpanded = false
