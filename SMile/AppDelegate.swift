@@ -204,6 +204,120 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				println("saving data for \(webAccount.emailAddress)")
 			}
 			
+			
+			var tcomAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			tcomAccount.username = "fixmymail@t-online.de"
+			tcomAccount.password = "*"
+			tcomAccount.emailAddress = "fixmymail@t-online.de"
+			tcomAccount.imapHostname = "secureimap.t-online.de"
+			tcomAccount.imapPort = 993
+			tcomAccount.authTypeImap = authTypeToString(MCOAuthType.SASLNone)
+			tcomAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
+			tcomAccount.smtpHostname = "securesmtp.t-online.de"
+			tcomAccount.smtpPort = 465
+			tcomAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
+			tcomAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
+			tcomAccount.realName = "SMile_Tcom"
+			tcomAccount.accountName = "Tcom"
+			tcomAccount.isActivated = true
+			tcomAccount.signature = "Sent with T-Online!"
+			let errorLocksmithTcom = Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
+			if errorLocksmithTcom == nil {
+				NSLog("found old data -> deleted!")
+			}
+			let tcomSaveRequest = LocksmithRequest(userAccount: "fixmymail@t-online.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
+			tcomSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+			let (tcomDictionary, tcomRequestError) = Locksmith.performRequest(tcomSaveRequest)
+			if tcomRequestError == nil {
+				NSLog("saving data for \(tcomAccount.emailAddress)")
+			}
+			
+			
+			var iCloudAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			iCloudAccount.username = "fixmymail2015"
+			iCloudAccount.password = "*"
+			iCloudAccount.emailAddress = "fixmymail2015@icloud.com"
+			iCloudAccount.imapHostname = "imap.mail.me.com"
+			iCloudAccount.imapPort = 993
+			iCloudAccount.authTypeImap = authTypeToString(MCOAuthType.SASLPlain)
+			iCloudAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
+			iCloudAccount.smtpHostname = "smtp.mail.me.com"
+			iCloudAccount.smtpPort = 587
+			iCloudAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
+			iCloudAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.StartTLS)
+			iCloudAccount.realName = "SMile_iCloud"
+			iCloudAccount.accountName = "iCloud"
+			iCloudAccount.isActivated = true
+			iCloudAccount.signature = "Sent with iCloud"
+			let errorLocksmithiCloud = Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
+			if errorLocksmithiCloud == nil {
+				NSLog("found old data -> deleted!")
+			}
+			let iCloudSaveRequest = LocksmithRequest(userAccount: "fixmymail2015@icloud.com", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
+			iCloudSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+			let (iCloudDictionary, iCloudRequestError) = Locksmith.performRequest(iCloudSaveRequest)
+			if iCloudRequestError == nil {
+				NSLog("saving data for \(iCloudAccount.emailAddress)")
+			}
+			
+			
+			var YahooAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			YahooAccount.username = "fixmymail2015"
+			YahooAccount.password = "*"
+			YahooAccount.emailAddress = "fixmymail2015@yahoo.de"
+			YahooAccount.imapHostname = "imap.mail.yahoo.com"
+			YahooAccount.imapPort = 993
+			YahooAccount.authTypeImap = authTypeToString(MCOAuthType.SASLPlain)
+			YahooAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
+			YahooAccount.smtpHostname = "smtp.mail.yahoo.com"
+			YahooAccount.smtpPort = 465
+			YahooAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
+			YahooAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.TLS)
+			YahooAccount.realName = "SMile_yahoo"
+			YahooAccount.accountName = "Yahoo"
+			YahooAccount.isActivated = true
+			YahooAccount.signature = "Sent with Yahoo"
+			let errorLocksmithYahoo = Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
+			if errorLocksmithYahoo == nil {
+				NSLog("found old data -> deleted!")
+			}
+			let YahooSaveRequest = LocksmithRequest(userAccount: "fixmymail2015@yahoo.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
+			YahooSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+			let (YahooDictionary, YahooRequestError) = Locksmith.performRequest(YahooSaveRequest)
+			if YahooRequestError == nil {
+				NSLog("saving data for \(YahooAccount.emailAddress)")
+			}
+			
+			
+			var OutlookAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			OutlookAccount.username = "fixme2015@outlook.de"
+			OutlookAccount.password = "*"
+			OutlookAccount.emailAddress = "fixme2015@outlook.de"
+			OutlookAccount.imapHostname = "imap-mail.outlook.com"
+			OutlookAccount.imapPort = 993
+			OutlookAccount.authTypeImap = authTypeToString(MCOAuthType.SASLPlain)
+			OutlookAccount.connectionTypeImap = connectionTypeToString(MCOConnectionType.TLS)
+			OutlookAccount.smtpHostname = "smtp-mail.outlook.com"
+			OutlookAccount.smtpPort = 587
+			OutlookAccount.authTypeSmtp = authTypeToString(MCOAuthType.SASLPlain)
+			OutlookAccount.connectionTypeSmtp = connectionTypeToString(MCOConnectionType.StartTLS)
+			OutlookAccount.realName = "SMile_outlook"
+			OutlookAccount.accountName = "Outlook"
+			OutlookAccount.isActivated = true
+			OutlookAccount.signature = "Sent with Outlook"
+			let errorLocksmithOutlook = Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
+			if errorLocksmithOutlook == nil {
+				NSLog("found old data -> deleted!")
+			}
+			let OutlookSaveRequest = LocksmithRequest(userAccount: "fixme2015@outlook.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
+			OutlookSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+			let (OutlookDictionary, OutlookRequestError) = Locksmith.performRequest(OutlookSaveRequest)
+			if OutlookRequestError == nil {
+				NSLog("saving data for \(OutlookAccount.emailAddress)")
+			}
+			
+			
+			
             var error: NSError?
             self.managedObjectContext!.save(&error)
       
