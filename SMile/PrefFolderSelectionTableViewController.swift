@@ -1,5 +1,5 @@
 //
-//  PrefAccountBehaviorTableViewController.swift
+//  PrefFolderSelectionTableViewController.swift
 //  SMile
 //
 //  Created by Sebastian Thürauf on 29.07.15.
@@ -8,20 +8,19 @@
 
 import UIKit
 
-class PrefAccountBehaviorTableViewController: UITableViewController {
+class PrefFolderSelectionTableViewController: UITableViewController {
 	
 	var emailAcc: EmailAccount?
-	var entries = [String: String]()
-	var labelStrings = [String]()
-	var folderVCs:[PrefFolderSelectionTableViewController?] = [nil,nil,nil,nil]
-        
+	var StringForFolderBehavior: String?
+	var folderPaths = [String]()
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		
 		loadData()
 
-		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
-		self.navigationItem.title = "Account behavior"
+		tableView.registerNib(UINib(nibName: "AuthConTableViewCell", bundle: nil),forCellReuseIdentifier:"AuthConTableViewCell")
+		self.navigationItem.title = self.StringForFolderBehavior
 		
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -46,34 +45,19 @@ class PrefAccountBehaviorTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return self.entries.count
+        return self.folderPaths.count
     }
 
-	
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("PreferenceAccountCell", forIndexPath: indexPath) as! PreferenceAccountTableViewCell
-		
-		cell.labelCellContent.text = self.labelStrings[indexPath.row]
-		cell.textfield.text = self.entries[self.labelStrings[indexPath.row]]
-		cell.textfield.textAlignment = NSTextAlignment.Right
-		cell.textfield.enabled = false
-		cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-		
+        let cell = tableView.dequeueReusableCellWithIdentifier("AuthConTableViewCell", forIndexPath: indexPath) as! AuthConTableViewCell
 
         // Configure the cell...
+		cell.textfield.text = self.folderPaths[indexPath.row]
 
         return cell
     }
-	
-	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		if self.folderVCs[indexPath.row] == nil {
-			self.folderVCs[indexPath.row] = PrefFolderSelectionTableViewController(nibName: "PrefFolderSelectionTableViewController", bundle: nil)
-			self.folderVCs[indexPath.row]!.emailAcc = self.emailAcc!
-			self.folderVCs[indexPath.row]!.StringForFolderBehavior = self.labelStrings[indexPath.row]
-		}
-		self.navigationController?.pushViewController(self.folderVCs[indexPath.row]!, animated: true)
-		tableView.deselectRowAtIndexPath(indexPath, animated: true)
-	}
+
 
     /*
     // Override to support conditional editing of the table view.
@@ -119,16 +103,16 @@ class PrefAccountBehaviorTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-	func loadData(){
-		self.entries["Drafts"] = self.emailAcc!.draftFolder
-		self.entries["Sent"] = self.emailAcc!.sentFolder
-		self.entries["Deleted"] = self.emailAcc!.deletedFolder
-		self.entries["Archive"] = self.emailAcc!.archiveFolder
-		
-		self.labelStrings.append("Drafts")
-		self.labelStrings.append("Sent")
-		self.labelStrings.append("Deleted")
-		self.labelStrings.append("Archive")
+	
+	func loadData() {
+		if self.emailAcc != nil {
+			for folderObject in self.emailAcc!.folders {
+				if let folder = folderObject as? ImapFolder {
+					self.folderPaths.append(folder.mcoimapfolder.path)
+				}
+			}
+		}
+			
 	}
-    
+	
 }
