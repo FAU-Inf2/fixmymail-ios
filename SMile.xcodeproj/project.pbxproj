@@ -52,6 +52,8 @@
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
 		8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E57385A1B1B19C8009AA28A /* WebViewController.swift */; };
+		8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */; };
+		8E63CE561B53E03E00DC9B04 /* MoveEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */; };
 		8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */; };
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
@@ -168,6 +170,8 @@
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveEmailViewController.swift; sourceTree = "<group>"; };
+		8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoveEmailViewController.xib; sourceTree = "<group>"; };
 		8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellWithTextView.swift; sourceTree = "<group>"; };
 		8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellWithTextView.xib; sourceTree = "<group>"; };
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
@@ -249,10 +253,10 @@
 		3D3654E01B3854A4003B38F0 /* SideBarItems */ = {
 			isa = PBXGroup;
 			children = (
-				3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */,
-				3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */,
 				3D3654E11B385566003B38F0 /* SideBarSubFolderTableViewCell.swift */,
 				3D3654E21B385566003B38F0 /* SideBarSubFolderTableViewCell.xib */,
+				3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */,
+				3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */,
 			);
 			name = SideBarItems;
 			sourceTree = "<group>";
@@ -261,10 +265,10 @@
 			isa = PBXGroup;
 			children = (
 				3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */,
-				3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */,
-				3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */,
 				3D37FFA81B01DBC200388F81 /* ContentViewController.swift */,
 				3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */,
+				3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */,
+				3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */,
 			);
 			name = Sidebar;
 			sourceTree = "<group>";
@@ -272,14 +276,16 @@
 		3D8D90DF1B00A1DE00D5135D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */,
-				A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */,
-				8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */,
-				8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
 				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
 				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
 				ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */,
+				8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */,
+				A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */,
+				8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */,
+				8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */,
+				8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */,
+				8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */,
 				8E57385A1B1B19C8009AA28A /* WebViewController.swift */,
 				3D58BC451B1CCE0C00CCA5F0 /* Sidebar */,
 				AD0100A01B19EC99009E4E18 /* Preferences */,
@@ -290,14 +296,14 @@
 		3D8D90E21B00A2AF00D5135D /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */,
-				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
 				8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */,
 				8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */,
+				ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */,
+				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
 				AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */,
+				AD0100A11B19ECC4009E4E18 /* Preferences */,
 				8E1441181B1DF00500F1A023 /* SendView */,
 				3D3654E01B3854A4003B38F0 /* SideBarItems */,
-				AD0100A11B19ECC4009E4E18 /* Preferences */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -305,12 +311,12 @@
 		3D9027561AF970A2000D3E72 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */,
 				3D2128711B2DF57200C9FC4C /* EmailAccount.swift */,
 				3D21286D1B2DF57100C9FC4C /* Email.swift */,
 				3DA302941B2ED122003CE16A /* ImapFolder.swift */,
 				3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */,
 				3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */,
+				3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -319,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */,
+				5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */,
 				8E450B9F1B15BBF0001E37B9 /* MCOCIDURLProtocol.h */,
 				8E450BA01B15BBF0001E37B9 /* MCOCIDURLProtocol.mm */,
 				8E450BA11B15BBF0001E37B9 /* MCOMessageView.h */,
@@ -369,17 +376,16 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
-				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				3D9027521AF96D0D000D3E72 /* MailCore.framework */,
 				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
 				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
-				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
-				5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */,
 				AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */,
-				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
+				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
+				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -415,22 +421,22 @@
 		AD0100A01B19EC99009E4E18 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */,
-				AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */,
+				AD789DA01B319BC30001719E /* AboutUsViewController.swift */,
+				AD789DA11B319BC30001719E /* AboutUsViewController.xib */,
+				AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */,
+				AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */,
+				AD789D981B3050640001719E /* FeedbackViewController.swift */,
+				AD789D971B3050640001719E /* FeedbackViewController.xib */,
 				AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */,
 				AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */,
 				ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */,
 				ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */,
-				AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */,
-				AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */,
-				AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */,
-				AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */,
-				AD789D971B3050640001719E /* FeedbackViewController.xib */,
-				AD789D981B3050640001719E /* FeedbackViewController.swift */,
-				AD789DA01B319BC30001719E /* AboutUsViewController.swift */,
-				AD789DA11B319BC30001719E /* AboutUsViewController.xib */,
 				ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */,
 				ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */,
+				AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */,
+				AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */,
+				AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */,
+				AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -438,12 +444,12 @@
 		AD0100A11B19ECC4009E4E18 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */,
+				AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */,
 				AD16B2211B1C594B001645A5 /* PreferenceAccountTableViewCell.swift */,
 				AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */,
 				AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */,
 				AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */,
-				AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */,
-				AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */,
 				AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */,
 				AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */,
 			);
@@ -495,8 +501,8 @@
 		ADD135CE1B15B5C200A9B31A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				ADD135C31B15B56300A9B31A /* KeyItem.swift */,
 				AD85401C1B186A7C003F9C92 /* ActionItem.swift */,
+				ADD135C31B15B56300A9B31A /* KeyItem.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -626,6 +632,7 @@
 				A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */,
 				AD6E5DF51B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib in Resources */,
 				3DB242141B38BADB00095634 /* folder.png in Resources */,
+				8E63CE561B53E03E00DC9B04 /* MoveEmailViewController.xib in Resources */,
 				3D3654E41B385566003B38F0 /* SideBarSubFolderTableViewCell.xib in Resources */,
 				AD44E0381B1B528400751FFA /* fau-logo.png in Resources */,
 				8E14411C1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib in Resources */,
@@ -675,6 +682,7 @@
 				3D3654E31B385566003B38F0 /* SideBarSubFolderTableViewCell.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
+				8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */,
 				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,

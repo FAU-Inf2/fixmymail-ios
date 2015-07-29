@@ -60,8 +60,7 @@ class SidebarTableViewController: UITableViewController {
             var actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAccount: emailAcc, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc))
             inboxRows.append(actionItem)
         }
-        
-        
+        inboxRows = inboxRows.sorted{ $0.cellName < $1.cellName }
         
         var settingsArr: [ActionItem] = [ActionItem]()
         settingsArr.append(ActionItem(Name: "REMIND ME!", viewController: "TODO"))
@@ -276,67 +275,19 @@ class SidebarTableViewController: UITableViewController {
     
     private func fetchIMAPFolders() -> Void {
         IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess, newFolders) -> Void in
-            if sucess == true {
-                var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
-                let accItem = ActionItem(Name: account!.accountName, viewController: "NoVC", emailAccount: account!, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(account!))
-                var indexOfAccount: Int? = find(actionItems, accItem)
-                if let index = indexOfAccount {
-                    if index == 0 {
-                        var indexTo: Int!
-                        for var i = index; i < actionItems.count; i++ {
-                            let item = actionItems[i]
-                            if item.viewController == "NoVC" {
-                                indexTo = i
-                                break
-                            }
-                        }
-                        var subArr = Array(actionItems[index...indexTo])
-                        var newAccItemArr = [ActionItem]()
-                        newAccItemArr.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
-                        for item in subArr {
-                            newAccItemArr.append(item)
-                        }
-                        self.rows[1] = newAccItemArr
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.tableView.reloadData()
-                        })
-                    } else {
-                        var firstPart = Array(actionItems[0...index])
-                        var indexTo: Int? = nil
-                        for var i = index; i < actionItems.count; i++ {
-                            let item = actionItems[i]
-                            if item.viewController == "NoVC" {
-                                indexTo = i
-                                break
-                            }
-                        }
-                        if indexTo == nil {
-                            firstPart.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
-                            self.rows[1] = firstPart
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                self.tableView.reloadData()
-                            })
-                        } else {
-                            var lastPart = Array(actionItems[indexTo!...actionItems.count - 1])
-                            firstPart.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
-                            for item in lastPart {
-                                firstPart.append(item)
-                            }
-                            self.rows[1] = firstPart
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                self.tableView.reloadData()
-                            })
-                        }
-                    }
+            if sucess == true && newFolders == true {
+                var sectionItems = self.rows[1] as! [ActionItem]
+                var newActionItem = self.getActionItemsFromEmailAccount(account!)
+                if self.containsActionItem(newActionItem, inActionItemArray: self.rows[1] as! [ActionItem]) == false {
+                    sectionItems.append(newActionItem)
                 } else {
-                    if newFolders == true {
-                        actionItems.append(self.getActionItemsFromEmailAccount(account!, andFolders: folders))
-                        self.rows[1] = actionItems
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.tableView.reloadData()
-                        })
-                    }
+                    let indexOfObject = find(sectionItems, newActionItem)
+                    sectionItems.removeAtIndex(indexOfObject!)
+                    sectionItems.append(newActionItem)
                 }
+                sectionItems = sectionItems.sorted { $0.cellName < $1.cellName }
+                self.rows[1] = sectionItems
+                self.tableView.reloadData()
             }
         }
     }
@@ -345,61 +296,22 @@ class SidebarTableViewController: UITableViewController {
         var resultItems = [ActionItem]()
         for account in emailAccounts {
             if account.folders.count > 0 {
-                resultItems.append(self.getActionItemsFromEmailAccount(account, andFolders: nil))
+                resultItems.append(self.getActionItemsFromEmailAccount(account))
             }
         }
-        return resultItems
+        return resultItems.sorted{ $0.cellName < $1.cellName }
     }
     
-    private func getActionItemsFromEmailAccount(emailAccount: EmailAccount, andFolders folders: [MCOIMAPFolder]?) -> ActionItem {
+    private func getActionItemsFromEmailAccount(emailAccount: EmailAccount) -> ActionItem {
         var actionItem = ActionItem(Name: emailAccount.accountName, viewController: "NoVC", emailAccount: emailAccount, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAccount))
         var subItems = [ActionItem]()
-        if folders != nil {
-            for fol in folders! {
-                var pathComponents = fol.path.pathComponents
-                if pathComponents.count > 1 {
-                    for var i = 0; i < (pathComponents.count - 1); i++ {
-                        let parentFolderName = pathComponents[i]
-                        var parentItem: ActionItem? = self.getParentItemFromItems(subItems, andParentFolderName: parentFolderName)
-                        if let parItem = parentItem {
-                            if pathComponents[i + 1] != fol.path.lastPathComponent {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "NoVC", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
-                                var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
-                                    subItemArr.append(acItem)
-                                    acItem.actionItems = subItemArr
-                                }
-                            } else {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "NoVC", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
-                                var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
-                                    subItemArr.append(acItem)
-                                    acItem.actionItems = subItemArr
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
-                    if contains(subItems, item) == false {
-                        subItems.append(item)
-                    }
-                }
-            }
-        } else {
             for imapFolder in emailAccount.folders {
                 var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
                 var pathComponents = fol.path.pathComponents
                 if pathComponents.count > 1 {
                     for var i = 0; i < (pathComponents.count - 1); i++ {
                         let parentFolderName = pathComponents[i]
-                        var parentItem: ActionItem?
-                        for item in subItems {
-                            if item.cellName == parentFolderName {
-                                parentItem = item
-                                break;
-                            }
-                        }
+                        var parentItem: ActionItem? = self.getParentItemFromItems(subItems, andParentFolderName: parentFolderName)
                         if parentItem == nil {
                             var acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                             acItem.pathComponentNumber = i
@@ -408,7 +320,7 @@ class SidebarTableViewController: UITableViewController {
                             if i == 0 {
                                 subItems.append(acItem)
                             } else {
-                                //TODO
+                                self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents[i - 1])
                             }
                         }
                         if let parItem = parentItem {
@@ -416,7 +328,7 @@ class SidebarTableViewController: UITableViewController {
                             if pathComponents[i + 1] != fol.path.lastPathComponent {
                                 var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
+                                if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
                                     subItemArr.append(acItem)
                                     subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
                                     acItem.actionItems = subItemArr
@@ -425,7 +337,7 @@ class SidebarTableViewController: UITableViewController {
                                 var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
                                 acItem.pathComponentNumber = i + 1
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
+                                if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
                                     subItemArr.append(acItem)
                                     subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
                                     parItem.actionItems = subItemArr
@@ -436,10 +348,10 @@ class SidebarTableViewController: UITableViewController {
                 } else {
                     var isParentFolder = false
                     for imapFolder in emailAccount.folders {
-                        var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-                        var folPath: NSString = NSString(string: fol.path)
+                        var folder: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
+                        var folPath: NSString = NSString(string: folder.path)
                         var range: NSRange = folPath.rangeOfString(NSString(format: "%@/", fol.path) as String)
-                        if range.length != NSNotFound {
+                        if range.location != NSNotFound {
                             isParentFolder = true
                             break;
                         }
@@ -454,7 +366,6 @@ class SidebarTableViewController: UITableViewController {
                         subItems.append(item)
                     }
                 }
-            }
         }
         
         
@@ -538,6 +449,30 @@ class SidebarTableViewController: UITableViewController {
             }
         }
         return false
+    }
+    
+    private func addItemToParentItemWithItem(childItem: ActionItem, andParentItemName parentName: String) -> Bool {
+        var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
+        var parentItem: ActionItem?
+        for item in actionItems {
+            if item.cellName == parentName {
+                parentItem = item
+                break
+            }else if item.actionItems != nil && item.actionItems?.count > 0 {
+                parentItem = self.getParentItemFromItems(item.actionItems!, andParentFolderName: parentName)
+                if parentItem != nil {
+                    break
+                }
+            }
+        }
+        if parentItem == nil {
+            return false
+        } else {
+            var parItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
+            parItemArr.append(childItem)
+            parentItem?.actionItems = parItemArr.sorted{ $0.cellName < $1.cellName }
+            return true
+        }
     }
 
 }

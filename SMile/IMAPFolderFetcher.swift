@@ -107,6 +107,7 @@ class IMAPFolderFetcher: NSObject {
                                         folderEntity.mcoimapfolder = folWrapper
                                         folderEntity.toEmailAccount = acc
                                         println(folWrapper.description)
+                                        newFolders = true
                                     }
                                 }
                             }

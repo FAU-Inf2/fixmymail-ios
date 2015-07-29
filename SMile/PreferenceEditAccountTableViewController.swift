@@ -377,8 +377,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.tableView.reloadData()
 		if self.allEntriesSet() {
 			
-			// check if duplicate account and return if so
-			if self.checkIfDuplicateAccounts() {
+			// check if duplicate account emailaddress and return if so
+			if self.checkIfDuplicateAccountMailAddress() {
 				var alert = UIAlertController(title: "Duplicate", message: "An account with address: \"" + self.entries["Mailaddress:"]!.lowercaseString + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
 				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
 				
@@ -386,6 +386,19 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				self.navigationItem.rightBarButtonItem?.enabled = true
 				return
 			}
+			
+			// check if duplicate accountname and return if so
+			if self.checkIfDuplicateAccountName() {
+				var alert = UIAlertController(title: "Duplicate", message: "An account with name: \"" + self.entries["Accountname:"]! + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
+				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
+				
+				self.presentViewController(alert, animated: true, completion: nil)
+				self.navigationItem.rightBarButtonItem?.enabled = true
+				return
+			}
+			
+			
+			
 			
 			var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel ", style: .Plain, target: self, action: "cancelTapped:")
 			cancelButton.tintColor = UIColor.redColor()
@@ -615,15 +628,17 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		return true
 	}
 	
-	func checkIfDuplicateAccounts() -> Bool {
+	func checkIfDuplicateAccountMailAddress() -> Bool {
 		if !self.allAccounts.isEmpty {
+			
+			// save if same account is just edited
+			if self.entries["Mailaddress:"] == emailAcc?.emailAddress {
+				return false
+			}
+			
 			for account in self.allAccounts {
-				// save if same account is just edited
-				if account.emailAddress == emailAcc?.emailAddress {
-					return false
-				}
 				
-				if account.emailAddress == self.entries["Mailaddress:"]!.lowercaseString {
+				if account.emailAddress.lowercaseString == self.entries["Mailaddress:"]!.lowercaseString {
 					return true
 				}
 			}
@@ -631,6 +646,23 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		return false
 	}
 	
+	func checkIfDuplicateAccountName() -> Bool {
+		if !self.allAccounts.isEmpty {
+			
+			// save if same account is just edited
+			if self.entries["Accountname:"]! == emailAcc?.accountName {
+				return false
+			}
+			
+			for account in self.allAccounts {
+				
+				if account.accountName.lowercaseString == self.entries["Accountname:"]!.lowercaseString {
+					return true
+				}
+			}
+		}
+		return false
+	}
 
 	func getImapOperation() -> MCOIMAPOperation {
 		
