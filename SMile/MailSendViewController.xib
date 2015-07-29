@@ -1,25 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MailSendViewController" customModule="FixMyMail" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MailSendViewController" customModule="SMile" customModuleProvider="target">
             <connections>
-                <outlet property="sendTableView" destination="Eyr-Bs-rt0" id="t53-0K-biy"/>
-                <outlet property="view" destination="Eyr-Bs-rt0" id="l8q-w9-y2I"/>
+                <outlet property="scrollView" destination="1s5-Hc-Y7F" id="T6I-UB-xsJ"/>
+                <outlet property="sendTableView" destination="0wV-wr-fkj" id="WMX-2j-7Pz"/>
+                <outlet property="textViewTextBody" destination="YdA-Ey-eef" id="mtn-FX-DBo"/>
+                <outlet property="view" destination="pB3-uO-TFC" id="Vv5-iY-wEV"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Eyr-Bs-rt0">
+        <view contentMode="scaleToFill" id="pB3-uO-TFC">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1s5-Hc-Y7F">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="0wV-wr-fkj">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="223"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="223" id="ay5-lS-I7L"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="fdD-cc-M43"/>
+                                <outlet property="delegate" destination="-1" id="isF-UL-YwA"/>
+                            </connections>
+                        </tableView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YdA-Ey-eef">
+                            <rect key="frame" x="8" y="231" width="592" height="361"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="361" id="4xH-xo-CSb"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="0wV-wr-fkj" firstAttribute="top" secondItem="1s5-Hc-Y7F" secondAttribute="top" id="XYj-CT-1qi"/>
+                        <constraint firstItem="0wV-wr-fkj" firstAttribute="leading" secondItem="1s5-Hc-Y7F" secondAttribute="leading" id="a0f-wu-iim"/>
+                        <constraint firstAttribute="trailing" secondItem="0wV-wr-fkj" secondAttribute="trailing" id="brj-Tw-T6P"/>
+                        <constraint firstAttribute="trailing" secondItem="YdA-Ey-eef" secondAttribute="trailing" id="iSL-0s-Lxx"/>
+                        <constraint firstItem="YdA-Ey-eef" firstAttribute="top" secondItem="0wV-wr-fkj" secondAttribute="bottom" constant="8" id="l7q-6i-3Ph"/>
+                        <constraint firstAttribute="bottom" secondItem="YdA-Ey-eef" secondAttribute="bottom" constant="8" id="qBE-Nx-ETQ"/>
+                        <constraint firstItem="YdA-Ey-eef" firstAttribute="leading" secondItem="1s5-Hc-Y7F" secondAttribute="leading" constant="8" id="x5a-3h-d0f"/>
+                        <constraint firstItem="0wV-wr-fkj" firstAttribute="centerX" secondItem="1s5-Hc-Y7F" secondAttribute="centerX" id="xho-76-D3Y"/>
+                    </constraints>
+                </scrollView>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-            <connections>
-                <outlet property="dataSource" destination="-1" id="aS4-W4-Yeb"/>
-                <outlet property="delegate" destination="-1" id="0f9-Uh-Q2B"/>
-            </connections>
-            <point key="canvasLocation" x="-192" y="443"/>
-        </tableView>
+            <constraints>
+                <constraint firstItem="1s5-Hc-Y7F" firstAttribute="leading" secondItem="pB3-uO-TFC" secondAttribute="leading" id="3q6-m6-a78"/>
+                <constraint firstAttribute="bottom" secondItem="1s5-Hc-Y7F" secondAttribute="bottom" id="Bno-k2-ULx"/>
+                <constraint firstItem="1s5-Hc-Y7F" firstAttribute="top" secondItem="pB3-uO-TFC" secondAttribute="top" id="k1W-j6-CtJ"/>
+                <constraint firstAttribute="trailing" secondItem="1s5-Hc-Y7F" secondAttribute="trailing" id="uro-S6-vx3"/>
+            </constraints>
+            <point key="canvasLocation" x="49" y="458"/>
+        </view>
     </objects>
 </document>

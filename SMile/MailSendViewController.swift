@@ -8,9 +8,12 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     
     //MARK: - Variables
     @IBOutlet weak var sendTableView: UITableView!
+    @IBOutlet weak var textViewTextBody: UITextView!
+    @IBOutlet weak var scrollView: UIScrollView!
     var emailAddressPicker: UIPickerView!
     
-    var origintableViewInsets: UIEdgeInsets?
+    var initialTextViewHeight: CGFloat = 0
+    var initialTableViewHeight: CGFloat = 0
     
     var tableViewIsExpanded: Bool = false
     
@@ -34,8 +37,25 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             self.title = subject
         }
+        
+        self.textViewTextBody.delegate = self
+        self.textViewTextBody.scrollEnabled = false
+        self.textViewTextBody.text = self.textBody
+        self.initialTextViewHeight = self.textViewTextBody.frame.size.height
+        
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
-        self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithTextView", bundle: nil), forCellReuseIdentifier: "SendViewCellWithTextView")
+        self.sendTableView.scrollEnabled = false
+        for constraint in self.sendTableView.constraints() {
+            let cons = constraint as! NSLayoutConstraint
+            if cons.firstAttribute == NSLayoutAttribute.Height {
+                self.initialTableViewHeight = cons.constant
+                if !tableViewIsExpanded {
+                    cons.constant = 132
+                }
+                break
+            }
+        }
+        
         var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmailWithSender:")
         self.navigationItem.rightBarButtonItem = buttonSend
         var buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "performCancelWithSender:")
@@ -98,24 +118,9 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.tableViewIsExpanded {
-            return 6
+            return 5
         }
-        return 4
-    }
-    
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        var offset = 0
-        if self.tableViewIsExpanded {
-            offset = 2
-        }
-        if indexPath.row == 3 + offset {
-            return tableView.frame.height - (3 * 44 + self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height)
-        }
-        return 44
+        return 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -184,7 +189,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
-				buttonOpenContacts.tag = 2
+                buttonOpenContacts.tag = 2
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
                 
                 self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Bcc:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: bccRecipientsAsString, textFieldTag: 2, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonOpenContacts)
@@ -199,32 +204,19 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 return cell
             }
-        case 3:
-            if self.tableViewIsExpanded { // Cell for From
-                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-                
-                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "From:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: UIColor.clearColor(), textFieldText: self.account.emailAddress, textFieldTag: 3, textFieldDelegate: self, textFieldInputView: self.emailAddressPicker, cellAccessoryView: nil)
-                
-                return cell
-            } else { // Cell for TextBody
-                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-                
-                self.initSendViewCellWithTextViewWithCell(cell, textColor: UIColor.blackColor(), tintColor: self.view.tintColor, delegate: self, inputView: nil, tag: 6, text: self.textBody)
-                
-                return cell
-            }
+        case 3: // Cell for From
+            var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+            
+            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "From:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: UIColor.clearColor(), textFieldText: self.account.emailAddress, textFieldTag: 3, textFieldDelegate: self, textFieldInputView: self.emailAddressPicker, cellAccessoryView: nil)
+            
+            return cell
+            
         case 4: // Cell for Subject
             var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
             
             self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
             
             cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
-            
-            return cell
-        case 5: // Cell for TextBody
-            var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithTextView", forIndexPath: indexPath) as! SendViewCellWithTextView
-            
-            self.initSendViewCellWithTextViewWithCell(cell, textColor: UIColor.blackColor(), tintColor: self.view.tintColor, delegate: self, inputView: nil, tag: 6, text: self.textBody)
             
             return cell
         default:
@@ -238,50 +230,47 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         case 0: // Cell for To
             if tableViewIsExpanded && self.shouldContractTableView() {
                 tableViewIsExpanded = false
+                for constraint in tableView.constraints() {
+                    let cons = constraint as! NSLayoutConstraint
+                    if cons.firstAttribute == NSLayoutAttribute.Height {
+                        cons.constant = 132
+                        break
+                    }
+                }
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
             selectIndexPath = indexPath
         case 1: // Cell for CC
             if !tableViewIsExpanded {
                 tableViewIsExpanded = true
+                for constraint in tableView.constraints() {
+                    let cons = constraint as! NSLayoutConstraint
+                    if cons.firstAttribute == NSLayoutAttribute.Height {
+                        cons.constant = self.initialTableViewHeight
+                        break
+                    }
+                }
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
             selectIndexPath = indexPath
         case 2: // Cell for BCC or Subject
             selectIndexPath = indexPath
-        case 3: // Cell for From or TextBody
-            if tableViewIsExpanded {
-                self.togglePickerViewWithSender((tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithLabelAndTextField).textField)
-            } else {
-                if let responder: AnyObject = self.isResponder {
-                    responder.resignFirstResponder()
-                }
-                var textView = (tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithTextView).textViewMailBody
-                textView.becomeFirstResponder()
-            }
+        case 3: // Cell for From
+            self.togglePickerViewWithSender((tableView.cellForRowAtIndexPath(indexPath) as! SendViewCellWithLabelAndTextField).textField)
         case 4: // Cell for Subject
             if self.shouldContractTableView() {
                 tableViewIsExpanded = false
+                for constraint in tableView.constraints() {
+                    let cons = constraint as! NSLayoutConstraint
+                    if cons.firstAttribute == NSLayoutAttribute.Height {
+                        cons.constant = 132
+                        break
+                    }
+                }
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
                 selectIndexPath = NSIndexPath(forRow: 2, inSection: 0)
             } else {
                 selectIndexPath = indexPath
-            }
-        case 5: // Cell for TextBody
-            if self.shouldContractTableView() {
-                tableViewIsExpanded = false
-                tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
-                var textView = (tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody
-                if let responder: AnyObject = self.isResponder {
-                    responder.resignFirstResponder()
-                }
-                textView.becomeFirstResponder()
-            } else {
-                var textView = (tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody
-                if let responder: AnyObject = self.isResponder {
-                    responder.resignFirstResponder()
-                }
-                textView.becomeFirstResponder()
             }
         default:
             break
@@ -314,23 +303,50 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-		var oldAccount = self.account
+        var oldAccount = self.account
         self.account = self.allAccounts[row]
         (self.isResponder as! UITextField).text = self.account.emailAddress
-		self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
-		(self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.text = self.textBody
+        self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
+        (self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.text = self.textBody
     }
     
     //MARK: - TextViewDelegate
     func textViewDidBeginEditing(textView: UITextView) {
-        textView.userInteractionEnabled = true
         self.isResponder = textView
+        if tableViewIsExpanded && self.shouldContractTableView() {
+            tableViewIsExpanded = false
+            for constraint in self.sendTableView.constraints() {
+                let cons = constraint as! NSLayoutConstraint
+                if cons.firstAttribute == NSLayoutAttribute.Height {
+                    cons.constant = 132
+                    break
+                }
+            }
+            self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
     }
     
     func textViewDidEndEditing(textView: UITextView) {
         self.textBody = textView.text
         self.isResponder = nil
-        textView.userInteractionEnabled = false
+    }
+    
+    func textViewDidChange(textView: UITextView) {
+        let newSize = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.max))
+        for constraint in textView.constraints() {
+            let cons = constraint as! NSLayoutConstraint
+            if cons.firstAttribute == NSLayoutAttribute.Height && newSize.height > cons.constant {
+                cons.constant = newSize.height
+                for scrollConstraint in self.scrollView.constraints() {
+                    let scrollCons = scrollConstraint as! NSLayoutConstraint
+                    if scrollCons.firstAttribute == NSLayoutAttribute.Height {
+                        scrollCons.constant = self.sendTableView.frame.height + newSize.height + textView.font.lineHeight
+                        break
+                    }
+                }
+                break
+            }
+        }
     }
     
     //MARK: - TextFieldDelegate
@@ -391,7 +407,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         textField.resignFirstResponder()
         return true
     }
-   
+    
     //MARK: - ActionSheetDelegate
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
         switch buttonIndex {
@@ -437,17 +453,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.textField.inputView = textFieldInputView
         cell.textField.enabled = false
         cell.accessoryView = cellAccessoryView
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
-    }
-    
-    func initSendViewCellWithTextViewWithCell(cell: SendViewCellWithTextView, textColor: UIColor, tintColor: UIColor, delegate: UITextViewDelegate, inputView: UIView?, tag: Int, text: String) {
-        cell.textViewMailBody.textColor = textColor
-        cell.textViewMailBody.tintColor = tintColor
-        cell.textViewMailBody.delegate = delegate
-        cell.textViewMailBody.inputView = inputView
-        cell.textViewMailBody.tag = tag
-        cell.textViewMailBody.userInteractionEnabled = false
-        cell.textViewMailBody.text = text
         cell.selectionStyle = UITableViewCellSelectionStyle.None
     }
     
@@ -581,7 +586,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                 })
-
+                
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })
@@ -592,29 +597,20 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
             var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
             
-            if self.origintableViewInsets == nil {
-                self.origintableViewInsets = self.sendTableView.contentInset
-            }
-            
-            self.sendTableView.contentInset = contentInsets
-            self.sendTableView.scrollIndicatorInsets = contentInsets
-            if self.isResponder != nil {
-                var cellView = self.isResponder!.superview!
-                var cell = cellView!.superview as! UITableViewCell
-                var indexPath = self.sendTableView.indexPathForCell(cell)
-                self.sendTableView.scrollToRowAtIndexPath(indexPath!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-            }
+            self.scrollView.contentInset = contentInsets
+            self.scrollView.contentInset.bottom = self.scrollView.contentInset.bottom + self.textViewTextBody.font.lineHeight
+            self.scrollView.scrollIndicatorInsets = contentInsets
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        if let animationDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double) {
-            if self.origintableViewInsets != nil {
-                UIView.animateWithDuration(animationDuration, animations: { () -> Void in
-                    self.sendTableView.contentInset = self.origintableViewInsets!
-                    self.sendTableView.scrollIndicatorInsets = self.origintableViewInsets!
-                })
-            }
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + keyboardSize.height)
+            
+            var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, 0.0, 0.0)
+            
+            self.scrollView.contentInset = contentInsets
+            self.scrollView.scrollIndicatorInsets = contentInsets
         }
     }
     
@@ -625,31 +621,31 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         picker.displayedProperties = [Int(kABPersonEmailProperty)]
         picker.predicateForSelectionOfPerson = NSPredicate(value:false)
         picker.predicateForSelectionOfProperty = NSPredicate(value:true)
-		switch sender.tag {
-		case 0: picker.title = "To:"
-		case 1: picker.title = "Cc:"
-		case 2: picker.title = "Bcc:"
-		default: picker.title = ""
-		}
+        switch sender.tag {
+        case 0: picker.title = "To:"
+        case 1: picker.title = "Cc:"
+        case 2: picker.title = "Bcc:"
+        default: picker.title = ""
+        }
         self.presentViewController(picker, animated:true, completion:nil)
     }
-
-	func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
-		println("person and property")
-		let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
-		let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
-		let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
-		println(email)
-		var address = MCOAddress(mailbox: email)
-		
-		switch peoplePicker.title! {
-		case "To:": self.recipients.addObject(address)
-		case "Cc:": self.ccRecipients.addObject(address)
-		case "Bcc:": self.bccRecipients.addObject(address)
-		default: break
-		}
-		
-		self.sendTableView.reloadData()
-	}
-	
+    
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
+        println("person and property")
+        let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
+        let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
+        let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
+        println(email)
+        var address = MCOAddress(mailbox: email)
+        
+        switch peoplePicker.title! {
+        case "To:": self.recipients.addObject(address)
+        case "Cc:": self.ccRecipients.addObject(address)
+        case "Bcc:": self.bccRecipients.addObject(address)
+        default: break
+        }
+        
+        self.sendTableView.reloadData()
+    }
+    
 }
