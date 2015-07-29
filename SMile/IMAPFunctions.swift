@@ -54,6 +54,14 @@ func addFlagToEmail(mail: Email, flag: MCOMessageFlag){
                 let expungeFolder = session.expungeOperation(mail.folder)
                 expungeFolder.start({ (error) -> Void in })
             }
+            if flag == MCOMessageFlag.Deleted {
+                managedObjectContext.deleteObject(mail)
+                var error: NSError?
+                managedObjectContext!.save(&error)
+                if error != nil {
+                    NSLog("%@", error!.description)
+                }
+            }
         })
     }
 }
@@ -83,13 +91,13 @@ func removeFlagFromEmail(mail: Email, flag: MCOMessageFlag){
 func moveEmailToFolder(mail: Email!, destFolder: String!) {
     //copy email to destFolder
     let session = getSession(mail.toAccount)
-    let localCopyMessageOp = session.copyMessagesOperationWithFolder(mail.folder, uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: destFolder)
+    let copyMessageOp = session.copyMessagesOperationWithFolder(mail.folder, uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: destFolder)
     
-    localCopyMessageOp.start {(error, uidMapping) -> Void in
+    copyMessageOp.start {(error, uidMapping) -> Void in
         if let error = error {
-            NSLog("error in moveEmailToFolder in localCopyMessageOp: \(error.userInfo!)")
+            NSLog("error in moveEmailToFolder in copyMessageOp: \(error.userInfo!)")
         } else {
-            mail.folder = destFolder
+            NSLog("email deleted or moved")
         }
     }
     

@@ -14,6 +14,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     @IBOutlet weak var mailTableView: UITableView!
     var refreshControl: UIRefreshControl!
     var delegate: ContentViewControllerProtocol?
+    var emails = [Email]()
     
     //IMAP folder names
     var trashFolderName: String?
@@ -29,7 +30,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
-    lazy var fetchedResultsController: NSFetchedResultsController = {
+    /*lazy var fetchedResultsController: NSFetchedResultsController = {
         let mailFetchRequest = NSFetchRequest(entityName: "Email")
         let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.receivedDate", ascending: false)
         mailFetchRequest.sortDescriptors = [primarySortDescriptor];
@@ -52,7 +53,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         frc.delegate = self
         
         return frc
-        }()
+        }()*/
     
     
     
@@ -60,6 +61,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     //MARK: - Override functions
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        
+        
+        
         self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
         
         var menuItem: UIBarButtonItem = UIBarButtonItem(title: "Menu", style: .Plain, target: self, action: "menuTapped:")
@@ -86,10 +91,21 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
         
         //fetch local Emails from CoreData
-        var error: NSError? = nil
+        if let accs = accounts {
+            for account in accs {
+                for mail in account.emails {
+                    if mail.folder == folderToQuery {
+                        emails.append(mail as! Email)
+                    }
+                }
+            }
+            
+            emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
+        }
+        /*var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
-        }
+        }*/
         
         imapSynchronize()
     }
@@ -102,12 +118,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setToolbarHidden(true, animated: false)
-        
-        var error: NSError? = nil
-        self.managedObjectContext!.save(&error)
-        if error != nil {
-            NSLog("%@", error!.description)
-        }
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -126,7 +136,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     // MARK: - TableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var mailcell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
-        let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
+        let mail = self.emails[indexPath.row]
+        //let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
         
         mailcell.mailFrom.text = mail.sender
         mailcell.mailSubject.text = mail.title
@@ -137,13 +148,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         var header = mail.mcomessage.header!
         mailcell.dateLabel.text = header.receivedDate.toEuropeanShortDateString()
         
-        var parser = MCOMessageParser(data: mail.data)
-        mailcell.mailBody.text = parser.plainTextBodyRendering()
-        
         var previewLines = NSUserDefaults.standardUserDefaults().valueForKey("previewLines") as! Int
         if previewLines == 0 {
             mailcell.mailBody.hidden = true
         } else {
+            mailcell.mailBody.text = mail.plainText
             mailcell.mailBody.hidden = false
             mailcell.mailBody.lineBreakMode = .ByWordWrapping
             mailcell.mailBody.numberOfLines = previewLines
@@ -234,6 +243,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         //Load new Emails
                         for message in messages {
                             var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
+                            NSLog(String((message as! MCOIMAPMessage).uid))
                             newEmail.mcomessage = message
                             
                             //Set sender
@@ -260,6 +270,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 } else {
                                     newEmail.data = data
                                     let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                                    newEmail.plainText = parser.plainTextBodyRendering()
+                                    
+                                    //Add newEmail to Array
+                                    self.insertEmailToArray(newEmail)
+                                    
+                                    self.saveCoreDataChanges()
                                     self.refreshTableView()
                                 }
                             })
@@ -292,11 +308,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 if deleted {
                                     NSLog("email has been deleted or moved")
                                     self.managedObjectContext.deleteObject(mail as! NSManagedObject)
-                                    var error: NSError? = nil
-                                    self.managedObjectContext!.save(&error)
-                                    if error != nil {
-                                        NSLog("%@", error!.description)
-                                    }
+                                    self.removeEmailFromArray(mail as! Email)
+                                    self.saveCoreDataChanges()
                                     self.refreshTableView()
                                 }
                             }
@@ -333,8 +346,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 } else {
                     moveEmailToFolder(mail, self.trashFolderName)
                 }
-                NSLog("email deleted")
-                self.managedObjectContext.deleteObject(mail)
+                self.removeEmailFromArray(mail)
             } else {
                 NSLog("error: trashFolderName == nil")
             }
@@ -364,7 +376,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             if self.archiveFolderName != nil {
                 if self.folderToQuery != self.archiveFolderName {
                     moveEmailToFolder(mail, self.archiveFolderName)
-                    self.managedObjectContext.deleteObject(mail)
+                    self.removeEmailFromArray(mail)
                     NSLog("email archived")
                 }
             } else {
@@ -557,30 +569,80 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //MARK: - Help functions for tableview
     func refreshTableView() {
-        var error: NSError? = nil
+        //Load Emails from CoreData
+        /*emails.removeAll()
+        if let accs = accounts {
+            for account in accs {
+                for mail in account.emails {
+                    emails.append(mail as! Email)
+                }
+            }
+            
+            emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
+        }*/
+        /*var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
             print("An error occurred: \(error?.localizedDescription)")
-        }
+        }*/
         
-        mailTableView.layoutIfNeeded()
-        self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+        mailTableView.reloadData()
+        //mailTableView.layoutIfNeeded()
+        //self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+    }
+    
+    func removeEmailFromArray(email: Email) {
+        objc_sync_enter(self.emails)
+        var array = NSMutableArray(array: emails)
+        var index = array.indexOfObject(email)
+        if index != NSNotFound {
+            emails.removeAtIndex(index)
+        }
+        /*for var i = 0; i < emails.count; i++ {
+            if emails[i] == email {
+                NSLog("removedEmailFromArray")
+                emails.removeAtIndex(i)
+            }
+        }*/
+        
+
+        objc_sync_exit(self.emails)
+    }
+    
+    func insertEmailToArray(newEmail: Email) {
+        objc_sync_enter(self.emails)
+        if emails.count == 0 {
+            emails.append(newEmail)
+            return
+        }
+        if (newEmail.mcomessage as! MCOIMAPMessage).header.receivedDate > (emails.first!.mcomessage as! MCOIMAPMessage).header.receivedDate {
+            emails.insert(newEmail, atIndex: 0)
+        }else {
+            //Binary Search?
+            emails.append(newEmail)
+            emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
+        }
+        objc_sync_exit(self.emails)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if let sections = fetchedResultsController.sections {
-            return sections.count
-        }
+        return 1
         
-        return 0
+        /*if let sections = fetchedResultsController.sections {
+            return sections.count
+        }*/
+        
+        //return 0
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = fetchedResultsController.sections {
+        return self.emails.count
+        
+        /*if let sections = fetchedResultsController.sections {
             let currentSection = sections[section] as! NSFetchedResultsSectionInfo
             return currentSection.numberOfObjects
-        }
+        }*/
         
-        return 0
+        //return 0
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -641,6 +703,14 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         return retaccount
     }
     
+    //MARK: - CoreData
+    func saveCoreDataChanges(){
+        var error: NSError?
+        self.managedObjectContext!.save(&error)
+        if error != nil {
+            NSLog("%@", error!.description)
+        }
+    }
     
     //MARK: - Navigation
     @IBAction func menuTapped(sender: AnyObject) -> Void {
