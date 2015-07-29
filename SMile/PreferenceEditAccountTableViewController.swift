@@ -23,6 +23,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var cellAccountTextfielString = [String]()
 	var cellImapConnectionTextfielString = [String]()
 	var cellSmtpConnectionTextfielString = [String]()
+	var AccountBehaviorString = [String]()
 	var labels = [AnyObject]()
 	var textfields = [AnyObject]()
 	var entries = [String: String]()
@@ -51,7 +52,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.navigationItem.title = actionItem?.emailAddress
 		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
-		self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", "",""]
+		if actionItem?.emailAddress != "Add New Account" {
+			self.sections = ["Account Details:", "Account behavior", "IMAP Details", "SMTP Details:", "",""]
+		} else {
+			self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", "",""]
+		}
+		
 		
 		// set alert dialog for delete
 		self.alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
@@ -208,8 +214,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			if cell.textfield.placeholder == "IMAP Auth:" || cell.textfield.placeholder == "SMTP Auth:"
 				|| cell.textfield.placeholder == "IMAP ConType:" || cell.textfield.placeholder == "SMTP ConType:" {
 					cell.textfield.enabled = false
+					cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
 			} else {
 				cell.textfield.enabled = true
+				cell.accessoryType = UITableViewCellAccessoryType.None
 			}
 			
 			// fill the textfields
@@ -219,7 +227,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			if emailAcc != nil {
 				// configure delete cell
-				if cell.labelCellContent.text == deleteString[0] {
+				if cell.labelCellContent.text == self.deleteString[0] {
 					cell.labelCellContent.textAlignment = NSTextAlignment.Center
 					cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
 					cell.textfield.text = ""
@@ -227,6 +235,15 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					cell.textfield.enabled = false
 					self.entries.removeValueForKey(self.deleteString[0])
 					self.entriesChecked.removeValueForKey(self.deleteString[0])
+				}
+				// configure account behavior cell
+				if cell.labelCellContent.text == self.AccountBehaviorString[0] {
+					cell.textfield.text = ""
+					cell.textfield.placeholder = ""
+					cell.textfield.enabled = false
+					cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+					self.entries.removeValueForKey(self.AccountBehaviorString[0])
+					self.entriesChecked.removeValueForKey(self.AccountBehaviorString[0])
 				}
 			}
 			
@@ -254,6 +271,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.labelSmtpConnectionDetailString.append("SMTP Port:")
 		self.labelSmtpConnectionDetailString.append("SMTP Auth:")
 		self.labelSmtpConnectionDetailString.append("SMTP ConType:")
+		
+		self.isActivatedString.append("Activate:")
 		
 		if emailAcc != nil {
 			self.cellAccountTextfielString.append(emailAcc!.emailAddress)
@@ -319,23 +338,42 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.isActivated = false
 		}
 		
+		
+		
 		if actionItem?.emailAddress != "Add New Account" {
 			self.deleteString.append("DELETE")
+			self.AccountBehaviorString.append("Advanced")
+			
+			self.labels.append(self.labelAccountDetailString)
+			self.labels.append(self.AccountBehaviorString)
+			self.labels.append(self.labelImapConnectionDetailString)
+			self.labels.append(self.labelSmtpConnectionDetailString)
+			self.labels.append(self.isActivatedString)
+			self.labels.append(self.deleteString)
+			
+			self.textfields.append(self.cellAccountTextfielString)
+			self.textfields.append(self.AccountBehaviorString)
+			self.textfields.append(self.cellImapConnectionTextfielString)
+			self.textfields.append(self.cellSmtpConnectionTextfielString)
+			self.textfields.append(self.isActivatedString)
+			self.textfields.append(self.deleteString)
+
+		} else {
+			self.labels.append(self.labelAccountDetailString)
+			self.labels.append(self.labelImapConnectionDetailString)
+			self.labels.append(self.labelSmtpConnectionDetailString)
+			self.labels.append(self.isActivatedString)
+			self.labels.append(self.deleteString)
+			
+			self.textfields.append(self.cellAccountTextfielString)
+			self.textfields.append(self.cellImapConnectionTextfielString)
+			self.textfields.append(self.cellSmtpConnectionTextfielString)
+			self.textfields.append(self.isActivatedString)
+			self.textfields.append(self.deleteString)
+
 		}
 		
-		self.isActivatedString.append("Activate:")
 		
-		self.labels.append(self.labelAccountDetailString)
-		self.labels.append(self.labelImapConnectionDetailString)
-		self.labels.append(self.labelSmtpConnectionDetailString)
-		self.labels.append(self.isActivatedString)
-		self.labels.append(self.deleteString)
-		
-		self.textfields.append(self.cellAccountTextfielString)
-		self.textfields.append(self.cellImapConnectionTextfielString)
-		self.textfields.append(self.cellSmtpConnectionTextfielString)
-		self.textfields.append(self.isActivatedString)
-		self.textfields.append(self.deleteString)
 		
 	}
 	
