@@ -16,6 +16,7 @@ class Email: NSManagedObject {
     @NSManaged var mcomessage: AnyObject
     @NSManaged var message: String
     @NSManaged var pgp: NSNumber
+    @NSManaged var plainText: String
     @NSManaged var sender: String
     @NSManaged var smime: NSNumber
     @NSManaged var title: String

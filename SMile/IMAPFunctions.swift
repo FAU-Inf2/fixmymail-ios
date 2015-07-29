@@ -83,11 +83,13 @@ func removeFlagFromEmail(mail: Email, flag: MCOMessageFlag){
 func moveEmailToFolder(mail: Email!, destFolder: String!) {
     //copy email to destFolder
     let session = getSession(mail.toAccount)
-    let localCopyMessageOp = session.copyMessagesOperationWithFolder(mail.folder, uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: destFolder)
+    let copyMessageOp = session.copyMessagesOperationWithFolder(mail.folder, uids: MCOIndexSet(index: UInt64((mail.mcomessage as! MCOIMAPMessage).uid)), destFolder: destFolder)
     
-    localCopyMessageOp.start {(error, uidMapping) -> Void in
+    copyMessageOp.start {(error, uidMapping) -> Void in
         if let error = error {
             NSLog("error in moveEmailToFolder in localCopyMessageOp: \(error.userInfo!)")
+        }else{
+            NSLog("email deleted or moved")
         }
     }
     

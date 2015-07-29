@@ -105,6 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data Saving support
 
     func saveContext () {
+        //objc_sync_enter(self.managedObjectContext)
         if let moc = self.managedObjectContext {
             var error: NSError? = nil
             if moc.hasChanges && !moc.save(&error) {
@@ -114,6 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 abort()
             }
         }
+        //objc_sync_exit(self.managedObjectContext)
     }
     
     //WARNING: This is method is only for adding dummy entries to CoreData!!!
