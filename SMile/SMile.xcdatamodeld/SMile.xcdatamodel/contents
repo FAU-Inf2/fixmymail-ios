@@ -42,13 +42,8 @@
         <relationship name="toEmailAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmailAccount" inverseName="folders" inverseEntity="EmailAccount" syncable="YES"/>
     </entity>
     <elements>
-<<<<<<< HEAD
-        <element name="Email" positionX="-333" positionY="-309" width="128" height="180"/>
-        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="390"/>
-=======
         <element name="Email" positionX="-333" positionY="-309" width="128" height="195"/>
         <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="330"/>
->>>>>>> 779ffb4e5237e9073653d7b883a7ada14125b0f1
         <element name="ImapFolder" positionX="-180" positionY="-171" width="128" height="75"/>
     </elements>
 </model>
