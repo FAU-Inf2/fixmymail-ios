@@ -243,7 +243,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         //Load new Emails
                         for message in messages {
                             var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                            
+                            NSLog(String((message as! MCOIMAPMessage).uid))
                             newEmail.mcomessage = message
                             
                             //Set sender
@@ -346,9 +346,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 } else {
                     moveEmailToFolder(mail, self.trashFolderName)
                 }
-                self.managedObjectContext.deleteObject(mail)
                 self.removeEmailFromArray(mail)
-                self.saveCoreDataChanges()
             } else {
                 NSLog("error: trashFolderName == nil")
             }
@@ -378,9 +376,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             if self.archiveFolderName != nil {
                 if self.folderToQuery != self.archiveFolderName {
                     moveEmailToFolder(mail, self.archiveFolderName)
-                    self.managedObjectContext.deleteObject(mail)
                     self.removeEmailFromArray(mail)
-                    self.saveCoreDataChanges()
                     NSLog("email archived")
                 }
             } else {
