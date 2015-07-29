@@ -606,6 +606,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				}
 			}
 			newEntry.setValue(self.isActivated, forKey: "isActivated")
+			// save initial account behavoir
 			newEntry.setValue("", forKey: "draftFolder")
 			newEntry.setValue("", forKey: "sentFolder")
 			newEntry.setValue("", forKey: "deletedFolder")
@@ -659,6 +660,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						}
 					}
 					managedObject.setValue(self.isActivated, forKey: "isActivated")
+					// save account behavior selections
+					if self.accountBehaviorVC != nil {
+						managedObject.setValue(self.accountBehaviorVC!.entries["Drafts"], forKey: "draftFolder")
+						managedObject.setValue(self.accountBehaviorVC!.entries["Sent"], forKey: "sentFolder")
+						managedObject.setValue(self.accountBehaviorVC!.entries["Deleted"], forKey: "deletedFolder")
+						managedObject.setValue(self.accountBehaviorVC!.entries["Archive"], forKey: "archiveFolder")
+					}
+
 				}
 			}
 		}

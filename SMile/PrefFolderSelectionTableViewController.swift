@@ -12,7 +12,10 @@ class PrefFolderSelectionTableViewController: UITableViewController {
 	
 	var emailAcc: EmailAccount?
 	var StringForFolderBehavior: String?
+	var selectedFolderPath: String?
 	var folderPaths = [String]()
+	var lastTappedIndexPath: NSIndexPath?
+	var isChecked: [Bool] = [Bool]()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,13 +40,11 @@ class PrefFolderSelectionTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Potentially incomplete method implementation.
         // Return the number of sections.
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
         // Return the number of rows in the section.
         return self.folderPaths.count
     }
@@ -54,63 +55,58 @@ class PrefFolderSelectionTableViewController: UITableViewController {
 
         // Configure the cell...
 		cell.textfield.text = self.folderPaths[indexPath.row]
+		cell.textfield.enabled = false
+		
+		// if checked
+		if self.isChecked[indexPath.row] {
+			cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+		} else {
+			cell.accessoryType = UITableViewCellAccessoryType.None
+		}
 
         return cell
     }
-
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		for var i = 0; i < self.isChecked.count; i++ {
+			self.isChecked[i] = false
+		}
+		
+		self.isChecked[indexPath.row] = true
+		
+		if self.folderPaths[indexPath.row] == "Use account standard folders" {
+			self.selectedFolderPath = ""
+		} else {
+			self.selectedFolderPath = self.folderPaths[indexPath.row]
+		}
+		// uncheck previous
+		if self.lastTappedIndexPath != nil {
+			self.isChecked[self.lastTappedIndexPath!.row] = false
+		}
+		
+		self.lastTappedIndexPath = indexPath
+		self.tableView.reloadData()
+	}
 	
 	func loadData() {
+		self.folderPaths.append("Use account standard folders")
 		if self.emailAcc != nil {
 			for folderObject in self.emailAcc!.folders {
 				if let folder = folderObject as? ImapFolder {
 					self.folderPaths.append(folder.mcoimapfolder.path)
 				}
 			}
+		}
+		
+		for item in self.folderPaths {
+			if item == self.selectedFolderPath {
+				self.isChecked.append(true)
+			} else {
+				self.isChecked.append(false)
+			}
+		}
+		if self.selectedFolderPath == "" {
+			self.isChecked[0] = true
 		}
 			
 	}

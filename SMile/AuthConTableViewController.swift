@@ -66,7 +66,7 @@ class AuthConTableViewController: UITableViewController {
 		
 		self.selectedString = self.options[indexPath.row]
 		
-		// unceck previous
+		// uncheck previous
 		if self.lastTappedIndexPath != nil {
 			self.isChecked[self.lastTappedIndexPath!.row] = false
 		}
