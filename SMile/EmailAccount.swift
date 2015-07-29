@@ -30,5 +30,9 @@ class EmailAccount: NSManagedObject {
     @NSManaged var emails: NSSet
     @NSManaged var folders: NSSet
 	@NSManaged var signature: String
+	@NSManaged var draftFolder: String
+	@NSManaged var sentFolder: String
+	@NSManaged var deletedFolder: String
+	@NSManaged var archiveFolder: String
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14D136" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14E46" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Email" representedClassName="SMile.Email" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="folder" optional="YES" attributeType="String" syncable="YES"/>
@@ -13,10 +13,13 @@
     </entity>
     <entity name="EmailAccount" representedClassName="SMile.EmailAccount" syncable="YES">
         <attribute name="accountName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="archiveFolder" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="authTypeImap" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="authTypeSmtp" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="connectionTypeImap" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="connectionTypeSmtp" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deletedFolder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="draftFolder" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imapHostname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imapPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -24,6 +27,7 @@
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="realName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recentlyUsed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="sentFolder" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="session" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="smtpHostname" optional="YES" attributeType="String" syncable="YES"/>
@@ -38,7 +42,7 @@
     </entity>
     <elements>
         <element name="Email" positionX="-333" positionY="-309" width="128" height="180"/>
-        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="330"/>
+        <element name="EmailAccount" positionX="-65" positionY="-313" width="128" height="390"/>
         <element name="ImapFolder" positionX="-180" positionY="-171" width="128" height="75"/>
     </elements>
 </model>

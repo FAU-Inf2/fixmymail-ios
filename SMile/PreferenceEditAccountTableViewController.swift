@@ -34,6 +34,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var selectedTextfield: UITextField?
 	var selectedIndexPath: NSIndexPath?
 	var authConVC: AuthConTableViewController?
+	var accountBehaviorVC: PrefAccountBehaviorTableViewController?
 	var origintableViewInsets: UIEdgeInsets?
 	var isActivated: Bool?
 	var imapOperation: MCOIMAPOperation?
@@ -155,8 +156,16 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				self.authConVC!.labelPreviousVC = labelString
 				self.authConVC!.selectedString = textfieldString!
 				self.navigationController?.pushViewController(self.authConVC!, animated: true)
-		} else {
-			if labelString != "DELETE" && labelString != "Activate:" {
+		}
+		// if advanved cell -> load PrefAccountBehaviorTableViewController
+		else if labelString == "Advanced" {
+			self.accountBehaviorVC = PrefAccountBehaviorTableViewController(nibName: "PrefAccountBehaviorTableViewController", bundle: nil)
+			self.accountBehaviorVC!.emailAcc = self.emailAcc!
+			self.navigationController?.pushViewController(self.accountBehaviorVC!, animated: true)
+		}
+		// normal cells
+		else {
+			if labelString != "DELETE" && labelString != "Activate:" && labelString != "Advanced" {
 				var cell = tableView.cellForRowAtIndexPath(indexPath) as! PreferenceAccountTableViewCell
 				cell.textfield.becomeFirstResponder()
 			}
@@ -217,7 +226,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
 			} else {
 				cell.textfield.enabled = true
-				cell.accessoryType = UITableViewCellAccessoryType.None
 			}
 			
 			// fill the textfields
@@ -540,6 +548,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					if cell.textfield.text.isEmpty {
 						if cell.labelCellContent.text == "Signature:" {}
 						else if cell.labelCellContent.text == "Activate:" {}
+						else if cell.labelCellContent.text == "Advanced" {}
 						else {
 							cell.labelCellContent.attributedText = NSAttributedString(string: cell.labelCellContent.text!, attributes: [NSForegroundColorAttributeName: UIColor.redColor()])
 						}
@@ -597,6 +606,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				}
 			}
 			newEntry.setValue(self.isActivated, forKey: "isActivated")
+			newEntry.setValue("", forKey: "draftFolder")
+			newEntry.setValue("", forKey: "sentFolder")
+			newEntry.setValue("", forKey: "deletedFolder")
+			newEntry.setValue("", forKey: "archiveFolder")
+
+
 			
 		} else {
 			
