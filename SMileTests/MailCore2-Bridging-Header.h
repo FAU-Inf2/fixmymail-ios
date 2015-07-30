@@ -14,6 +14,8 @@
 #import "MCOMessageView.h"
 #import "MCTMsgViewController.h"
 #import "MCOIMAPFolderWrapper.h"
+#import "RNEncryptor.h"
+#import "RNDecryptor.h"
 
 
 //#endif

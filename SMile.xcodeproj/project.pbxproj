@@ -94,6 +94,10 @@
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
 		AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */; };
 		AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85401C1B186A7C003F9C92 /* ActionItem.swift */; };
+		AD8744311B6A3C1900257AA5 /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8744281B6A3C1900257AA5 /* RNCryptor.m */; };
+		AD8744321B6A3C1900257AA5 /* RNCryptorEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = AD87442C1B6A3C1900257AA5 /* RNCryptorEngine.m */; };
+		AD8744331B6A3C1900257AA5 /* RNDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD87442E1B6A3C1900257AA5 /* RNDecryptor.m */; };
+		AD8744341B6A3C1900257AA5 /* RNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8744301B6A3C1900257AA5 /* RNEncryptor.m */; };
 		ADBF50AC1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */; };
 		ADBF50AD1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */; };
 		ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */; };
@@ -218,6 +222,17 @@
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
 		AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewCell.xib; sourceTree = "<group>"; };
 		AD85401C1B186A7C003F9C92 /* ActionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItem.swift; sourceTree = "<group>"; };
+		AD8744261B6A3C1900257AA5 /* RNCryptor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RNCryptor-Prefix.pch"; path = "Supporting Files/RNCryptor/RNCryptor-Prefix.pch"; sourceTree = "<group>"; };
+		AD8744271B6A3C1900257AA5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNCryptor.h; path = "Supporting Files/RNCryptor/RNCryptor.h"; sourceTree = "<group>"; };
+		AD8744281B6A3C1900257AA5 /* RNCryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNCryptor.m; path = "Supporting Files/RNCryptor/RNCryptor.m"; sourceTree = "<group>"; };
+		AD8744291B6A3C1900257AA5 /* RNCryptor+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RNCryptor+Private.h"; path = "Supporting Files/RNCryptor/RNCryptor+Private.h"; sourceTree = "<group>"; };
+		AD87442A1B6A3C1900257AA5 /* RNCryptor+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RNCryptor+Swift.h"; path = "Supporting Files/RNCryptor/RNCryptor+Swift.h"; sourceTree = "<group>"; };
+		AD87442B1B6A3C1900257AA5 /* RNCryptorEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNCryptorEngine.h; path = "Supporting Files/RNCryptor/RNCryptorEngine.h"; sourceTree = "<group>"; };
+		AD87442C1B6A3C1900257AA5 /* RNCryptorEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNCryptorEngine.m; path = "Supporting Files/RNCryptor/RNCryptorEngine.m"; sourceTree = "<group>"; };
+		AD87442D1B6A3C1900257AA5 /* RNDecryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNDecryptor.h; path = "Supporting Files/RNCryptor/RNDecryptor.h"; sourceTree = "<group>"; };
+		AD87442E1B6A3C1900257AA5 /* RNDecryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNDecryptor.m; path = "Supporting Files/RNCryptor/RNDecryptor.m"; sourceTree = "<group>"; };
+		AD87442F1B6A3C1900257AA5 /* RNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNEncryptor.h; path = "Supporting Files/RNCryptor/RNEncryptor.h"; sourceTree = "<group>"; };
+		AD8744301B6A3C1900257AA5 /* RNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNEncryptor.m; path = "Supporting Files/RNCryptor/RNEncryptor.m"; sourceTree = "<group>"; };
 		ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefAccountBehaviorTableViewController.swift; sourceTree = "<group>"; };
 		ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefAccountBehaviorTableViewController.xib; sourceTree = "<group>"; };
 		ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesPreviewLinesTableViewController.swift; sourceTree = "<group>"; };
@@ -390,6 +405,7 @@
 				3D9027521AF96D0D000D3E72 /* MailCore.framework */,
 				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
 				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
+				AD8744161B6A3B7600257AA5 /* RNCryptor */,
 				AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
@@ -508,6 +524,24 @@
 				AD789D9C1B3054A00001719E /* Feedback.html */,
 			);
 			name = HTML_Files;
+			sourceTree = "<group>";
+		};
+		AD8744161B6A3B7600257AA5 /* RNCryptor */ = {
+			isa = PBXGroup;
+			children = (
+				AD8744261B6A3C1900257AA5 /* RNCryptor-Prefix.pch */,
+				AD8744271B6A3C1900257AA5 /* RNCryptor.h */,
+				AD8744281B6A3C1900257AA5 /* RNCryptor.m */,
+				AD8744291B6A3C1900257AA5 /* RNCryptor+Private.h */,
+				AD87442A1B6A3C1900257AA5 /* RNCryptor+Swift.h */,
+				AD87442B1B6A3C1900257AA5 /* RNCryptorEngine.h */,
+				AD87442C1B6A3C1900257AA5 /* RNCryptorEngine.m */,
+				AD87442D1B6A3C1900257AA5 /* RNDecryptor.h */,
+				AD87442E1B6A3C1900257AA5 /* RNDecryptor.m */,
+				AD87442F1B6A3C1900257AA5 /* RNEncryptor.h */,
+				AD8744301B6A3C1900257AA5 /* RNEncryptor.m */,
+			);
+			name = RNCryptor;
 			sourceTree = "<group>";
 		};
 		ADD135CE1B15B5C200A9B31A /* Model */ = {
@@ -685,11 +719,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD8744321B6A3C1900257AA5 /* RNCryptorEngine.m in Sources */,
 				3D848A2E1B376A010039A162 /* EmailAccountSupport.swift in Sources */,
 				3D848A2D1B3768C90039A162 /* SendViewCellWithTextView.swift in Sources */,
 				AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */,
 				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,
+				AD8744341B6A3C1900257AA5 /* RNEncryptor.m in Sources */,
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
 				AD5292631B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift in Sources */,
@@ -718,6 +754,7 @@
 				AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */,
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
 				8E450BAC1B15BBF0001E37B9 /* MailSendViewController.swift in Sources */,
+				AD8744331B6A3C1900257AA5 /* RNDecryptor.m in Sources */,
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
 				AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
@@ -726,6 +763,7 @@
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
+				AD8744311B6A3C1900257AA5 /* RNCryptor.m in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
 				3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
