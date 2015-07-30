@@ -112,7 +112,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        setToolbarWithComposeButton()
+        if selectedEmails.count == 0 {
+            setToolbarWithComposeButton()
+        } else {
+            setToolbarWhileEditingAndSomethingSelected()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -509,7 +513,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func editToggled(sender: AnyObject) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
             self.navigationItem.rightBarButtonItem?.title = "Done"
-            selectedEmails.removeAllObjects()
             setToolbarWhileEditingAndNothingSelected()
             mailTableView.setEditing(true, animated: true)
         } else {
@@ -519,6 +522,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     func endEditing() {
         self.navigationItem.rightBarButtonItem?.title = "Edit"
+        selectedEmails.removeAllObjects()
         setToolbarWithComposeButton()
         self.refreshTableView()
         mailTableView.layoutIfNeeded()

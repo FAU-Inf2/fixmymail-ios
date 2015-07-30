@@ -425,7 +425,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
                         var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
                         appendMsgOp.start({ (error, uid) -> Void in
                             if error != nil {
-                                NSLog("error in appenMsgOp")
+                                NSLog("%@", error.description)
                             } else {
                                 NSLog("Draft saved")
                             }
@@ -560,29 +560,59 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var data = self.buildEmail()
         
+        let imapSession = getSession(self.account)
         let sendOp = session.sendOperationWithData(data)
         sendOp.start({(error) in
             if error != nil {
                 NSLog("%@", error.description)
+                
+                var alert = UIAlertView(title: "Error", message: "Could not sent your message. A copy of it was moved to your drafts.", delegate: nil, cancelButtonTitle: "OK")
+                
+                alert.show()
+                
+                //Mail could not be sent
+                //Move Email to drafts folder
+                //get draftsFolderName
+                let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
+                fetchFoldersOp.start({ (error, folders) -> Void in
+                    if error != nil {
+                        NSLog("%@", error.description)
+                    } else {
+                        for folder in folders {
+                            if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
+                                //append Email to sent Folder
+                                var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: data, flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
+                                appendMsgOp.start({ (error, uid) -> Void in
+                                    if error != nil {
+                                        NSLog("%@", error.description)
+                                    }
+                                })
+                                break
+                            }
+                        }
+                    }
+                })
             } else {
                 NSLog("sent")
                 
                 //Move Email to sent Folder
-                let imapSession = getSession(self.account)
-                
                 //get sentFolderName
                 let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
                 fetchFoldersOp.start({ (error, folders) -> Void in
-                    for folder in folders {
-                        if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.SentMail) == MCOIMAPFolderFlag.SentMail {
-                            //append Email to sent Folder
-                            var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: data, flags: MCOMessageFlag.Seen)
-                            appendMsgOp.start({ (error, uid) -> Void in
-                                if error != nil {
-                                    NSLog("error in appenMsgOp")
-                                }
-                            })
-                            break
+                    if error != nil {
+                        NSLog("%@", error.description)
+                    } else {
+                        for folder in folders {
+                            if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.SentMail) == MCOIMAPFolderFlag.SentMail {
+                                //append Email to sent Folder
+                                var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: data, flags: MCOMessageFlag.Seen)
+                                appendMsgOp.start({ (error, uid) -> Void in
+                                    if error != nil {
+                                        NSLog("%@", error.description)
+                                    }
+                                })
+                                break
+                            }
                         }
                     }
                 })
@@ -605,8 +635,6 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + keyboardSize.height)
-            
             var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, 0.0, 0.0)
             
             self.scrollView.contentInset = contentInsets

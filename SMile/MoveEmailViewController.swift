@@ -20,7 +20,7 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
         super.viewDidLoad()
         
         self.moveMailTableView.registerNib(UINib(nibName: "PreferenceTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceCell")
-        cellItems = getSubFolderFromParentFolder(self.getActionItemsFromEmailAccount((emailsToMove.firstObject as! Email).toAccount, andFolders: nil))
+        cellItems = getSubFolderFromParentFolder(self.getActionItemsFromEmailAccount((emailsToMove.firstObject as! Email).toAccount))
         self.moveMailTableView.registerNib(UINib(nibName: "SideBarSubFolderTableViewCell", bundle: nil), forCellReuseIdentifier: "SideBarSubFolder")
         
         var buttonCancel = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: "closeVCWithSender:")
@@ -107,112 +107,80 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
     func closeVCWithSender(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true)
         if sender.tag != 1 {
+            var updatedEmails = NSMutableArray(array: (self.navigationController?.topViewController as! MailTableViewController).emails)
+            for email in updatedEmails {
+                if self.emailsToMove.containsObject(email) {
+                    updatedEmails.removeObject(email)
+                }
+            }
+            (self.navigationController?.topViewController as! MailTableViewController).emails = updatedEmails.objectsAtIndexes(NSIndexSet(indexesInRange: NSRange(location: 0, length: updatedEmails.count))) as! [Email]
+            (self.navigationController?.topViewController as! MailTableViewController).emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
             (self.navigationController?.topViewController as! MailTableViewController).endEditing()
         }
     }
     
-    func getActionItemsFromEmailAccount(emailAccount: EmailAccount, andFolders folders: [MCOIMAPFolder]?) -> ActionItem {
+    func getActionItemsFromEmailAccount(emailAccount: EmailAccount) -> ActionItem {
         var actionItem = ActionItem(Name: emailAccount.accountName, viewController: "NoVC", emailAccount: emailAccount, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAccount))
         var subItems = [ActionItem]()
-        if folders != nil {
-            for fol in folders! {
-                var pathComponents = fol.path.pathComponents
-                if pathComponents.count > 1 {
-                    for var i = 0; i < (pathComponents.count - 1); i++ {
-                        let parentFolderName = pathComponents[i]
-                        var parentItem: ActionItem? = self.getParentItemFromItems(subItems, andParentFolderName: parentFolderName)
-                        if let parItem = parentItem {
-                            if pathComponents[i + 1] != fol.path.lastPathComponent {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "NoVC", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
-                                var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
-                                    subItemArr.append(acItem)
-                                    acItem.actionItems = subItemArr
-                                }
-                            } else {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "NoVC", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
-                                var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
-                                    subItemArr.append(acItem)
-                                    acItem.actionItems = subItemArr
-                                }
-                            }
+        for imapFolder in emailAccount.folders {
+            var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
+            var pathComponents = fol.path.pathComponents
+            if pathComponents.count > 1 {
+                for var i = 0; i < (pathComponents.count - 1); i++ {
+                    let parentFolderName = pathComponents[i]
+                    var parentItem: ActionItem? = self.getParentItemFromItems(subItems, andParentFolderName: parentFolderName)
+                    if parentItem == nil {
+                        var acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                        acItem.pathComponentNumber = i
+                        acItem.actionItems = [ActionItem]()
+                        parentItem = acItem
+                        if i == 0 {
+                            subItems.append(acItem)
+                        } else {
+                            self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents[i - 1])
                         }
                     }
-                } else {
-                    var item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
-                    if contains(subItems, item) == false {
-                        subItems.append(item)
+                    if let parItem = parentItem {
+                        parItem.viewController = "SubFolder"
+                        if pathComponents[i + 1] != fol.path.lastPathComponent {
+                            var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                            var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
+                            if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
+                                subItemArr.append(acItem)
+                                subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
+                                acItem.actionItems = subItemArr
+                            }
+                        } else {
+                            var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
+                            acItem.pathComponentNumber = i + 1
+                            var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
+                            if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
+                                subItemArr.append(acItem)
+                                subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
+                                parItem.actionItems = subItemArr
+                            }
+                        }
                     }
                 }
-            }
-        } else {
-            for imapFolder in emailAccount.folders {
-                var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-                var pathComponents = fol.path.pathComponents
-                if pathComponents.count > 1 {
-                    for var i = 0; i < (pathComponents.count - 1); i++ {
-                        let parentFolderName = pathComponents[i]
-                        var parentItem: ActionItem?
-                        for item in subItems {
-                            if item.cellName == parentFolderName {
-                                parentItem = item
-                                break;
-                            }
-                        }
-                        if parentItem == nil {
-                            var acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
-                            acItem.pathComponentNumber = i
-                            acItem.actionItems = [ActionItem]()
-                            parentItem = acItem
-                            if i == 0 {
-                                subItems.append(acItem)
-                            } else {
-                                //TODO
-                            }
-                        }
-                        if let parItem = parentItem {
-                            parItem.viewController = "SubFolder"
-                            if pathComponents[i + 1] != fol.path.lastPathComponent {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
-                                var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
-                                    subItemArr.append(acItem)
-                                    subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
-                                    acItem.actionItems = subItemArr
-                                }
-                            } else {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
-                                acItem.pathComponentNumber = i + 1
-                                var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
-                                if contains(subItemArr, acItem) == false {
-                                    subItemArr.append(acItem)
-                                    subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
-                                    parItem.actionItems = subItemArr
-                                }
-                            }
-                        }
+            } else {
+                var isParentFolder = false
+                for imapFolder in emailAccount.folders {
+                    var folder: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
+                    var folPath: NSString = NSString(string: folder.path)
+                    var range: NSRange = folPath.rangeOfString(NSString(format: "%@/", fol.path) as String)
+                    if range.location != NSNotFound {
+                        isParentFolder = true
+                        break;
                     }
+                }
+                var item: ActionItem!
+                if isParentFolder == true {
+                    item = ActionItem(Name: fol.path, viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                 } else {
-                    var isParentFolder = false
-                    for imapFolder in emailAccount.folders {
-                        var folder: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-                        var folPath: NSString = NSString(string: folder.path)
-                        var range: NSRange = folPath.rangeOfString(NSString(format: "%@/", fol.path) as String)
-                        if range.location != NSNotFound {
-                            isParentFolder = true
-                            break;
-                        }
-                    }
-                    var item: ActionItem!
-                    if isParentFolder == true {
-                        item = ActionItem(Name: fol.path, viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
-                    } else {
-                        item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
-                    }
-                    if self.containsActionItem(item, inActionItemArray: subItems) == false {
-                        subItems.append(item)
-                    }
+                    item = ActionItem(Name: fol.path, viewController: "EmailSpecific", emailAccount: emailAccount, emailFolder: fol, icon: UIImage(named: "folder.png"))
+                }
+                if self.containsActionItem(item, inActionItemArray: subItems) == false {
+                    subItems.append(item)
                 }
             }
         }
@@ -221,6 +189,30 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
         actionItem.actionItems = subItems.sorted { $0.cellName < $1.cellName }
         actionItem.folderExpanded = false
         return actionItem
+    }
+    
+    func addItemToParentItemWithItem(childItem: ActionItem, andParentItemName parentName: String) -> Bool {
+        var actionItems: [ActionItem] = self.cellItems
+        var parentItem: ActionItem?
+        for item in actionItems {
+            if item.cellName == parentName {
+                parentItem = item
+                break
+            }else if item.actionItems != nil && item.actionItems?.count > 0 {
+                parentItem = self.getParentItemFromItems(item.actionItems!, andParentFolderName: parentName)
+                if parentItem != nil {
+                    break
+                }
+            }
+        }
+        if parentItem == nil {
+            return false
+        } else {
+            var parItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
+            parItemArr.append(childItem)
+            parentItem?.actionItems = parItemArr.sorted{ $0.cellName < $1.cellName }
+            return true
+        }
     }
     
     func containsActionItem(actionItem: ActionItem, inActionItemArray actionItemArray: [ActionItem]) -> Bool {
