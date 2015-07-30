@@ -89,7 +89,6 @@ class PrefFolderSelectionTableViewController: UITableViewController {
 	}
 	
 	func loadData() {
-		self.folderPaths.append("Use account standard folders")
 		if self.emailAcc != nil {
 			for folderObject in self.emailAcc!.folders {
 				if let folder = folderObject as? ImapFolder {
@@ -98,6 +97,9 @@ class PrefFolderSelectionTableViewController: UITableViewController {
 			}
 		}
 		
+		self.folderPaths.sort(){$0 < $1}
+		self.folderPaths.insert("Use account standard folders", atIndex: 0)
+
 		for item in self.folderPaths {
 			if item == self.selectedFolderPath {
 				self.isChecked.append(true)
@@ -108,7 +110,5 @@ class PrefFolderSelectionTableViewController: UITableViewController {
 		if self.selectedFolderPath == "" {
 			self.isChecked[0] = true
 		}
-			
 	}
-	
 }
