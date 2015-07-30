@@ -16,6 +16,7 @@
 #import "MCOIMAPFolderWrapper.h"
 #import "RNEncryptor.h"
 #import "RNDecryptor.h"
+#import "MyRNEncryptor.h"
 
 
 //#endif
