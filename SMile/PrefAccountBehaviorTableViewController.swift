@@ -62,7 +62,7 @@ class PrefAccountBehaviorTableViewController: UITableViewController {
 		// Configure the cell...
 		cell.labelCellContent.text = self.labelStrings[indexPath.row]
 		cell.textfield.text = self.entries[self.labelStrings[indexPath.row]]
-		cell.textfield.textAlignment = NSTextAlignment.Right
+		cell.textfield.textAlignment = NSTextAlignment.Left
 		cell.textfield.enabled = false
 		cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
 
