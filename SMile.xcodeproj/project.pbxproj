@@ -83,6 +83,8 @@
 		AD5292641B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */; };
 		AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */; };
 		AD6E5DF51B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */; };
+		AD6F67711B6D07C00015B79E /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6F676F1B6D07C00015B79E /* libcrypto.a */; };
+		AD6F67721B6D07C00015B79E /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6F67701B6D07C00015B79E /* libssl.a */; };
 		AD789D991B3050640001719E /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD789D971B3050640001719E /* FeedbackViewController.xib */; };
 		AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD789D981B3050640001719E /* FeedbackViewController.swift */; };
 		AD789D9D1B3054A00001719E /* Feedback.html in Resources */ = {isa = PBXBuildFile; fileRef = AD789D9C1B3054A00001719E /* Feedback.html */; };
@@ -213,6 +215,8 @@
 		AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefFolderSelectionTableViewController.xib; sourceTree = "<group>"; };
 		AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceStandardAccountTableViewController.swift; sourceTree = "<group>"; };
 		AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceStandardAccountTableViewController.xib; sourceTree = "<group>"; };
+		AD6F676F1B6D07C00015B79E /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../OpenSSL/lib/iOS/libcrypto.a; sourceTree = "<group>"; };
+		AD6F67701B6D07C00015B79E /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../OpenSSL/lib/iOS/libssl.a; sourceTree = "<group>"; };
 		AD789D971B3050640001719E /* FeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedbackViewController.xib; sourceTree = "<group>"; };
 		AD789D981B3050640001719E /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		AD789D9C1B3054A00001719E /* Feedback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Feedback.html; path = HTML_Files/Feedback.html; sourceTree = "<group>"; };
@@ -265,6 +269,8 @@
 				3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */,
 				3D9027541AF96D0D000D3E72 /* MailCore.framework in Frameworks */,
 				3D9027551AF96D0D000D3E72 /* SwiftyJSON.framework in Frameworks */,
+				AD6F67711B6D07C00015B79E /* libcrypto.a in Frameworks */,
+				AD6F67721B6D07C00015B79E /* libssl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +411,8 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AD6F676F1B6D07C00015B79E /* libcrypto.a */,
+				AD6F67701B6D07C00015B79E /* libssl.a */,
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
@@ -915,6 +923,7 @@
 		3DF253CA1AF7611E00B99BC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -927,16 +936,22 @@
 				);
 				INFOPLIST_FILE = SMile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					./OpenSSL/lib/iOS,
+					"$(PROJECT_DIR)/OpenSSL/lib/iOS",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
+				USER_HEADER_SEARCH_PATHS = ./OpenSSL/include;
 			};
 			name = Debug;
 		};
 		3DF253CB1AF7611E00B99BC8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -949,9 +964,14 @@
 				);
 				INFOPLIST_FILE = SMile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					./OpenSSL/lib/iOS,
+					"$(PROJECT_DIR)/OpenSSL/lib/iOS",
+				);
 				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
+				USER_HEADER_SEARCH_PATHS = ./OpenSSL/include;
 			};
 			name = Release;
 		};
