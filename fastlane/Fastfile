@@ -55,7 +55,7 @@ platform :ios do
       )
     end
 
-    xctool "-project SMile.xcodeproj \
+    xctool "-workspace SMile.xcworkspace \
         -scheme 'SMile' \
         -configuration Release \
         -sdk iphonesimulator \
@@ -65,7 +65,7 @@ platform :ios do
   desc "Build project with xctool"
   lane :build do
     cocoapods
-    xctool "-project SMile.xcodeproj \
+    xctool "-workspace SMile.xcworkspace \
         -scheme 'SMile' \
         -configuration Release \
         -sdk iphonesimulator \
@@ -74,7 +74,7 @@ platform :ios do
 
   desc "Run tests for project with xctool"
   lane :test do
-    xctool "-project SMile.xcodeproj \
+    xctool "-workspace SMile.xcworkspace \
         -scheme 'SMile' \
         -configuration Release \
         -sdk iphonesimulator \
