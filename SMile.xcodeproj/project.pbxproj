@@ -66,6 +66,8 @@
 		AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */; };
 		AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */; };
 		AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */; };
+		AD43C7FC1B6FEE9200C8F286 /* DevPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */; };
+		AD43C7FD1B6FEE9200C8F286 /* DevPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */; };
 		AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0211B1AFE0300751FFA /* smile-gray.png */; };
 		AD44E0271B1B017900751FFA /* outlook.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0231B1B017900751FFA /* outlook.png */; };
 		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
@@ -198,6 +200,8 @@
 		AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccountSupport.swift; sourceTree = "<group>"; };
+		AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevPasswordViewController.swift; sourceTree = "<group>"; };
+		AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DevPasswordViewController.xib; sourceTree = "<group>"; };
 		AD44E0211B1AFE0300751FFA /* smile-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "smile-gray.png"; sourceTree = "<group>"; };
 		AD44E0231B1B017900751FFA /* outlook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outlook.png; sourceTree = "<group>"; };
 		AD44E0241B1B017900751FFA /* Yahoo-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Yahoo-icon.png"; sourceTree = "<group>"; };
@@ -313,6 +317,8 @@
 		3D8D90DF1B00A1DE00D5135D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */,
+				AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
 				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
 				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
@@ -697,6 +703,7 @@
 				AD789DA31B319BC30001719E /* AboutUsViewController.xib in Resources */,
 				8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */,
 				3D65A4CD1B53014E00E88CC7 /* triangle_right.png in Resources */,
+				AD43C7FD1B6FEE9200C8F286 /* DevPasswordViewController.xib in Resources */,
 				5B7EAB081B31870800B888BD /* archive.png in Resources */,
 				AD789D9D1B3054A00001719E /* Feedback.html in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
@@ -809,6 +816,7 @@
 				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
 				AD6F68451B6E17400015B79E /* SwiftyJSON.swift in Sources */,
 				8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */,
+				AD43C7FC1B6FEE9200C8F286 /* DevPasswordViewController.swift in Sources */,
 				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,

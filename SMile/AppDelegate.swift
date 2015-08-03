@@ -146,12 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if errorLocksmithGmail == nil {
 				NSLog("found old data -> deleted!")
 			}
-			let GmailSaveRequest = LocksmithRequest(userAccount: "fixmymail2015@gmail.com", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
-			GmailSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-			let (GmailDictionary, GmailRequestError) = Locksmith.performRequest(GmailSaveRequest)
-			if GmailRequestError == nil {
-				NSLog("saving data for \(gmailAccount.emailAddress)")
-			}
+			
 			
 			
 			
@@ -180,12 +175,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if errorLocksmithGmx == nil {
 				NSLog("found old data -> deleted!")
 			}
-			let GmxSaveRequest = LocksmithRequest(userAccount: "fixmymail@gmx.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
-			GmxSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-			let (GmxDictionary, GmxRequestError) = Locksmith.performRequest(GmxSaveRequest)
-			if GmxRequestError == nil {
-				NSLog("saving data for \(gmxAccount.emailAddress)")
-			}
+			
 			
 			
             var webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
@@ -212,12 +202,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
 			if errorLocksmithWeb == nil {
 				NSLog("found old data -> deleted!")
-			}
-			let WebSaveRequest = LocksmithRequest(userAccount: "fixmymail@web.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
-			WebSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-			let (WebDictionary, WebRequestError) = Locksmith.performRequest(WebSaveRequest)
-			if WebRequestError == nil {
-				println("saving data for \(webAccount.emailAddress)")
 			}
 			
 			
@@ -246,12 +230,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if errorLocksmithTcom == nil {
 				NSLog("found old data -> deleted!")
 			}
-			let tcomSaveRequest = LocksmithRequest(userAccount: "fixmymail@t-online.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
-			tcomSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-			let (tcomDictionary, tcomRequestError) = Locksmith.performRequest(tcomSaveRequest)
-			if tcomRequestError == nil {
-				NSLog("saving data for \(tcomAccount.emailAddress)")
-			}
 			
 			
 			var iCloudAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
@@ -278,12 +256,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			let errorLocksmithiCloud = Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
 			if errorLocksmithiCloud == nil {
 				NSLog("found old data -> deleted!")
-			}
-			let iCloudSaveRequest = LocksmithRequest(userAccount: "fixmymail2015@icloud.com", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
-			iCloudSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-			let (iCloudDictionary, iCloudRequestError) = Locksmith.performRequest(iCloudSaveRequest)
-			if iCloudRequestError == nil {
-				NSLog("saving data for \(iCloudAccount.emailAddress)")
 			}
 			
 			
@@ -312,12 +284,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if errorLocksmithYahoo == nil {
 				NSLog("found old data -> deleted!")
 			}
-			let YahooSaveRequest = LocksmithRequest(userAccount: "fixmymail2015@yahoo.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
-			YahooSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-			let (YahooDictionary, YahooRequestError) = Locksmith.performRequest(YahooSaveRequest)
-			if YahooRequestError == nil {
-				NSLog("saving data for \(YahooAccount.emailAddress)")
-			}
 			
 			
 			var OutlookAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
@@ -344,12 +310,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			let errorLocksmithOutlook = Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
 			if errorLocksmithOutlook == nil {
 				NSLog("found old data -> deleted!")
-			}
-			let OutlookSaveRequest = LocksmithRequest(userAccount: "fixme2015@outlook.de", requestType: .Create, data: ["Password:": "fixinginMAD2015"])
-			OutlookSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-			let (OutlookDictionary, OutlookRequestError) = Locksmith.performRequest(OutlookSaveRequest)
-			if OutlookRequestError == nil {
-				NSLog("saving data for \(OutlookAccount.emailAddress)")
 			}
 			
 			

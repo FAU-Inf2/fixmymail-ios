@@ -39,13 +39,19 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		tableView.registerNib(UINib(nibName: "SwitchTableViewCell", bundle: nil), forCellReuseIdentifier: "SwitchTableViewCell")
 		self.navigationItem.title = "Accounts"
 		self.sections = ["Accounts:", "", "Options:"]
+		
+		
+		//DELETE before release
+		var buttonInfo: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Bookmarks, target: self, action: "showPasswordView")
+		self.navigationItem.rightBarButtonItem = buttonInfo
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+	
+	//DELETE before release
+	func showPasswordView() {
+		self.navigationController?.pushViewController(DevPasswordViewController(nibName: "DevPasswordViewController", bundle: nil), animated: true)
+	}
+	
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(true)
