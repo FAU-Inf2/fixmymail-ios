@@ -64,9 +64,10 @@ platform :ios do
 
   desc "Build project with xctool"
   lane :build do
-    carthageverbose(
-      verbose: true
-    )
+    #carthageverbose(
+      #verbose: true
+    #)
+    cocoapodsverbose(verbose: true)
     xctool "-project SMile.xcodeproj \
         -scheme 'SMile' \
         -configuration Release \

@@ -22,8 +22,6 @@
 		3D848A2E1B376A010039A162 /* EmailAccountSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */; };
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
 		3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */; };
-		3D9027541AF96D0D000D3E72 /* MailCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9027521AF96D0D000D3E72 /* MailCore.framework */; };
-		3D9027551AF96D0D000D3E72 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */; };
 		3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D90275D1AF97167000D3E72 /* CoreData.framework */; };
 		3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA302941B2ED122003CE16A /* ImapFolder.swift */; };
 		3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */; };
@@ -55,6 +53,7 @@
 		8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */; };
 		8E63CE561B53E03E00DC9B04 /* MoveEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */; };
 		8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */; };
+		A57032F3C67E01D83552C847 /* libPods-SMile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 442C288A316BE4CDB9E2D43B /* libPods-SMile.a */; };
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
 		AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */; };
@@ -83,8 +82,7 @@
 		AD5292641B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */; };
 		AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */; };
 		AD6E5DF51B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */; };
-		AD6F67711B6D07C00015B79E /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6F676F1B6D07C00015B79E /* libcrypto.a */; };
-		AD6F67721B6D07C00015B79E /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6F67701B6D07C00015B79E /* libssl.a */; };
+		AD6F68451B6E17400015B79E /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6F68441B6E17400015B79E /* SwiftyJSON.swift */; };
 		AD789D991B3050640001719E /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD789D971B3050640001719E /* FeedbackViewController.xib */; };
 		AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD789D981B3050640001719E /* FeedbackViewController.swift */; };
 		AD789D9D1B3054A00001719E /* Feedback.html in Resources */ = {isa = PBXBuildFile; fileRef = AD789D9C1B3054A00001719E /* Feedback.html */; };
@@ -143,8 +141,6 @@
 		3D65A4CB1B53014E00E88CC7 /* triangle_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = triangle_right.png; sourceTree = "<group>"; };
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
-		3D9027521AF96D0D000D3E72 /* MailCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MailCore.framework; path = ../Carthage/Build/iOS/MailCore.framework; sourceTree = "<group>"; };
-		3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = ../Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D90275D1AF97167000D3E72 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3DA302941B2ED122003CE16A /* ImapFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImapFolder.swift; sourceTree = "<group>"; };
 		3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCOIMAPFolderWrapper.h; sourceTree = "<group>"; };
@@ -162,10 +158,12 @@
 		3DF253C41AF7611E00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253C51AF7611E00B99BC8 /* SMileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMileTests.swift; sourceTree = "<group>"; };
 		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "SMileTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		442C288A316BE4CDB9E2D43B /* libPods-SMile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SMile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPFunctions.swift; sourceTree = "<group>"; };
 		5B7EAB071B31870800B888BD /* archive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archive.png; sourceTree = "<group>"; };
 		5B8948FA1B317DAA0064F3C0 /* Trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trash.png; sourceTree = "<group>"; };
 		5B8B6E0A1B2455E60087B124 /* bluedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluedot@2x.png"; sourceTree = "<group>"; };
+		7F91E422645C25FE1118DCAC /* Pods-SMile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SMile/Pods-SMile.debug.xcconfig"; sourceTree = "<group>"; };
 		8E1441161B1DEFFA00F1A023 /* SendViewCellWithLabelAndTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellWithLabelAndTextField.swift; sourceTree = "<group>"; };
 		8E14411B1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellWithLabelAndTextField.xib; sourceTree = "<group>"; };
 		8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMailTableViewCell.swift; sourceTree = "<group>"; };
@@ -186,6 +184,7 @@
 		8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoveEmailViewController.xib; sourceTree = "<group>"; };
 		8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellWithTextView.swift; sourceTree = "<group>"; };
 		8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellWithTextView.xib; sourceTree = "<group>"; };
+		948593F7BA81284FFBF715C1 /* Pods-SMile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMile.release.xcconfig"; path = "Pods/Target Support Files/Pods-SMile/Pods-SMile.release.xcconfig"; sourceTree = "<group>"; };
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
 		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
@@ -215,8 +214,7 @@
 		AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefFolderSelectionTableViewController.xib; sourceTree = "<group>"; };
 		AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceStandardAccountTableViewController.swift; sourceTree = "<group>"; };
 		AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceStandardAccountTableViewController.xib; sourceTree = "<group>"; };
-		AD6F676F1B6D07C00015B79E /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../OpenSSL/lib/iOS/libcrypto.a; sourceTree = "<group>"; };
-		AD6F67701B6D07C00015B79E /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../OpenSSL/lib/iOS/libssl.a; sourceTree = "<group>"; };
+		AD6F68441B6E17400015B79E /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = "Supporting Files/SwiftyJSON/SwiftyJSON.swift"; sourceTree = "<group>"; };
 		AD789D971B3050640001719E /* FeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedbackViewController.xib; sourceTree = "<group>"; };
 		AD789D981B3050640001719E /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		AD789D9C1B3054A00001719E /* Feedback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Feedback.html; path = HTML_Files/Feedback.html; sourceTree = "<group>"; };
@@ -267,10 +265,7 @@
 				8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */,
 				8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */,
 				3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */,
-				3D9027541AF96D0D000D3E72 /* MailCore.framework in Frameworks */,
-				3D9027551AF96D0D000D3E72 /* SwiftyJSON.framework in Frameworks */,
-				AD6F67711B6D07C00015B79E /* libcrypto.a in Frameworks */,
-				AD6F67721B6D07C00015B79E /* libssl.a in Frameworks */,
+				A57032F3C67E01D83552C847 /* libPods-SMile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +279,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A2A175FE96269B32B7F3D98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				442C288A316BE4CDB9E2D43B /* libPods-SMile.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3D3654E01B3854A4003B38F0 /* SideBarItems */ = {
 			isa = PBXGroup;
 			children = (
@@ -376,6 +379,8 @@
 				3DF253A91AF7611D00B99BC8 /* SMile */,
 				3DF253C21AF7611E00B99BC8 /* SMileTests */,
 				3DF253A81AF7611D00B99BC8 /* Products */,
+				D7DD74CA526362FA7BB68475 /* Pods */,
+				2A2A175FE96269B32B7F3D98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -411,15 +416,12 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AD6F676F1B6D07C00015B79E /* libcrypto.a */,
-				AD6F67701B6D07C00015B79E /* libssl.a */,
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
-				3D9027521AF96D0D000D3E72 /* MailCore.framework */,
-				3D9027531AF96D0D000D3E72 /* SwiftyJSON.framework */,
 				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
 				AD8744161B6A3B7600257AA5 /* RNCryptor */,
+				AD6F68431B6E17240015B79E /* SwiftyJSON */,
 				AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
@@ -531,6 +533,14 @@
 			name = Locksmith;
 			sourceTree = "<group>";
 		};
+		AD6F68431B6E17240015B79E /* SwiftyJSON */ = {
+			isa = PBXGroup;
+			children = (
+				AD6F68441B6E17400015B79E /* SwiftyJSON.swift */,
+			);
+			name = SwiftyJSON;
+			sourceTree = "<group>";
+		};
 		AD789D9B1B3054420001719E /* HTML_Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -577,6 +587,15 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		D7DD74CA526362FA7BB68475 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7F91E422645C25FE1118DCAC /* Pods-SMile.debug.xcconfig */,
+				948593F7BA81284FFBF715C1 /* Pods-SMile.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -584,10 +603,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3DF253C91AF7611E00B99BC8 /* Build configuration list for PBXNativeTarget "SMile" */;
 			buildPhases = (
+				1131A2B111509E4AB4B306FB /* Check Pods Manifest.lock */,
 				3DF253A31AF7611D00B99BC8 /* Sources */,
 				3DF253A41AF7611D00B99BC8 /* Frameworks */,
 				3DF253A51AF7611D00B99BC8 /* Resources */,
 				3DF253CF1AF766A200B99BC8 /* ShellScript */,
+				BD16F529DA2B2C5ADD5BC647 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -721,20 +742,48 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1131A2B111509E4AB4B306FB /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		3DF253CF1AF766A200B99BC8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/MailCore.framework",
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage build --platform \"$PLATFORM_NAME\" \"$SRCROOT\"\n/usr/local/bin/carthage copy-frameworks";
+			shellScript = "";
+		};
+		BD16F529DA2B2C5ADD5BC647 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SMile/Pods-SMile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -758,6 +807,7 @@
 				AD8744381B6A406200257AA5 /* MyRNEncryptor.m in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
+				AD6F68451B6E17400015B79E /* SwiftyJSON.swift in Sources */,
 				8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */,
 				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
@@ -922,56 +972,43 @@
 		};
 		3DF253CA1AF7611E00B99BC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7F91E422645C25FE1118DCAC /* Pods-SMile.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/**",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/SMile",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SMile/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					./OpenSSL/lib/iOS,
-					"$(PROJECT_DIR)/OpenSSL/lib/iOS",
-				);
-				ONLY_ACTIVE_ARCH = NO;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
-				USER_HEADER_SEARCH_PATHS = ./OpenSSL/include;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
 		3DF253CB1AF7611E00B99BC8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 948593F7BA81284FFBF715C1 /* Pods-SMile.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/**",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/SMile",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SMile/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					./OpenSSL/lib/iOS,
-					"$(PROJECT_DIR)/OpenSSL/lib/iOS",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
-				USER_HEADER_SEARCH_PATHS = ./OpenSSL/include;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
