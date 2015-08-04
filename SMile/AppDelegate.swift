@@ -370,5 +370,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSUserDefaults.standardUserDefaults().registerDefaults(["standardAccount" : "",
             "loadPictures" : true, "previewLines" : 1])
     }
+	
+	//MARK: - AirDrop Support
+		
+	func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+		//var resourceToOpen: NSURL = url
+		var documentController = UIDocumentInteractionController(URL: url)
+		println("Imported document: " + documentController.URL.path!)
+		return true
+	}
+	
 }
 
