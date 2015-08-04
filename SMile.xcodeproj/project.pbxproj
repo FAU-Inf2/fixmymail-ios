@@ -68,7 +68,10 @@
 		AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */; };
 		AD43C7FC1B6FEE9200C8F286 /* DevPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */; };
 		AD43C7FD1B6FEE9200C8F286 /* DevPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */; };
-		AD43C8011B70B6FA00C8F286 /* keyicon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD43C8001B70B6FA00C8F286 /* keyicon.png */; };
+		AD43C8041B70F92600C8F286 /* ReceivedFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */; };
+		AD43C8051B70F92600C8F286 /* ReceivedFileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */; };
+		AD43C80A1B71199900C8F286 /* fileicon_standard.png in Resources */ = {isa = PBXBuildFile; fileRef = AD43C8081B71199900C8F286 /* fileicon_standard.png */; };
+		AD43C80B1B71199900C8F286 /* keyicon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD43C8091B71199900C8F286 /* keyicon.png */; };
 		AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0211B1AFE0300751FFA /* smile-gray.png */; };
 		AD44E0271B1B017900751FFA /* outlook.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0231B1B017900751FFA /* outlook.png */; };
 		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
@@ -203,7 +206,10 @@
 		AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccountSupport.swift; sourceTree = "<group>"; };
 		AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevPasswordViewController.swift; sourceTree = "<group>"; };
 		AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DevPasswordViewController.xib; sourceTree = "<group>"; };
-		AD43C8001B70B6FA00C8F286 /* keyicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyicon.png; path = Icons/keyicon.png; sourceTree = "<group>"; };
+		AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceivedFileViewController.swift; sourceTree = "<group>"; };
+		AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReceivedFileViewController.xib; sourceTree = "<group>"; };
+		AD43C8081B71199900C8F286 /* fileicon_standard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fileicon_standard.png; sourceTree = "<group>"; };
+		AD43C8091B71199900C8F286 /* keyicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keyicon.png; sourceTree = "<group>"; };
 		AD44E0211B1AFE0300751FFA /* smile-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "smile-gray.png"; sourceTree = "<group>"; };
 		AD44E0231B1B017900751FFA /* outlook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outlook.png; sourceTree = "<group>"; };
 		AD44E0241B1B017900751FFA /* Yahoo-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Yahoo-icon.png"; sourceTree = "<group>"; };
@@ -321,6 +327,8 @@
 			children = (
 				AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */,
 				AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */,
+				AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */,
+				AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
 				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
 				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
@@ -511,7 +519,8 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				AD43C8001B70B6FA00C8F286 /* keyicon.png */,
+				AD43C8081B71199900C8F286 /* fileicon_standard.png */,
+				AD43C8091B71199900C8F286 /* keyicon.png */,
 				ADE770FE1B35E1C50008B449 /* smile_icon_blue.png */,
 				AD44E0371B1B528400751FFA /* fau-logo.png */,
 				AD44E0351B1B51ED00751FFA /* icloud-icon.png */,
@@ -690,10 +699,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
+				AD43C80A1B71199900C8F286 /* fileicon_standard.png in Resources */,
 				AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
-				AD43C8011B70B6FA00C8F286 /* keyicon.png in Resources */,
+				AD43C8051B70F92600C8F286 /* ReceivedFileViewController.xib in Resources */,
 				5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */,
 				ADCAB63C1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib in Resources */,
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
@@ -720,6 +730,7 @@
 				AD44E0271B1B017900751FFA /* outlook.png in Resources */,
 				AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
+				AD43C80B1B71199900C8F286 /* keyicon.png in Resources */,
 				ADBF50AD1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib in Resources */,
 				ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */,
 				AD44E0291B1B017900751FFA /* gmx.png in Resources */,
@@ -845,6 +856,7 @@
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
 				AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */,
 				AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */,
+				AD43C8041B70F92600C8F286 /* ReceivedFileViewController.swift in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
 				ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,

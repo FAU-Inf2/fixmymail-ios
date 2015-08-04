@@ -374,10 +374,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	//MARK: - AirDrop Support
 		
 	func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-		//var resourceToOpen: NSURL = url
-		var documentController = UIDocumentInteractionController(URL: url)
-		println("Imported document: " + documentController.URL.path!)
-		return true
+		var fileManager = NSFileManager.defaultManager()
+		if fileManager.fileExistsAtPath(url.path!) == true {
+			NSLog("File exists. File path: " + url.path!)
+			var receivedFileVC = ReceivedFileViewController(nibName: "ReceivedFileViewController", bundle: nil)
+			receivedFileVC.url = url
+			self.window?.rootViewController?.presentViewController(receivedFileVC, animated: true, completion: nil)
+			
+			return true
+		} else {
+			return false
+		}
+		
 	}
 	
 }
