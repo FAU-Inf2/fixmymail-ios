@@ -413,8 +413,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 							return
 						}
 						
+						// no error checking here. if something went wrong function would have returned earlier
+						defaults.setURL(NSURL(fileURLWithPath: pubringPath)!, forKey: "pubring")
+						defaults.setURL(NSURL(fileURLWithPath: secringPath)!, forKey: "secring")
 						defaults.setBool(true, forKey: "RingfilesCreated")
-						
+
+						//NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
+						//NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
 					}
 				}
 			}
