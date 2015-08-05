@@ -23,7 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
-        initCoreDataTestEntries()
+		self.createRingFiles()
+        self.initCoreDataTestEntries()
         
         return true
     }
@@ -386,6 +387,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return false
 		}
 		
+	}
+	
+	// MARK: - Create GPG ring files
+	func createRingFiles() -> Void {
+		let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+		if(!defaults.boolForKey("RingfilesCreated")) {
+			var fileManager = NSFileManager.defaultManager()
+			let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
+			let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
+			if let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true) {
+				if paths.count > 0 {
+					if let dirPath = paths[0] as? String {
+						// create public ring file
+						var pubringPath = dirPath.stringByAppendingPathComponent("smile_pubring.gpg")
+						if fileManager.createFileAtPath(pubringPath, contents: nil, attributes: [NSFilePosixPermissions: NSNumber(short: 0600)]) == false {
+							NSLog("public ringfile not created!")
+							return
+						}
+						
+						// create secret ring file
+						var secringPath = dirPath.stringByAppendingPathComponent("smile_secring.gpg")
+						if fileManager.createFileAtPath(secringPath, contents: nil, attributes: [NSFilePosixPermissions: NSNumber(short: 0600)]) == false {
+							NSLog("secret ringfile not created!")
+							return
+						}
+						
+						defaults.setBool(true, forKey: "RingfilesCreated")
+						
+					}
+				}
+			}
+		}
 	}
 	
 }
