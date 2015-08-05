@@ -72,6 +72,7 @@
 		AD43C8051B70F92600C8F286 /* ReceivedFileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */; };
 		AD43C80A1B71199900C8F286 /* fileicon_standard.png in Resources */ = {isa = PBXBuildFile; fileRef = AD43C8081B71199900C8F286 /* fileicon_standard.png */; };
 		AD43C80B1B71199900C8F286 /* keyicon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD43C8091B71199900C8F286 /* keyicon.png */; };
+		AD43C80D1B7247F400C8F286 /* fileicon_lock.png in Resources */ = {isa = PBXBuildFile; fileRef = AD43C80C1B7247F400C8F286 /* fileicon_lock.png */; };
 		AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0211B1AFE0300751FFA /* smile-gray.png */; };
 		AD44E0271B1B017900751FFA /* outlook.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0231B1B017900751FFA /* outlook.png */; };
 		AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0241B1B017900751FFA /* Yahoo-icon.png */; };
@@ -210,6 +211,7 @@
 		AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReceivedFileViewController.xib; sourceTree = "<group>"; };
 		AD43C8081B71199900C8F286 /* fileicon_standard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fileicon_standard.png; sourceTree = "<group>"; };
 		AD43C8091B71199900C8F286 /* keyicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keyicon.png; sourceTree = "<group>"; };
+		AD43C80C1B7247F400C8F286 /* fileicon_lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fileicon_lock.png; sourceTree = "<group>"; };
 		AD44E0211B1AFE0300751FFA /* smile-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "smile-gray.png"; sourceTree = "<group>"; };
 		AD44E0231B1B017900751FFA /* outlook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outlook.png; sourceTree = "<group>"; };
 		AD44E0241B1B017900751FFA /* Yahoo-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Yahoo-icon.png"; sourceTree = "<group>"; };
@@ -519,6 +521,7 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AD43C80C1B7247F400C8F286 /* fileicon_lock.png */,
 				AD43C8081B71199900C8F286 /* fileicon_standard.png */,
 				AD43C8091B71199900C8F286 /* keyicon.png */,
 				ADE770FE1B35E1C50008B449 /* smile_icon_blue.png */,
@@ -713,6 +716,7 @@
 				3DF253B51AF7611D00B99BC8 /* Main.storyboard in Resources */,
 				8E450BA91B15BBF0001E37B9 /* CustomMailTableViewCell.xib in Resources */,
 				3D0FFD6D1B0A297700C4F8F6 /* ContentViewController.xib in Resources */,
+				AD43C80D1B7247F400C8F286 /* fileicon_lock.png in Resources */,
 				AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */,
 				AD789DA31B319BC30001719E /* AboutUsViewController.xib in Resources */,
 				8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */,

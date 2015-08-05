@@ -21,29 +21,39 @@ class ReceivedFileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		loadData()
-
+		// load file
+		self.fileManager = NSFileManager.defaultManager()
+		self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+		
         // Do any additional setup after loading the view.
 		// set navigationbar
 		let navItem: UINavigationItem = UINavigationItem(title: "Received File")
 		var flexSpaceItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
 		var cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
-		var importButton: UIBarButtonItem = UIBarButtonItem(title: "Import Key", style: .Plain, target: self, action: "importTapped:")
-		if self.fileIsKeyfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == false {
-			importButton.enabled = false
+		var importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
+		var decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
+		// file is a .asc or .gpg file
+		if self.fileIsKeyfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
+			if self.isPGPKey(self.url!) == true {
+				navItem.rightBarButtonItems = [importButton]
+			} else {
+				navItem.rightBarButtonItems = [decryptButton]
+			}
+			
 		}
 		navItem.leftBarButtonItems = [cancelItem]
-		navItem.rightBarButtonItems = [importButton]
 		navigationBar.items = [navItem]
 		
 		// set toolbar
 		var composeButton: UIBarButtonItem = UIBarButtonItem(title: "Attach to Email", style: .Plain,  target: self, action: "showEmptyMailSendView:")
-		var items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
+		var actionButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "actionTapped:")
+		var items = [actionButton, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
 		self.toolbar.setItems(items, animated: false)
 		
 		// set view content
 		self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
 		self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
+		
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,10 +81,8 @@ class ReceivedFileViewController: UIViewController {
 		// import key
 	}
 	
-	// MARK: - Load Data
-	func loadData() {
-		self.fileManager = NSFileManager.defaultManager()
-		self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+	@IBAction func actionTapped(sender: AnyObject) -> Void {
+		
 	}
 	
 	func getUImageFromFilename(filename: String) -> UIImage? {
@@ -83,7 +91,8 @@ class ReceivedFileViewController: UIViewController {
 		case let s where s.rangeOfString(".asc") != nil:
 			fileimage = UIImage(named: "keyicon.png")
 		// add more cases for different document types
-		// case let s where s.rangeOfString(".) != nil:
+		case let s where s.rangeOfString(".gpg") != nil:
+			fileimage = UIImage(named: "fileicon_lock.png")
 		default:
 			fileimage = UIImage(named: "fileicon_standard.png")
 		}
@@ -92,11 +101,22 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	func fileIsKeyfile(filename: String) -> Bool {
-		if filename.rangeOfString(".asc") != nil {
+		if filename.rangeOfString(".asc") != nil || filename.rangeOfString(".gpg") != nil {
 			return true
 		} else {
 			return false
 		}
+	}
+	
+	func isPGPKey(fileUrl: NSURL) -> Bool {
+		if let fileContent = String(contentsOfFile: fileUrl.path!, encoding: NSUTF8StringEncoding, error: nil) {
+			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil
+				|| fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----") != nil {
+				return true
+			}
+		}
+		
+		return false
 	}
 	
 }

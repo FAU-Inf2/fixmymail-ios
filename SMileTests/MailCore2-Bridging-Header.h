@@ -17,6 +17,8 @@
 #import "RNEncryptor.h"
 #import "RNDecryptor.h"
 #import "MyRNEncryptor.h"
+#import "ObjectivePGP.h"
+#import "UNNetPGP.h"
 
 
 //#endif
