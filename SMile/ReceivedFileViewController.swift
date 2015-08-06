@@ -99,6 +99,9 @@ class ReceivedFileViewController: UIViewController {
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
 		var crypto: SMileCrypto = SMileCrypto()
+		crypto.printAllPublicKeys()
+		crypto.printAllSecretKeys()
+		
 		var decryptedFile = crypto.decryptFile(self.url!, passphrase: "GoMADyoumust1!", encryptionType: "PGP")
 		if decryptedFile != nil {
 			self.fileManager!.removeItemAtURL(self.url!, error: nil)

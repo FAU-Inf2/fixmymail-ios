@@ -406,14 +406,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					if let dirPath = paths[0] as? String {
 						// create public ring file
 						var pubringPath = dirPath.stringByAppendingPathComponent("smile_pubring.gpg")
-						if fileManager.createFileAtPath(pubringPath, contents: nil, attributes: [NSFilePosixPermissions: NSNumber(short: 0600)]) == false {
+						if fileManager.createFileAtPath(pubringPath, contents: nil, attributes: nil) == false {
 							NSLog("public ringfile not created!")
 							return
 						}
 						
 						// create secret ring file
 						var secringPath = dirPath.stringByAppendingPathComponent("smile_secring.gpg")
-						if fileManager.createFileAtPath(secringPath, contents: nil, attributes: [NSFilePosixPermissions: NSNumber(short: 0600)]) == false {
+						if fileManager.createFileAtPath(secringPath, contents: nil, attributes: nil) == false {
 							NSLog("secret ringfile not created!")
 							return
 						}
@@ -424,8 +424,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 						defaults.setBool(true, forKey: "RingfilesCreated")
 
 						// DEBUG
-						NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
-						NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
+						//NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
+						//NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
 					}
 				}
 			}

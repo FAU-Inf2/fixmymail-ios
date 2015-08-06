@@ -196,7 +196,7 @@ class SMileCrypto: NSObject {
 	// MARK: - DEBUG
 	
 	func printAllPublicKeys() {
-		println("PublicRingFile: " + self.pubringURL.path!)
+		//println("PublicRingFile: " + self.pubringURL.path!)
 		var pubkeys = pgp.getKeysOfType(PGPKeyType.Public) as! [PGPKey]
 		if pubkeys.count == 0 {
 			println("NO PUBLIC KEYS")
@@ -207,7 +207,7 @@ class SMileCrypto: NSObject {
 	}
 	
 	func printAllSecretKeys() {
-		println("SecretRingFile: " + self.secringURL.path!)
+		//println("SecretRingFile: " + self.secringURL.path!)
 		var seckeys = pgp.getKeysOfType(PGPKeyType.Secret) as! [PGPKey]
 		if seckeys.count == 0 {
 			println("NO SECRET KEYS")
