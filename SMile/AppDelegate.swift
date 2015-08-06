@@ -25,7 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.registerUserDefaults()
 		self.createRingFiles()
         self.initCoreDataTestEntries()
-        
+		
+		//WARNING: DELETE BEFORE RELEASE
+		var cryptotest = SMileCrypto()
+		cryptotest.printAllPublicKeys()
+		cryptotest.printAllSecretKeys()
+		
         return true
     }
 
@@ -418,8 +423,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 						defaults.setURL(NSURL(fileURLWithPath: secringPath)!, forKey: "secring")
 						defaults.setBool(true, forKey: "RingfilesCreated")
 
-						//NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
-						//NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
+						// DEBUG
+						NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
+						NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
 					}
 				}
 			}
