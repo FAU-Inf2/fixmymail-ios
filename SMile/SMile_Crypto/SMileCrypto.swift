@@ -72,6 +72,28 @@ class SMileCrypto: NSObject {
 		return nil
 	}
 	
+	func importKey(keyfile: NSURL) -> Bool {
+		var result: Bool = false
+		var exportError: NSError?
+		if let fileContent = String(contentsOfFile: keyfile.path!, encoding: NSUTF8StringEncoding, error: nil) {
+			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil
+				|| fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----") != nil {
+				pgp.importKeysFromFile(keyfile.path!, allowDuplicates: false)
+				result = pgp.exportKeysOfType(PGPKeyType.Public, toFile: self.pubringURL.path!, error: &exportError)
+				result = result && pgp.exportKeysOfType(PGPKeyType.Secret, toFile: self.secringURL.path!, error: &exportError)
+				
+			} else if fileContent.rangeOfString("pkcs7-mime") != nil {
+				// TODO
+				// do smime stuff
+			}
+		}
+		if exportError != nil {
+			NSLog("Error: \(exportError?.domain)")
+		} else {
+			NSLog("Import successful")
+		}
+		return result
+	}
 	
 	
 	func encryptString(estring: String, key: String) -> NSData {

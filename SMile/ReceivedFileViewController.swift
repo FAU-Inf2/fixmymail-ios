@@ -71,7 +71,7 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {
-		if self.fileManager!.removeItemAtURL(url!, error: nil) {
+		if self.fileManager!.removeItemAtURL(self.url!, error: nil) {
 			NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
 		}
 		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
@@ -79,7 +79,28 @@ class ReceivedFileViewController: UIViewController {
 	
 	@IBAction func importTapped(sender: AnyObject) -> Void {
 		// import key
+		var crypto: SMileCrypto = SMileCrypto()
+		var success = crypto.importKey(self.url!)
+		if success {
+			self.label.text = "Import Successful"
+			self.image.image = UIImage(named: "Checkmark-icon.png")
+			self.delay(1.0) {
+				if self.fileManager!.removeItemAtURL(self.url!, error: nil) {
+					NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
+				}
+				self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+			}
+		} else {
+			self.label.text = "Sorry, something went wrong!"
+			self.image.image = UIImage(named: "x_icon.png")
+		}
+		
 	}
+	
+	@IBAction func decryptTapped(sender: AnyObject) -> Void {
+		
+	}
+	
 	
 	@IBAction func actionTapped(sender: AnyObject) -> Void {
 		
@@ -117,6 +138,16 @@ class ReceivedFileViewController: UIViewController {
 		}
 		
 		return false
+	}
+	
+	// delay block for seconds
+	func delay(delay:Double, closure:()->()) {
+		dispatch_after(
+			dispatch_time(
+				DISPATCH_TIME_NOW,
+				Int64(delay * Double(NSEC_PER_SEC))
+			),
+			dispatch_get_main_queue(), closure)
 	}
 	
 }

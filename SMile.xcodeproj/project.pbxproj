@@ -121,6 +121,9 @@
 		ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */; };
 		ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */; };
 		ADDE66031B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */; };
+		ADE6739A1B73551700C920B0 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE673991B73551700C920B0 /* Key.swift */; };
+		ADE6739D1B7365B400C920B0 /* x_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE6739B1B7365B400C920B0 /* x_icon.png */; };
+		ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */; };
 		ADE770FF1B35E1C50008B449 /* smile_icon_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE770FE1B35E1C50008B449 /* smile_icon_blue.png */; };
 /* End PBXBuildFile section */
 
@@ -268,6 +271,9 @@
 		ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyChainListTableViewController.xib; sourceTree = "<group>"; };
 		ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountTableViewController.swift; sourceTree = "<group>"; };
 		ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountTableViewController.xib; sourceTree = "<group>"; };
+		ADE673991B73551700C920B0 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		ADE6739B1B7365B400C920B0 /* x_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_icon.png; sourceTree = "<group>"; };
+		ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Checkmark-icon.png"; sourceTree = "<group>"; };
 		ADE770FE1B35E1C50008B449 /* smile_icon_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smile_icon_blue.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -369,6 +375,7 @@
 				3D2128711B2DF57200C9FC4C /* EmailAccount.swift */,
 				3D21286D1B2DF57100C9FC4C /* Email.swift */,
 				3DA302941B2ED122003CE16A /* ImapFolder.swift */,
+				ADE673991B73551700C920B0 /* Key.swift */,
 				3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */,
 				3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */,
 				3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */,
@@ -521,6 +528,8 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				ADE6739B1B7365B400C920B0 /* x_icon.png */,
+				ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */,
 				AD43C80C1B7247F400C8F286 /* fileicon_lock.png */,
 				AD43C8081B71199900C8F286 /* fileicon_standard.png */,
 				AD43C8091B71199900C8F286 /* keyicon.png */,
@@ -705,6 +714,7 @@
 				AD43C80A1B71199900C8F286 /* fileicon_standard.png in Resources */,
 				AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
+				ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
 				AD43C8051B70F92600C8F286 /* ReceivedFileViewController.xib in Resources */,
 				5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */,
@@ -732,6 +742,7 @@
 				AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */,
 				AD5292641B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib in Resources */,
 				AD44E0271B1B017900751FFA /* outlook.png in Resources */,
+				ADE6739D1B7365B400C920B0 /* x_icon.png in Resources */,
 				AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
 				AD43C80B1B71199900C8F286 /* keyicon.png in Resources */,
@@ -871,6 +882,7 @@
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
 				3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
+				ADE6739A1B73551700C920B0 /* Key.swift in Sources */,
 				AD16B2231B1C594B001645A5 /* PreferenceAccountTableViewCell.swift in Sources */,
 				AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */,
 				8E1441171B1DEFFA00F1A023 /* SendViewCellWithLabelAndTextField.swift in Sources */,
