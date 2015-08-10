@@ -95,12 +95,17 @@ class ReceivedFileViewController: UIViewController {
 			self.image.image = UIImage(named: "x_icon.png")
 		}
 		
+		// DEBUG
+		crypto.printAllPublicKeys()
+		crypto.printAllSecretKeys()
+		
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-	/*	var crypto: SMileCrypto = SMileCrypto()
+		var crypto: SMileCrypto = SMileCrypto()
 		crypto.printAllPublicKeys()
 		crypto.printAllSecretKeys()
+		
 		
 		var decryptedFile = crypto.decryptFile(self.url!, passphrase: "", encryptionType: "PGP")
 		if decryptedFile != nil {
@@ -111,7 +116,7 @@ class ReceivedFileViewController: UIViewController {
 			self.file = self.fileManager!.contentsAtPath(self.url!.path!)
 	
 		}
-	*/
+	
 	}
 	
 	

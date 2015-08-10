@@ -155,28 +155,71 @@ class SMileCrypto: NSObject {
 	:returns: true if import was successful.
 	*/
 	func importKey(keyfile: NSURL) -> Bool {
-		var result: Bool = false
+		var resultPublic: Bool?
+		var resultSecret: Bool?
 		var exportError: NSError?
 		if let fileContent = String(contentsOfFile: keyfile.path!, encoding: NSUTF8StringEncoding, error: nil) {
-			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil
-				|| fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----") != nil {
-				pgp.importKeysFromFile(keyfile.path!, allowDuplicates: false)
-				self.printAllPublicKeys()
-				self.printAllSecretKeys()
-				result = pgp.exportKeysOfType(PGPKeyType.Public, toFile: self.pubringURL.path!, error: &exportError)
-				result = pgp.exportKeysOfType(PGPKeyType.Secret, toFile: self.secringURL.path!, error: &exportError)
-				
-			} else if fileContent.rangeOfString("pkcs7-mime") != nil {
+			// extract and import public key block
+			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil {
+				var beginRange = fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----")
+				var endRange = fileContent.rangeOfString("-----END PGP PUBLIC KEY BLOCK-----")
+				if beginRange != nil && endRange != nil {
+					var pubKeyBlock = fileContent.substringWithRange(Range<String.Index>(start: beginRange!.startIndex, end: endRange!.endIndex))
+				//	NSLog("pubKeyBlock: \n" + pubKeyBlock)
+				//	NSLog("fileContent: \n" + fileContent)
+					var keyData: NSData = pubKeyBlock.dataUsingEncoding(NSUTF8StringEncoding)!
+					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
+					resultPublic = importedOjbects.count > 0
+					// DEBUG
+					if resultPublic != nil {
+						NSLog("Public key imported")
+					}
+
+				}
+			
+			}
+			// extract and import private key block
+			if fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----") != nil {
+				var beginRange = fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----")
+				var endRange = fileContent.rangeOfString("-----END PGP PRIVATE KEY BLOCK-----")
+				if beginRange != nil && endRange != nil {
+					var secKeyBlock = fileContent.substringWithRange(Range<String.Index>(start: beginRange!.startIndex, end: endRange!.endIndex))
+				//	NSLog("secKeyBlock: " + secKeyBlock)
+					var keyData: NSData = secKeyBlock.dataUsingEncoding(NSUTF8StringEncoding)!
+					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
+					resultSecret = importedOjbects.count > 0
+					// DEBUG
+					if resultSecret != nil {
+						NSLog("Secret key imported")
+					}
+				}
+			}
+			
+			if fileContent.rangeOfString("pkcs7-mime") != nil {
 				// TODO
 				// do smime stuff
 			}
+
+			
 		}
+		
+		pgp.exportKeysOfType(PGPKeyType.Public, toFile: self.pubringURL.path!, error: &exportError)
+		pgp.exportKeysOfType(PGPKeyType.Secret, toFile: self.secringURL.path!, error: &exportError)
 		if exportError != nil {
 			NSLog("Error: \(exportError?.domain)")
 		} else {
-			NSLog("Import successful")
+			//NSLog("Export of imported keys to ringfile successful")
 		}
-		return result
+	
+		if resultPublic != nil && resultSecret != nil {
+			return resultSecret! && resultPublic!
+		} else if resultPublic != nil && resultSecret == nil {
+			return resultPublic!
+		} else if resultPublic == nil && resultSecret != nil {
+			return resultSecret!
+		} else {
+			return false
+		}
 	}
 	
 	
@@ -196,24 +239,22 @@ class SMileCrypto: NSObject {
 	// MARK: - DEBUG
 	
 	func printAllPublicKeys() {
-		//println("PublicRingFile: " + self.pubringURL.path!)
 		var pubkeys = pgp.getKeysOfType(PGPKeyType.Public) as! [PGPKey]
-		if pubkeys.count == 0 {
-			println("NO PUBLIC KEYS")
-		}
+		var pubKeyStrings: [String] = [String]()
 		for key in pubkeys {
-			println("PubKey-ID: " + key.keyID.shortKeyString)
+			pubKeyStrings.append(key.keyID.shortKeyString)
 		}
+		println("Public Keys: " + ",".join(pubKeyStrings))
 	}
 	
 	func printAllSecretKeys() {
-		//println("SecretRingFile: " + self.secringURL.path!)
 		var seckeys = pgp.getKeysOfType(PGPKeyType.Secret) as! [PGPKey]
-		if seckeys.count == 0 {
-			println("NO SECRET KEYS")
-		}
+		var secKeyStrings: [String] = [String]()
 		for key in seckeys {
-			println("SecKey-ID: " + key.keyID.shortKeyString)
+			secKeyStrings.append(key.keyID.shortKeyString)
 		}
+		println("Secret Keys: " + ",".join(secKeyStrings))
 	}
+	
+
 }
