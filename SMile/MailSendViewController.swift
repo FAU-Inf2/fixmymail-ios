@@ -647,6 +647,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         let picker = ABPeoplePickerNavigationController()
         picker.peoplePickerDelegate = self
         picker.displayedProperties = [Int(kABPersonEmailProperty)]
+        picker.predicateForEnablingPerson = NSPredicate(format: "emailAddresses.@count > 0")
         picker.predicateForSelectionOfPerson = NSPredicate(value:false)
         picker.predicateForSelectionOfProperty = NSPredicate(value:true)
         switch (sender as! UIButton).tag {
