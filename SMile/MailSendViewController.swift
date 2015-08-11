@@ -649,7 +649,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         picker.displayedProperties = [Int(kABPersonEmailProperty)]
         picker.predicateForSelectionOfPerson = NSPredicate(value:false)
         picker.predicateForSelectionOfProperty = NSPredicate(value:true)
-        switch (sender as! UIBarButtonItem).tag {
+        switch (sender as! UIButton).tag {
         case 0: picker.title = "To:"
         case 1: picker.title = "Cc:"
         case 2: picker.title = "Bcc:"
