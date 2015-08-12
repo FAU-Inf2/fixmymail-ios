@@ -16,6 +16,7 @@ class ReceivedFileViewController: UIViewController {
 	var url: NSURL?
 	var file: NSData?
 	var fileManager: NSFileManager?
+	var docController: UIDocumentInteractionController?
 	
 
     override func viewDidLoad() {
@@ -24,6 +25,7 @@ class ReceivedFileViewController: UIViewController {
 		// load file
 		self.fileManager = NSFileManager.defaultManager()
 		self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+		docController = UIDocumentInteractionController(URL: self.url!)
 		
         // Do any additional setup after loading the view.
 		// set navigationbar
@@ -121,7 +123,7 @@ class ReceivedFileViewController: UIViewController {
 	
 	
 	@IBAction func actionTapped(sender: AnyObject) -> Void {
-		
+		self.docController!.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
 	}
 	
 	func getUImageFromFilename(filename: String) -> UIImage? {
