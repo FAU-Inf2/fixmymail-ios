@@ -22,9 +22,10 @@
 			<key>CFBundleTypeIconFiles</key>
 			<array/>
 			<key>CFBundleTypeName</key>
-			<string>All Files</string>
+			<string>AllFiles</string>
 			<key>LSItemContentTypes</key>
 			<array>
+				<string>public.data</string>
 				<string>public.content</string>
 			</array>
 			<key>xyz</key>
@@ -107,6 +108,17 @@
 					<string>gpg</string>
 				</array>
 			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>AllFiles</string>
+			<key>UTTypeIdentifier</key>
+			<string>all.files</string>
 		</dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>

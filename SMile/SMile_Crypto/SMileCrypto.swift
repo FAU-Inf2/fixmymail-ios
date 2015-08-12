@@ -91,18 +91,18 @@ class SMileCrypto: NSObject {
 		var encryptedData: NSData?
 		var decryptedData: NSData?
 		
-	//	var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory.stringByAppendingPathComponent(self.fileManager.displayNameAtPath(encryptedFile.path!)))!
+		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory.stringByAppendingPathComponent(self.fileManager.displayNameAtPath(encryptedFile.path!)))!
 		
-	//	self.fileManager.copyItemAtURL(encryptedFile, toURL: copyItem, error: nil)
+		self.fileManager.copyItemAtURL(encryptedFile, toURL: copyItem, error: nil)
 		
 		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
-			encryptedData = NSData(contentsOfFile: encryptedFile.path!)
+			encryptedData = NSData(contentsOfFile: copyItem.path!)
 			if encryptedData != nil {
 				decryptedData = pgp.decryptData(encryptedData!, passphrase: passphrase, error: &error)
 				if decryptedData != nil && error == nil {
 					// cut of .asc or .gpg to get the original extention
 					// for files not conforming to encrypted filenames like test.pdf.asc we have to implement some magic number checking
-					var newFilePath: String = (encryptedFile.path! as NSString).substringToIndex((encryptedFile.path! as NSString).length - 4)
+					var newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
 					if self.fileManager.createFileAtPath(newFilePath, contents: decryptedData, attributes: nil) == true {
 						decryptedFile = NSURL(fileURLWithPath: newFilePath)
 					}
@@ -112,6 +112,19 @@ class SMileCrypto: NSObject {
 			// TODO
 			// Do smime stuff
 		}
+
+/*
+		self.unnetpgp = UNNetPGP(userId: "fixmymail2015@gmail.com")
+		self.unnetpgp.armored = true
+		self.unnetpgp.publicKeyRingPath = self.pubringURL.path!
+		self.unnetpgp.secretKeyRingPath = self.secringURL.path!
+		self.unnetpgp.password = passphrase
+		var newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
+		
+		self.unnetpgp.decryptFileAtPath(copyItem.path!, toFileAtPath: newFilePath)
+		decryptedFile = NSURL(fileURLWithPath: newFilePath)
+		
+*/
 		
 		return decryptedFile
 	}
@@ -200,8 +213,31 @@ class SMileCrypto: NSObject {
 				// do smime stuff
 			}
 
+
+			
+			
 			
 		}
+		
+		// self delete dublicates because it is not working with private keys
+		
+		var pubKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Public)
+		var secKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Secret)
+		var pubKeysArray: NSArray = [PGPKey]()
+		var secKeysArray: NSArray = [PGPKey]()
+		
+		
+		
+		
+		var uniqueSecKeys: NSSet = NSSet(array: secKeys as! [PGPKey])
+		secKeys = uniqueSecKeys.allObjects as AnyObject as! NSArray
+		
+		var allKeys = NSArray(array: pubKeys.arrayByAddingObjectsFromArray(secKeys as [AnyObject]))
+		pgp.keys = allKeys as [AnyObject]
+
+
+		self.fileManager.createFileAtPath(self.pubringURL.path!, contents: nil, attributes: nil)
+		self.fileManager.createFileAtPath(self.secringURL.path!, contents: nil, attributes: nil)
 		
 		pgp.exportKeysOfType(PGPKeyType.Public, toFile: self.pubringURL.path!, error: &exportError)
 		pgp.exportKeysOfType(PGPKeyType.Secret, toFile: self.secringURL.path!, error: &exportError)
