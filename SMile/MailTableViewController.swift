@@ -188,14 +188,34 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                              subject: mail.header.subject,
                             textBody: parser.plainTextBodyRenderingAndStripWhitespace(false))
             } else {
-                var mailView: WebViewController = WebViewController()
-                mailView.putMessage()
-                mailView.message = cell.mail
-                mailView.session = getSession(mailView.message.toAccount)
-                self.navigationController?.pushViewController(mailView, animated: true)
-                tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 
-                addFlagToEmail(mailView.message, MCOMessageFlag.Seen)
+                var mail: MCOIMAPMessage = cell.mail.mcomessage as! MCOIMAPMessage
+                var messageParser : MCOMessageParser = MCOMessageParser(data: cell.mail.data)
+                
+                
+                var msgVC: MCTMsgViewController = MCTMsgViewController()
+                msgVC.folder = cell.mail.folder;
+                msgVC.message = mail
+                msgVC.parser = messageParser
+                msgVC.session = getSession(cell.mail.toAccount)
+                self.navigationController?.pushViewController(msgVC, animated: true)
+                
+//                MCOIMAPMessage *msg = self.messages[indexPath.row];
+//                MCTMsgViewController *vc = [[MCTMsgViewController alloc] init];
+//                vc.folder = @"INBOX";
+//                vc.message = msg;
+//                vc.session = self.imapSession;
+//                [self.navigationController pushViewController:vc animated:YES];
+//                
+                
+//                var mailView: WebViewController = WebViewController()
+//                mailView.putMessage()
+//                mailView.message = cell.mail
+//                mailView.session = getSession(mailView.message.toAccount)
+//                self.navigationController?.pushViewController(mailView, animated: true)
+//                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                
+                addFlagToEmail(cell.mail, MCOMessageFlag.Seen)
             }
             self.refreshTableView()
         } else {
@@ -226,7 +246,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 NSLog("emailAdresse in imapSynchronize:  " + account.emailAddress)
                 let session = getSession(account)
                 
-                let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers)
+                let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure)
                 
                 //Check for new Emails
                 var currentMaxUID = self.getMaxUID(account)

@@ -7,14 +7,19 @@
 //
 
 #include <MailCore/MailCore.h>
-#import <UIKit/UIKit.h>
+#import "HeaderView.h"
+#import "MCOMessageView.h"
 
 @class MCOMessageView;
 @class MCOIMAPAsyncSession;
 @class MCOMAPMessage;
 
-@interface MCTMsgViewController : UIViewController {
+@interface MCTMsgViewController : UIViewController <MCOMessageViewDelegate, HeaderViewDelegate> {
     IBOutlet MCOMessageView * _messageView;
+    HeaderView *_headerView;
+    UIScrollView * _scrollView;
+    UIView * _messageContentsView;
+    
     NSMutableDictionary * _storage;
     NSMutableSet * _pending;
     NSMutableArray * _ops;
@@ -25,8 +30,10 @@
 }
 
 @property (nonatomic, copy) NSString * folder;
-
 @property (nonatomic, strong) MCOIMAPSession * session;
 @property (nonatomic, strong) MCOIMAPMessage * message;
+@property (nonatomic, strong) MCOMessageParser *parser;
+
+- (NSString *) msgContent;
 
 @end

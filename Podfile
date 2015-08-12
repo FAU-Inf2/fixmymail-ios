@@ -3,7 +3,7 @@ platform :ios, '8.0'
 
 target 'SMile' do
 	pod 'mailcore2-ios'
-	pod 'ObjectivePGP'
+#	pod 'ObjectivePGP'
 	pod 'UNNetPGP'
 
 end

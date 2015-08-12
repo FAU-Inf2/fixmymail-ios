@@ -7,54 +7,12 @@
 //
 
 #import "MCOMessageView.h"
-#import "MCOCIDURLProtocol.h"
 
-static NSString * mainJavascript = @"\
-var imageElements = function() {\
-var imageNodes = document.getElementsByTagName('img');\
-return [].slice.call(imageNodes);\
-};\
-\
-var findCIDImageURL = function() {\
-var images = imageElements();\
-\
-var imgLinks = [];\
-for (var i = 0; i < images.length; i++) {\
-var url = images[i].getAttribute('src');\
-if (url.indexOf('cid:') == 0 || url.indexOf('x-mailcore-image:') == 0)\
-imgLinks.push(url);\
-}\
-return JSON.stringify(imgLinks);\
-};\
-\
-var replaceImageSrc = function(info) {\
-var images = imageElements();\
-\
-for (var i = 0; i < images.length; i++) {\
-var url = images[i].getAttribute('src');\
-if (url.indexOf(info.URLKey) == 0) {\
-images[i].setAttribute('src', info.LocalPathKey);\
-break;\
-}\
-}\
-};\
-";
+#import "OpenInChromeController.h"
 
-static NSString * mainStyle = @"\
-body {\
-font-family: Helvetica;\
-font-size: 14px;\
-word-wrap: break-word;\
--webkit-text-size-adjust:none;\
--webkit-nbsp-mode: space;\
-}\
-\
-pre {\
-white-space: pre-wrap;\
-}\
-";
+#import <MobileCoreServices/MobileCoreServices.h>
 
-@interface MCOMessageView () <MCOHTMLRendererIMAPDelegate>
+@interface MCOMessageView () <MCOHTMLRendererIMAPDelegate, UIGestureRecognizerDelegate>
 
 @end
 
@@ -62,25 +20,33 @@ white-space: pre-wrap;\
     UIWebView * _webView;
     NSString * _folder;
     MCOAbstractMessage * _message;
-    __unsafe_unretained id <MCOMessageViewDelegate> _delegate;
+    __weak id <MCOMessageViewDelegate> _delegate;
     BOOL _prefetchIMAPImagesEnabled;
     BOOL _prefetchIMAPAttachmentsEnabled;
+    NSString *msgContent;
 }
 
 @synthesize folder = _folder;
+@synthesize msgContent = _msgContent;
 @synthesize delegate = _delegate;
 @synthesize prefetchIMAPImagesEnabled = _prefetchIMAPImagesEnabled;
 @synthesize prefetchIMAPAttachmentsEnabled = _prefetchIMAPAttachmentsEnabled;
+@synthesize gestureRecognizerEnabled = _gestureRecognizerEnabled;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     
-    _webView = [[UIWebView alloc] initWithFrame:[self bounds]];
-    _webView.scalesPageToFit = YES;
-    [_webView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
-    [_webView setDelegate:self];
-    [self addSubview:_webView];
+    if(self) {
+        _webView = [[UIWebView alloc] initWithFrame:[self bounds]];
+        [_webView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
+        [_webView setDelegate:self];
+//        _webView.scalesPageToFit = YES;
+        
+        _gestureRecognizerEnabled = YES;
+        
+        [self addSubview:_webView];
+    }
     
     return self;
 }
@@ -90,6 +56,10 @@ white-space: pre-wrap;\
     _message = nil;
     _folder = nil;
     _webView = nil;
+}
+
+- (NSString*) getMessage {
+    return _msgContent;
 }
 
 - (void) setMessage:(MCOAbstractMessage *)message
@@ -133,30 +103,67 @@ white-space: pre-wrap;\
     }
     
     NSMutableString * html = [NSMutableString string];
-    [html appendFormat:@"<html><head><script>%@</script><style>%@</style></head>"
-     @"<body>%@</body><iframe src='x-mailcore-msgviewloaded:' style='width: 0px; height: 0px; border: none;'>"
-     @"</iframe></html>", mainJavascript, mainStyle, content];
+    NSURL * jsURL = [[NSBundle mainBundle] URLForResource:@"MCOMessageViewScript" withExtension:@"js"];
+    [html appendFormat:@"<html><head><script src=\"%@\"></script><style type='text/css'>body{ font-family: 'Helvetica Neue', Helvetica, Arial; margin:0; padding:30px;}\
+     hr {border: 0; height: 1px; background-color: #bdc3c7;}\
+     .show { display: none;}.hide:target + .show { display: inline;} .hide:target { display: none;} .content { display:none;} .hide:target ~ .content { display:inline;}\
+     </style></head><body>%@</body><iframe src='x-mailcore-msgviewloaded:' style='width: 0px; height: 0px; border: none;'></iframe></html>",
+     [jsURL absoluteString], content];
     [_webView loadHTMLString:html baseURL:nil];
+    if (_msgContent == nil){
+        _msgContent = [[NSString alloc] init];
+    }
+    
+    
+    
+    _msgContent = content;
+}
+
+- (BOOL) _isCID:(NSURL *)url
+{
+    NSString *theScheme = [url scheme];
+    if ([theScheme caseInsensitiveCompare:@"cid"] == NSOrderedSame)
+        return YES;
+    return NO;
+}
+
+- (BOOL) _isXMailcoreImage:(NSURL *)url
+{
+    NSString *theScheme = [url scheme];
+    if ([theScheme caseInsensitiveCompare:@"x-mailcore-image"] == NSOrderedSame)
+        return YES;
+    return NO;
 }
 
 - (void) _loadImages
 {
     NSString * result = [_webView stringByEvaluatingJavaScriptFromString:@"findCIDImageURL()"];
-    NSLog(@"----------");
-    NSLog(@"%@", result);
     NSData * data = [result dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error = nil;
     NSArray * imagesURLStrings = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    NSString* messageID = [[self.message header] messageID];
+    
+    if (imagesURLStrings.count > 0)
+    {
+        _gestureRecognizerEnabled = YES;
+        
+        // Load the JavaScript code from the Resources and inject it into the web page
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"WebViewActions" ofType:@"js"];
+        NSString *jsCode = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+        [_webView stringByEvaluatingJavaScriptFromString:jsCode];
+    }
     
     for(NSString * urlString in imagesURLStrings) {
         MCOAbstractPart * part = nil;
         NSURL * url;
         
         url = [NSURL URLWithString:urlString];
-        if ([MCOCIDURLProtocol isCID:url]) {
+        if ([self _isCID:url]) {
+            NSLog(@"url is cidurl:%@", url);
             part = [self _partForCIDURL:url];
         }
-        else if ([MCOCIDURLProtocol isXMailcoreImage:url]) {
+        else if ([self _isXMailcoreImage:url]) {
+            NSLog(@"url is x-mailcore-img:%@", url);
             NSString * specifier = [url resourceSpecifier];
             NSString * partUniqueID = specifier;
             part = [self _partForUniqueID:partUniqueID];
@@ -170,8 +177,10 @@ white-space: pre-wrap;\
         
         void (^replaceImages)(NSError *error) = ^(NSError *error) {
             NSData * downloadedData = [[self delegate] MCOMessageView:self dataForPartWithUniqueID:partUniqueID];
-            NSData * previewData = [[self delegate] MCOMessageView:self previewForData:downloadedData isHTMLInlineImage:[MCOCIDURLProtocol isCID:url]];
-            NSString * filename = [NSString stringWithFormat:@"%u", (unsigned int) downloadedData.hash];
+            NSLog(@"LDC Replace Images: %lu", (unsigned long)[downloadedData length]);
+            
+            NSData * previewData = [[self delegate] MCOMessageView:self previewForData:downloadedData isHTMLInlineImage:[self _isCID:url]];
+            NSString * filename = [NSString stringWithFormat:@"%lu%@", (unsigned long)urlString.hash, messageID];
             NSURL * cacheURL = [self _cacheJPEGImageData:previewData withFilename:filename];
             
             NSDictionary * args = @{ @"URLKey": urlString, @"LocalPathKey": cacheURL.absoluteString };
@@ -228,13 +237,104 @@ white-space: pre-wrap;\
     return data;
 }
 
+- (void)handleTapAtpoint:(CGPoint)pt
+{
+    if (_gestureRecognizerEnabled)
+    {
+        // Load the JavaScript code from the Resources and inject it into the web page
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"JSTools" ofType:@"js"];
+        NSString *jsCode = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+        [_webView stringByEvaluatingJavaScriptFromString:jsCode];
+        
+        // get the Tags at the touch location
+        NSString *tags = [_webView stringByEvaluatingJavaScriptFromString:
+                          [NSString stringWithFormat:@"getHTMLElementsAtPoint(%li,%li);",(long)pt.x,(long)pt.y]];
+        
+        NSString *tagsSRC = [_webView stringByEvaluatingJavaScriptFromString:
+                             [NSString stringWithFormat:@"getLinkSRCAtPoint(%li,%li);",(long)pt.x,(long)pt.y]];
+        
+        NSString *tagsID = [_webView stringByEvaluatingJavaScriptFromString:
+                            [NSString stringWithFormat:@"getObjectIdAtPoint(%li,%li);",(long)pt.x,(long)pt.y]];
+        
+        // If an image was touched, add image-related buttons.
+        if ([tags rangeOfString:@",IMG,"].location != NSNotFound)
+        {
+            NSString * path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[tagsSRC pathComponents] lastObject]];
+            UIImage *inlineImage = [UIImage imageWithContentsOfFile:path];
+            
+            CGRect imageRect = [self positionOfElementWithId:tagsID];
+            
+            CFStringRef pathExtension = (__bridge_retained CFStringRef)[path pathExtension];
+            CFStringRef type = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension, NULL);
+            CFRelease(pathExtension);
+            
+            // The UTI can be converted to a mime type:
+            
+            NSString *mimeType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass(type, kUTTagClassMIMEType);
+            
+            if (self.delegate && [self.delegate respondsToSelector:@selector(MCOMessageView:didTappedInlineImage:atPoint:imageRect:imagePath:imageName:imageMimeType:)])
+            {
+                [self.delegate MCOMessageView:self
+                         didTappedInlineImage:inlineImage
+                                      atPoint:pt
+                                    imageRect:imageRect
+                                    imagePath:path
+                                    imageName:[[path pathComponents] lastObject]
+                                imageMimeType:mimeType];
+            }
+        }
+    }
+}
+
+- (CGRect)positionOfElementWithId:(NSString *)elementID {
+    NSString *js = @"function f(){ var r = document.getElementById('%@').getBoundingClientRect(); return '{{'+r.left+','+r.top+'},{'+r.width+','+r.height+'}}'; } f();";
+    NSString *result = [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:js, elementID]];
+    CGRect rect = CGRectFromString(result);
+    return rect;
+}
+
+#pragma mark - UIWebViewDelegate
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    NSURLRequest *responseRequest = [self webView:webView resource:nil willSendRequest:request redirectResponse:nil fromDataSource:nil];
+    NSURLRequest *responseRequest = [self webView:webView
+                                         resource:nil
+                                  willSendRequest:request
+                                 redirectResponse:nil
+                                   fromDataSource:nil];
     
     if(responseRequest == request) {
-        return YES;
-    } else {
+        
+        if ( navigationType == UIWebViewNavigationTypeLinkClicked )
+        {
+            if ([[[request URL] scheme] isEqual:@"mailto"])
+            {
+                if (self.delegate && [self.delegate respondsToSelector:@selector(MCOMessageView:handleMailtoUrlString:)])
+                {
+                    [self.delegate MCOMessageView:self handleMailtoUrlString:[[request URL] resourceSpecifier]];
+                }
+                
+            }
+            else if ([[OpenInChromeController sharedInstance] isChromeInstalled])
+            {
+                [[OpenInChromeController sharedInstance] openInChrome:[request URL]
+                                                      withCallbackURL:[NSURL URLWithString: @"thatinbox://back"]
+                                                         createNewTab:YES];
+            }
+            else if ([[UIApplication sharedApplication] canOpenURL:[request URL]])
+            {
+                [[UIApplication sharedApplication] openURL:[request URL]];
+            }
+            
+            return NO;
+        }
+        else
+        {
+            return YES;
+        }
+    }
+    else
+    {
         [webView loadRequest:responseRequest];
         return NO;
     }
@@ -248,6 +348,22 @@ white-space: pre-wrap;\
     
     return request;
 }
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    if (_gestureRecognizerEnabled)
+    {
+        // Disable user selection
+        [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitUserSelect='none';"];
+        // Disable callout
+        [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitTouchCallout='none';"];
+    }
+    
+    
+    [self.delegate webViewDidFinishLoad:webView];
+}
+
+#pragma mark - MCOHTMLRendererDelegate
 
 - (BOOL) MCOAbstractMessage:(MCOAbstractMessage *)msg canPreviewPart:(MCOAbstractPart *)part
 {
@@ -284,7 +400,7 @@ white-space: pre-wrap;\
     }
     
     if (![[self delegate] respondsToSelector:@selector(MCOMessageView:canPreviewPart:)]) {
-        return NO;
+        return false;
     }
     return [[self delegate] MCOMessageView:self canPreviewPart:part];
 }
