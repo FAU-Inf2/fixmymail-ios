@@ -34,6 +34,7 @@ class ReceivedFileViewController: UIViewController {
 		var cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		var importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
 		var decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
+		var encryptButton: UIBarButtonItem = UIBarButtonItem(title: "Encrypt file", style: .Plain, target: self, action: "encryptTapped:")
 		// file is a .asc or .gpg file
 		if self.fileIsKeyfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
 			if self.isPGPKey(self.url!) == true {
@@ -42,6 +43,9 @@ class ReceivedFileViewController: UIViewController {
 				navItem.rightBarButtonItems = [decryptButton]
 			}
 			
+		} else {
+			// other files
+			navItem.rightBarButtonItems = [encryptButton]
 		}
 		navItem.leftBarButtonItems = [cancelItem]
 		navigationBar.items = [navItem]
@@ -109,16 +113,35 @@ class ReceivedFileViewController: UIViewController {
 		crypto.printAllSecretKeys()
 		
 		
-		var decryptedFile = crypto.decryptFile(self.url!, passphrase: "", encryptionType: "PGP")
-		if decryptedFile != nil {
+		var (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: "", encryptionType: "PGP")
+		if decryptedFile != nil && error == nil {
 			self.fileManager!.removeItemAtURL(self.url!, error: nil)
 			self.url = decryptedFile!
 			self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
 			self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
 			self.file = self.fileManager!.contentsAtPath(self.url!.path!)
 	
+		} else {
+			if error != nil {
+				NSLog("Decrytpion Error: \(error?.domain)")
+			}
 		}
 	
+	}
+	
+	@IBAction func encryptTapped(sender: AnyObject) -> Void {
+		var crypto: SMileCrypto = SMileCrypto()
+		var (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+		if encryptedFile != nil && error == nil {
+			self.fileManager!.removeItemAtURL(self.url!, error: nil)
+			self.url = encryptedFile!
+			self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
+			self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
+		} else {
+			if error != nil {
+				NSLog("Encryption Error: \(error?.domain)")
+			}
+		}
 	}
 	
 	

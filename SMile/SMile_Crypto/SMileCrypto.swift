@@ -75,7 +75,7 @@ class SMileCrypto: NSObject {
 		}
 	}
 	
-	
+	// MARK: - Decryption
 	/**
 	Decrypt File
 	
@@ -83,9 +83,10 @@ class SMileCrypto: NSObject {
 	:param: passphrase:	the passphrase to unlock the private key.
 	:param: encryptionType:	PGP or SMIME
 	
-	:returns: Decrytped File at URL or nil if error occured.
+	:returns: The Error or nil if decrypt was successful.
+			  Decrytped File at URL or nil if error occured.
 	*/
-	func decryptFile(encryptedFile: NSURL, passphrase: String, encryptionType: String) -> NSURL? {
+	func decryptFile(encryptedFile: NSURL, passphrase: String, encryptionType: String) -> (NSError?, NSURL?) {
 		var error: NSError?
 		var decryptedFile: NSURL?
 		var encryptedData: NSData?
@@ -93,40 +94,40 @@ class SMileCrypto: NSObject {
 		
 		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory.stringByAppendingPathComponent(self.fileManager.displayNameAtPath(encryptedFile.path!)))!
 		
-		self.fileManager.copyItemAtURL(encryptedFile, toURL: copyItem, error: nil)
-		
-		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
-			encryptedData = NSData(contentsOfFile: copyItem.path!)
-			if encryptedData != nil {
-				decryptedData = pgp.decryptData(encryptedData!, passphrase: passphrase, error: &error)
-				if decryptedData != nil && error == nil {
-					// cut of .asc or .gpg to get the original extention
-					// for files not conforming to encrypted filenames like test.pdf.asc we have to implement some magic number checking
-					var newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
-					if self.fileManager.createFileAtPath(newFilePath, contents: decryptedData, attributes: nil) == true {
-						decryptedFile = NSURL(fileURLWithPath: newFilePath)
+		self.fileManager.copyItemAtURL(encryptedFile, toURL: copyItem, error: &error)
+		if error == nil {
+			if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+				encryptedData = NSData(contentsOfURL: copyItem)
+				if encryptedData != nil {
+					decryptedData = self.pgp.decryptData(encryptedData!, passphrase: passphrase, error: &error)
+					if decryptedData != nil && error == nil {
+						// cut of .asc or .gpg to get the original extention
+						// for files not conforming to encrypted filenames like test.pdf.asc we have to implement some magic number checking
+						var newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
+						if self.fileManager.createFileAtPath(newFilePath, contents: decryptedData, attributes: nil) == true {
+							decryptedFile = NSURL(fileURLWithPath: newFilePath)
+						}
 					}
 				}
+			} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+				// TODO
+				// Do smime stuff
 			}
-		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
-			// TODO
-			// Do smime stuff
+			
+			/*
+			self.unnetpgp = UNNetPGP(userId: "fixmymail2015@gmail.com")
+			self.unnetpgp.armored = true
+			self.unnetpgp.publicKeyRingPath = self.pubringURL.path!
+			self.unnetpgp.secretKeyRingPath = self.secringURL.path!
+			self.unnetpgp.password = passphrase
+			var newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
+			
+			self.unnetpgp.decryptFileAtPath(copyItem.path!, toFileAtPath: newFilePath)
+			decryptedFile = NSURL(fileURLWithPath: newFilePath)
+			
+			*/
 		}
-
-/*
-		self.unnetpgp = UNNetPGP(userId: "fixmymail2015@gmail.com")
-		self.unnetpgp.armored = true
-		self.unnetpgp.publicKeyRingPath = self.pubringURL.path!
-		self.unnetpgp.secretKeyRingPath = self.secringURL.path!
-		self.unnetpgp.password = passphrase
-		var newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
-		
-		self.unnetpgp.decryptFileAtPath(copyItem.path!, toFileAtPath: newFilePath)
-		decryptedFile = NSURL(fileURLWithPath: newFilePath)
-		
-*/
-		
-		return decryptedFile
+		return (error, decryptedFile)
 	}
 	
 	/**
@@ -136,30 +137,95 @@ class SMileCrypto: NSObject {
 		:param: passphrase:	the passphrase to unlock the private key.
 		:param: encryptionType:	PGP or SMIME
 	
-		:returns: Decrytped Data or nil if error occured.
+		:returns: The Error or nil if decrypt was successful
+				  and Decrytped Data or nil if error occured.
  	*/
-	func decryptData(data: NSData, passphrase: String?, encryptionType: String) -> NSData? {
+	func decryptData(data: NSData, passphrase: String, encryptionType: String) -> (NSError?, NSData?) {
 		var error: NSError?
 		var decryptedData: NSData?
-		decryptedData = pgp.decryptData(data, passphrase: passphrase, error: &error)
-		if error != nil {
-			NSLog("Error: \(error?.domain)")
+		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+			decryptedData = self.pgp.decryptData(data, passphrase: passphrase, error: &error)
+			
+		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+			// TODO
+			// Do smime stuff
 		}
 		
-		return decryptedData
+		
+		return (error, decryptedData)
+	}
+	
+	// MARK: - Encryption
+	/**
+	Encrypt File
+	
+	:param: file:	the file to be encrypted.
+	:param: keyIdentifier:	the key ID full or short.
+	:param: encryptionType:	PGP or SMIME
+	
+	:returns: The Error or nil if encrypt was successful
+	and encrytped Data or nil if error occured.
+	*/
+	func encryptFile(file: NSURL, keyIdentifier: String, encryptionType: String) -> (NSError?, NSURL?) {
+		var error: NSError?
+		var encryptedFile: NSURL?
+		var encryptedData: NSData?
+		var dataToEncrypt: NSData?
+		
+		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory.stringByAppendingPathComponent(self.fileManager.displayNameAtPath(file.path!)))!
+		self.fileManager.copyItemAtURL(file, toURL: copyItem, error: &error)
+		if error == nil {
+			if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+				dataToEncrypt = NSData(contentsOfURL: copyItem)
+				if dataToEncrypt != nil {
+					var keyToEncrypt: PGPKey = self.pgp.getKeyForIdentifier(keyIdentifier, type: PGPKeyType.Public)
+					encryptedData = self.pgp.encryptData(dataToEncrypt!, usingPublicKey: keyToEncrypt, armored: true, error: &error)
+					if encryptedData != nil && error == nil {
+						var newFilePath: String = copyItem.path! + ".asc"
+						if self.fileManager.createFileAtPath(newFilePath, contents: encryptedData!, attributes: nil) == true {
+							encryptedFile = NSURL(fileURLWithPath: newFilePath)
+						}
+					}
+				}
+				
+				
+			} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+				// TODO
+				// Do smime stuff
+			}
+		}
+		
+		return (error, encryptedFile)
 	}
 	
 	
-	func encryptFile(file: NSURL, keyIdentifier: String, encryptionType: String) -> NSURL? {
-		// TODO
-		return nil
+	/**
+	Encrypt Data
+	
+	:param: data:	the data to be encrypted.
+	:param: keyIdentifier:	the key ID full or short.
+	:param: encryptionType:	PGP or SMIME
+	
+	:returns: The Error or nil if encrypt was successful
+			  and encrytped Data or nil if error occured.
+	*/
+	func encryptData(data: NSData, keyIdentifier: String, encryptionType: String) -> (NSError?, NSData?) {
+		var error: NSError?
+		var encryptedData: NSData?
+		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+			var keyToEncrypt: PGPKey = self.pgp.getKeyForIdentifier(keyIdentifier, type: PGPKeyType.Public)
+			encryptedData = self.pgp.encryptData(data, usingPublicKey: keyToEncrypt, armored: true, error: &error)
+			
+		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+			// TODO
+			// Do smime stuff
+		}
+		
+		
+		return (error, encryptedData)
 	}
 	
-	func encryptData(data: NSData, keyIdentifier: String, encryptionType: String) -> NSData? {
-		// TODO
-		return nil
-	}
-	
+	// MARK: - Import Keys
 	/**
 	Import Key
 	
@@ -218,16 +284,13 @@ class SMileCrypto: NSObject {
 			
 			
 		}
-		
+/*
 		// self delete dublicates because it is not working with private keys
-		
+		// TODO #######
 		var pubKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Public)
 		var secKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Secret)
 		var pubKeysArray: NSArray = [PGPKey]()
 		var secKeysArray: NSArray = [PGPKey]()
-		
-		
-		
 		
 		var uniqueSecKeys: NSSet = NSSet(array: secKeys as! [PGPKey])
 		secKeys = uniqueSecKeys.allObjects as AnyObject as! NSArray
@@ -235,7 +298,9 @@ class SMileCrypto: NSObject {
 		var allKeys = NSArray(array: pubKeys.arrayByAddingObjectsFromArray(secKeys as [AnyObject]))
 		pgp.keys = allKeys as [AnyObject]
 
-
+		//##########
+		
+*/
 		self.fileManager.createFileAtPath(self.pubringURL.path!, contents: nil, attributes: nil)
 		self.fileManager.createFileAtPath(self.secringURL.path!, contents: nil, attributes: nil)
 		
@@ -258,7 +323,7 @@ class SMileCrypto: NSObject {
 		}
 	}
 	
-	
+	// MARK: - Encrypt Strings with password
 	func encryptString(estring: String, key: String) -> NSData {
 		var edata = MyRNEncryptor.encryptData(estring.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true), password: key, error: nil)
 		
