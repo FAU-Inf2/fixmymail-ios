@@ -25,11 +25,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.registerUserDefaults()
 		self.createRingFiles()
         self.initCoreDataTestEntries()
+		self.printKeys()
+	//	self.cryptoTest()
 		
-		//WARNING: DELETE BEFORE RELEASE
-		var cryptotest = SMileCrypto()
-		cryptotest.printAllPublicKeys()
-		cryptotest.printAllSecretKeys()
+		
+		
+		
+		
+		
+		
 		
         return true
     }
@@ -429,6 +433,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					}
 				}
 			}
+		}
+	}
+	
+	// MARK: - DELETE BEFORE RELEASE
+	
+	func printKeys() -> Void {
+		//WARNING: DELETE BEFORE RELEASE
+		var crypto = SMileCrypto()
+		crypto.printAllPublicKeys()
+		crypto.printAllSecretKeys()
+	}
+	
+	func cryptoTest() -> Void {
+		//WARNING: DELETE BEFORE RELEASE
+		var crypto = SMileCrypto()
+		
+		var data = ("THIS IS A ENCRYPTION TEST").dataUsingEncoding(NSUTF8StringEncoding)
+		println("Original message: " + (NSString(data: data!, encoding: NSUTF8StringEncoding) as! String))
+		var (error, encryptedData) = crypto.encryptData(data!, keyIdentifier: "67F86BAD", encryptionType: "PGP")
+		if error != nil {
+			NSLog("Encryption Error: " + error!.localizedDescription)
+		} else {
+			if encryptedData != nil {
+				println("Encrypted Data: " + (NSString(data: encryptedData!, encoding: NSUTF8StringEncoding) as! String))
+				var (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: "GoMADyoumust1!", encryptionType: "PGP")
+				if error2 != nil {
+					NSLog("Decrytption Error: " + error2!.localizedDescription)
+				} else {
+					if decrytpedData != nil {
+						println("Decrypted Data: " + (NSString(data: decrytpedData!, encoding: NSUTF8StringEncoding) as! String))
+					} else {
+						NSLog("Nothing was decrytped!")
+					}
+					
+				}
+			} else {
+				NSLog("Nothing was encrypted!")
+			}
+			
 		}
 	}
 	

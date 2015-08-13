@@ -179,6 +179,7 @@ class SMileCrypto: NSObject {
 				dataToEncrypt = NSData(contentsOfURL: copyItem)
 				if dataToEncrypt != nil {
 					var keyToEncrypt: PGPKey = self.pgp.getKeyForIdentifier(keyIdentifier, type: PGPKeyType.Public)
+					NSLog(NSString(data: keyToEncrypt.primaryKeyPacket.headerData, encoding: NSUTF8StringEncoding) as! String)
 					encryptedData = self.pgp.encryptData(dataToEncrypt!, usingPublicKey: keyToEncrypt, armored: true, error: &error)
 					if encryptedData != nil && error == nil {
 						var newFilePath: String = copyItem.path! + ".asc"
@@ -214,6 +215,7 @@ class SMileCrypto: NSObject {
 		var encryptedData: NSData?
 		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
 			var keyToEncrypt: PGPKey = self.pgp.getKeyForIdentifier(keyIdentifier, type: PGPKeyType.Public)
+						
 			encryptedData = self.pgp.encryptData(data, usingPublicKey: keyToEncrypt, armored: true, error: &error)
 			
 		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
@@ -300,18 +302,18 @@ class SMileCrypto: NSObject {
 
 		//##########
 		
-*/
+
 		self.fileManager.createFileAtPath(self.pubringURL.path!, contents: nil, attributes: nil)
 		self.fileManager.createFileAtPath(self.secringURL.path!, contents: nil, attributes: nil)
 		
 		pgp.exportKeysOfType(PGPKeyType.Public, toFile: self.pubringURL.path!, error: &exportError)
-		pgp.exportKeysOfType(PGPKeyType.Secret, toFile: self.secringURL.path!, error: &exportError)
+		pgp.exportKeysOfType(PGPKeyType.RawValue, toFile: self.secringURL.path!, error: &exportError)
 		if exportError != nil {
 			NSLog("Error: \(exportError?.domain)")
 		} else {
 			//NSLog("Export of imported keys to ringfile successful")
 		}
-	
+*/
 		if resultPublic != nil && resultSecret != nil {
 			return resultSecret! && resultPublic!
 		} else if resultPublic != nil && resultSecret == nil {

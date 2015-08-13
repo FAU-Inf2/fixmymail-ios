@@ -17,6 +17,7 @@ class ReceivedFileViewController: UIViewController {
 	var file: NSData?
 	var fileManager: NSFileManager?
 	var docController: UIDocumentInteractionController?
+	var crypto: SMileCrypto = SMileCrypto()
 	
 
     override func viewDidLoad() {
@@ -85,7 +86,6 @@ class ReceivedFileViewController: UIViewController {
 	
 	@IBAction func importTapped(sender: AnyObject) -> Void {
 		// import key
-		var crypto: SMileCrypto = SMileCrypto()
 		var success = crypto.importKey(self.url!)
 		if success {
 			self.label.text = "Import Successful"
@@ -108,7 +108,6 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		var crypto: SMileCrypto = SMileCrypto()
 		crypto.printAllPublicKeys()
 		crypto.printAllSecretKeys()
 		
@@ -123,15 +122,14 @@ class ReceivedFileViewController: UIViewController {
 	
 		} else {
 			if error != nil {
-				NSLog("Decrytpion Error: \(error?.domain)")
+				NSLog("Decrytpion Error: \(error?.localizedDescription)")
 			}
 		}
 	
 	}
 	
 	@IBAction func encryptTapped(sender: AnyObject) -> Void {
-		var crypto: SMileCrypto = SMileCrypto()
-		var (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+		var (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "67F86BAD", encryptionType: "PGP")
 		if encryptedFile != nil && error == nil {
 			self.fileManager!.removeItemAtURL(self.url!, error: nil)
 			self.url = encryptedFile!
@@ -139,9 +137,10 @@ class ReceivedFileViewController: UIViewController {
 			self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
 		} else {
 			if error != nil {
-				NSLog("Encryption Error: \(error?.domain)")
+				NSLog("Encryption Error: \(error?.localizedDescription)")
 			}
 		}
+		
 	}
 	
 	
