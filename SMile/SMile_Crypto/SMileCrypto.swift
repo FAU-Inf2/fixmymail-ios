@@ -114,7 +114,7 @@ class SMileCrypto: NSObject {
 				// Do smime stuff
 			}
 			
-			/*
+	/*
 			self.unnetpgp = UNNetPGP(userId: "fixmymail2015@gmail.com")
 			self.unnetpgp.armored = true
 			self.unnetpgp.publicKeyRingPath = self.pubringURL.path!
@@ -124,8 +124,8 @@ class SMileCrypto: NSObject {
 			
 			self.unnetpgp.decryptFileAtPath(copyItem.path!, toFileAtPath: newFilePath)
 			decryptedFile = NSURL(fileURLWithPath: newFilePath)
+	*/	
 			
-			*/
 		}
 		return (error, decryptedFile)
 	}
