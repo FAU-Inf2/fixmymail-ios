@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14E46" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Email" representedClassName="SMile.Email" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="folder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mcomessage" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pgp" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="plainText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="smime" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="toAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmailAccount" inverseName="emails" inverseEntity="EmailAccount" syncable="YES"/>
+    </entity>
+    <entity name="EmailAccount" representedClassName="SMile.EmailAccount" syncable="YES">
+        <attribute name="accountName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="archiveFolder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="authTypeImap" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="authTypeSmtp" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="connectionTypeImap" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="connectionTypeSmtp" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deletedFolder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="draftFolder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imapHostname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imapPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="isActivated" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="realName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recentlyUsed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="sentFolder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="session" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="smtpHostname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="smtpPort" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="emails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Email" inverseName="toAccount" inverseEntity="Email" syncable="YES"/>
+        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ImapFolder" inverseName="toEmailAccount" inverseEntity="ImapFolder" syncable="YES"/>
+    </entity>
+    <entity name="ImapFolder" representedClassName="SMile.ImapFolder" syncable="YES">
+        <attribute name="mcoimapfolder" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="toEmailAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmailAccount" inverseName="folders" inverseEntity="EmailAccount" syncable="YES"/>
+    </entity>
+    <entity name="Key" representedClassName="SMile.Key" syncable="YES">
+        <attribute name="algorithm" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="emailAddressPrimary" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fingerprint" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isPublicKey" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isSecretKey" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="keyData" optional="YES" attributeType="Binary" storedInTruthFile="YES" syncable="YES"/>
+        <attribute name="keyID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="keyLength" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="keyType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trust" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="userIDprimary" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="validThru" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="subKeys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SubKey" inverseName="toKey" inverseEntity="SubKey" syncable="YES"/>
+        <relationship name="userIDs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserID" inverseName="toKey" inverseEntity="UserID" syncable="YES"/>
+    </entity>
+    <entity name="SubKey" representedClassName="SMile.SubKey" syncable="YES">
+        <attribute name="algorithm" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="subKeyID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="validThru" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="toKey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="subKeys" inverseEntity="Key" syncable="YES"/>
+    </entity>
+    <entity name="UserID" representedClassName="SMile.UserID" syncable="YES">
+        <attribute name="comment" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="toKey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Key" inverseName="userIDs" inverseEntity="Key" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Email" positionX="-630" positionY="-477" width="128" height="195"/>
+        <element name="EmailAccount" positionX="88" positionY="-639" width="128" height="330"/>
+        <element name="ImapFolder" positionX="277" positionY="-576" width="128" height="75"/>
+        <element name="Key" positionX="106" positionY="-144" width="128" height="268"/>
+        <element name="UserID" positionX="-558" positionY="50" width="128" height="103"/>
+        <element name="SubKey" positionX="-569" positionY="-162" width="128" height="133"/>
+    </elements>
+</model>

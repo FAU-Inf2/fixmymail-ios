@@ -10,8 +10,8 @@ import Foundation
 import CoreData
 
 class Key: NSManagedObject {
-	@NSManaged var keyOwner: String
-	@NSManaged var mailAddress: String
+	@NSManaged var userIDprimary: String
+	@NSManaged var emailAddressPrimary: String
 	@NSManaged var keyID: String
 	@NSManaged var isSecretKey: Bool
 	@NSManaged var isPublicKey: Bool
@@ -24,6 +24,7 @@ class Key: NSManagedObject {
 	@NSManaged var trust: NSNumber
 	@NSManaged var userIDs: NSSet
 	@NSManaged var subKeys: NSSet
+	@NSManaged var keyData: NSData
 	
 	
 	

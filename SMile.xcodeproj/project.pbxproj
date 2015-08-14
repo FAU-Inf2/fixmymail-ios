@@ -188,6 +188,8 @@
 		AD8744341B6A3C1900257AA5 /* RNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8744301B6A3C1900257AA5 /* RNEncryptor.m */; };
 		AD8744381B6A406200257AA5 /* MyRNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8744371B6A406200257AA5 /* MyRNEncryptor.m */; };
 		AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */; };
+		AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CB1B7DE7250068E542 /* UserID.swift */; };
+		AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CD1B7DEA710068E542 /* SubKey.swift */; };
 		ADBF50AC1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */; };
 		ADBF50AD1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */; };
 		ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */; };
@@ -466,6 +468,9 @@
 		AD8744351B6A3FAE00257AA5 /* MyRNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyRNEncryptor.h; path = "Supporting Files/RNCryptor/MyRNEncryptor.h"; sourceTree = "<group>"; };
 		AD8744371B6A406200257AA5 /* MyRNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyRNEncryptor.m; path = "Supporting Files/RNCryptor/MyRNEncryptor.m"; sourceTree = "<group>"; };
 		AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SMileCrypto.swift; path = SMile_Crypto/SMileCrypto.swift; sourceTree = "<group>"; };
+		AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v2.xcdatamodel"; sourceTree = "<group>"; };
+		AD97A0CB1B7DE7250068E542 /* UserID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserID.swift; sourceTree = "<group>"; };
+		AD97A0CD1B7DEA710068E542 /* SubKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubKey.swift; sourceTree = "<group>"; };
 		ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefAccountBehaviorTableViewController.swift; sourceTree = "<group>"; };
 		ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefAccountBehaviorTableViewController.xib; sourceTree = "<group>"; };
 		ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesPreviewLinesTableViewController.swift; sourceTree = "<group>"; };
@@ -661,6 +666,8 @@
 				3D21286D1B2DF57100C9FC4C /* Email.swift */,
 				3DA302941B2ED122003CE16A /* ImapFolder.swift */,
 				ADE673991B73551700C920B0 /* Key.swift */,
+				AD97A0CD1B7DEA710068E542 /* SubKey.swift */,
+				AD97A0CB1B7DE7250068E542 /* UserID.swift */,
 				3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */,
 				3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */,
 				3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */,
@@ -1436,6 +1443,7 @@
 				ADD80E4A1B7CED0E00A32D59 /* PGPPublicKeyEncryptedSessionKeyPacket.m in Sources */,
 				3DF253B01AF7611D00B99BC8 /* SMile.xcdatamodeld in Sources */,
 				3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */,
+				AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */,
 				ADD80E501B7CED0E00A32D59 /* PGPSecretSubKeyPacket.m in Sources */,
 				AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */,
 				3DD3C7FE1B7BDF7700F53EAA /* FUIPopoverBackgroundView.m in Sources */,
@@ -1465,6 +1473,7 @@
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
 				AD8744311B6A3C1900257AA5 /* RNCryptor.m in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
+				AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */,
 				ADD80E3D1B7CED0E00A32D59 /* PGPCryptoCFB.m in Sources */,
 				3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */,
 				ADD80E381B7CED0E00A32D59 /* NSData+PGPUtils.m in Sources */,
@@ -1746,9 +1755,10 @@
 		3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */,
 				3DF253AF1AF7611D00B99BC8 /* SMile.xcdatamodel */,
 			);
-			currentVersion = 3DF253AF1AF7611D00B99BC8 /* SMile.xcdatamodel */;
+			currentVersion = AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */;
 			path = SMile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
