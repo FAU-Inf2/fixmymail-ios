@@ -28,8 +28,8 @@ class KeyDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-		self.TextfieldKeyOwner.text = keyItem?.keyOwner
-		self.TextfieldMailAddress1.text = keyItem?.mailAddress
+		self.TextfieldKeyOwner.text = keyItem?.userIDprimary
+		self.TextfieldMailAddress1.text = keyItem?.emailAddressPrimary
 		self.TextfieldKeyID.text = keyItem?.keyID
 		self.TextfieldValidThru.text = keyItem?.validThru.toLongDateString()
     }

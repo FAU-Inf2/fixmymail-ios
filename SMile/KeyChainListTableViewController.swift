@@ -74,8 +74,8 @@ class KeyChainListTableViewController: UITableViewController, CellDelegate {
 		var keyItem = self.keyItemList[indexPath.row]
 		
 		// Fill data to labels
-		cell.LabelKeyOwner.text = keyItem.keyOwner
-		cell.LabelMailAddress.text = keyItem.mailAddress
+		cell.LabelKeyOwner.text = keyItem.userIDprimary
+		cell.LabelMailAddress.text = keyItem.emailAddressPrimary
 		cell.LabelKeyID.text = keyItem.keyID
 		
 		// Set the right lables for the key type
@@ -193,7 +193,7 @@ class KeyChainListTableViewController: UITableViewController, CellDelegate {
 	*/
 	
 	func loadInitialData() {
-
+/*
 		var key1 = KeyItem(keyOwner: "Max Mustermann", mailAddress: "max.musterman@gmail.com", keyID: "XXXXXXXX", isSecretKey: true, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2014-06-30")))
 		var key2 = KeyItem(keyOwner: "Maximilianus Mustermann", mailAddress: "maxi.mus@web.de", keyID: "XXXXXXXX", isSecretKey: false, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2015-9-03")))
 		var key3 = KeyItem(keyOwner: "Max Mustermann", mailAddress: "m.m@hotmail.com", keyID: "XXXXXXXX", isSecretKey: true, isPublicKey: true, keyType: "SMIME", created: NSDate(), validThru: (NSDate(dateString: "2017-03-12")))
@@ -201,6 +201,7 @@ class KeyChainListTableViewController: UITableViewController, CellDelegate {
 		keyItemList.append(key3)
 		keyItemList.append(key2)
 		keyItemList.append(key1)
+*/
 	}
 	
 	// get detail view of the corresponding cell

@@ -102,14 +102,14 @@ class ReceivedFileViewController: UIViewController {
 		}
 		
 		// DEBUG
-		crypto.printAllPublicKeys()
-		crypto.printAllSecretKeys()
+		crypto.printAllPublicKeys(false)
+		crypto.printAllSecretKeys(false)
 		
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		crypto.printAllPublicKeys()
-		crypto.printAllSecretKeys()
+		crypto.printAllPublicKeys(false)
+		crypto.printAllSecretKeys(false)
 		
 		
 		var (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: "", encryptionType: "PGP")

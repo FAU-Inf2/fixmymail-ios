@@ -441,8 +441,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func printKeys() -> Void {
 		//WARNING: DELETE BEFORE RELEASE
 		var crypto = SMileCrypto()
-		crypto.printAllPublicKeys()
-		crypto.printAllSecretKeys()
+		crypto.printAllPublicKeys(false)
+		crypto.printAllSecretKeys(false)
 	}
 	
 	func cryptoTest() -> Void {
