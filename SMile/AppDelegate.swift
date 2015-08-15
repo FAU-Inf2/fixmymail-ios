@@ -441,8 +441,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func printKeys() -> Void {
 		//WARNING: DELETE BEFORE RELEASE
 		var crypto = SMileCrypto()
+		println("KEYS IN PGP INSTANCE")
+		crypto.printAllPublicKeys(true)
+		crypto.printAllSecretKeys(true)
+		println("######################")
+		println("KEYS IN CORE DATA")
 		crypto.printAllPublicKeys(false)
 		crypto.printAllSecretKeys(false)
+		println("######################")
 	}
 	
 	func cryptoTest() -> Void {
