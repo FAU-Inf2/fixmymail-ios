@@ -287,7 +287,7 @@ class SMileCrypto: NSObject {
 		var resultSecret: Bool?
 		var exportError: NSError?
 		if let fileContent = String(contentsOfFile: keyfile.path!, encoding: NSUTF8StringEncoding, error: nil) {
-			// extract and import public key block
+/*			// extract and import public key block
 			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil {
 				var beginRange = fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----")
 				var endRange = fileContent.rangeOfString("-----END PGP PUBLIC KEY BLOCK-----")
@@ -328,7 +328,16 @@ class SMileCrypto: NSObject {
 				// do smime stuff
 			}
 
+*/
+			
+			var keyData: NSData = fileContent.dataUsingEncoding(NSUTF8StringEncoding)!
+			pgp.importKeysFromData(keyData, allowDuplicates: false)
+
 		}
+
+		self.printAllPublicKeys(true)
+		self.printAllSecretKeys(true)
+		
 		
 		
 		var keyFetchRequest = NSFetchRequest(entityName: "Key")
@@ -344,6 +353,7 @@ class SMileCrypto: NSObject {
 			if self.keysInCoreData != nil {
 				if self.keysInCoreData!.count > 0 {
 					for key in self.keysInCoreData! {
+						self.printPGPKeyFull(key) // DEBUG
 						if key.isPublicKey {
 							if key.keyID == pubkey.keyID.longKeyString {
 								isPresent = true
@@ -375,6 +385,7 @@ class SMileCrypto: NSObject {
 			if self.keysInCoreData != nil {
 				if self.keysInCoreData!.count > 0 {
 					for key in self.keysInCoreData! {
+						self.printPGPKeyFull(key) // DEBUG
 						if key.isSecretKey {
 							if key.keyID == secKey.keyID.longKeyString {
 								isPresent = true
@@ -479,7 +490,9 @@ class SMileCrypto: NSObject {
 				NSLog("Public Key fetchRequest: \(error?.localizedDescription)")
 			} else {
 				for key in fetchedKeysFromCoreData! {
-					pubKeyStrings.append(key.keyID)
+					if key.isPublicKey {
+						pubKeyStrings.append(key.keyID)
+					}
 				}
 			}
 			println("Public Keys: " + ",".join(pubKeyStrings))
@@ -509,13 +522,45 @@ class SMileCrypto: NSObject {
 				NSLog("Secret Key fetchRequest: \(error?.localizedDescription)")
 			} else {
 				for key in fetchedKeysFromCoreData! {
-					secKeyStrings.append(key.keyID)
+					if key.isSecretKey {
+						secKeyStrings.append(key.keyID)
+					}
 				}
 			}
 			println("Secret Keys: " + ",".join(secKeyStrings))
 		}
 	}
+	
+	func printPGPKeyFull(key: Key) -> Void {
+		println("UserIDprimary: " + key.userIDprimary)
+		println("emailAddressPrimary: " + key.emailAddressPrimary)
+		println("keyID: " + key.keyID)
+		println("isSecretKey: \(key.isSecretKey)")
+		println("isPublicKey: \(key.isPublicKey)")
+		println("keyType: " + key.keyType)
+		println("created: \(key.created)")
+		println("validThru: \(key.validThru)")
+		println("keyLength: \(key.keyLength)")
+		println("algorithm: " + key.algorithm)
+		println("fingerprint: " + key.fingerprint)
+		println("trust: \(key.trust)")
+		var userIDs: [String] = [String]()
+		for someUserID in key.userIDs{
+			let userID = someUserID as! UserID
+			userIDs.append(userID.name)
+		}
+		println("UserIDs: " + ",".join(userIDs))
+		var subKeys: [String] = [String]()
+		for SomeSubKey in key.subKeys {
+			let subkey = SomeSubKey as! SubKey
+			subKeys.append(subkey.subKeyID)
+		}
+		println("SubKeys: " + ",".join(subKeys))
+		println("keyData: " + String(NSString(data: key.keyData, encoding: NSUTF8StringEncoding)!))
+	}
+	
 
+	// MARK: - CoreData
 /*	func getKeyFromPGPKey(pgpKey: PGPKey) -> Key {
 		var newKey = Key()
 		newKey.userIDprimary = (pgpKey.users.firstObject as! PGPUser).userID
@@ -573,6 +618,7 @@ class SMileCrypto: NSObject {
 			newKeyEntry.setValue(keyToSave.keyID.longKeyString, forKey: "keyID")
 			newKeyEntry.setValue((keyToSave.type == PGPKeyType.Secret), forKey: "isSecretKey")
 			newKeyEntry.setValue((keyToSave.type == PGPKeyType.Public), forKey: "isPublicKey")
+			newKeyEntry.setValue("PGP", forKey: "keyType")
 			newKeyEntry.setValue((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).createDate, forKey: "created")
 			newKeyEntry.setValue(NSDate(timeInterval: Double((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).V3validityPeriod), sinceDate: (keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).createDate), forKey: "validThru")
 			newKeyEntry.setValue((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).keySize, forKey: "keyLength")

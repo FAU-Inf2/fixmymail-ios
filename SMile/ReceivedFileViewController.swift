@@ -101,16 +101,9 @@ class ReceivedFileViewController: UIViewController {
 			self.image.image = UIImage(named: "x_icon.png")
 		}
 		
-		// DEBUG
-		crypto.printAllPublicKeys(false)
-		crypto.printAllSecretKeys(false)
-		
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		crypto.printAllPublicKeys(false)
-		crypto.printAllSecretKeys(false)
-		
 		
 		var (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: "", encryptionType: "PGP")
 		if decryptedFile != nil && error == nil {
