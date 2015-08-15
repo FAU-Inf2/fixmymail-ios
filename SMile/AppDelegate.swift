@@ -452,6 +452,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	func cryptoTest() -> Void {
+		
 		//WARNING: DELETE BEFORE RELEASE
 		var crypto = SMileCrypto()
 		
@@ -463,7 +464,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		} else {
 			if encryptedData != nil {
 				println("Encrypted Data: " + (NSString(data: encryptedData!, encoding: NSUTF8StringEncoding) as! String))
-				var (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: "GoMADyoumust1!", encryptionType: "PGP")
+				var (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: "", encryptionType: "PGP")
 				if error2 != nil {
 					NSLog("Decrytption Error: " + error2!.localizedDescription)
 				} else {
@@ -480,6 +481,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			
 		}
 	}
-	
+
 }
 
