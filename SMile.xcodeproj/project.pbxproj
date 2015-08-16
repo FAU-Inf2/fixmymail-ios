@@ -192,7 +192,6 @@
 		AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */; };
 		AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CB1B7DE7250068E542 /* UserID.swift */; };
 		AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CD1B7DEA710068E542 /* SubKey.swift */; };
-		ADB45DDD1B80ACD300143001 /* PassPhrase.txt in Resources */ = {isa = PBXBuildFile; fileRef = ADB45DDC1B80ACD300143001 /* PassPhrase.txt */; };
 		ADBF50AC1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */; };
 		ADBF50AD1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */; };
 		ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */; };
@@ -476,7 +475,6 @@
 		AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v2.xcdatamodel"; sourceTree = "<group>"; };
 		AD97A0CB1B7DE7250068E542 /* UserID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserID.swift; sourceTree = "<group>"; };
 		AD97A0CD1B7DEA710068E542 /* SubKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubKey.swift; sourceTree = "<group>"; };
-		ADB45DDC1B80ACD300143001 /* PassPhrase.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PassPhrase.txt; sourceTree = "<group>"; };
 		ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefAccountBehaviorTableViewController.swift; sourceTree = "<group>"; };
 		ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefAccountBehaviorTableViewController.xib; sourceTree = "<group>"; };
 		ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesPreviewLinesTableViewController.swift; sourceTree = "<group>"; };
@@ -857,7 +855,6 @@
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
-				ADB45DDC1B80ACD300143001 /* PassPhrase.txt */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1282,7 +1279,6 @@
 				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				3DD3C7E31B7BD5FD00F53EAA /* page_white_vector.png in Resources */,
 				3DD3C7B41B7BD5FD00F53EAA /* page_white_actionscript@2x.png in Resources */,
-				ADB45DDD1B80ACD300143001 /* PassPhrase.txt in Resources */,
 				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
 				3DD3C7DF1B7BD5FD00F53EAA /* page_white_text.png in Resources */,
 				AD789DA51B31A4420001719E /* AboutUs.html in Resources */,
