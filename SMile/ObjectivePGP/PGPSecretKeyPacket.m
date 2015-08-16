@@ -98,7 +98,7 @@
     [data appendData: secretKeyPacketData];
 
     // header not allways match because export new format while input can be old format
-    NSAssert([secretKeyPacketData isEqualToData:self.bodyData], @"Secret key not match");
+ //   NSAssert([secretKeyPacketData isEqualToData:self.bodyData], @"Secret key not match");
     return [data copy];
 }
 
@@ -379,7 +379,7 @@
             // S2K
             NSError *exportError = nil;
             [data appendData:[self.s2k export:&exportError]];
-            NSAssert(exportError, @"export failed");
+     //       NSAssert(exportError, @"export failed");
             if (exportError) {
                 return nil;
             }

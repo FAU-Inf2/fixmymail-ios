@@ -39,3 +39,4 @@ SwiftyJSON.framework
 .DS_Store
 fastlane/report.xml
 log_*.txt
+PassPhrase.txt

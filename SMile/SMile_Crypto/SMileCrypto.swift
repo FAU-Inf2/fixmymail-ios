@@ -79,6 +79,8 @@ class SMileCrypto: NSObject {
 			}
 			
 		}
+		
+		
 	
 	}
 /*
@@ -226,12 +228,12 @@ class SMileCrypto: NSObject {
 				dataToEncrypt = NSData(contentsOfURL: copyItem)
 				if dataToEncrypt != nil {
 					var keyToEncrypt: PGPKey = self.pgp.getKeyForIdentifier(keyIdentifier, type: PGPKeyType.Public)
-					NSLog(NSString(data: keyToEncrypt.primaryKeyPacket.headerData, encoding: NSUTF8StringEncoding) as! String)
 					encryptedData = self.pgp.encryptData(dataToEncrypt!, usingPublicKey: keyToEncrypt, armored: true, error: &error)
 					if encryptedData != nil && error == nil {
 						var newFilePath: String = copyItem.path! + ".asc"
 						if self.fileManager.createFileAtPath(newFilePath, contents: encryptedData!, attributes: nil) == true {
 							encryptedFile = NSURL(fileURLWithPath: newFilePath)
+							self.fileManager.removeItemAtURL(copyItem, error: nil)
 						}
 					}
 				}
@@ -287,7 +289,7 @@ class SMileCrypto: NSObject {
 		var resultSecret: Bool?
 		var exportError: NSError?
 		if let fileContent = String(contentsOfFile: keyfile.path!, encoding: NSUTF8StringEncoding, error: nil) {
-/*			// extract and import public key block
+			// extract and import public key block
 			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil {
 				var beginRange = fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----")
 				var endRange = fileContent.rangeOfString("-----END PGP PUBLIC KEY BLOCK-----")
@@ -328,10 +330,10 @@ class SMileCrypto: NSObject {
 				// do smime stuff
 			}
 
-*/
+
 			
-			var keyData: NSData = fileContent.dataUsingEncoding(NSUTF8StringEncoding)!
-			pgp.importKeysFromData(keyData, allowDuplicates: false)
+		//	var keyData: NSData = fileContent.dataUsingEncoding(NSUTF8StringEncoding)!
+		//	pgp.importKeysFromData(keyData, allowDuplicates: false)
 
 		}
 
@@ -353,7 +355,6 @@ class SMileCrypto: NSObject {
 			if self.keysInCoreData != nil {
 				if self.keysInCoreData!.count > 0 {
 					for key in self.keysInCoreData! {
-						self.printPGPKeyFull(key) // DEBUG
 						if key.isPublicKey {
 							if key.keyID == pubkey.keyID.longKeyString {
 								isPresent = true
@@ -366,7 +367,6 @@ class SMileCrypto: NSObject {
 			}
 			if isPresent == false {
 				// save new pubkey to core data
-	//			var newKeyToSave = self.getKeyFromPGPKey(pubkey)
 				var success = self.saveKeyToCoreData(pubkey)
 				if success {
 					var keyFetchRequest = NSFetchRequest(entityName: "Key")
@@ -385,7 +385,6 @@ class SMileCrypto: NSObject {
 			if self.keysInCoreData != nil {
 				if self.keysInCoreData!.count > 0 {
 					for key in self.keysInCoreData! {
-						self.printPGPKeyFull(key) // DEBUG
 						if key.isSecretKey {
 							if key.keyID == secKey.keyID.longKeyString {
 								isPresent = true
@@ -398,7 +397,6 @@ class SMileCrypto: NSObject {
 			}
 			if isPresent == false {
 				// save new seckey to core data
-	//			var newKeyToSave = self.getKeyFromPGPKey(secKey)
 				var success = self.saveKeyToCoreData(secKey)
 				if success {
 					var keyFetchRequest = NSFetchRequest(entityName: "Key")
@@ -409,9 +407,14 @@ class SMileCrypto: NSObject {
 			
 		}
 
-		
-		
-		
+/*		if self.keysInCoreData != nil {
+			if self.keysInCoreData!.count > 0 {
+				for key in self.keysInCoreData! {
+					self.printPGPKeyFull(key) // DEBUG
+				}
+			}
+		}
+*/		
 /*
 		// self delete dublicates because it is not working with private keys
 		// TODO #######

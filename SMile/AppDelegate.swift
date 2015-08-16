@@ -455,30 +455,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		//WARNING: DELETE BEFORE RELEASE
 		var crypto = SMileCrypto()
+		var fileReadError: NSError?
+		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
+		var pw = ""
+		if path != nil {
+			 pw = String(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &fileReadError)!
+		}
 		
-		var data = ("THIS IS A ENCRYPTION TEST").dataUsingEncoding(NSUTF8StringEncoding)
-		println("Original message: " + (NSString(data: data!, encoding: NSUTF8StringEncoding) as! String))
-		var (error, encryptedData) = crypto.encryptData(data!, keyIdentifier: "67F86BAD", encryptionType: "PGP")
-		if error != nil {
-			NSLog("Encryption Error: " + error!.localizedDescription)
-		} else {
-			if encryptedData != nil {
-				println("Encrypted Data: " + (NSString(data: encryptedData!, encoding: NSUTF8StringEncoding) as! String))
-				var (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: "", encryptionType: "PGP")
-				if error2 != nil {
-					NSLog("Decrytption Error: " + error2!.localizedDescription)
-				} else {
-					if decrytpedData != nil {
-						println("Decrypted Data: " + (NSString(data: decrytpedData!, encoding: NSUTF8StringEncoding) as! String))
-					} else {
-						NSLog("Nothing was decrytped!")
-					}
-					
-				}
-			} else {
-				NSLog("Nothing was encrypted!")
-			}
+		if fileReadError == nil {
 			
+			var data = ("THIS IS A ENCRYPTION TEST").dataUsingEncoding(NSUTF8StringEncoding)
+			println("Original message: " + (NSString(data: data!, encoding: NSUTF8StringEncoding) as! String))
+			var (error, encryptedData) = crypto.encryptData(data!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+			if error != nil {
+				NSLog("Encryption Error: " + error!.localizedDescription)
+			} else {
+				if encryptedData != nil {
+					println("Encrypted Data: " + (NSString(data: encryptedData!, encoding: NSUTF8StringEncoding) as! String))
+					var (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: pw, encryptionType: "PGP")
+					if error2 != nil {
+						NSLog("Decrytption Error: " + error2!.localizedDescription)
+					} else {
+						if decrytpedData != nil {
+							println("Decrypted Data: " + (NSString(data: decrytpedData!, encoding: NSUTF8StringEncoding) as! String))
+						} else {
+							NSLog("Nothing was decrytped!")
+						}
+						
+					}
+				} else {
+					NSLog("Nothing was encrypted!")
+				}
+				
+			}
 		}
 	}
 
