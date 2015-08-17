@@ -254,6 +254,7 @@
 		ADEF085E1B8205B9008AC0D0 /* sec_label.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08571B8205B9008AC0D0 /* sec_label.png */; };
 		ADEF085F1B8205B9008AC0D0 /* smime_label.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08581B8205B9008AC0D0 /* smime_label.png */; };
 		ADEF08601B8205B9008AC0D0 /* yellow_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */; };
+		ADEF08621B823C3A008AC0D0 /* gray_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08611B823C3A008AC0D0 /* gray_indicator.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -583,6 +584,7 @@
 		ADEF08571B8205B9008AC0D0 /* sec_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sec_label.png; sourceTree = "<group>"; };
 		ADEF08581B8205B9008AC0D0 /* smime_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smime_label.png; sourceTree = "<group>"; };
 		ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_indicator.png; sourceTree = "<group>"; };
+		ADEF08611B823C3A008AC0D0 /* gray_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_indicator.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -954,6 +956,7 @@
 				ADEF08531B8205B9008AC0D0 /* green_indicator.png */,
 				ADEF08541B8205B9008AC0D0 /* pgp_label.png */,
 				ADEF08551B8205B9008AC0D0 /* pub_label.png */,
+				ADEF08611B823C3A008AC0D0 /* gray_indicator.png */,
 				ADEF08561B8205B9008AC0D0 /* red_indicator.png */,
 				ADEF08571B8205B9008AC0D0 /* sec_label.png */,
 				ADEF08581B8205B9008AC0D0 /* smime_label.png */,
@@ -1351,6 +1354,7 @@
 				3DD3C7B11B7BD5FD00F53EAA /* page_white_acrobat_import.png in Resources */,
 				8E14411C1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib in Resources */,
 				3DD3C7DC1B7BD5FD00F53EAA /* page_white_ruby@2x.png in Resources */,
+				ADEF08621B823C3A008AC0D0 /* gray_indicator.png in Resources */,
 				3DD3C7BF1B7BD5FD00F53EAA /* page_white_cup.png in Resources */,
 				3DD3C7CD1B7BD5FD00F53EAA /* page_white_import.png in Resources */,
 				3DD3C7E21B7BD5FD00F53EAA /* page_white_tux@2x.png in Resources */,

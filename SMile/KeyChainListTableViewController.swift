@@ -15,9 +15,11 @@ class KeyChainListTableViewController: UITableViewController {
 	var navController: UINavigationController!
 	var keyDetailView: KeyDetailViewController?
 	var keyList = [Key]()
+	var keysFromCoreData = [Key]()
 	var managedObjectContext: NSManagedObjectContext?
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
-	let myOpacity:CGFloat = 0.1
+	let myOpacity: CGFloat = 0.1
+	let myOpacityFULL: CGFloat = 1.0
 	let monthsInYear: Int = 12
 	let monthsForFullValidity: Int = 6
 	
@@ -40,6 +42,12 @@ class KeyChainListTableViewController: UITableViewController {
 		self.navigationItem.title = "KeyChain"
 		self.navigationItem.leftBarButtonItem = menuItem
 		self.navigationItem.rightBarButtonItem = self.editButtonItem()
+		
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		loadInitialData()
+		self.tableView.reloadData()
 		
 	}
 	
@@ -72,6 +80,7 @@ class KeyChainListTableViewController: UITableViewController {
 		var keyItem = self.keyList[indexPath.row]
 		
 		// Fill data to labels
+		cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
 		cell.LabelKeyOwner.text = keyItem.userIDprimary
 		cell.LabelMailAddress.text = keyItem.emailAddressPrimary
 		cell.LabelKeyID.text = keyItem.keyID
@@ -84,20 +93,31 @@ class KeyChainListTableViewController: UITableViewController {
 		switch keyItem.keyType {
 		case "SMIME":
 			cell.pgp.alpha = myOpacity
+			cell.smime.alpha = myOpacityFULL
 		case "PGP":
 			cell.smime.alpha = myOpacity
+			cell.pgp.alpha = myOpacityFULL
 		default:
 			cell.smime.alpha = myOpacity
 			cell.pgp.alpha = myOpacity
 		}
 		
-		if !keyItem.isSecretKey {
-			cell.secKey.alpha = myOpacity
+		if keyItem.isSecretKey && keyItem.isPublicKey {
+			cell.pubKey.alpha = myOpacityFULL
+			cell.secKey.alpha = myOpacityFULL
+		} else {
+			if keyItem.isSecretKey {
+				cell.pubKey.alpha = myOpacity
+				cell.secKey.alpha = myOpacityFULL
+			}
+			
+			if keyItem.isPublicKey {
+				cell.secKey.alpha = myOpacity
+				cell.pubKey.alpha = myOpacityFULL
+			}
 		}
 		
-		if !keyItem.isPublicKey {
-			cell.pubKey.alpha = myOpacity
-		}
+		
 		
 		
 		// Set the valid thru bar
@@ -114,10 +134,16 @@ class KeyChainListTableViewController: UITableViewController {
 				cell.validIndicator1.image = UIImage(named: "yellow_indicator.png")
 				cell.validIndicator2.image = UIImage(named: "yellow_indicator.png")
 				cell.validIndicator3.image = UIImage(named: "yellow_indicator.png")
+				cell.validIndicator4.image = UIImage(named: "gray_indicator.png")
+				cell.validIndicator5.image = UIImage(named: "gray_indicator.png")
 			}
 			
 		} else {
 			cell.validIndicator1.image = UIImage(named: "red_indicator.png")
+			cell.validIndicator2.image = UIImage(named: "gray_indicator.png")
+			cell.validIndicator3.image = UIImage(named: "gray_indicator.png")
+			cell.validIndicator4.image = UIImage(named: "gray_indicator.png")
+			cell.validIndicator5.image = UIImage(named: "gray_indicator.png")
 		}
 		
 		
@@ -183,17 +209,6 @@ class KeyChainListTableViewController: UITableViewController {
 	*/
 	
 	func loadInitialData() {
-		/*
-		var key1 = KeyItem(keyOwner: "Max Mustermann", mailAddress: "max.musterman@gmail.com", keyID: "XXXXXXXX", isSecretKey: true, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2014-06-30")))
-		var key2 = KeyItem(keyOwner: "Maximilianus Mustermann", mailAddress: "maxi.mus@web.de", keyID: "XXXXXXXX", isSecretKey: false, isPublicKey: true, keyType: "PGP", created: NSDate(), validThru: (NSDate(dateString: "2015-9-03")))
-		var key3 = KeyItem(keyOwner: "Max Mustermann", mailAddress: "m.m@hotmail.com", keyID: "XXXXXXXX", isSecretKey: true, isPublicKey: true, keyType: "SMIME", created: NSDate(), validThru: (NSDate(dateString: "2017-03-12")))
-		
-		keyItemList.append(key3)
-		keyItemList.append(key2)
-		keyItemList.append(key1)
-		*/
-		
-		
 		
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 		if let appDelegate = appDel {
@@ -204,8 +219,33 @@ class KeyChainListTableViewController: UITableViewController {
 			if error != nil {
 				NSLog("Key fetchRequest: \(error?.localizedDescription)")
 			} else {
-				self.keyList = fetchedKeysFromCoreData!
+				self.keysFromCoreData = fetchedKeysFromCoreData!
+				
 			}
+			
+			// check if sec and pub key with same keyID
+			var secKeys = [Key]()
+			var pubKeys = [Key]()
+			for key in self.keysFromCoreData {
+				if key.isPublicKey {
+					pubKeys.append(key)
+				}
+				if key.isSecretKey {
+					secKeys.append(key)
+				}
+			}
+			
+			for seckey in secKeys {
+				for var i = 0; i < pubKeys.count; i++ {
+					let pubkey = pubKeys[i]
+					if seckey.keyID == pubkey.keyID {
+						seckey.isPublicKey = true
+						pubKeys.removeAtIndex(i)
+					}
+				}
+			}
+			
+			self.keyList = secKeys + pubKeys
 			
 			
 		}

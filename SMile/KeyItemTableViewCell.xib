@@ -87,7 +87,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Valid Thru:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSm-iX-dB7" userLabel="LabelValidThru">
-                        <rect key="frame" x="463" y="60" width="129" height="33"/>
+                        <rect key="frame" x="463" y="55" width="129" height="33"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -131,9 +131,9 @@
                     <constraint firstItem="jyh-05-ScO" firstAttribute="top" secondItem="tDJ-MH-XoS" secondAttribute="bottom" constant="8" symbolic="YES" id="pQ9-cH-aWt"/>
                     <constraint firstItem="SJC-sy-MzA" firstAttribute="leading" secondItem="rjN-Bu-wMh" secondAttribute="trailing" constant="1" id="qgW-fF-iWh"/>
                     <constraint firstItem="KLj-7j-FMJ" firstAttribute="bottom" secondItem="rjN-Bu-wMh" secondAttribute="bottom" id="s0o-eQ-dLn"/>
-                    <constraint firstItem="jyh-05-ScO" firstAttribute="baseline" secondItem="ZSm-iX-dB7" secondAttribute="baseline" constant="-10" id="s5d-Sy-Rml"/>
+                    <constraint firstItem="jyh-05-ScO" firstAttribute="baseline" secondItem="ZSm-iX-dB7" secondAttribute="baseline" constant="-5" id="s5d-Sy-Rml"/>
                     <constraint firstItem="ZSm-iX-dB7" firstAttribute="trailing" secondItem="YYg-1Y-gku" secondAttribute="trailing" id="tkS-ch-Ckn"/>
-                    <constraint firstItem="ZSm-iX-dB7" firstAttribute="top" secondItem="YYg-1Y-gku" secondAttribute="bottom" constant="15" id="vxd-3Z-Xhp"/>
+                    <constraint firstItem="ZSm-iX-dB7" firstAttribute="top" secondItem="YYg-1Y-gku" secondAttribute="bottom" constant="10" id="vxd-3Z-Xhp"/>
                     <constraint firstItem="bcv-PW-gvq" firstAttribute="leading" secondItem="a5K-X2-ZUh" secondAttribute="trailing" constant="1" id="wNY-Zd-P4k"/>
                     <constraint firstItem="a5K-X2-ZUh" firstAttribute="top" secondItem="8Mt-t8-FMt" secondAttribute="top" id="x5e-uN-chE"/>
                 </constraints>

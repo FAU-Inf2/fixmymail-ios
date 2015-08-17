@@ -406,7 +406,7 @@ class SMileCrypto: NSObject {
 			}
 			
 		}
-
+/*
 		if self.keysInCoreData != nil {
 			if self.keysInCoreData!.count > 0 {
 				for key in self.keysInCoreData! {
@@ -414,7 +414,7 @@ class SMileCrypto: NSObject {
 				}
 			}
 		}
-		
+*/		
 /*
 		// self delete dublicates because it is not working with private keys
 		// TODO #######
