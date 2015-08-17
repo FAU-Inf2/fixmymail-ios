@@ -198,8 +198,6 @@
 		ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */; };
 		ADCAB63C1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */; };
 		ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */; };
-		ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */; };
-		ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */; };
 		ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C31B15B56300A9B31A /* KeyItem.swift */; };
 		ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */; };
 		ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */; };
@@ -255,6 +253,10 @@
 		ADEF085F1B8205B9008AC0D0 /* smime_label.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08581B8205B9008AC0D0 /* smime_label.png */; };
 		ADEF08601B8205B9008AC0D0 /* yellow_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */; };
 		ADEF08621B823C3A008AC0D0 /* gray_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08611B823C3A008AC0D0 /* gray_indicator.png */; };
+		ADEF08651B824F95008AC0D0 /* KeyDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF08631B824F95008AC0D0 /* KeyDetailTableViewController.swift */; };
+		ADEF08661B824F95008AC0D0 /* KeyDetailTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08641B824F95008AC0D0 /* KeyDetailTableViewController.xib */; };
+		ADEF08691B826819008AC0D0 /* KeyDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF08671B826819008AC0D0 /* KeyDetailTableViewCell.swift */; };
+		ADEF086A1B826819008AC0D0 /* KeyDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08681B826819008AC0D0 /* KeyDetailTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -490,8 +492,6 @@
 		ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesPreviewLinesTableViewController.swift; sourceTree = "<group>"; };
 		ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesPreviewLinesTableViewController.xib; sourceTree = "<group>"; };
 		ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
-		ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailViewController.swift; sourceTree = "<group>"; };
-		ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailViewController.xib; sourceTree = "<group>"; };
 		ADD135C31B15B56300A9B31A /* KeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItem.swift; sourceTree = "<group>"; };
 		ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItemTableViewCell.swift; sourceTree = "<group>"; };
 		ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyItemTableViewCell.xib; sourceTree = "<group>"; };
@@ -585,6 +585,10 @@
 		ADEF08581B8205B9008AC0D0 /* smime_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smime_label.png; sourceTree = "<group>"; };
 		ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_indicator.png; sourceTree = "<group>"; };
 		ADEF08611B823C3A008AC0D0 /* gray_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_indicator.png; sourceTree = "<group>"; };
+		ADEF08631B824F95008AC0D0 /* KeyDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailTableViewController.swift; sourceTree = "<group>"; };
+		ADEF08641B824F95008AC0D0 /* KeyDetailTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailTableViewController.xib; sourceTree = "<group>"; };
+		ADEF08671B826819008AC0D0 /* KeyDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailTableViewCell.swift; sourceTree = "<group>"; };
+		ADEF08681B826819008AC0D0 /* KeyDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -651,8 +655,8 @@
 				AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */,
 				ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */,
 				ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */,
-				ADD135C11B15B56300A9B31A /* KeyDetailViewController.swift */,
-				ADD135C21B15B56300A9B31A /* KeyDetailViewController.xib */,
+				ADEF08631B824F95008AC0D0 /* KeyDetailTableViewController.swift */,
+				ADEF08641B824F95008AC0D0 /* KeyDetailTableViewController.xib */,
 				8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */,
 				A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */,
 				8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */,
@@ -673,6 +677,8 @@
 				8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */,
 				ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */,
 				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
+				ADEF08671B826819008AC0D0 /* KeyDetailTableViewCell.swift */,
+				ADEF08681B826819008AC0D0 /* KeyDetailTableViewCell.xib */,
 				AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */,
 				AD0100A11B19ECC4009E4E18 /* Preferences */,
 				8E1441181B1DF00500F1A023 /* SendView */,
@@ -1230,6 +1236,7 @@
 				AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */,
 				3DD3C7E91B7BD5FD00F53EAA /* pages.png in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
+				ADEF086A1B826819008AC0D0 /* KeyDetailTableViewCell.xib in Resources */,
 				ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */,
 				ADEF085D1B8205B9008AC0D0 /* red_indicator.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
@@ -1288,6 +1295,7 @@
 				3DD3C7E11B7BD5FD00F53EAA /* page_white_tux.png in Resources */,
 				3DD3C7E81B7BD5FD00F53EAA /* page_white_word@2x.png in Resources */,
 				3DF253BA1AF7611D00B99BC8 /* LaunchScreen.xib in Resources */,
+				ADEF08661B824F95008AC0D0 /* KeyDetailTableViewController.xib in Resources */,
 				3DD3C7D71B7BD5FD00F53EAA /* page_white_picture.png in Resources */,
 				3DD3C7C01B7BD5FD00F53EAA /* page_white_cup@2x.png in Resources */,
 				AD43C80B1B71199900C8F286 /* keyicon.png in Resources */,
@@ -1314,7 +1322,6 @@
 				3DD3C7E31B7BD5FD00F53EAA /* page_white_vector.png in Resources */,
 				3DD3C7B41B7BD5FD00F53EAA /* page_white_actionscript@2x.png in Resources */,
 				AD10C4C21B80C60200C1C026 /* PassPhrase.txt in Resources */,
-				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
 				3DD3C7DF1B7BD5FD00F53EAA /* page_white_text.png in Resources */,
 				AD789DA51B31A4420001719E /* AboutUs.html in Resources */,
 				3D65A4CC1B53014E00E88CC7 /* triangle_bottom.png in Resources */,
@@ -1421,6 +1428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADEF08651B824F95008AC0D0 /* KeyDetailTableViewController.swift in Sources */,
 				ADD80E471B7CED0E00A32D59 /* PGPPacketFactory.m in Sources */,
 				AD8744321B6A3C1900257AA5 /* RNCryptorEngine.m in Sources */,
 				3D848A2E1B376A010039A162 /* EmailAccountSupport.swift in Sources */,
@@ -1459,7 +1467,6 @@
 				8E450BB41B15BBF0001E37B9 /* MCTMsgViewController.mm in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
-				ADD135C81B15B56300A9B31A /* KeyDetailViewController.swift in Sources */,
 				ADD80E3C1B7CED0E00A32D59 /* PGPCompressedPacket.m in Sources */,
 				ADD80E491B7CED0E00A32D59 /* PGPPKCSEmsa.m in Sources */,
 				3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */,
@@ -1498,6 +1505,7 @@
 				ADD80E5A1B7CED0E00A32D59 /* PGPUserIDPacket.m in Sources */,
 				3DD3C7491B7BCF3400F53EAA /* OpenInChromeController.m in Sources */,
 				ADD80E571B7CED0E00A32D59 /* PGPUser.m in Sources */,
+				ADEF08691B826819008AC0D0 /* KeyDetailTableViewCell.swift in Sources */,
 				ADD80E4F1B7CED0E00A32D59 /* PGPSecretKeyPacket.m in Sources */,
 				AD8744331B6A3C1900257AA5 /* RNDecryptor.m in Sources */,
 				8E450BB31B15BBF0001E37B9 /* MCOMessageView.mm in Sources */,
