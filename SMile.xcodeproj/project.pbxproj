@@ -138,6 +138,7 @@
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
 		AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */; };
+		AD10C4C21B80C60200C1C026 /* PassPhrase.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD10C4C11B80C60200C1C026 /* PassPhrase.txt */; };
 		AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DB1B1A223A005EA5CE /* ios7-plus.png */; };
 		AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */; };
 		AD1255E01B1A302F005EA5CE /* sources.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DF1B1A302F005EA5CE /* sources.txt */; };
@@ -246,6 +247,13 @@
 		ADE6739D1B7365B400C920B0 /* x_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE6739B1B7365B400C920B0 /* x_icon.png */; };
 		ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */; };
 		ADE770FF1B35E1C50008B449 /* smile_icon_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE770FE1B35E1C50008B449 /* smile_icon_blue.png */; };
+		ADEF085A1B8205B9008AC0D0 /* green_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08531B8205B9008AC0D0 /* green_indicator.png */; };
+		ADEF085B1B8205B9008AC0D0 /* pgp_label.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08541B8205B9008AC0D0 /* pgp_label.png */; };
+		ADEF085C1B8205B9008AC0D0 /* pub_label.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08551B8205B9008AC0D0 /* pub_label.png */; };
+		ADEF085D1B8205B9008AC0D0 /* red_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08561B8205B9008AC0D0 /* red_indicator.png */; };
+		ADEF085E1B8205B9008AC0D0 /* sec_label.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08571B8205B9008AC0D0 /* sec_label.png */; };
+		ADEF085F1B8205B9008AC0D0 /* smime_label.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08581B8205B9008AC0D0 /* smime_label.png */; };
+		ADEF08601B8205B9008AC0D0 /* yellow_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -411,6 +419,7 @@
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
 		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
+		AD10C4C11B80C60200C1C026 /* PassPhrase.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PassPhrase.txt; sourceTree = "<group>"; };
 		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
 		AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Gmail-128.png"; sourceTree = "<group>"; };
 		AD1255DF1B1A302F005EA5CE /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
@@ -567,6 +576,13 @@
 		ADE6739B1B7365B400C920B0 /* x_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_icon.png; sourceTree = "<group>"; };
 		ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Checkmark-icon.png"; sourceTree = "<group>"; };
 		ADE770FE1B35E1C50008B449 /* smile_icon_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smile_icon_blue.png; sourceTree = "<group>"; };
+		ADEF08531B8205B9008AC0D0 /* green_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = green_indicator.png; sourceTree = "<group>"; };
+		ADEF08541B8205B9008AC0D0 /* pgp_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pgp_label.png; sourceTree = "<group>"; };
+		ADEF08551B8205B9008AC0D0 /* pub_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pub_label.png; sourceTree = "<group>"; };
+		ADEF08561B8205B9008AC0D0 /* red_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red_indicator.png; sourceTree = "<group>"; };
+		ADEF08571B8205B9008AC0D0 /* sec_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sec_label.png; sourceTree = "<group>"; };
+		ADEF08581B8205B9008AC0D0 /* smime_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smime_label.png; sourceTree = "<group>"; };
+		ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_indicator.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -845,6 +861,7 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AD10C4C11B80C60200C1C026 /* PassPhrase.txt */,
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
@@ -934,6 +951,13 @@
 			children = (
 				ADE6739B1B7365B400C920B0 /* x_icon.png */,
 				ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */,
+				ADEF08531B8205B9008AC0D0 /* green_indicator.png */,
+				ADEF08541B8205B9008AC0D0 /* pgp_label.png */,
+				ADEF08551B8205B9008AC0D0 /* pub_label.png */,
+				ADEF08561B8205B9008AC0D0 /* red_indicator.png */,
+				ADEF08571B8205B9008AC0D0 /* sec_label.png */,
+				ADEF08581B8205B9008AC0D0 /* smime_label.png */,
+				ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */,
 				AD43C80C1B7247F400C8F286 /* fileicon_lock.png */,
 				AD43C8081B71199900C8F286 /* fileicon_standard.png */,
 				AD43C8091B71199900C8F286 /* keyicon.png */,
@@ -1204,6 +1228,7 @@
 				3DD3C7E91B7BD5FD00F53EAA /* pages.png in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */,
+				ADEF085D1B8205B9008AC0D0 /* red_indicator.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
 				AD43C8051B70F92600C8F286 /* ReceivedFileViewController.xib in Resources */,
 				5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */,
@@ -1232,9 +1257,12 @@
 				AD43C7FD1B6FEE9200C8F286 /* DevPasswordViewController.xib in Resources */,
 				5B7EAB081B31870800B888BD /* archive.png in Resources */,
 				3DD3C7C11B7BD5FD00F53EAA /* page_white_dvd.png in Resources */,
+				ADEF085C1B8205B9008AC0D0 /* pub_label.png in Resources */,
 				3DD3C7B71B7BD5FD00F53EAA /* page_white_code.png in Resources */,
+				ADEF085E1B8205B9008AC0D0 /* sec_label.png in Resources */,
 				3DD3C7CA1B7BD5FD00F53EAA /* page_white_gear@2x.png in Resources */,
 				AD789D9D1B3054A00001719E /* Feedback.html in Resources */,
+				ADEF085B1B8205B9008AC0D0 /* pgp_label.png in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
 				AD789D991B3050640001719E /* FeedbackViewController.xib in Resources */,
 				3DD3C7D61B7BD5FD00F53EAA /* page_white_php@2x.png in Resources */,
@@ -1249,6 +1277,7 @@
 				AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */,
 				AD5292641B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib in Resources */,
 				AD44E0271B1B017900751FFA /* outlook.png in Resources */,
+				ADEF085F1B8205B9008AC0D0 /* smime_label.png in Resources */,
 				ADE6739D1B7365B400C920B0 /* x_icon.png in Resources */,
 				AD44E0281B1B017900751FFA /* Yahoo-icon.png in Resources */,
 				3DD3C7B01B7BD5FD00F53EAA /* page_white_acrobat@2x.png in Resources */,
@@ -1264,9 +1293,11 @@
 				3DD3C7BE1B7BD5FD00F53EAA /* page_white_csharp@2x.png in Resources */,
 				ADBF50AD1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib in Resources */,
 				3DD3C7E01B7BD5FD00F53EAA /* page_white_text@2x.png in Resources */,
+				ADEF08601B8205B9008AC0D0 /* yellow_indicator.png in Resources */,
 				3DD3C7CF1B7BD5FD00F53EAA /* page_white_jef.png in Resources */,
 				ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */,
 				AD44E0291B1B017900751FFA /* gmx.png in Resources */,
+				ADEF085A1B8205B9008AC0D0 /* green_indicator.png in Resources */,
 				3DD3C7C61B7BD5FD00F53EAA /* page_white_film@2x.png in Resources */,
 				3DD3C7B61B7BD5FD00F53EAA /* page_white_c@2x.png in Resources */,
 				ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */,
@@ -1279,6 +1310,7 @@
 				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				3DD3C7E31B7BD5FD00F53EAA /* page_white_vector.png in Resources */,
 				3DD3C7B41B7BD5FD00F53EAA /* page_white_actionscript@2x.png in Resources */,
+				AD10C4C21B80C60200C1C026 /* PassPhrase.txt in Resources */,
 				ADD135C91B15B56300A9B31A /* KeyDetailViewController.xib in Resources */,
 				3DD3C7DF1B7BD5FD00F53EAA /* page_white_text.png in Resources */,
 				AD789DA51B31A4420001719E /* AboutUs.html in Resources */,

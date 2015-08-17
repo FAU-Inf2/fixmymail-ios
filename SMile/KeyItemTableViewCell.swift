@@ -17,17 +17,22 @@ class KeyItemTableViewCell: UITableViewCell, CellDelegate {
 	
 	@IBOutlet weak var LabelKeyOwner: UILabel!
 	@IBOutlet weak var LabelMailAddress: UILabel!
-	@IBOutlet weak var LabelSecretKey: UILabel!
-	@IBOutlet weak var LabelPublicKey: UILabel!
-	@IBOutlet weak var LabelSMIME: UILabel!
-	@IBOutlet weak var LabelPGP: UILabel!
 	@IBOutlet weak var LabelKeyID: UILabel!
 	@IBOutlet weak var LabelValidThru: UILabel!
-	@IBOutlet weak var LabelValid1: UILabel!
-	@IBOutlet weak var LabelValid2: UILabel!
-	@IBOutlet weak var LabelValid3: UILabel!
-	@IBOutlet weak var LabelValid4: UILabel!
-	@IBOutlet weak var LabelValid5: UILabel!
+	@IBOutlet weak var secKey: UIImageView!
+	@IBOutlet weak var pubKey: UIImageView!
+	@IBOutlet weak var smime: UIImageView!
+	@IBOutlet weak var pgp: UIImageView!
+	@IBOutlet weak var validIndicator1: UIImageView!
+	@IBOutlet weak var validIndicator2: UIImageView!
+	@IBOutlet weak var validIndicator3: UIImageView!
+	@IBOutlet weak var validIndicator4: UIImageView!
+	@IBOutlet weak var validIndicator5: UIImageView!
+	
+	
+	
+	
+	
 	
 	@IBOutlet weak var ButtonKeyDetail: UIButton!
 	

@@ -7,13 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
 class KeyChainListTableViewController: UITableViewController, CellDelegate {
 	
     var delegate: ContentViewControllerProtocol?
     var navController: UINavigationController!
 	var keyDetailView: KeyDetailViewController?
-	var keyItemList = [KeyItem]()
+	var keyList = [Key]()
+	var managedObjectContext: NSManagedObjectContext?
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
 	let myOpacity:CGFloat = 0.1
 	let monthsInYear: Int = 12
@@ -57,7 +59,7 @@ class KeyChainListTableViewController: UITableViewController, CellDelegate {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return self.keyItemList.count
+        return self.keyList.count
     }
 
 
@@ -202,6 +204,22 @@ class KeyChainListTableViewController: UITableViewController, CellDelegate {
 		keyItemList.append(key2)
 		keyItemList.append(key1)
 */
+		
+		
+		
+		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
+		if let appDelegate = appDel {
+			self.managedObjectContext = appDelegate.managedObjectContext!
+			var keyFetchRequest = NSFetchRequest(entityName: "Key")
+			var error: NSError?
+			var fetchedKeysFromCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
+			if error != nil {
+				NSLog("Key fetchRequest: \(error?.localizedDescription)")
+			} else {
+				self.keyList = fetchedKeysFromCoreData!
+			}
+		
+		
 	}
 	
 	// get detail view of the corresponding cell

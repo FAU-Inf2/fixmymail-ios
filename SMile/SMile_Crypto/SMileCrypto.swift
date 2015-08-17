@@ -407,14 +407,14 @@ class SMileCrypto: NSObject {
 			
 		}
 
-/*		if self.keysInCoreData != nil {
+		if self.keysInCoreData != nil {
 			if self.keysInCoreData!.count > 0 {
 				for key in self.keysInCoreData! {
 					self.printPGPKeyFull(key) // DEBUG
 				}
 			}
 		}
-*/		
+		
 /*
 		// self delete dublicates because it is not working with private keys
 		// TODO #######
@@ -616,8 +616,10 @@ class SMileCrypto: NSObject {
 		if self.managedObjectContext != nil {
 			var newKeyEntry = NSEntityDescription.insertNewObjectForEntityForName("Key", inManagedObjectContext: self.managedObjectContext!) as! Key
 			
-			newKeyEntry.setValue((keyToSave.users.firstObject as! PGPUser).userID, forKey: "userIDprimary")
-			newKeyEntry.setValue("", forKey: "emailAddressPrimary")
+			var (name, address) = self.extractNameAndMailAddressFromUserID((keyToSave.users.firstObject as! PGPUser).userID)
+			
+			newKeyEntry.setValue(name, forKey: "userIDprimary")
+			newKeyEntry.setValue(address, forKey: "emailAddressPrimary")
 			newKeyEntry.setValue(keyToSave.keyID.longKeyString, forKey: "keyID")
 			newKeyEntry.setValue((keyToSave.type == PGPKeyType.Secret), forKey: "isSecretKey")
 			newKeyEntry.setValue((keyToSave.type == PGPKeyType.Public), forKey: "isPublicKey")
@@ -634,8 +636,9 @@ class SMileCrypto: NSObject {
 			var userIDs: [UserID] = [UserID]()
 			for var i = 0; i < keyToSave.users.count; i++ {
 				var newUserIDEntry = NSEntityDescription.insertNewObjectForEntityForName("UserID", inManagedObjectContext: self.managedObjectContext!) as! UserID
-				newUserIDEntry.setValue((keyToSave.users.objectAtIndex(i) as! PGPUser).userID, forKey: "name")
-				newUserIDEntry.setValue("", forKey: "emailAddress")
+				var (subName, subAddress) = self.extractNameAndMailAddressFromUserID((keyToSave.users.objectAtIndex(i) as! PGPUser).userID)
+				newUserIDEntry.setValue(subName, forKey: "name")
+				newUserIDEntry.setValue(subAddress, forKey: "emailAddress")
 				newUserIDEntry.setValue("", forKey: "comment")
 				newUserIDEntry.setValue(newKeyEntry, forKey: "toKey")
 				userIDs.append(newUserIDEntry)
@@ -653,6 +656,28 @@ class SMileCrypto: NSObject {
 		} else {
 			return true
 		}
+	}
+	
+	/**
+	Get name and address from userID String
+	
+	:param: userID:	The userID String (PGPUser.userID).
+	
+	:returns: (name, address) or (String(), String()).
+	*/
+	private func extractNameAndMailAddressFromUserID(userID: String) -> (name: String, mailAddress: String) {
+		var nameRange: Range? = userID.rangeOfString("<")
+		var addressRange: Range? = userID.rangeOfString(">")
+		var name: String = ""
+		var address: String = ""
+		if nameRange != nil {
+			name = userID.substringToIndex(nameRange!.startIndex)
+		}
+		if addressRange != nil {
+			address = userID.substringWithRange(Range<String.Index>(start: nameRange!.endIndex, end: addressRange!.startIndex))
+		}
+		
+		return (name, address)
 	}
 	
 
