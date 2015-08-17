@@ -138,7 +138,6 @@
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
 		AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */; };
-		AD10C4C21B80C60200C1C026 /* PassPhrase.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD10C4C11B80C60200C1C026 /* PassPhrase.txt */; };
 		AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DB1B1A223A005EA5CE /* ios7-plus.png */; };
 		AD1255DE1B1A2B6C005EA5CE /* Gmail-128.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */; };
 		AD1255E01B1A302F005EA5CE /* sources.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DF1B1A302F005EA5CE /* sources.txt */; };
@@ -422,7 +421,6 @@
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
 		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
-		AD10C4C11B80C60200C1C026 /* PassPhrase.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PassPhrase.txt; sourceTree = "<group>"; };
 		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
 		AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Gmail-128.png"; sourceTree = "<group>"; };
 		AD1255DF1B1A302F005EA5CE /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
@@ -869,7 +867,6 @@
 		3DF253AA1AF7611D00B99BC8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AD10C4C11B80C60200C1C026 /* PassPhrase.txt */,
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
@@ -1321,7 +1318,6 @@
 				AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */,
 				3DD3C7E31B7BD5FD00F53EAA /* page_white_vector.png in Resources */,
 				3DD3C7B41B7BD5FD00F53EAA /* page_white_actionscript@2x.png in Resources */,
-				AD10C4C21B80C60200C1C026 /* PassPhrase.txt in Resources */,
 				3DD3C7DF1B7BD5FD00F53EAA /* page_white_text.png in Resources */,
 				AD789DA51B31A4420001719E /* AboutUs.html in Resources */,
 				3D65A4CC1B53014E00E88CC7 /* triangle_bottom.png in Resources */,
