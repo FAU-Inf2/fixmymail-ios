@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="subjectInfoCell" rowHeight="62" id="KGk-i7-Jjw" customClass="SubjectInfoTableViewCell" customModule="SMile" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="62"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sD7-f2-Ht4">
+                        <rect key="frame" x="8" y="8" width="304" height="24"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ly-lO-uyN">
+                        <rect key="frame" x="8" y="32" width="304" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="9ly-lO-uyN" secondAttribute="bottom" constant="8" id="3C8-G2-JU4"/>
+                    <constraint firstItem="9ly-lO-uyN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="9FH-br-iVe"/>
+                    <constraint firstItem="9ly-lO-uyN" firstAttribute="top" secondItem="sD7-f2-Ht4" secondAttribute="bottom" id="CXw-HV-vn9"/>
+                    <constraint firstAttribute="trailing" secondItem="sD7-f2-Ht4" secondAttribute="trailing" constant="8" id="eJu-en-Qf7"/>
+                    <constraint firstItem="sD7-f2-Ht4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="eO1-Bd-Jel"/>
+                    <constraint firstItem="sD7-f2-Ht4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="gE1-Z5-2xD"/>
+                    <constraint firstAttribute="trailing" secondItem="9ly-lO-uyN" secondAttribute="trailing" constant="8" id="ie0-1k-xPO"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="dateLabel" destination="9ly-lO-uyN" id="k7o-ih-taX"/>
+                <outlet property="subjectLabel" destination="sD7-f2-Ht4" id="UEE-dS-97G"/>
+            </connections>
+            <point key="canvasLocation" x="436" y="384"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -17,7 +17,6 @@
 @end
 
 @implementation MCOMessageView {
-    UIWebView * _webView;
     NSString * _folder;
     MCOAbstractMessage * _message;
     __weak id <MCOMessageViewDelegate> _delegate;
@@ -26,6 +25,7 @@
     NSString *msgContent;
 }
 
+@synthesize webView = _webView;
 @synthesize folder = _folder;
 @synthesize msgContent = _msgContent;
 @synthesize delegate = _delegate;
@@ -39,9 +39,9 @@
     
     if(self) {
         _webView = [[UIWebView alloc] initWithFrame:[self bounds]];
-        [_webView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
+//        [_webView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
         [_webView setDelegate:self];
-//        _webView.scalesPageToFit = YES;
+        _webView.scalesPageToFit = YES;
         
         _gestureRecognizerEnabled = YES;
         

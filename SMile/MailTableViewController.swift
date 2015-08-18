@@ -156,7 +156,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if previewLines == 0 {
             mailcell.mailBody.hidden = true
         } else {
-            mailcell.mailBody.text = mail.plainText
+            mailcell.mailBody.text = (mail.valueForKey("plainText") as! String?) ?? ""
             mailcell.mailBody.hidden = false
             mailcell.mailBody.lineBreakMode = .ByWordWrapping
             mailcell.mailBody.numberOfLines = previewLines
@@ -192,14 +192,15 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 var mail: MCOIMAPMessage = cell.mail.mcomessage as! MCOIMAPMessage
                 var messageParser : MCOMessageParser = MCOMessageParser(data: cell.mail.data)
                 
+//                var emailVC = EmailViewController(nibName: "EmailViewController", bundle: nil)
+                var emailVC = EmailViewController()
+                emailVC.message = cell.mail
+                emailVC.mcoimapmessage = mail
+                emailVC.session = getSession(cell.mail.toAccount)
+                self.navigationController?.pushViewController(emailVC, animated: true)
                 
-                var msgVC: MCTMsgViewController = MCTMsgViewController()
-                msgVC.folder = cell.mail.folder;
-                msgVC.message = mail
-                msgVC.parser = messageParser
-                msgVC.session = getSession(cell.mail.toAccount)
-                self.navigationController?.pushViewController(msgVC, animated: true)
                 
+//                var msgVC: MCTMsgViewController = MCTMsgViewController()
 //                MCOIMAPMessage *msg = self.messages[indexPath.row];
 //                MCTMsgViewController *vc = [[MCTMsgViewController alloc] init];
 //                vc.folder = @"INBOX";

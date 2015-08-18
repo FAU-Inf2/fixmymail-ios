@@ -16,6 +16,7 @@
 @property (nonatomic, copy) NSString * folder;
 @property (nonatomic, strong) MCOAbstractMessage * message;
 @property (nonatomic, strong) NSString* msgContent;
+@property (nonatomic, strong) UIWebView * webView;
 
 @property (nonatomic, weak) id <MCOMessageViewDelegate> delegate;
 

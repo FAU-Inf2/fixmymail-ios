@@ -19,6 +19,7 @@
 #import "MyRNEncryptor.h"
 #import "ObjectivePGP.h"
 #import "UNNetPGP.h"
+#import "HTMLRenderDelegateBridge.h"
 
 
 //#endif

@@ -26,7 +26,7 @@
 #import "DelayedAttachment.h"
 #import "UTIFunctions.h"
 
-@interface MCTMsgViewController () <UIGestureRecognizerDelegate, UIPopoverControllerDelegate, ActionPickerDelegate>
+@interface MCTMsgViewController () <UIGestureRecognizerDelegate, UIPopoverControllerDelegate, ActionPickerDelegate, UIScrollViewDelegate>
 {
     UIPopoverController *_actionPickerPopover;
     ActionPickerViewController *_actionPicker;
@@ -69,7 +69,10 @@
     _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _scrollView.scrollEnabled = YES;
-    _scrollView.directionalLockEnabled = YES;
+//    _scrollView.directionalLockEnabled = YES;
+    _scrollView.delegate = self;
+//    _scrollView.minimumZoomScale = 0.5;
+//    _scrollView.maximumZoomScale = 6.0;
     
     NSMutableArray *delayed = [[NSMutableArray alloc] init];
     for (MCOIMAPPart *a in [self.message attachments]) {
@@ -232,11 +235,21 @@ typedef void (^DownloadCallback)(NSError * error);
     }
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return _messageView.webView;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return _messageView.gestureRecognizerEnabled;
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+    
 }
 
 #pragma mark - ActionPickerDelegate
@@ -473,16 +486,19 @@ typedef void (^DownloadCallback)(NSError * error);
     [self hideSpinner];
     
     NSString *webViewContentHeight = [webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"];
+    NSString *webViewContentWidth = [webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetWidth;"];
     CGFloat contentHeight = (CGFloat)webViewContentHeight.floatValue;
-    CGFloat contentWidth = webView.scrollView.contentSize.width;
+    CGFloat contentWidth = (CGFloat)webViewContentWidth.floatValue;
     contentHeight = contentHeight > (self.view.bounds.size.height - _headerView.bounds.size.height) ? contentHeight : (self.view.bounds.size.height - _headerView.bounds.size.height);
     
-    _messageContentsView.frame = CGRectMake(_messageContentsView.frame.origin.x, _messageContentsView.frame.origin.y, contentWidth, contentHeight);
+//    _messageContentsView.frame = CGRectMake(_messageContentsView.frame.origin.x, _messageContentsView.frame.origin.y, contentWidth, contentHeight);
     
     for (UIView *v in webView.scrollView.subviews){
+        webView.scrollView.contentSize = CGSizeMake(contentWidth, contentHeight);
         [_messageContentsView addSubview:v];
     }
     
+//    _scrollView.contentSize = CGSizeMake(contentWidth, _headerView.bounds.size.height + _messageContentsView.bounds.size.height);
     _scrollView.contentSize = CGSizeMake(_messageContentsView.bounds.size.width, _headerView.bounds.size.height + _messageContentsView.bounds.size.height);
 
 }
