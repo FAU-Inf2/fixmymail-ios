@@ -8,36 +8,25 @@
 
 import UIKit
 
-protocol CellDelegate {
-	func didClickOnCellInfoButton(cellIndex: Int)
-}
 
-class KeyItemTableViewCell: UITableViewCell, CellDelegate {
+class KeyItemTableViewCell: UITableViewCell {
 	
 	
 	@IBOutlet weak var LabelKeyOwner: UILabel!
 	@IBOutlet weak var LabelMailAddress: UILabel!
-	@IBOutlet weak var LabelSecretKey: UILabel!
-	@IBOutlet weak var LabelPublicKey: UILabel!
-	@IBOutlet weak var LabelSMIME: UILabel!
-	@IBOutlet weak var LabelPGP: UILabel!
 	@IBOutlet weak var LabelKeyID: UILabel!
 	@IBOutlet weak var LabelValidThru: UILabel!
-	@IBOutlet weak var LabelValid1: UILabel!
-	@IBOutlet weak var LabelValid2: UILabel!
-	@IBOutlet weak var LabelValid3: UILabel!
-	@IBOutlet weak var LabelValid4: UILabel!
-	@IBOutlet weak var LabelValid5: UILabel!
+	@IBOutlet weak var secKey: UIImageView!
+	@IBOutlet weak var pubKey: UIImageView!
+	@IBOutlet weak var smime: UIImageView!
+	@IBOutlet weak var pgp: UIImageView!
+	@IBOutlet weak var validIndicator1: UIImageView!
+	@IBOutlet weak var validIndicator2: UIImageView!
+	@IBOutlet weak var validIndicator3: UIImageView!
+	@IBOutlet weak var validIndicator4: UIImageView!
+	@IBOutlet weak var validIndicator5: UIImageView!
 	
-	@IBOutlet weak var ButtonKeyDetail: UIButton!
 	
-	var delegate: CellDelegate?
-	var cellIndex: Int?
-	
-	// http://stackoverflow.com/questions/20655060/get-button-click-inside-ui-table-view-cell
-	@IBAction func keyDetailButtonClicked(sender: UIButton) {
-		self.delegate!.didClickOnCellInfoButton(cellIndex!)
-	}
 	
 
     override func awakeFromNib() {
@@ -51,8 +40,5 @@ class KeyItemTableViewCell: UITableViewCell, CellDelegate {
         // Configure the view for the selected state
     }
 	
-	// impl to fullfil protocol
-	func didClickOnCellInfoButton(cellIndex: Int) {
-	}
 
 }

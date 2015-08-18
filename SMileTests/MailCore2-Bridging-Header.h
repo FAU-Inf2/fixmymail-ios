@@ -18,6 +18,9 @@
 #import "RNDecryptor.h"
 #import "MyRNEncryptor.h"
 #import "ObjectivePGP.h"
+#import "PGPPacket.h"
+#import "PGPPublicKeyPacket.h"
+#import "PGPSecretKeyPacket.h"
 #import "UNNetPGP.h"
 #import "HTMLRenderDelegateBridge.h"
 

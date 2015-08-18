@@ -17,6 +17,7 @@ class ReceivedFileViewController: UIViewController {
 	var file: NSData?
 	var fileManager: NSFileManager?
 	var docController: UIDocumentInteractionController?
+	var crypto: SMileCrypto = SMileCrypto()
 	
 
     override func viewDidLoad() {
@@ -25,7 +26,7 @@ class ReceivedFileViewController: UIViewController {
 		// load file
 		self.fileManager = NSFileManager.defaultManager()
 		self.file = self.fileManager!.contentsAtPath(self.url!.path!)
-		docController = UIDocumentInteractionController(URL: self.url!)
+		
 		
         // Do any additional setup after loading the view.
 		// set navigationbar
@@ -34,6 +35,7 @@ class ReceivedFileViewController: UIViewController {
 		var cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		var importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
 		var decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
+		var encryptButton: UIBarButtonItem = UIBarButtonItem(title: "Encrypt file", style: .Plain, target: self, action: "encryptTapped:")
 		// file is a .asc or .gpg file
 		if self.fileIsKeyfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
 			if self.isPGPKey(self.url!) == true {
@@ -42,6 +44,9 @@ class ReceivedFileViewController: UIViewController {
 				navItem.rightBarButtonItems = [decryptButton]
 			}
 			
+		} else {
+			// other files
+			navItem.rightBarButtonItems = [encryptButton]
 		}
 		navItem.leftBarButtonItems = [cancelItem]
 		navigationBar.items = [navItem]
@@ -81,9 +86,10 @@ class ReceivedFileViewController: UIViewController {
 	
 	@IBAction func importTapped(sender: AnyObject) -> Void {
 		// import key
-		var crypto: SMileCrypto = SMileCrypto()
 		var success = crypto.importKey(self.url!)
 		if success {
+			var button = sender as! UIBarButtonItem
+			button.enabled = false
 			self.label.text = "Import Successful"
 			self.image.image = UIImage(named: "Checkmark-icon.png")
 			self.delay(1.0) {
@@ -97,32 +103,59 @@ class ReceivedFileViewController: UIViewController {
 			self.image.image = UIImage(named: "x_icon.png")
 		}
 		
-		// DEBUG
-		crypto.printAllPublicKeys()
-		crypto.printAllSecretKeys()
-		
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		var crypto: SMileCrypto = SMileCrypto()
-		crypto.printAllPublicKeys()
-		crypto.printAllSecretKeys()
+		// DEBUG ###########
+		var fileReadError: NSError?
+		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
+		var pw = ""
+		if path != nil {
+			pw = String(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &fileReadError)!
+		}
 		
-		
-		var decryptedFile = crypto.decryptFile(self.url!, passphrase: "", encryptionType: "PGP")
-		if decryptedFile != nil {
+		if fileReadError == nil {
+		// ##################
+			var (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: pw, encryptionType: "PGP")
+			if decryptedFile != nil && error == nil {
+				var button = sender as! UIBarButtonItem
+				button.enabled = false
+				self.fileManager!.removeItemAtURL(self.url!, error: nil)
+				self.url = decryptedFile!
+				self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
+				self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
+				self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+				
+			} else {
+				if error != nil {
+					NSLog("Decrytpion Error: \(error?.localizedDescription)")
+				}
+			}
+		}
+	}
+	
+	@IBAction func encryptTapped(sender: AnyObject) -> Void {
+		var (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+		if encryptedFile != nil && error == nil {
+			var button = sender as! UIBarButtonItem
+			button.enabled = false
 			self.fileManager!.removeItemAtURL(self.url!, error: nil)
-			self.url = decryptedFile!
+			self.url = encryptedFile!
+			self.file = self.fileManager!.contentsAtPath(self.url!.path!)
 			self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
 			self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
-			self.file = self.fileManager!.contentsAtPath(self.url!.path!)
-	
+			
+		} else {
+			if error != nil {
+				NSLog("Encryption Error: \(error?.localizedDescription)")
+			}
 		}
-	
+		
 	}
 	
 	
 	@IBAction func actionTapped(sender: AnyObject) -> Void {
+		self.docController = UIDocumentInteractionController(URL: self.url!)
 		self.docController!.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
 	}
 	

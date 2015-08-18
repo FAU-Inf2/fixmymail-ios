@@ -91,7 +91,7 @@ static const unsigned int PGP_SALT_SIZE = 8;
     }
 
     if (_specifier == PGPS2KSpecifierIteratedAndSalted) {
-        NSAssert(self.uncodedCount == 0, @"Count value is 0");
+ //       NSAssert(self.uncodedCount == 0, @"Count value is 0");
         [data appendBytes:&_uncodedCount length:1];
     }
 
