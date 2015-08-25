@@ -3,8 +3,9 @@ import CoreData
 import AddressBook
 import Foundation
 import AddressBookUI
+import AssetsLibrary
 
-class MailSendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIActionSheetDelegate {
+class MailSendViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIActionSheetDelegate {
     
     //MARK: - Variables
     @IBOutlet weak var sendTableView: UITableView!
@@ -22,6 +23,7 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     var bccRecipients: NSMutableArray = NSMutableArray()
     var subject: String = ""
     var textBody: String = ""
+    var attachments: NSMutableDictionary = NSMutableDictionary()
     
     var account: EmailAccount!
     var allAccounts: [EmailAccount]!
@@ -57,7 +59,8 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmailWithSender:")
-        self.navigationItem.rightBarButtonItem = buttonSend
+        var buttonImagePicker: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "pushImagePickerViewWithSender:")
+        self.navigationItem.rightBarButtonItems = [buttonSend, buttonImagePicker]
         var buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "performCancelWithSender:")
         self.navigationItem.leftBarButtonItem = buttonCancel
         
@@ -412,32 +415,71 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
         switch buttonIndex {
         case 0:
-            self.navigationController?.popViewControllerAnimated(true)
+            if actionSheet.tag == 1 {
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        /*case 1:
+            if actionSheet.tag == 2 {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+                imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.Rear
+                imagePicker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }*/
         case 2:
-            //Move Email to drafts Folder
-            let imapSession = getSession(self.account)
-            
-            //get draftsFolderName
-            let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
-            fetchFoldersOp.start({ (error, folders) -> Void in
-                for folder in folders {
-                    if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
-                        var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
-                        appendMsgOp.start({ (error, uid) -> Void in
-                            if error != nil {
-                                NSLog("%@", error.description)
-                            } else {
-                                NSLog("Draft saved")
-                            }
-                        })
-                        break
+            if actionSheet.tag == 1 {
+                //Move Email to drafts Folder
+                let imapSession = getSession(self.account)
+                
+                //get draftsFolderName
+                let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
+                fetchFoldersOp.start({ (error, folders) -> Void in
+                    for folder in folders {
+                        if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
+                            var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
+                            appendMsgOp.start({ (error, uid) -> Void in
+                                if error != nil {
+                                    NSLog("%@", error.description)
+                                } else {
+                                    NSLog("Draft saved")
+                                }
+                            })
+                            break
+                        }
                     }
-                }
-            })
-            
-            self.navigationController?.popViewControllerAnimated(true)
+                })
+                
+                self.navigationController?.popViewControllerAnimated(true)
+            } else {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }
         default:
             break
+        }
+    }
+    
+    //MARK: - UIImagePickerControllerDelegate
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        let dictionary = NSDictionary(dictionary: info)
+        let data = UIImagePNGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage)
+        
+        if picker.sourceType == UIImagePickerControllerSourceType.PhotoLibrary {
+            let refURL: NSURL = dictionary.valueForKey(UIImagePickerControllerReferenceURL) as! NSURL
+            
+            let assetsLibrary: ALAssetsLibrary = ALAssetsLibrary()
+            assetsLibrary.assetForURL(refURL, resultBlock: { (imageAsset) -> Void in
+                let imageRep: ALAssetRepresentation = imageAsset.defaultRepresentation()
+                self.attachments.setValue(data, forKey: imageRep.filename())
+                }) { (error) -> Void in
+                    
+            }
+        } else {
+            self.attachments.setValue(data, forKey: "bild.JPG")
         }
     }
     
@@ -498,10 +540,17 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         text = self.replaceSignatureWithText(text, toDelete: self.account.signature, toInsert: "")
         if self.recipients.count != 0 || self.ccRecipients.count != 0 || self.bccRecipients.count != 0 || self.subject != "" || text != "\n" {
             var cancelActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Delete Draft", otherButtonTitles: "Save Draft")
+            cancelActionSheet.tag = 1
             cancelActionSheet.showInView(self.view)
         } else {
             self.navigationController?.popViewControllerAnimated(true)
         }
+    }
+    
+    func pushImagePickerViewWithSender(sender: AnyObject) {
+        var attachmentActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Take Photo or Video", "Choose existing")
+        attachmentActionSheet.tag = 2
+        attachmentActionSheet.showInView(self.view)
     }
     
     func addSignature() {
@@ -535,6 +584,10 @@ class MailSendViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         builder.header.subject = self.subject
         builder.textBody = self.textBody
+        for (fileName, attachment) in self.attachments {
+            NSLog("%@\n\n", fileName as! String)
+            builder.addAttachment(MCOAttachment(data: attachment as! NSData, filename: fileName as! String))
+        }
         
         return builder.data()
     }

@@ -142,6 +142,7 @@
 		8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */; };
 		8E63CE561B53E03E00DC9B04 /* MoveEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */; };
 		8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */; };
+		8E84EAC71B8C9B5B00621926 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */; };
 		A57032F3C67E01D83552C847 /* libPods-SMile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 442C288A316BE4CDB9E2D43B /* libPods-SMile.a */; };
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
@@ -434,6 +435,7 @@
 		8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoveEmailViewController.xib; sourceTree = "<group>"; };
 		8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellWithTextView.swift; sourceTree = "<group>"; };
 		8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellWithTextView.xib; sourceTree = "<group>"; };
+		8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		948593F7BA81284FFBF715C1 /* Pods-SMile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMile.release.xcconfig"; path = "Pods/Target Support Files/Pods-SMile/Pods-SMile.release.xcconfig"; sourceTree = "<group>"; };
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
@@ -611,6 +613,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E84EAC71B8C9B5B00621926 /* AssetsLibrary.framework in Frameworks */,
 				3DD3C74B1B7BD02D00F53EAA /* MobileCoreServices.framework in Frameworks */,
 				8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */,
 				8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */,
@@ -632,6 +635,7 @@
 		2A2A175FE96269B32B7F3D98 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */,
 				3DD3C74A1B7BD02D00F53EAA /* MobileCoreServices.framework */,
 				442C288A316BE4CDB9E2D43B /* libPods-SMile.a */,
 			);
