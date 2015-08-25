@@ -14,23 +14,27 @@ var sessionDictionary = [String: MCOIMAPSession]()
 var trashFolderDictionary = [String: String]()
 var archiveFolderDictionary = [String: String]()
 
+func createNewSession(account: EmailAccount) {
+    let session = MCOIMAPSession()
+    session.hostname = account.imapHostname
+    session.port = UInt32(account.imapPort.unsignedIntegerValue)
+    session.username = account.username
+    
+    let (dictionary, error) = Locksmith.loadDataForUserAccount(account.emailAddress)
+    if error == nil {
+        session.password = dictionary?.valueForKey("Password:") as! String
+    }
+    
+    session.authType = StringToAuthType(account.authTypeImap)
+    session.connectionType = StringToConnectionType(account.connectionTypeImap)
+    
+    sessionDictionary[account.accountName] = session
+}
+
 func getSession(account: EmailAccount) -> MCOIMAPSession {
     if sessionDictionary[account.accountName] == nil {
         //Neue Session
-        let session = MCOIMAPSession()
-        session.hostname = account.imapHostname
-        session.port = UInt32(account.imapPort.unsignedIntegerValue)
-        session.username = account.username
-        
-        let (dictionary, error) = Locksmith.loadDataForUserAccount(account.emailAddress)
-        if error == nil {
-            session.password = dictionary?.valueForKey("Password:") as! String
-        }
-        
-        session.authType = StringToAuthType(account.authTypeImap)
-        session.connectionType = StringToConnectionType(account.connectionTypeImap)
-        
-        sessionDictionary[account.accountName] = session
+        createNewSession(account)
     }
     
     return sessionDictionary[account.accountName]!

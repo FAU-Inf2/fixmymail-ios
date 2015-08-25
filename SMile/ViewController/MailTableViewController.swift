@@ -267,6 +267,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         NSLog("%i new Emails", messages.count)
                         //Load new Emails
                         for message in messages {
+                            //Workaround
+                            if (message as! MCOIMAPMessage).uid == currentMaxUID {
+                                continue
+                            }
                             var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
                             NSLog(String((message as! MCOIMAPMessage).uid))
                             newEmail.mcomessage = message
@@ -298,6 +302,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                     newEmail.plainText = parser.plainTextBodyRendering()
                                     
                                     //Add newEmail to Array
+                                    NSLog("data downlaod")
                                     self.insertEmailToArray(newEmail)
                                     
                                     self.saveCoreDataChanges()
