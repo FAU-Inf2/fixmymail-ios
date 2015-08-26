@@ -111,7 +111,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var mailcell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
         let mail = self.emails[indexPath.row]
-        //let mail = fetchedResultsController.objectAtIndexPath(indexPath) as! Email
         
         mailcell.mailFrom.text = mail.sender
         mailcell.mailSubject.text = mail.title
@@ -294,6 +293,26 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         }else {
                             for mail in localEmails {
                                 var deleted = true
+                                
+                                //reload missing data
+                                if (mail as! Email).data.length == 0 {
+                                    //Fetch data
+                                    let fetchOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: ((mail as! Email).mcomessage as! MCOIMAPMessage).uid)
+                                    
+                                    fetchOp.start({(error, data) in
+                                        if error != nil {
+                                            NSLog("Could not recieve mail: %@", error)
+                                        } else {
+                                            (mail as! Email).data = data
+                                            let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                                            (mail as! Email).plainText = parser.plainTextBodyRendering()
+                                            
+                                            self.saveCoreDataChanges()
+                                            self.refreshTableView()
+                                        }
+                                    })
+                                }
+                                
                                 for message in messages {
                                     if (message as! MCOIMAPMessage).uid == ((mail as! Email).mcomessage as! MCOIMAPMessage).uid {
                                         if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags{
