@@ -278,26 +278,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SidebarTableViewController.xib; sourceTree = "<group>"; };
+		3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarTableViewController.xib; path = SMile/ViewController/Sidebar/SidebarTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		3D0FFD6A1B0A22F100C4F8F6 /* SideBarTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SideBarTableViewCell.xib; sourceTree = "<group>"; };
-		3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContentViewController.xib; sourceTree = "<group>"; };
+		3D0FFD6C1B0A297700C4F8F6 /* ContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContentViewController.xib; path = SMile/ViewController/Sidebar/ContentViewController.xib; sourceTree = SOURCE_ROOT; };
 		3D21286D1B2DF57100C9FC4C /* Email.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Email.swift; sourceTree = "<group>"; };
 		3D2128711B2DF57200C9FC4C /* EmailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccount.swift; sourceTree = "<group>"; };
 		3D3654E11B385566003B38F0 /* SideBarSubFolderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarSubFolderTableViewCell.swift; sourceTree = "<group>"; };
 		3D3654E21B385566003B38F0 /* SideBarSubFolderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SideBarSubFolderTableViewCell.xib; sourceTree = "<group>"; };
-		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		3D37FFA81B01DBC200388F81 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentViewController.swift; path = SMile/ViewController/Sidebar/ContentViewController.swift; sourceTree = SOURCE_ROOT; };
 		3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPFolderFetcher.swift; sourceTree = "<group>"; };
 		3D65A4CA1B53014E00E88CC7 /* triangle_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = triangle_bottom.png; sourceTree = "<group>"; };
 		3D65A4CB1B53014E00E88CC7 /* triangle_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = triangle_right.png; sourceTree = "<group>"; };
 		3D69EB981B83709C0082EF5C /* EmailCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailCache.swift; sourceTree = "<group>"; };
-		3D69EB9A1B8370AA0082EF5C /* EmailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
-		3D69EB9C1B8370B20082EF5C /* EmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailViewController.swift; sourceTree = "<group>"; };
-		3D69EBA11B83A4CB0082EF5C /* SenderInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderInfoTableViewCell.swift; sourceTree = "<group>"; };
-		3D69EBA21B83A4CB0082EF5C /* SenderInfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SenderInfoTableViewCell.xib; sourceTree = "<group>"; };
-		3D69EBA51B83A5020082EF5C /* SubjectInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectInfoTableViewCell.swift; sourceTree = "<group>"; };
-		3D69EBA61B83A5020082EF5C /* SubjectInfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubjectInfoTableViewCell.xib; sourceTree = "<group>"; };
-		3D69EBA91B83A5100082EF5C /* HTMLRenderDelegateBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLRenderDelegateBridge.h; sourceTree = "<group>"; };
-		3D69EBAA1B83A5100082EF5C /* HTMLRenderDelegateBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLRenderDelegateBridge.m; sourceTree = "<group>"; };
+		3D69EB9A1B8370AA0082EF5C /* EmailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailView.swift; path = SMile/ViewController/EmailViewController/EmailView.swift; sourceTree = SOURCE_ROOT; };
+		3D69EB9C1B8370B20082EF5C /* EmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailViewController.swift; path = SMile/ViewController/EmailViewController/EmailViewController.swift; sourceTree = SOURCE_ROOT; };
+		3D69EBA11B83A4CB0082EF5C /* SenderInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SenderInfoTableViewCell.swift; path = SMile/ViewController/EmailViewController/SenderInfoTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		3D69EBA21B83A4CB0082EF5C /* SenderInfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SenderInfoTableViewCell.xib; path = SMile/ViewController/EmailViewController/SenderInfoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		3D69EBA51B83A5020082EF5C /* SubjectInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubjectInfoTableViewCell.swift; path = SMile/ViewController/EmailViewController/SubjectInfoTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		3D69EBA61B83A5020082EF5C /* SubjectInfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SubjectInfoTableViewCell.xib; path = SMile/ViewController/EmailViewController/SubjectInfoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		3D69EBA91B83A5100082EF5C /* HTMLRenderDelegateBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTMLRenderDelegateBridge.h; path = SMile/ViewController/EmailViewController/HTMLRenderDelegateBridge.h; sourceTree = SOURCE_ROOT; };
+		3D69EBAA1B83A5100082EF5C /* HTMLRenderDelegateBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTMLRenderDelegateBridge.m; path = SMile/ViewController/EmailViewController/HTMLRenderDelegateBridge.m; sourceTree = SOURCE_ROOT; };
 		3D69EC601B83AB410082EF5C /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		3D69EC611B83AB410082EF5C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		3D69EC631B83AB9A0082EF5C /* keynote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keynote.png; sourceTree = "<group>"; };
@@ -394,8 +394,8 @@
 		3D69ED041B83ABE20082EF5C /* MCOMessageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MCOMessageView.mm; sourceTree = "<group>"; };
 		3D69ED051B83ABE20082EF5C /* MCTMsgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCTMsgViewController.h; sourceTree = "<group>"; };
 		3D69ED061B83ABE20082EF5C /* MCTMsgViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MCTMsgViewController.mm; sourceTree = "<group>"; };
-		3D69ED121B83ABFD0082EF5C /* MCOMessageViewScript.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MCOMessageViewScript.js; sourceTree = "<group>"; };
-		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
+		3D69ED121B83ABFD0082EF5C /* MCOMessageViewScript.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = MCOMessageViewScript.js; path = SMile/ViewController/EmailViewController/MCOMessageViewScript.js; sourceTree = SOURCE_ROOT; };
+		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SidebarTableViewController.swift; path = SMile/ViewController/Sidebar/SidebarTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
 		3D90275D1AF97167000D3E72 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3DA302941B2ED122003CE16A /* ImapFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImapFolder.swift; sourceTree = "<group>"; };
@@ -407,7 +407,7 @@
 		3DF253AB1AF7611D00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253AC1AF7611D00B99BC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DF253AF1AF7611D00B99BC8 /* SMile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SMile.xcdatamodel; sourceTree = "<group>"; };
-		3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		3DF253B11AF7611D00B99BC8 /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContainerViewController.swift; path = SMile/ViewController/Sidebar/ContainerViewController.swift; sourceTree = SOURCE_ROOT; };
 		3DF253B41AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3DF253B61AF7611D00B99BC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3DF253B91AF7611D00B99BC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -425,21 +425,21 @@
 		8E14411B1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellWithLabelAndTextField.xib; sourceTree = "<group>"; };
 		8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMailTableViewCell.swift; sourceTree = "<group>"; };
 		8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomMailTableViewCell.xib; sourceTree = "<group>"; };
-		8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailSendViewController.swift; sourceTree = "<group>"; };
-		8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailTableViewController.swift; sourceTree = "<group>"; };
-		8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailTableViewController.xib; sourceTree = "<group>"; };
+		8E450B991B15BBF0001E37B9 /* MailSendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MailSendViewController.swift; path = SMile/ViewController/MailSendViewController.swift; sourceTree = SOURCE_ROOT; };
+		8E450B9B1B15BBF0001E37B9 /* MailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MailTableViewController.swift; path = SMile/ViewController/MailTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		8E450B9C1B15BBF0001E37B9 /* MailTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MailTableViewController.xib; path = SMile/ViewController/MailTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveEmailViewController.swift; sourceTree = "<group>"; };
-		8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoveEmailViewController.xib; sourceTree = "<group>"; };
+		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = SMile/ViewController/WebViewController.swift; sourceTree = SOURCE_ROOT; };
+		8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoveEmailViewController.swift; path = SMile/ViewController/MoveEmailViewController.swift; sourceTree = SOURCE_ROOT; };
+		8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MoveEmailViewController.xib; path = SMile/ViewController/MoveEmailViewController.xib; sourceTree = SOURCE_ROOT; };
 		8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellWithTextView.swift; sourceTree = "<group>"; };
 		8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendViewCellWithTextView.xib; sourceTree = "<group>"; };
 		8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		948593F7BA81284FFBF715C1 /* Pods-SMile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMile.release.xcconfig"; path = "Pods/Target Support Files/Pods-SMile/Pods-SMile.release.xcconfig"; sourceTree = "<group>"; };
-		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
-		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
-		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
+		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MailSendViewController.xib; path = SMile/ViewController/MailSendViewController.xib; sourceTree = SOURCE_ROOT; };
+		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferenceAccountListTableViewController.swift; path = SMile/ViewController/Preferences/PreferenceAccountListTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferenceAccountListTableViewController.xib; path = SMile/ViewController/Preferences/PreferenceAccountListTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
 		AD1255DD1B1A2B6C005EA5CE /* Gmail-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Gmail-128.png"; sourceTree = "<group>"; };
 		AD1255DF1B1A302F005EA5CE /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
@@ -450,10 +450,10 @@
 		AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccountSupport.swift; sourceTree = "<group>"; };
-		AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevPasswordViewController.swift; sourceTree = "<group>"; };
-		AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DevPasswordViewController.xib; sourceTree = "<group>"; };
-		AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceivedFileViewController.swift; sourceTree = "<group>"; };
-		AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReceivedFileViewController.xib; sourceTree = "<group>"; };
+		AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DevPasswordViewController.swift; path = SMile/ViewController/DevPasswordViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DevPasswordViewController.xib; path = SMile/ViewController/DevPasswordViewController.xib; sourceTree = SOURCE_ROOT; };
+		AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReceivedFileViewController.swift; path = SMile/ViewController/ReceivedFileViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD43C8031B70F92600C8F286 /* ReceivedFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ReceivedFileViewController.xib; path = SMile/ViewController/ReceivedFileViewController.xib; sourceTree = SOURCE_ROOT; };
 		AD43C8081B71199900C8F286 /* fileicon_standard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fileicon_standard.png; sourceTree = "<group>"; };
 		AD43C8091B71199900C8F286 /* keyicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keyicon.png; sourceTree = "<group>"; };
 		AD43C80C1B7247F400C8F286 /* fileicon_lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fileicon_lock.png; sourceTree = "<group>"; };
@@ -465,8 +465,8 @@
 		AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextfieldWithPadding.swift; sourceTree = "<group>"; };
 		AD44E0351B1B51ED00751FFA /* icloud-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icloud-icon.png"; sourceTree = "<group>"; };
 		AD44E0371B1B528400751FFA /* fau-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fau-logo.png"; sourceTree = "<group>"; };
-		AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewController.swift; sourceTree = "<group>"; };
-		AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewController.xib; sourceTree = "<group>"; };
+		AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthConTableViewController.swift; path = SMile/ViewController/Preferences/AuthConTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AuthConTableViewController.xib; path = SMile/ViewController/Preferences/AuthConTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewCell.swift; sourceTree = "<group>"; };
 		AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewCell.xib; sourceTree = "<group>"; };
 		AD4E57D91B7F781000E8C521 /* UserIdItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserIdItem.swift; sourceTree = "<group>"; };
@@ -558,19 +558,19 @@
 		AD4FB15B1B88C08C004D18CB /* RNDecryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNDecryptor.m; sourceTree = "<group>"; };
 		AD4FB15C1B88C08C004D18CB /* RNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNEncryptor.h; sourceTree = "<group>"; };
 		AD4FB15D1B88C08C004D18CB /* RNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNEncryptor.m; sourceTree = "<group>"; };
-		AD5292611B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefFolderSelectionTableViewController.swift; sourceTree = "<group>"; };
-		AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefFolderSelectionTableViewController.xib; sourceTree = "<group>"; };
-		AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceStandardAccountTableViewController.swift; sourceTree = "<group>"; };
-		AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceStandardAccountTableViewController.xib; sourceTree = "<group>"; };
+		AD5292611B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrefFolderSelectionTableViewController.swift; path = SMile/ViewController/Preferences/PrefFolderSelectionTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PrefFolderSelectionTableViewController.xib; path = SMile/ViewController/Preferences/PrefFolderSelectionTableViewController.xib; sourceTree = SOURCE_ROOT; };
+		AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferenceStandardAccountTableViewController.swift; path = SMile/ViewController/Preferences/PreferenceStandardAccountTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferenceStandardAccountTableViewController.xib; path = SMile/ViewController/Preferences/PreferenceStandardAccountTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		AD6F68441B6E17400015B79E /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
-		AD789D971B3050640001719E /* FeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedbackViewController.xib; sourceTree = "<group>"; };
-		AD789D981B3050640001719E /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		AD789D971B3050640001719E /* FeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FeedbackViewController.xib; path = SMile/ViewController/Preferences/FeedbackViewController.xib; sourceTree = SOURCE_ROOT; };
+		AD789D981B3050640001719E /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedbackViewController.swift; path = SMile/ViewController/Preferences/FeedbackViewController.swift; sourceTree = SOURCE_ROOT; };
 		AD789D9C1B3054A00001719E /* Feedback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Feedback.html; sourceTree = "<group>"; };
-		AD789DA01B319BC30001719E /* AboutUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutUsViewController.swift; sourceTree = "<group>"; };
-		AD789DA11B319BC30001719E /* AboutUsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutUsViewController.xib; sourceTree = "<group>"; };
+		AD789DA01B319BC30001719E /* AboutUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AboutUsViewController.swift; path = SMile/ViewController/Preferences/AboutUsViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD789DA11B319BC30001719E /* AboutUsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AboutUsViewController.xib; path = SMile/ViewController/Preferences/AboutUsViewController.xib; sourceTree = SOURCE_ROOT; };
 		AD789DA41B31A4420001719E /* AboutUs.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutUs.html; sourceTree = "<group>"; };
-		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
-		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
+		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferenceTableViewController.swift; path = SMile/ViewController/Preferences/PreferenceTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferenceTableViewController.xib; path = SMile/ViewController/Preferences/PreferenceTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
 		AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewCell.xib; sourceTree = "<group>"; };
 		AD85401C1B186A7C003F9C92 /* ActionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItem.swift; sourceTree = "<group>"; };
@@ -578,18 +578,18 @@
 		AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v2.xcdatamodel"; sourceTree = "<group>"; };
 		AD97A0CB1B7DE7250068E542 /* UserID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserID.swift; sourceTree = "<group>"; };
 		AD97A0CD1B7DEA710068E542 /* SubKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubKey.swift; sourceTree = "<group>"; };
-		ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefAccountBehaviorTableViewController.swift; sourceTree = "<group>"; };
-		ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefAccountBehaviorTableViewController.xib; sourceTree = "<group>"; };
-		ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesPreviewLinesTableViewController.swift; sourceTree = "<group>"; };
-		ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesPreviewLinesTableViewController.xib; sourceTree = "<group>"; };
-		ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainListTableViewController.swift; sourceTree = "<group>"; };
+		ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrefAccountBehaviorTableViewController.swift; path = SMile/ViewController/Preferences/PrefAccountBehaviorTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PrefAccountBehaviorTableViewController.xib; path = SMile/ViewController/Preferences/PrefAccountBehaviorTableViewController.xib; sourceTree = SOURCE_ROOT; };
+		ADCAB6391B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferencesPreviewLinesTableViewController.swift; path = SMile/ViewController/Preferences/PreferencesPreviewLinesTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		ADCAB63A1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferencesPreviewLinesTableViewController.xib; path = SMile/ViewController/Preferences/PreferencesPreviewLinesTableViewController.xib; sourceTree = SOURCE_ROOT; };
+		ADD135C01B15B56300A9B31A /* KeyChainListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeyChainListTableViewController.swift; path = SMile/ViewController/KeyChainListTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		ADD135C31B15B56300A9B31A /* KeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItem.swift; sourceTree = "<group>"; };
 		ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItemTableViewCell.swift; sourceTree = "<group>"; };
 		ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyItemTableViewCell.xib; sourceTree = "<group>"; };
 		ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedClassExtensions.swift; sourceTree = "<group>"; };
-		ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyChainListTableViewController.xib; sourceTree = "<group>"; };
-		ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountTableViewController.swift; sourceTree = "<group>"; };
-		ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountTableViewController.xib; sourceTree = "<group>"; };
+		ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KeyChainListTableViewController.xib; path = SMile/ViewController/KeyChainListTableViewController.xib; sourceTree = SOURCE_ROOT; };
+		ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferenceEditAccountTableViewController.swift; path = SMile/ViewController/Preferences/PreferenceEditAccountTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreferenceEditAccountTableViewController.xib; path = SMile/ViewController/Preferences/PreferenceEditAccountTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		ADE673991B73551700C920B0 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		ADE6739B1B7365B400C920B0 /* x_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_icon.png; sourceTree = "<group>"; };
 		ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Checkmark-icon.png"; sourceTree = "<group>"; };
@@ -602,8 +602,8 @@
 		ADEF08581B8205B9008AC0D0 /* smime_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smime_label.png; sourceTree = "<group>"; };
 		ADEF08591B8205B9008AC0D0 /* yellow_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow_indicator.png; sourceTree = "<group>"; };
 		ADEF08611B823C3A008AC0D0 /* gray_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_indicator.png; sourceTree = "<group>"; };
-		ADEF08631B824F95008AC0D0 /* KeyDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailTableViewController.swift; sourceTree = "<group>"; };
-		ADEF08641B824F95008AC0D0 /* KeyDetailTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailTableViewController.xib; sourceTree = "<group>"; };
+		ADEF08631B824F95008AC0D0 /* KeyDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeyDetailTableViewController.swift; path = SMile/ViewController/KeyDetailTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		ADEF08641B824F95008AC0D0 /* KeyDetailTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KeyDetailTableViewController.xib; path = SMile/ViewController/KeyDetailTableViewController.xib; sourceTree = SOURCE_ROOT; };
 		ADEF08671B826819008AC0D0 /* KeyDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetailTableViewCell.swift; sourceTree = "<group>"; };
 		ADEF08681B826819008AC0D0 /* KeyDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyDetailTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -662,8 +662,9 @@
 				3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */,
 				3D0FFD681B09E7E100C4F8F6 /* SidebarTableViewController.xib */,
 			);
-			path = Sidebar;
-			sourceTree = "<group>";
+			name = Sidebar;
+			path = SMile/ViewController/Sidebar;
+			sourceTree = SOURCE_ROOT;
 		};
 		3D69EBA01B8371160082EF5C /* EmailViewController */ = {
 			isa = PBXGroup;
@@ -895,10 +896,10 @@
 				3DF253B31AF7611D00B99BC8 /* Main.storyboard */,
 				ADD135CE1B15B5C200A9B31A /* Model */,
 				AD8744391B6A412E00257AA5 /* SMile_Crypto */,
-				3DF253AA1AF7611D00B99BC8 /* Supporting Files */,
 				3D8D90E21B00A2AF00D5135D /* UI */,
 				3DA3029D1B3215C0003CE16A /* Utility */,
 				3D8D90DF1B00A1DE00D5135D /* ViewController */,
+				3DF253AA1AF7611D00B99BC8 /* Supporting Files */,
 			);
 			path = SMile;
 			sourceTree = "<group>";
@@ -972,8 +973,9 @@
 				AD5292611B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift */,
 				AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */,
 			);
-			path = Preferences;
-			sourceTree = "<group>";
+			name = Preferences;
+			path = SMile/ViewController/Preferences;
+			sourceTree = SOURCE_ROOT;
 		};
 		AD0100A11B19ECC4009E4E18 /* Preferences */ = {
 			isa = PBXGroup;
