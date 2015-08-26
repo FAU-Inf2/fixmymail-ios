@@ -23,6 +23,9 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var messageContent: String = ""
     var htmlRenderBridge = HTMLRenderDelegateBridge()
     var imapPartCache = [String: NSData]()
+    var ccStringHeight: CGFloat!
+    var toStringHeight: CGFloat!
+    var fromStringHeight: CGFloat!
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -77,10 +80,11 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         let standardFont = UIFont.systemFontOfSize(17.0)
         let width: CGFloat = CGFloat(self.frame.size.width - 8.0 - 8.0)
         
-        let ccStringHeight: CGFloat = self.messageHeaderInfo["cc"] != nil ? self.messageHeaderInfo["cc"]!.heightForWith(width, usingFont: standardFont) : 0.0
-        let toStringHeight: CGFloat = self.messageHeaderInfo["to"] != nil ? self.messageHeaderInfo["to"]!.heightForWith(width, usingFont: standardFont) : 0.0
-        let fromStringHeight: CGFloat = self.messageHeaderInfo["from"]!.heightForWith(width, usingFont: boldFont)
-        self.cellSenderHeight = 8.0 + 2.0 + 2.0 + 8.0 + ccStringHeight + toStringHeight + fromStringHeight
+        self.ccStringHeight = self.messageHeaderInfo["cc"] != nil ? self.messageHeaderInfo["cc"]!.heightForWith(width, usingFont: standardFont) : 0.0
+//        let toStringHeight: CGFloat = self.messageHeaderInfo["to"] != nil ? self.messageHeaderInfo["to"]!.heightForWith(width, usingFont: standardFont) : 0.0
+        self.toStringHeight = self.messageHeaderInfo["to"] != nil ? self.heightForView(self.messageHeaderInfo["to"]!, font: standardFont, width: width): 0.0
+        self.fromStringHeight = self.messageHeaderInfo["from"]!.heightForWith(width, usingFont: boldFont)
+        self.cellSenderHeight = 8.0 + 2.0 + 2.0 + 8.0 + self.ccStringHeight + self.toStringHeight + self.fromStringHeight
         
         let subjectStringHeight: CGFloat = self.messageHeaderInfo["subject"] != nil ? self.messageHeaderInfo["subject"]!.heightForWith(width, usingFont: boldFont) : "".heightForWith(width, usingFont: boldFont)
         let dateStringHeight: CGFloat = self.messageHeaderInfo["date"]!.heightForWith(width, usingFont: standardFont)
@@ -163,11 +167,16 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             let ccLabelString: String? = self.messageHeaderInfo["cc"] != nil ? self.messageHeaderInfo["cc"]! : nil
             if ccLabelString == nil {
                 senderInfoCell.ccLabel.frame.size = CGSizeZero
+                senderInfoCell.ccLabel.text = ""
             } else {
+                senderInfoCell.ccLabel.frame.size = CGSizeMake(senderInfoCell.ccLabel.frame.size.width, self.ccStringHeight)
+                senderInfoCell.ccLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
                 senderInfoCell.ccLabel.text = ccLabelString!
             }
             
             let toLabelString = self.messageHeaderInfo["to"] != nil ? self.messageHeaderInfo["to"]! : "To:"
+            senderInfoCell.toLabel.frame.size = CGSizeMake(senderInfoCell.toLabel.frame.size.width, self.toStringHeight)
+            senderInfoCell.toLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
             senderInfoCell.toLabel.text = toLabelString
             
             senderInfoCell.accessoryType = .None
@@ -217,6 +226,17 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         return returnDict
     }
     
+    private func heightForView(text:String, font: UIFont, width: CGFloat) -> CGFloat{
+        let label:UILabel = UILabel(frame: CGRectMake(0, 0, width, CGFloat.max))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        label.font = font
+        label.text = text
+        
+        label.sizeToFit()
+        return label.frame.height
+    }
+    
     private func addressStringFromArray(array :[AnyObject]?) -> String? {
         if array == nil || array!.count == 0 {
             return nil
@@ -234,7 +254,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             }
         }
         
-        return addArray.componentsJoinedByString(",")
+        return addArray.componentsJoinedByString(", ")
     }
     
     private func loadHTMLView() -> Void {
@@ -270,13 +290,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                     htmlContent = content.stringByReplacingOccurrencesOfString(("<body>\n<div style=\"font-family: Verdana;font-size: 12.0px;\">"), withString: ("<body>\n<div style=\"font-family: Helvetica;font-size: 50.0px;\">"))
                 }
             }
-            let content: NSString = htmlContent! as NSString
-            let fontSizeRange: NSRange = content.rangeOfString("font-size:")
-            if fontSizeRange.location != NSNotFound{
                 htmlString += "<html><head><script src=\"\(jsURL!.absoluteString)\"></script><style type='text/css'>body{ font-family: 'Helvetica Neue', Helvetica, Arial; margin:0; padding:30px;}\\hr {border: 0; height: 1px; background-color: #bdc3c7;}\\.show { display: none;}.hide:target + .show { display: inline;} .hide:target { display: none;} .content { display: none;} .hide:target ~ .content { display:inline;}\\</style></head><body><div style=\"font-family: Helvetica;font-size: 50.0px;\">\(htmlContent!)</div></body><iframe src='x-mailcore-msgviewloaded:' style='width: 0px; height: 0px; border: none;'></iframe></html>"
-            } else {
-                htmlString += "<html><head><script src=\"\(jsURL!.absoluteString)\"></script><style type='text/css'>body{ font-family: 'Helvetica Neue', Helvetica, Arial; font-size: 50px; margin:0; padding:30px;}\\hr {border: 0; height: 1px; background-color: #bdc3c7;}\\.show { display: none;}.hide:target + .show { display: inline;} .hide:target { display: none;} .content { display: none;} .hide:target ~ .content { display:inline;}\\</style></head><body><div style=\"font-family: Helvetica;font-size: 50.0px;\">\(htmlContent!)</div></body><iframe src='x-mailcore-msgviewloaded:' style='width: 0px; height: 0px; border: none;'></iframe></html>"
-            }
             
             EmailCache.sharedInstance.emailContentCache["\(self.message.uid)"] = htmlString
             
