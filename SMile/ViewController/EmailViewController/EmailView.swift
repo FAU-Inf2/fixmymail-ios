@@ -180,6 +180,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             senderInfoCell.toLabel.text = toLabelString
             
             senderInfoCell.accessoryType = .None
+            senderInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return senderInfoCell
         } else {
             var subjectInfoCell: SubjectInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("subjectInfoCell", forIndexPath: indexPath) as! SubjectInfoTableViewCell
@@ -190,6 +191,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             subjectInfoCell.dateLabel.text = self.messageHeaderInfo["date"]
             
             subjectInfoCell.accessoryType = .None
+            subjectInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return subjectInfoCell
         }
     }
