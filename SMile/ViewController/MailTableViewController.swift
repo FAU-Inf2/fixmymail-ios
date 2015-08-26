@@ -30,46 +30,17 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
-    /*lazy var fetchedResultsController: NSFetchedResultsController = {
-        let mailFetchRequest = NSFetchRequest(entityName: "Email")
-        let primarySortDescriptor = NSSortDescriptor(key: "mcomessage.header.receivedDate", ascending: false)
-        mailFetchRequest.sortDescriptors = [primarySortDescriptor];
-        if self.folderToQuery == nil {
-            self.folderToQuery = "INBOX"
-        }
-        
-        if self.accounts == nil {
-            mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@", "alwaysFalse")
-        } else if self.accounts?.count == 1 {
-            mailFetchRequest.predicate = NSPredicate(format: "toAccount.emailAddress == %@ && folder == %@", self.accounts!.first!.emailAddress, self.folderToQuery!)
-        }
-        
-        let frc = NSFetchedResultsController(
-            fetchRequest: mailFetchRequest,
-            managedObjectContext: self.managedObjectContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil)
-        
-        frc.delegate = self
-        
-        return frc
-        }()*/
-    
-    
-    
     
     //MARK: - Override functions
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
-        
         
         self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
         
         var menuItem: UIBarButtonItem = UIBarButtonItem(title: "Menu", style: .Plain, target: self, action: "menuTapped:")
         self.navigationItem.leftBarButtonItems = [menuItem]
         var editButton: UIBarButtonItem = UIBarButtonItem(title: "Edit", style: .Plain, target: self, action: "editToggled:")
+        editButton.enabled = false
         self.navigationItem.rightBarButtonItem = editButton
         mailTableView.allowsMultipleSelectionDuringEditing = true
         
@@ -96,16 +67,15 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 for mail in account.emails {
                     if mail.folder == folderToQuery {
                         emails.append(mail as! Email)
+                        
+                        //activate Edit Button
+                        self.navigationItem.rightBarButtonItem?.enabled = true
                     }
                 }
             }
             
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
-        /*var error: NSError? = nil
-        if (fetchedResultsController.performFetch(&error) == false) {
-            print("An error occurred: \(error?.localizedDescription)")
-        }*/
         
         imapSynchronize()
     }
@@ -115,7 +85,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if selectedEmails.count == 0 {
             setToolbarWithComposeButton()
         } else {
-            setToolbarWhileEditingAndSomethingSelected()
+            setToolbarWhileEditing()//AndSomethingSelected()
         }
     }
     
@@ -223,7 +193,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             //select Email
             selectedEmails.addObject(cell.mail)
             if selectedEmails.count == 1 {
-                setToolbarWhileEditingAndSomethingSelected()
+                setToolbarWhileEditing()//AndSomethingSelected()
             }
         }
     }
@@ -231,7 +201,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         selectedEmails.removeObject((mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail)
         if selectedEmails.count == 0 {
-            setToolbarWhileEditingAndNothingSelected()
+            setToolbarWhileEditing()//AndNothingSelected()
         }
     }
 
@@ -430,13 +400,33 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationController?.setToolbarHidden(false, animated: false)
     }
     
-    func setToolbarWhileEditingAndNothingSelected() {
+    func setToolbarWhileEditing(){
+        var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        var markAllButton = UIBarButtonItem(title: "Mark", style: UIBarButtonItemStyle.Plain, target: self, action: "markButtonAction")
+        var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
+        var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
+        
+        if selectedEmails.count == 0 {
+            markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
+            moveButton.enabled = false
+            deleteButton.enabled = false
+        }
+        
+        var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
+        self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
+        self.navigationController?.setToolbarHidden(false, animated: false)
+    }
+    
+    
+    /*func setToolbarWhileEditingAndNothingSelected() {
         var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         var markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
         var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: nil, action: "")
         var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: nil, action: "")
+        
         moveButton.enabled = false
         deleteButton.enabled = false
+        
         var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
         self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
         self.navigationController?.setToolbarHidden(false, animated: false)
@@ -448,10 +438,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         var markAllButton = UIBarButtonItem(title: "Mark", style: UIBarButtonItemStyle.Plain, target: self, action: "markButtonAction")
         var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
         var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
+        
         var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
         self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
         self.navigationController?.setToolbarHidden(false, animated: false)
-    }
+    }*/
     
     func showEmptyMailSendView() {
         self.showMailSendView(nil, ccRecipients: nil, bccRecipients: nil, subject: nil, textBody: nil)
@@ -539,7 +530,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func editToggled(sender: AnyObject) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
             self.navigationItem.rightBarButtonItem?.title = "Done"
-            setToolbarWhileEditingAndNothingSelected()
+            setToolbarWhileEditing()//AndNothingSelected()
             mailTableView.setEditing(true, animated: true)
         } else {
             endEditing()
@@ -642,6 +633,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         objc_sync_enter(self.emails)
         if emails.count == 0 {
             emails.append(newEmail)
+            
+            //activate Edit Button
+            self.navigationItem.rightBarButtonItem?.enabled = true
             return
         }
         if (newEmail.mcomessage as! MCOIMAPMessage).header.receivedDate > (emails.first!.mcomessage as! MCOIMAPMessage).header.receivedDate {
