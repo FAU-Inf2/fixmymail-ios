@@ -141,8 +141,10 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                 if self.emailViewDelegate != nil && self.emailViewDelegate!.respondsToSelector("handleMailtoWithRecipients:andSubject:andHTMLString:") {
                     self.emailViewDelegate!.handleMailtoWithRecipients([request.URL?.resourceSpecifier ?? ""], andSubject: (self.embededHeaderView.cellForRowAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as! SubjectInfoTableViewCell).subjectLabel.text ?? "",andHTMLString: EmailCache.sharedInstance.getHTMLStringWithUniqueEmailID("\(self.message.uid)") ?? "")
                 }
-                return false
+            } else if UIApplication.sharedApplication().canOpenURL(request.URL!) {
+                UIApplication.sharedApplication().openURL(request.URL!)
             }
+            return false
         }
         
         return true
