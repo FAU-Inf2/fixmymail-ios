@@ -44,7 +44,7 @@ class IMAPFolderFetcher: NSObject {
                     session.authType = StringToAuthType(acc.authTypeImap)
                     session.connectionType = StringToConnectionType(acc.connectionTypeImap)
                     
-                    let folderFetch = session.fetchSubscribedFoldersOperation()
+                    let folderFetch = session.fetchAllFoldersOperation()
                     folderFetch.start({ (error, folders) -> Void in
                         if error != nil {
                             println(error!.userInfo)
