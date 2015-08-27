@@ -139,6 +139,7 @@
 		8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB71B15BD2F001E37B9 /* CoreImage.framework */; };
 		8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E450BB91B15BD35001E37B9 /* ImageIO.framework */; };
 		8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E57385A1B1B19C8009AA28A /* WebViewController.swift */; };
+		8E5CA95E1B8DD7DE00C02AA4 /* attachedFile.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E5CA95D1B8DD7DE00C02AA4 /* attachedFile.png */; };
 		8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */; };
 		8E63CE561B53E03E00DC9B04 /* MoveEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */; };
 		8E6E35341B25C74C00449DC3 /* SendViewCellWithTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6E35331B25C74C00449DC3 /* SendViewCellWithTextView.xib */; };
@@ -431,6 +432,7 @@
 		8E450BB71B15BD2F001E37B9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		8E450BB91B15BD35001E37B9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		8E5CA95D1B8DD7DE00C02AA4 /* attachedFile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attachedFile.png; sourceTree = "<group>"; };
 		8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveEmailViewController.swift; sourceTree = "<group>"; };
 		8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoveEmailViewController.xib; sourceTree = "<group>"; };
 		8E6E35311B25C71100449DC3 /* SendViewCellWithTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewCellWithTextView.swift; sourceTree = "<group>"; };
@@ -994,6 +996,7 @@
 			isa = PBXGroup;
 			children = (
 				ADE6739B1B7365B400C920B0 /* x_icon.png */,
+				8E5CA95D1B8DD7DE00C02AA4 /* attachedFile.png */,
 				ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */,
 				ADEF08531B8205B9008AC0D0 /* green_indicator.png */,
 				ADEF08541B8205B9008AC0D0 /* pgp_label.png */,
@@ -1371,6 +1374,7 @@
 				AD789DA51B31A4420001719E /* AboutUs.html in Resources */,
 				3D65A4CC1B53014E00E88CC7 /* triangle_bottom.png in Resources */,
 				3D69ECE91B83AB9A0082EF5C /* pages.png in Resources */,
+				8E5CA95E1B8DD7DE00C02AA4 /* attachedFile.png in Resources */,
 				5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */,
 				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
 				3D69ECDB1B83AB9A0082EF5C /* page_white_ruby.png in Resources */,

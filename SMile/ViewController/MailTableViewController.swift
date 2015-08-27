@@ -410,7 +410,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     // MARK: - Toolbar
     func setToolbarWithComposeButton() {
-        var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showEmptyMailSendView")
+        var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showEmptyMailSendView:")
         if accounts!.count == 0 {
             composeButton.enabled = false
         }
@@ -463,7 +463,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationController?.setToolbarHidden(false, animated: false)
     }*/
     
-    func showEmptyMailSendView() {
+    func showEmptyMailSendView(sender: AnyObject) {
+        (sender as! UIBarButtonItem).enabled = false
         self.showMailSendView(nil, ccRecipients: nil, bccRecipients: nil, subject: nil, textBody: nil)
     }
     

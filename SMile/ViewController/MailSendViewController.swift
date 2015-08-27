@@ -24,6 +24,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     var subject: String = ""
     var textBody: String = ""
     var attachments: NSMutableDictionary = NSMutableDictionary()
+    var attachmentPositions: NSMutableArray = NSMutableArray()
     
     var account: EmailAccount!
     var allAccounts: [EmailAccount]!
@@ -309,8 +310,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         var oldAccount = self.account
         self.account = self.allAccounts[row]
         (self.isResponder as! UITextField).text = self.account.emailAddress
-        self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
-        (self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.text = self.textBody
+        //self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
+        //(self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.text = self.textBody
     }
     
     //MARK: - TextViewDelegate
@@ -418,7 +419,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             if actionSheet.tag == 1 {
                 self.navigationController?.popViewControllerAnimated(true)
             }
-        /*case 1:
+        case 1:
             if actionSheet.tag == 2 {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
@@ -426,7 +427,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.Rear
                 imagePicker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                 self.presentViewController(imagePicker, animated: true, completion: nil)
-            }*/
+            }
         case 2:
             if actionSheet.tag == 1 {
                 //Move Email to drafts Folder
@@ -474,12 +475,12 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             let assetsLibrary: ALAssetsLibrary = ALAssetsLibrary()
             assetsLibrary.assetForURL(refURL, resultBlock: { (imageAsset) -> Void in
                 let imageRep: ALAssetRepresentation = imageAsset.defaultRepresentation()
-                self.attachments.setValue(data, forKey: imageRep.filename())
+                self.attachFile(imageRep.filename(), data: data, mimetype: "JPG")
                 }) { (error) -> Void in
                     
             }
         } else {
-            self.attachments.setValue(data, forKey: "bild.JPG")
+            self.attachFile("image.JPG", data: data, mimetype: "JPG")
         }
     }
     
@@ -570,6 +571,28 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     //MARK: - Build and send E-Mail
+    func attachFile(filename: String, data: NSData, mimetype: String) {
+        self.attachments.setValue(data, forKey: filename)
+        var inlineImage = NSTextAttachment()
+        var scaleFactor: CGFloat = 0
+        if mimetype == "png" || mimetype == "JPG" || mimetype == "JPEG" {
+            inlineImage.image = UIImage(data: data)
+            let oldWidth = inlineImage.image!.size.width
+            scaleFactor = oldWidth / (self.textViewTextBody.frame.size.width - 10)
+        } else {
+            inlineImage.image = UIImage(named: "attachedFile.png")
+            let oldWidth = inlineImage.image!.size.width
+            scaleFactor = oldWidth / (200)
+        }
+        inlineImage.image = UIImage(CGImage: inlineImage.image!.CGImage, scale: scaleFactor, orientation: UIImageOrientation.Up)
+        var attrString = NSAttributedString(attachment: inlineImage)
+        self.textBody = self.textBody + "t"
+        var attributedString = NSMutableAttributedString(string: self.textBody)
+        attributedString.replaceCharactersInRange(NSMakeRange(count(self.textBody) - 1, 1), withAttributedString: attrString)
+        self.attachmentPositions.addObject(count(self.textBody) - 1)
+        self.textViewTextBody.attributedText = attributedString
+    }
+    
     func buildEmail() -> NSData {
         var builder = MCOMessageBuilder()
         
@@ -583,6 +606,11 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             builder.header.bcc = self.bccRecipients as [AnyObject]
         }
         builder.header.subject = self.subject
+        for attachment in self.attachmentPositions {
+            var attrString = NSMutableAttributedString(string: self.textBody)
+            attrString.replaceCharactersInRange(NSMakeRange(attachment as! Int, 1), withString: " ")
+            self.textBody = attrString.string
+        }
         builder.textBody = self.textBody
         for (fileName, attachment) in self.attachments {
             NSLog("%@\n\n", fileName as! String)
