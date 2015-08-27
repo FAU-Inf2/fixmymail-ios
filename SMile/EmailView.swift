@@ -8,11 +8,7 @@
 
 import UIKit
 
-protocol EmailViewDelegate: NSObjectProtocol {
-    func handleMailtoWithRecipients(recipients: [String], andSubject subject: String, andHTMLString html: String) -> Void
-}
-
-class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, HTMLRenderBridgeDelegate, UIWebViewDelegate {
+class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, HTMLRenderBridgeDelegate {
     
     var embededHeaderView: UITableView!
     var calculationView: UIView!
@@ -30,7 +26,6 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var ccStringHeight: CGFloat!
     var toStringHeight: CGFloat!
     var fromStringHeight: CGFloat!
-    var emailViewDelegate: EmailViewDelegate?
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -42,7 +37,6 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         
         self.webView = UIWebView(frame: frame)
         self.webView.scalesPageToFit = true
-        self.webView.delegate = self
         self.addSubview(self.webView)
         
         let spinnerSize = self.frame.width / 4
@@ -87,6 +81,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         let width: CGFloat = CGFloat(self.frame.size.width - 8.0 - 8.0)
         
         self.ccStringHeight = self.messageHeaderInfo["cc"] != nil ? self.messageHeaderInfo["cc"]!.heightForWith(width, usingFont: standardFont) : 0.0
+//        let toStringHeight: CGFloat = self.messageHeaderInfo["to"] != nil ? self.messageHeaderInfo["to"]!.heightForWith(width, usingFont: standardFont) : 0.0
         self.toStringHeight = self.messageHeaderInfo["to"] != nil ? self.heightForView(self.messageHeaderInfo["to"]!, font: standardFont, width: width): 0.0
         self.fromStringHeight = self.messageHeaderInfo["from"]!.heightForWith(width, usingFont: boldFont)
         self.cellSenderHeight = 8.0 + 2.0 + 2.0 + 8.0 + self.ccStringHeight + self.toStringHeight + self.fromStringHeight
@@ -130,24 +125,6 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     
     deinit {
         self.webView.scrollView.removeObserver(self, forKeyPath: "contentOffset")
-    }
-    
-    //MARK: - UIWebviewDelegate
-    
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        
-        if navigationType == UIWebViewNavigationType.LinkClicked {
-            if request.URL?.scheme == "mailto" {
-                if self.emailViewDelegate != nil && self.emailViewDelegate!.respondsToSelector("handleMailtoWithRecipients:andSubject:andHTMLString:") {
-                    self.emailViewDelegate!.handleMailtoWithRecipients([request.URL?.resourceSpecifier ?? ""], andSubject: (self.embededHeaderView.cellForRowAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as! SubjectInfoTableViewCell).subjectLabel.text ?? "",andHTMLString: EmailCache.sharedInstance.getHTMLStringWithUniqueEmailID("\(self.message.uid)") ?? "")
-                }
-            } else if UIApplication.sharedApplication().canOpenURL(request.URL!) {
-                UIApplication.sharedApplication().openURL(request.URL!)
-            }
-            return false
-        }
-        
-        return true
     }
     
     //MARK: - Key-Value-Observing
@@ -203,7 +180,6 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             senderInfoCell.toLabel.text = toLabelString
             
             senderInfoCell.accessoryType = .None
-            senderInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return senderInfoCell
         } else {
             var subjectInfoCell: SubjectInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("subjectInfoCell", forIndexPath: indexPath) as! SubjectInfoTableViewCell
@@ -214,7 +190,6 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             subjectInfoCell.dateLabel.text = self.messageHeaderInfo["date"]
             
             subjectInfoCell.accessoryType = .None
-            subjectInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return subjectInfoCell
         }
     }

@@ -41,7 +41,6 @@
                     <constraint firstAttribute="trailing" secondItem="y2d-Uu-5Yc" secondAttribute="trailing" constant="8" id="eVg-FD-L4p"/>
                     <constraint firstItem="Xft-DH-T0K" firstAttribute="top" secondItem="I8a-YR-IPN" secondAttribute="bottom" constant="2" id="erx-ln-SZ5"/>
                     <constraint firstItem="y2d-Uu-5Yc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="fqX-ae-nYD"/>
-                    <constraint firstAttribute="bottom" secondItem="y2d-Uu-5Yc" secondAttribute="bottom" constant="8" id="mfC-jb-4Cv"/>
                     <constraint firstItem="Xft-DH-T0K" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="oXU-Ts-hVE"/>
                 </constraints>
             </tableViewCellContentView>

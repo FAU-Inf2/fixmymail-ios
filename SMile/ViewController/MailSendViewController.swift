@@ -24,7 +24,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     var subject: String = ""
     var textBody: String = ""
     var attachments: NSMutableDictionary = NSMutableDictionary()
-    var attachmentPositions: NSMutableArray = NSMutableArray()
     
     var account: EmailAccount!
     var allAccounts: [EmailAccount]!
@@ -582,14 +581,12 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         } else {
             inlineImage.image = UIImage(named: "attachedFile.png")
             let oldWidth = inlineImage.image!.size.width
-            scaleFactor = oldWidth / (200)
+            scaleFactor = oldWidth / (300)
         }
         inlineImage.image = UIImage(CGImage: inlineImage.image!.CGImage, scale: scaleFactor, orientation: UIImageOrientation.Up)
         var attrString = NSAttributedString(attachment: inlineImage)
-        self.textBody = self.textBody + "t"
-        var attributedString = NSMutableAttributedString(string: self.textBody)
-        attributedString.replaceCharactersInRange(NSMakeRange(count(self.textBody) - 1, 1), withAttributedString: attrString)
-        self.attachmentPositions.addObject(count(self.textBody) - 1)
+        var attributedString = NSMutableAttributedString(string: self.textBody + " ")
+        attributedString.replaceCharactersInRange(NSMakeRange(count(self.textBody), 1), withAttributedString: attrString)
         self.textViewTextBody.attributedText = attributedString
     }
     
@@ -606,11 +603,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             builder.header.bcc = self.bccRecipients as [AnyObject]
         }
         builder.header.subject = self.subject
-        for attachment in self.attachmentPositions {
-            var attrString = NSMutableAttributedString(string: self.textBody)
-            attrString.replaceCharactersInRange(NSMakeRange(attachment as! Int, 1), withString: " ")
-            self.textBody = attrString.string
-        }
+        self.textBody = self.textBody.stringByReplacingOccurrencesOfString(String(Character(UnicodeScalar(NSAttachmentCharacter))), withString: " ", options: NSStringCompareOptions.LiteralSearch, range: nil)
         builder.textBody = self.textBody
         for (fileName, attachment) in self.attachments {
             NSLog("%@\n\n", fileName as! String)
