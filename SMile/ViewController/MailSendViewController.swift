@@ -17,6 +17,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     var initialTableViewHeight: CGFloat = 0
     
     var tableViewIsExpanded: Bool = false
+    var backspacePressed: Bool = false
     
     var recipients: NSMutableArray = NSMutableArray()
     var ccRecipients: NSMutableArray = NSMutableArray()
@@ -24,6 +25,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     var subject: String = ""
     var textBody: String = ""
     var attachments: NSMutableDictionary = NSMutableDictionary()
+    var keys: [String] = [String]()
+    var inlineImages: [NSTextAttachment] = [NSTextAttachment]()
     
     var account: EmailAccount!
     var allAccounts: [EmailAccount]!
@@ -309,8 +312,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         var oldAccount = self.account
         self.account = self.allAccounts[row]
         (self.isResponder as! UITextField).text = self.account.emailAddress
-        //self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
-        //(self.sendTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 5, inSection: 0)) as! SendViewCellWithTextView).textViewMailBody.text = self.textBody
+        self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
+        self.textViewTextBody.text = self.textBody
     }
     
     //MARK: - TextViewDelegate
@@ -330,11 +333,43 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func textViewDidEndEditing(textView: UITextView) {
-        self.textBody = textView.text
         self.isResponder = nil
     }
     
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if text == "" {
+            self.backspacePressed = true
+        }
+        return true
+    }
+    
     func textViewDidChange(textView: UITextView) {
+        if self.backspacePressed {
+            var indexOfAttachment = 0
+            var indexOfChar = self.textBody.startIndex
+            var textWithDeletedChar = textView.text
+            for char in self.textBody {
+                if indexOfChar == textWithDeletedChar.endIndex {
+                    textWithDeletedChar.append(Character(" "))
+                }
+                var c = textWithDeletedChar.removeAtIndex(indexOfChar)
+                if c == Character(UnicodeScalar(NSAttachmentCharacter)) {
+                    indexOfAttachment++
+                }
+                if char != c {
+                    if char == Character(UnicodeScalar(NSAttachmentCharacter)) {
+                        println(indexOfAttachment)
+                        self.inlineImages.removeAtIndex(indexOfAttachment)
+                        self.attachments.removeObjectForKey(self.keys.removeAtIndex(indexOfAttachment))
+                    }
+                    break
+                }
+                textWithDeletedChar.insert(c, atIndex: indexOfChar)
+                indexOfChar = indexOfChar.successor()
+            }
+            self.backspacePressed = false
+        }
+        self.textBody = textView.text
         let newSize = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.max))
         for constraint in textView.constraints() {
             let cons = constraint as! NSLayoutConstraint
@@ -367,9 +402,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     func textFieldDidEndEditing(textField: UITextField) {
         self.isResponder = nil
         textField.enabled = false
-        if textField.tag == 3 {
-            textField.userInteractionEnabled = true
-        }
         switch textField.tag {
         case 0:
             self.recipients.removeAllObjects()
@@ -401,6 +433,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                     self.bccRecipients.addObject(MCOAddress(mailbox: recipient))
                 }
             }
+        case 3:
+            textField.userInteractionEnabled = true
         default:
             break
         }
@@ -433,20 +467,12 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 let imapSession = getSession(self.account)
                 
                 //get draftsFolderName
-                let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
-                fetchFoldersOp.start({ (error, folders) -> Void in
-                    for folder in folders {
-                        if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
-                            var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
-                            appendMsgOp.start({ (error, uid) -> Void in
-                                if error != nil {
-                                    NSLog("%@", error.description)
-                                } else {
-                                    NSLog("Draft saved")
-                                }
-                            })
-                            break
-                        }
+                var appendMsgOp = imapSession.appendMessageOperationWithFolder(getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.Drafts), messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
+                appendMsgOp.start({ (error, uid) -> Void in
+                    if error != nil {
+                        NSLog("%@", error.description)
+                    } else {
+                        NSLog("Draft saved")
                     }
                 })
                 
@@ -572,6 +598,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     //MARK: - Build and send E-Mail
     func attachFile(filename: String, data: NSData, mimetype: String) {
         self.attachments.setValue(data, forKey: filename)
+        self.keys.append(filename)
         var inlineImage = NSTextAttachment()
         var scaleFactor: CGFloat = 0
         if mimetype == "png" || mimetype == "JPG" || mimetype == "JPEG" {
@@ -584,10 +611,18 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             scaleFactor = oldWidth / (300)
         }
         inlineImage.image = UIImage(CGImage: inlineImage.image!.CGImage, scale: scaleFactor, orientation: UIImageOrientation.Up)
-        var attrString = NSAttributedString(attachment: inlineImage)
-        var attributedString = NSMutableAttributedString(string: self.textBody + " ")
-        attributedString.replaceCharactersInRange(NSMakeRange(count(self.textBody), 1), withAttributedString: attrString)
+        self.inlineImages.append(inlineImage)
+        var attributedString = NSMutableAttributedString(string: self.textBody + String(Character(UnicodeScalar(NSAttachmentCharacter))))
+        var i = 0
+        var image = 0
+        for char in attributedString.string {
+            if char == Character(UnicodeScalar(NSAttachmentCharacter)) {
+                attributedString.replaceCharactersInRange(NSMakeRange(i, 1), withAttributedString: NSAttributedString(attachment: self.inlineImages[image++]))
+            }
+            i++
+        }
         self.textViewTextBody.attributedText = attributedString
+        self.textBody = attributedString.string
     }
     
     func buildEmail() -> NSData {
@@ -639,33 +674,9 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         sendOp.start({(error) in
             if error != nil {
                 NSLog("%@", error.description)
-                
-                var alert = UIAlertView(title: "Error", message: "Could not sent your message. A copy of it was moved to your drafts.", delegate: nil, cancelButtonTitle: "OK")
-                
+                var alert = UIAlertView(title: "Error", message: "Could not sent your message.", delegate: nil, cancelButtonTitle: "OK")
                 alert.show()
-                
-                //Mail could not be sent
-                //Move Email to drafts folder
-                //get draftsFolderName
-                let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
-                fetchFoldersOp.start({ (error, folders) -> Void in
-                    if error != nil {
-                        NSLog("%@", error.description)
-                    } else {
-                        for folder in folders {
-                            if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Drafts) == MCOIMAPFolderFlag.Drafts {
-                                //append Email to sent Folder
-                                var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: data, flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
-                                appendMsgOp.start({ (error, uid) -> Void in
-                                    if error != nil {
-                                        NSLog("%@", error.description)
-                                    }
-                                })
-                                break
-                            }
-                        }
-                    }
-                })
+                (sender as! UIBarButtonItem).enabled = true
             } else {
                 NSLog("sent")
                 
