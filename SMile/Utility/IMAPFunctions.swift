@@ -109,7 +109,6 @@ func moveEmailToFolder(mail: Email!, destFolder: String!) {
     addFlagToEmail(mail, MCOMessageFlag.Deleted)
 }
 
-//Does not work yet
 func getFolderPathWithMCOIMAPFolderFlag (account: EmailAccount, folderFlag: MCOIMAPFolderFlag) -> String? {
     //User Defaults
     switch folderFlag {

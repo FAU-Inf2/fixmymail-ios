@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UISearchResultsUpdating, TableViewCellDelegate {
+class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UISearchBarDelegate, UISearchResultsUpdating, TableViewCellDelegate {
     
     @IBOutlet weak var mailTableView: UITableView!
     var refreshControl: UIRefreshControl!
@@ -35,7 +35,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         switch searchController.searchBar.selectedScopeButtonIndex {
         case 0: //everywhere
-            searchPredicate = NSPredicate(format: "sender CONTAINS[c] %@ || title CONTAINS[c] %@ || plainText CONTAINS[c] %@", searchController.searchBar.text!)
+            searchPredicate = NSPredicate(format: "sender CONTAINS[c] %@ || title CONTAINS[c] %@ || plainText CONTAINS[c] %@", searchController.searchBar.text!, searchController.searchBar.text!, searchController.searchBar.text!)
         case 1: //sender
             searchPredicate = NSPredicate(format: "sender CONTAINS[c] %@", searchController.searchBar.text!)
         case 2: //subject
@@ -50,22 +50,23 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.mailTableView.reloadData()
     }
     
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        updateSearchResultsForSearchController(searchController)
+    }
     
     //MARK: - Override functions
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        var items = ["Test", "test2"]
-        var segments: UISegmentedControl = UISegmentedControl(items: items)
-        
         //init SearchController
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchController.searchResultsUpdater = self
-        self.searchController.dimsBackgroundDuringPresentation = true
+        self.searchController.dimsBackgroundDuringPresentation = false
         self.searchController.searchBar.sizeToFit()
         self.mailTableView.tableHeaderView = self.searchController.searchBar
         self.searchController.searchBar.scopeButtonTitles = ["Everywhere", "Sender", "Subject", "Body"]
+        self.searchController.searchBar.delegate = self
+        
         
         self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
         
@@ -109,7 +110,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
         
-        //imapSynchronize()
+        imapSynchronize()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -117,7 +118,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if selectedEmails.count == 0 {
             setToolbarWithComposeButton()
         } else {
-            setToolbarWhileEditing()//AndSomethingSelected()
+            setToolbarWhileEditing()
         }
     }
     
@@ -182,6 +183,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let cell = mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell
         
         if !(cell.editing) {
+            if searchController.active {
+                searchController.active = false
+            }
+            
             //open Email
             if ((cell.mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Draft) == MCOMessageFlag.Draft {
                 //open sendview
@@ -226,11 +231,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 addFlagToEmail(cell.mail, MCOMessageFlag.Seen)
             }
             self.refreshTableView()
-        } else {
+        } else { //edit mode enabled
             //select Email
             selectedEmails.addObject(cell.mail)
             if selectedEmails.count == 1 {
-                setToolbarWhileEditing()//AndSomethingSelected()
+                setToolbarWhileEditing()
             }
         }
     }
@@ -238,7 +243,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         selectedEmails.removeObject((mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail)
         if selectedEmails.count == 0 {
-            setToolbarWhileEditing()//AndNothingSelected()
+            setToolbarWhileEditing()
         }
     }
 
