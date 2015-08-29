@@ -494,7 +494,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
         let dictionary = NSDictionary(dictionary: info)
-        let data = UIImagePNGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage)
         
         if picker.sourceType == UIImagePickerControllerSourceType.PhotoLibrary {
             let refURL: NSURL = dictionary.valueForKey(UIImagePickerControllerReferenceURL) as! NSURL
@@ -502,11 +501,19 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             let assetsLibrary: ALAssetsLibrary = ALAssetsLibrary()
             assetsLibrary.assetForURL(refURL, resultBlock: { (imageAsset) -> Void in
                 let imageRep: ALAssetRepresentation = imageAsset.defaultRepresentation()
-                self.attachFile(imageRep.filename(), data: data, mimetype: "JPG")
+                println(imageRep.filename().pathExtension)
+                var data = NSData()
+                switch imageRep.filename().pathExtension {
+                    case "PNG", "png": data = UIImagePNGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage)
+                    case "JPG", "JPEG": data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
+                    default: break
+                }
+                self.attachFile(imageRep.filename(), data: data, mimetype: imageRep.filename().pathExtension)
                 }) { (error) -> Void in
                     
             }
         } else {
+            let data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
             self.attachFile("image.JPG", data: data, mimetype: "JPG")
         }
     }
@@ -603,7 +610,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.keys.append(filename)
         var inlineImage = NSTextAttachment()
         var scaleFactor: CGFloat = 0
-        if mimetype == "png" || mimetype == "JPG" || mimetype == "JPEG" {
+        if mimetype == "png" || mimetype == "PNG" || mimetype == "JPG" || mimetype == "JPEG" {
             inlineImage.image = UIImage(data: data)
             let oldWidth = inlineImage.image!.size.width
             scaleFactor = oldWidth / (self.textViewTextBody.frame.size.width - 10)
