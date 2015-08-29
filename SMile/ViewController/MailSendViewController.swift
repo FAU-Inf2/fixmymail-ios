@@ -344,6 +344,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func textViewDidChange(textView: UITextView) {
+        // Check if an attachment got deleted
         if self.backspacePressed {
             var indexOfAttachment = 0
             var indexOfChar = self.textBody.startIndex
@@ -370,6 +371,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             self.backspacePressed = false
         }
         self.textBody = textView.text
+        // Resize the textView if needed
         let newSize = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.max))
         for constraint in textView.constraints() {
             let cons = constraint as! NSLayoutConstraint
@@ -623,6 +625,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         }
         self.textViewTextBody.attributedText = attributedString
         self.textBody = attributedString.string
+        textViewDidChange(self.textViewTextBody)
     }
     
     func buildEmail() -> NSData {
