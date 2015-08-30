@@ -9,16 +9,14 @@
 import UIKit
 import CoreData
 
-class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, TableViewCellDelegate {
+class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UISearchBarDelegate, UISearchResultsUpdating, TableViewCellDelegate {
     
     @IBOutlet weak var mailTableView: UITableView!
     var refreshControl: UIRefreshControl!
+    var searchController: UISearchController!
     var delegate: ContentViewControllerProtocol?
     var emails = [Email]()
-    
-    //IMAP folder names
-    var trashFolderName: String?
-    var archiveFolderName: String?
+    var filterdEmails = [Email]()
     
     //required in the edit mode
     var selectedEmails = NSMutableArray()
@@ -30,10 +28,45 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
+
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        self.filterdEmails.removeAll(keepCapacity: false)
+        var searchPredicate: NSPredicate!
+        
+        switch searchController.searchBar.selectedScopeButtonIndex {
+        case 0: //everywhere
+            searchPredicate = NSPredicate(format: "sender CONTAINS[c] %@ || title CONTAINS[c] %@ || plainText CONTAINS[c] %@", searchController.searchBar.text!, searchController.searchBar.text!, searchController.searchBar.text!)
+        case 1: //sender
+            searchPredicate = NSPredicate(format: "sender CONTAINS[c] %@", searchController.searchBar.text!)
+        case 2: //subject
+            searchPredicate = NSPredicate(format: "title CONTAINS[c] %@", searchController.searchBar.text!)
+        case 3: //body
+            searchPredicate = NSPredicate(format: "plainText CONTAINS[c] %@", searchController.searchBar.text!)
+        default: break
+        }
+        
+        let array = (self.emails as NSArray).filteredArrayUsingPredicate(searchPredicate)
+        self.filterdEmails = array as! [Email]
+        self.mailTableView.reloadData()
+    }
+    
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        updateSearchResultsForSearchController(searchController)
+    }
     
     //MARK: - Override functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //init SearchController
+        self.searchController = UISearchController(searchResultsController: nil)
+        self.searchController.searchResultsUpdater = self
+        self.searchController.dimsBackgroundDuringPresentation = false
+        self.searchController.searchBar.sizeToFit()
+        self.mailTableView.tableHeaderView = self.searchController.searchBar
+        self.searchController.searchBar.scopeButtonTitles = ["Everywhere", "Sender", "Subject", "Body"]
+        self.searchController.searchBar.delegate = self
+        
         
         self.mailTableView.registerNib(UINib(nibName: "CustomMailTableViewCell", bundle: nil), forCellReuseIdentifier: "MailCell")
         
@@ -85,7 +118,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if selectedEmails.count == 0 {
             setToolbarWithComposeButton()
         } else {
-            setToolbarWhileEditing()//AndSomethingSelected()
+            setToolbarWhileEditing()
         }
     }
     
@@ -110,7 +143,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     // MARK: - TableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var mailcell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
-        let mail = self.emails[indexPath.row]
+
+        var mail: Email!
+        if self.searchController.active {
+            mail = self.filterdEmails[indexPath.row]
+        }else {
+            mail = self.emails[indexPath.row]
+        }
         
         mailcell.mailFrom.text = mail.sender
         mailcell.mailSubject.text = mail.title
@@ -144,6 +183,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let cell = mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell
         
         if !(cell.editing) {
+            if searchController.active {
+                searchController.active = false
+            }
+            
             //open Email
             if ((cell.mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Draft) == MCOMessageFlag.Draft {
                 //open sendview
@@ -170,11 +213,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 addFlagToEmail(cell.mail, MCOMessageFlag.Seen)
             }
             self.refreshTableView()
-        } else {
+        } else { //edit mode enabled
             //select Email
             selectedEmails.addObject(cell.mail)
             if selectedEmails.count == 1 {
-                setToolbarWhileEditing()//AndSomethingSelected()
+                setToolbarWhileEditing()
             }
         }
     }
@@ -182,7 +225,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         selectedEmails.removeObject((mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell).mail)
         if selectedEmails.count == 0 {
-            setToolbarWhileEditing()//AndNothingSelected()
+            setToolbarWhileEditing()
         }
     }
 
@@ -227,12 +270,20 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             newEmail.mcomessage = message
                             
                             //Set sender
-                            if (message as! MCOIMAPMessage).header.from.displayName != nil {
-                                newEmail.sender = (message as! MCOIMAPMessage).header.from.displayName
-                            }else if (message as! MCOIMAPMessage).header.sender.displayName != nil {
-                                newEmail.sender = (message as! MCOIMAPMessage).header.sender.displayName
-                            }else {
-                                newEmail.sender = (message as! MCOIMAPMessage).header.sender.mailbox
+                            if (message as! MCOIMAPMessage).header.from != nil {
+                                if (message as! MCOIMAPMessage).header.from.displayName != "" && (message as! MCOIMAPMessage).header.from.displayName != nil {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.from.displayName
+                                }else {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.from.mailbox
+                                }
+                            }else if (message as! MCOIMAPMessage).header.sender != nil {
+                                if (message as! MCOIMAPMessage).header.sender.displayName != "" && (message as! MCOIMAPMessage).header.sender.displayName != nil {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.sender.displayName
+                                }else {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.sender.mailbox
+                                }
+                            } else {
+                                newEmail.sender = ""
                             }
                             
                             //Set Title
@@ -324,67 +375,31 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func deleteEmail(mail: Email) {
-        let session = getSession(mail.toAccount)
-        
-        //Want to use getFolderPathWithMCOIMAPFolderFlag soon here
-        
-        let fetchFoldersOp = session.fetchAllFoldersOperation()
-        var folders = [MCOIMAPFolder]()
-        fetchFoldersOp.start({ (error, folders) -> Void in
-            for folder in folders {
-                if self.trashFolderName != nil {
-                    break
-                }
-                if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Trash) == MCOIMAPFolderFlag.Trash {
-                    self.trashFolderName = (folder as! MCOIMAPFolder).path
-                    //NSLog("found it" + self.trashFolderName!)
-                    break
-                }
-            }
-            if self.trashFolderName != nil {
-                if self.folderToQuery == self.trashFolderName {
-                    addFlagToEmail(mail, MCOMessageFlag.Deleted)
-                } else {
-                    moveEmailToFolder(mail, self.trashFolderName)
-                }
-                self.removeEmailFromArray(mail)
+        if let trashFolder = getFolderPathWithMCOIMAPFolderFlag(mail.toAccount, MCOIMAPFolderFlag.Trash) {
+            if self.folderToQuery == trashFolder {
+                addFlagToEmail(mail, MCOMessageFlag.Deleted)
             } else {
-                NSLog("error: trashFolderName == nil")
+                moveEmailToFolder(mail, trashFolder)
             }
-            
-            self.refreshTableView()
-        })
+            self.removeEmailFromArray(mail)
+            NSLog("email deleted")
+        } else {
+            NSLog("error: trashFolderName == nil")
+        }
+        self.refreshTableView()
     }
     
     func archiveEmail(mail: Email) {
-        let session = getSession(mail.toAccount)
-        
-        //Want to use getFolderPathWithMCOIMAPFolderFlag soon here
-
-        let fetchFoldersOp = session.fetchAllFoldersOperation()
-        var folders = [MCOIMAPFolder]()
-        fetchFoldersOp.start({ (error, folders) -> Void in
-            for folder in folders {
-                if self.archiveFolderName != nil {
-                    break
-                }
-                if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Archive) == MCOIMAPFolderFlag.Archive {
-                    self.archiveFolderName = (folder as! MCOIMAPFolder).path
-                    //NSLog("found archiveFolderName: " + self.archiveFolderName!)
-                    break
-                }
+        if let archiveFolder = getFolderPathWithMCOIMAPFolderFlag(mail.toAccount, MCOIMAPFolderFlag.Archive) {
+            if self.folderToQuery != archiveFolder {
+                moveEmailToFolder(mail, archiveFolder)
+                self.removeEmailFromArray(mail)
+                NSLog("email archived")
             }
-            if self.archiveFolderName != nil {
-                if self.folderToQuery != self.archiveFolderName {
-                    moveEmailToFolder(mail, self.archiveFolderName)
-                    self.removeEmailFromArray(mail)
-                    NSLog("email archived")
-                }
-            } else {
-                NSLog("error: archiveFolderName == nil")
-            }
-            self.refreshTableView()
-        })
+        } else {
+            NSLog("error: archiveFolderName == nil")
+        }
+        self.refreshTableView()
     }
     
     
@@ -392,7 +407,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     // MARK: - Toolbar
     func setToolbarWithComposeButton() {
-        var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showEmptyMailSendView")
+        var composeButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "showEmptyMailSendView:")
         if accounts!.count == 0 {
             composeButton.enabled = false
         }
@@ -445,7 +460,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationController?.setToolbarHidden(false, animated: false)
     }*/
     
-    func showEmptyMailSendView() {
+    func showEmptyMailSendView(sender: AnyObject) {
+        (sender as! UIBarButtonItem).enabled = false
         self.showMailSendView(nil, ccRecipients: nil, bccRecipients: nil, subject: nil, textBody: nil)
     }
     
@@ -660,14 +676,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.emails.count
-        
-        /*if let sections = fetchedResultsController.sections {
-            let currentSection = sections[section] as! NSFetchedResultsSectionInfo
-            return currentSection.numberOfObjects
-        }*/
-        
-        //return 0
+        if self.searchController.active {
+            return self.filterdEmails.count
+        } else {
+            return self.emails.count
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

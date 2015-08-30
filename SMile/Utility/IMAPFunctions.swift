@@ -109,16 +109,41 @@ func moveEmailToFolder(mail: Email!, destFolder: String!) {
     addFlagToEmail(mail, MCOMessageFlag.Deleted)
 }
 
-/*//Does not work yet
 func getFolderPathWithMCOIMAPFolderFlag (account: EmailAccount, folderFlag: MCOIMAPFolderFlag) -> String? {
-    for folder in account.folders {
-        let curFolder: MCOIMAPFolder = (folder as! ImapFolder).mcoimapfolder
+    //User Defaults
+    switch folderFlag {
+    case MCOIMAPFolderFlag.Trash:
+        if account.deletedFolder != "" {
+            return account.deletedFolder
+        }
+        fallthrough
         
-        if curFolder.flags & folderFlag == folderFlag {
-            NSLog("got a folder with flag!!")
-            return curFolder.path
+    case MCOIMAPFolderFlag.Drafts:
+        if account.draftFolder != "" {
+            return account.draftFolder
+        }
+        fallthrough
+        
+    case MCOIMAPFolderFlag.SentMail:
+        if account.sentFolder != "" {
+            return account.sentFolder
+        }
+        fallthrough
+        
+    case MCOIMAPFolderFlag.Archive:
+        if account.archiveFolder != "" {
+            return account.archiveFolder
+        }
+        fallthrough
+        
+    default:
+        for folder in account.folders {
+            let curFolder: MCOIMAPFolder = (folder as! ImapFolder).mcoimapfolder
+            if curFolder.flags & folderFlag == folderFlag {
+                return curFolder.path
+            }
         }
     }
-    NSLog("NIL")
+    
     return nil
-}*/
+}
