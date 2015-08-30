@@ -17,6 +17,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var delegate: ContentViewControllerProtocol?
     var emails = [Email]()
     var filterdEmails = [Email]()
+    var emailToDelete: Email?
     
     //required in the edit mode
     var selectedEmails = NSMutableArray()
@@ -111,6 +112,20 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
         
         imapSynchronize()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.emailToDelete != nil {
+            if contains(self.emails, self.emailToDelete!) {
+                let indexOfObject = find(self.emails, self.emailToDelete!)
+                if indexOfObject != nil {
+                    self.emails.removeAtIndex(indexOfObject!)
+                    self.emailToDelete = nil
+                    self.mailTableView.reloadData()
+                }
+            }
+        }
     }
     
     override func viewWillAppear(animated: Bool) {

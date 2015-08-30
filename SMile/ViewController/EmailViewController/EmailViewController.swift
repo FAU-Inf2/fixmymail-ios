@@ -105,6 +105,12 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
             }
         })
         
+        for var i = 0; i < self.navigationController?.viewControllers.count; i++ {
+            if self.navigationController?.viewControllers[i] is MailTableViewController {
+                var mailTableVC: MailTableViewController = self.navigationController?.viewControllers[i] as! MailTableViewController
+                mailTableVC.emailToDelete = self.message
+            }
+        }
         self.navigationController?.popViewControllerAnimated(true)
     }
 
