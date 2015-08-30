@@ -31,6 +31,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var toStringHeight: CGFloat!
     var fromStringHeight: CGFloat!
     var emailViewDelegate: EmailViewDelegate?
+    var plainHTMLContent: String!
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -303,6 +304,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                 })
                 return
             }
+            self.plainHTMLContent = htmlContent
             
             var htmlString = String()
             let jsURL = NSBundle.mainBundle().URLForResource("MCOMessageViewScript", withExtension: "js")

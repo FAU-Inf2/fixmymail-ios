@@ -161,29 +161,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 var mail: MCOIMAPMessage = cell.mail.mcomessage as! MCOIMAPMessage
                 var messageParser : MCOMessageParser = MCOMessageParser(data: cell.mail.data)
                 
-//                var emailVC = EmailViewController(nibName: "EmailViewController", bundle: nil)
                 var emailVC = EmailViewController()
                 emailVC.message = cell.mail
                 emailVC.mcoimapmessage = mail
                 emailVC.session = getSession(cell.mail.toAccount)
                 self.navigationController?.pushViewController(emailVC, animated: true)
-                
-                
-//                var msgVC: MCTMsgViewController = MCTMsgViewController()
-//                MCOIMAPMessage *msg = self.messages[indexPath.row];
-//                MCTMsgViewController *vc = [[MCTMsgViewController alloc] init];
-//                vc.folder = @"INBOX";
-//                vc.message = msg;
-//                vc.session = self.imapSession;
-//                [self.navigationController pushViewController:vc animated:YES];
-//                
-                
-//                var mailView: WebViewController = WebViewController()
-//                mailView.putMessage()
-//                mailView.message = cell.mail
-//                mailView.session = getSession(mailView.message.toAccount)
-//                self.navigationController?.pushViewController(mailView, animated: true)
-//                tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 
                 addFlagToEmail(cell.mail, MCOMessageFlag.Seen)
             }
