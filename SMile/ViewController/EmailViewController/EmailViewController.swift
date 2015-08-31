@@ -33,7 +33,7 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
     }
     
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setToolbarHidden(false, animated: false)
         var buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
@@ -56,59 +56,10 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
     //MARK: - UIBarButtonActions
     
     func delete() {
-        //get trashFolderName
-        let fetchFoldersOp = session.fetchAllFoldersOperation()
-        var folders = [MCOIMAPFolder]()
-        fetchFoldersOp.start({ (error, folders) -> Void in
-            var trashFolderName: String?
-            for folder in folders {
-                if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Trash) == MCOIMAPFolderFlag.Trash {
-                    trashFolderName = (folder as! MCOIMAPFolder).path
-                    //NSLog("found it" + self.trashFolderName!)
-                    break
-                }
-            }
-            if trashFolderName != nil {
-                //copy email to trash folder
-                let localCopyMessageOperation = self.session.copyMessagesOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((self.message.mcomessage as! MCOIMAPMessage).uid)), destFolder: trashFolderName)
-                
-                localCopyMessageOperation.start {(error, uidMapping) -> Void in
-                    if let error = error {
-                        NSLog("error in deleting email : \(error.userInfo!)")
-                    }
-                }
-                
-                //set deleteFlag
-                let setDeleteFlagOP = self.session.storeFlagsOperationWithFolder("INBOX", uids: MCOIndexSet(index: UInt64((self.message.mcomessage as! MCOIMAPMessage).uid)), kind: MCOIMAPStoreFlagsRequestKind.Add, flags: MCOMessageFlag.Deleted)
-                
-                setDeleteFlagOP.start({ (error) -> Void in
-                    if let error = error {
-                        NSLog("error in deleting email (flags) : \(error.userInfo)")
-                    } else {
-                        NSLog("email deleted")
-                        
-                        let expangeFolder = self.session.expungeOperation("INBOX")
-                        expangeFolder.start({ (error) -> Void in })
-                    }
-                })
-                
-                var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
-                managedObjectContext.deleteObject(self.message)
-                
-                var error: NSError? = nil
-                managedObjectContext.save(&error)
-                if error != nil {
-                    NSLog("%@", error!.description)
-                }
-            } else {
-                NSLog("error: trashFolderName == nil")
-            }
-        })
-        
         for var i = 0; i < self.navigationController?.viewControllers.count; i++ {
             if self.navigationController?.viewControllers[i] is MailTableViewController {
                 var mailTableVC: MailTableViewController = self.navigationController?.viewControllers[i] as! MailTableViewController
-                mailTableVC.emailToDelete = self.message
+                mailTableVC.deleteEmail(self.message)
             }
         }
         self.navigationController?.popViewControllerAnimated(true)

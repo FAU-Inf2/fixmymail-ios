@@ -114,20 +114,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         imapSynchronize()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        if self.emailToDelete != nil {
-            if contains(self.emails, self.emailToDelete!) {
-                let indexOfObject = find(self.emails, self.emailToDelete!)
-                if indexOfObject != nil {
-                    self.emails.removeAtIndex(indexOfObject!)
-                    self.emailToDelete = nil
-                    self.mailTableView.reloadData()
-                }
-            }
-        }
-    }
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if selectedEmails.count == 0 {
@@ -397,7 +383,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 moveEmailToFolder(mail, trashFolder)
             }
             self.removeEmailFromArray(mail)
-            NSLog("email deleted")
         } else {
             NSLog("error: trashFolderName == nil")
         }
@@ -409,7 +394,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             if self.folderToQuery != archiveFolder {
                 moveEmailToFolder(mail, archiveFolder)
                 self.removeEmailFromArray(mail)
-                NSLog("email archived")
             }
         } else {
             NSLog("error: archiveFolderName == nil")
