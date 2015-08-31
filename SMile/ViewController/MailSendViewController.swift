@@ -691,24 +691,10 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 NSLog("sent")
                 
                 //Move Email to sent Folder
-                //get sentFolderName
-                let fetchFoldersOp = imapSession.fetchAllFoldersOperation()
-                fetchFoldersOp.start({ (error, folders) -> Void in
+                var appendMsgOp = imapSession.appendMessageOperationWithFolder(getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.SentMail), messageData: data, flags: MCOMessageFlag.Seen)
+                appendMsgOp.start({ (error, uid) -> Void in
                     if error != nil {
                         NSLog("%@", error.description)
-                    } else {
-                        for folder in folders {
-                            if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.SentMail) == MCOIMAPFolderFlag.SentMail {
-                                //append Email to sent Folder
-                                var appendMsgOp = imapSession.appendMessageOperationWithFolder((folder as! MCOIMAPFolder).path, messageData: data, flags: MCOMessageFlag.Seen)
-                                appendMsgOp.start({ (error, uid) -> Void in
-                                    if error != nil {
-                                        NSLog("%@", error.description)
-                                    }
-                                })
-                                break
-                            }
-                        }
                     }
                 })
                 

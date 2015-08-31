@@ -17,7 +17,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var delegate: ContentViewControllerProtocol?
     var emails = [Email]()
     var filterdEmails = [Email]()
-    var emailToDelete: Email?
     
     //required in the edit mode
     var selectedEmails = NSMutableArray()
@@ -29,7 +28,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
-
+    
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         self.filterdEmails.removeAll(keepCapacity: false)
         var searchPredicate: NSPredicate!
@@ -84,7 +83,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if self.folderToQuery == nil {
             self.folderToQuery = "INBOX"
         }
-       
+        
         accounts = getRecentlyUsedAccount()
         //set tableView title
         if accounts!.count == 0 {
@@ -111,7 +110,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
         
-        imapSynchronize()
+        //mapSynchronize()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -144,7 +143,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     // MARK: - TableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var mailcell = tableView.dequeueReusableCellWithIdentifier("MailCell", forIndexPath: indexPath) as! CustomMailTableViewCell
-
+        
         var mail: Email!
         if self.searchController.active {
             mail = self.filterdEmails[indexPath.row]
@@ -196,10 +195,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 addFlagToEmail(cell.mail, MCOMessageFlag.Deleted)
                 imapSynchronize()
                 self.showMailSendView(mail.header.to == nil ? nil : NSMutableArray(array: mail.header.to),
-                        ccRecipients: mail.header.cc == nil ? nil : NSMutableArray(array: mail.header.cc),
-                       bccRecipients: mail.header.bcc == nil ? nil : NSMutableArray(array: mail.header.bcc),
-                             subject: mail.header.subject,
-                            textBody: parser.plainTextBodyRenderingAndStripWhitespace(false))
+                    ccRecipients: mail.header.cc == nil ? nil : NSMutableArray(array: mail.header.cc),
+                    bccRecipients: mail.header.bcc == nil ? nil : NSMutableArray(array: mail.header.bcc),
+                    subject: mail.header.subject,
+                    textBody: parser.plainTextBodyRenderingAndStripWhitespace(false))
             } else {
                 
                 var mail: MCOIMAPMessage = cell.mail.mcomessage as! MCOIMAPMessage
@@ -229,15 +228,17 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             setToolbarWhileEditing()
         }
     }
-
+    
     
     
     
     // MARK: - IMAP functions
     func imapSynchronize() {
         NSLog("refeshing..")
-        
-        if let accs = accounts {
+        if let accs = self.accounts {
+            var accountCounter: Int32 = Int32(accs.count)
+            var emailsToDownload: Int32 = 0
+            
             for account in accs {
                 NSLog("emailAdresse in imapSynchronize:  " + account.emailAddress)
                 let session = getSession(account)
@@ -253,70 +254,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                     }
                 }
                 
-                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
-                
-                fetchNewEmailsOp.start({ (error, messages, range) -> Void in
-                    if error != nil {
-                        NSLog("Could not load messages: %@", error)
-                    } else {
-                        NSLog("%i new Emails", messages.count)
-                        //Load new Emails
-                        for message in messages {
-                            //Workaround
-                            if (message as! MCOIMAPMessage).uid == currentMaxUID {
-                                continue
-                            }
-                            var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
-                            NSLog(String((message as! MCOIMAPMessage).uid))
-                            newEmail.mcomessage = message
-                            
-                            //Set sender
-                            if (message as! MCOIMAPMessage).header.from != nil {
-                                if (message as! MCOIMAPMessage).header.from.displayName != "" && (message as! MCOIMAPMessage).header.from.displayName != nil {
-                                    newEmail.sender = (message as! MCOIMAPMessage).header.from.displayName
-                                }else {
-                                    newEmail.sender = (message as! MCOIMAPMessage).header.from.mailbox
-                                }
-                            }else if (message as! MCOIMAPMessage).header.sender != nil {
-                                if (message as! MCOIMAPMessage).header.sender.displayName != "" && (message as! MCOIMAPMessage).header.sender.displayName != nil {
-                                    newEmail.sender = (message as! MCOIMAPMessage).header.sender.displayName
-                                }else {
-                                    newEmail.sender = (message as! MCOIMAPMessage).header.sender.mailbox
-                                }
-                            } else {
-                                newEmail.sender = ""
-                            }
-                            
-                            //Set Title
-                            newEmail.title = (message as! MCOIMAPMessage).header.subject ?? " "
-                            
-                            //Set folder
-                            newEmail.folder = self.folderToQuery!
-                            
-                            //Fetch data
-                            let fetchOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: (message as! MCOIMAPMessage).uid)
-                            
-                            fetchOp.start({(error, data) in
-                                if error != nil {
-                                    NSLog("Could not recieve mail: %@", error)
-                                } else {
-                                    newEmail.data = data
-                                    let parser: MCOMessageParser! = MCOMessageParser(data: data)
-                                    newEmail.plainText = parser.plainTextBodyRendering()
-                                    
-                                    //Add newEmail to Array
-                                    NSLog("data downlaod")
-                                    self.insertEmailToArray(newEmail)
-                                    
-                                    self.saveCoreDataChanges()
-                                    self.refreshTableView()
-                                }
-                            })
-                            newEmail.toAccount = account
-                        }
-                    }
-                })
-                
                 //Check for deleted or moved Emails and update Flags
                 if currentMaxUID > 0 {
                     let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID - 1))))
@@ -331,9 +268,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 //reload missing data
                                 if (mail as! Email).data.length == 0 {
                                     //Fetch data
-                                    let fetchOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: ((mail as! Email).mcomessage as! MCOIMAPMessage).uid)
+                                    let fetchEmailDataOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: ((mail as! Email).mcomessage as! MCOIMAPMessage).uid)
                                     
-                                    fetchOp.start({(error, data) in
+                                    fetchEmailDataOp.start({(error, data) in
                                         if error != nil {
                                             NSLog("Could not recieve mail: %@", error)
                                         } else {
@@ -370,9 +307,88 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         self.refreshTableView()
                     })
                 }
+                
+                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
+                
+                fetchNewEmailsOp.start({ (error, messages, range) -> Void in
+                    if error != nil {
+                        NSLog("Could not load messages: %@", error)
+                    } else {
+                        NSLog("%i new Emails", messages.count)
+                        //Load new Emails
+                        OSAtomicAdd32(Int32(messages.count), &emailsToDownload)
+                        
+                        for message in messages {
+                            //Workaround
+                            if (message as! MCOIMAPMessage).uid == currentMaxUID {
+                                NSLog("EmailsToDownlaod:  " + String(emailsToDownload) + " - 1")
+                                OSAtomicDecrement32(&emailsToDownload)
+                                if accountCounter == 0 && emailsToDownload == 0 {
+                                    self.refreshControl.endRefreshing()
+                                }
+                                continue
+                            }
+                            var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
+                            newEmail.mcomessage = message
+                            
+                            //Set sender
+                            if (message as! MCOIMAPMessage).header.from != nil {
+                                if (message as! MCOIMAPMessage).header.from.displayName != "" && (message as! MCOIMAPMessage).header.from.displayName != nil {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.from.displayName
+                                }else {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.from.mailbox
+                                }
+                            }else if (message as! MCOIMAPMessage).header.sender != nil {
+                                if (message as! MCOIMAPMessage).header.sender.displayName != "" && (message as! MCOIMAPMessage).header.sender.displayName != nil {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.sender.displayName
+                                }else {
+                                    newEmail.sender = (message as! MCOIMAPMessage).header.sender.mailbox
+                                }
+                            } else {
+                                newEmail.sender = ""
+                            }
+                            
+                            //Set Title
+                            newEmail.title = (message as! MCOIMAPMessage).header.subject ?? " "
+                            
+                            //Set folder
+                            newEmail.folder = self.folderToQuery!
+                            
+                            //Fetch data
+                            let fetchEmailDataOp = session.fetchMessageOperationWithFolder(self.folderToQuery!, uid: (message as! MCOIMAPMessage).uid)
+                            fetchEmailDataOp.start({(error, data) in
+                                if error != nil {
+                                    NSLog("Could not recieve mail: %@", error)
+                                } else {
+                                    newEmail.data = data
+                                    let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                                    newEmail.plainText = parser.plainTextBodyRendering()
+                                    
+                                    //Add newEmail to Array
+                                    NSLog("data downlaod")
+                                    self.insertEmailToArray(newEmail)
+                                    
+                                    self.saveCoreDataChanges()
+                                    self.refreshTableView()
+                                    
+                                    NSLog("EmailsToDownlaod:  " + String(emailsToDownload) + " - 1")
+                                }
+                                OSAtomicDecrement32(&emailsToDownload)
+                                if accountCounter == 0 && emailsToDownload == 0 {
+                                    self.refreshControl.endRefreshing()
+                                }
+                            })
+                            newEmail.toAccount = account
+                        }
+                    }
+                    NSLog("AccountCounter: " + String(accountCounter) + " - 1")
+                    OSAtomicDecrement32(&accountCounter)
+                })
+            }
+            if accountCounter == 0 && emailsToDownload == 0 {
+                self.refreshControl.endRefreshing()
             }
         }
-        self.refreshControl.endRefreshing()
     }
     
     func deleteEmail(mail: Email) {
@@ -434,29 +450,29 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     
     /*func setToolbarWhileEditingAndNothingSelected() {
-        var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        var markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
-        var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: nil, action: "")
-        var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: nil, action: "")
-        
-        moveButton.enabled = false
-        deleteButton.enabled = false
-        
-        var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
-        self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
-        self.navigationController?.setToolbarHidden(false, animated: false)
-        
+    var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+    var markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
+    var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: nil, action: "")
+    var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: nil, action: "")
+    
+    moveButton.enabled = false
+    deleteButton.enabled = false
+    
+    var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
+    self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
+    self.navigationController?.setToolbarHidden(false, animated: false)
+    
     }
     
     func setToolbarWhileEditingAndSomethingSelected() {
-        var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        var markAllButton = UIBarButtonItem(title: "Mark", style: UIBarButtonItemStyle.Plain, target: self, action: "markButtonAction")
-        var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
-        var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
-        
-        var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
-        self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
-        self.navigationController?.setToolbarHidden(false, animated: false)
+    var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+    var markAllButton = UIBarButtonItem(title: "Mark", style: UIBarButtonItemStyle.Plain, target: self, action: "markButtonAction")
+    var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
+    var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
+    
+    var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
+    self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
+    self.navigationController?.setToolbarHidden(false, animated: false)
     }*/
     
     func showEmptyMailSendView(sender: AnyObject) {
@@ -511,7 +527,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             self.navigationController?.pushViewController(sendView, animated: true)
         }
     }
-	
+    
     func markAllButtonAction() {
         for var i = 0; i < mailTableView.numberOfRowsInSection(0); i++ {
             var cell = tableView(mailTableView, cellForRowAtIndexPath: NSIndexPath(forRow: i, inSection: 0)) as! CustomMailTableViewCell
@@ -598,28 +614,28 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         default:
             break
         }
-
+        
     }
-
-
-
+    
+    
+    
     
     //MARK: - Help functions for tableview
     func refreshTableView() {
         //Load Emails from CoreData
         /*emails.removeAll()
         if let accs = accounts {
-            for account in accs {
-                for mail in account.emails {
-                    emails.append(mail as! Email)
-                }
-            }
-            
-            emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
+        for account in accs {
+        for mail in account.emails {
+        emails.append(mail as! Email)
+        }
+        }
+        
+        emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }*/
         /*var error: NSError? = nil
         if (fetchedResultsController.performFetch(&error) == false) {
-            print("An error occurred: \(error?.localizedDescription)")
+        print("An error occurred: \(error?.localizedDescription)")
         }*/
         
         mailTableView.reloadData()
@@ -635,13 +651,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             emails.removeAtIndex(index)
         }
         /*for var i = 0; i < emails.count; i++ {
-            if emails[i] == email {
-                NSLog("removedEmailFromArray")
-                emails.removeAtIndex(i)
-            }
+        if emails[i] == email {
+        NSLog("removedEmailFromArray")
+        emails.removeAtIndex(i)
+        }
         }*/
         
-
+        
         objc_sync_exit(self.emails)
     }
     
@@ -668,7 +684,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         return 1
         
         /*if let sections = fetchedResultsController.sections {
-            return sections.count
+        return sections.count
         }*/
         
         //return 0
