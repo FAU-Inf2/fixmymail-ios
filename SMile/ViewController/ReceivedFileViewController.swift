@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Foundation
+import CoreData
 
 class ReceivedFileViewController: UIViewController {
 	@IBOutlet weak var image: UIImageView!
@@ -74,7 +76,39 @@ class ReceivedFileViewController: UIViewController {
 	
 	@IBAction func showEmptyMailSendView(sender: AnyObject) -> Void {
 		// use file for email attachment
-		//self.showMailSendView(nil, ccRecipients: nil, bccRecipients: nil, subject: nil, textBody: nil)
+        /*var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        var sendAccount: EmailAccount? = nil
+        
+        var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+        let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+        var error: NSError?
+        var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+        if error != nil {
+            NSLog("%@", error!.description)
+            return
+        } else {
+            if let emailAccounts = result {
+                for account in emailAccounts {
+                    if (account as! EmailAccount).accountName == accountName {
+                        sendAccount = account as? EmailAccount
+                        break
+                    }
+                }
+                if sendAccount == nil {
+                    sendAccount = emailAccounts.first as? EmailAccount
+                }
+            }
+        }
+        
+        if let account = sendAccount {
+            sendView.account = account
+            sendView.attachFile(self.fileManager!.displayNameAtPath(self.url!.path!), data: file!, mimetype: self.fileManager!.displayNameAtPath(self.url!.path!).pathExtension)
+            
+            //self.presentViewController(sendView, animated: true, completion: nil)
+        }*/
+        (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = self.fileManager!.displayNameAtPath(self.url!.path!)
+        (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = file
+        cancelTapped(self)
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {

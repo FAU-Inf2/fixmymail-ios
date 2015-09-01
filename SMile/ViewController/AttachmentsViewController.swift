@@ -97,12 +97,14 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
                 default: break
                 }
                 self.attachFile(imageRep.filename(), data: data, mimetype: imageRep.filename().pathExtension)
+                self.attachmentsTableView.reloadData()
                 }) { (error) -> Void in
                     
             }
         } else {
             let data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
             self.attachFile("image.JPG", data: data, mimetype: "JPG")
+            self.attachmentsTableView.reloadData()
         }
     }
     
@@ -123,7 +125,6 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         }
         image = UIImage(CGImage: image.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
         self.images.append(image)
-        self.attachmentsTableView.reloadData()
     }
     
     func deleteAttachmentWithSender(sender: AnyObject) {

@@ -11,7 +11,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var textViewTextBody: UITextView!
     @IBOutlet weak var scrollView: UIScrollView!
     var emailAddressPicker: UIPickerView!
-    var attachmentView: AttachmentsViewController!
+    var attachmentView: AttachmentsViewController! = AttachmentsViewController(nibName: "AttachmentsViewController", bundle: nil)
     
     var initialTextViewHeight: CGFloat = 0
     var initialTableViewHeight: CGFloat = 0
@@ -42,8 +42,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         } else {
             self.title = subject
         }
-        
-        self.attachmentView = AttachmentsViewController(nibName: "AttachmentsViewController", bundle: nil)
         
         self.textViewTextBody.delegate = self
         self.textViewTextBody.scrollEnabled = false
@@ -497,14 +495,16 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 let imapSession = getSession(self.account)
                 
                 //get draftsFolderName
-                var appendMsgOp = imapSession.appendMessageOperationWithFolder(getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.Drafts), messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
-                appendMsgOp.start({ (error, uid) -> Void in
-                    if error != nil {
-                        NSLog("%@", error.description)
-                    } else {
-                        NSLog("Draft saved")
-                    }
-                })
+                if let folder = getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.Drafts) {
+                    var appendMsgOp = imapSession.appendMessageOperationWithFolder(folder, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
+                    appendMsgOp.start({ (error, uid) -> Void in
+                        if error != nil {
+                            NSLog("%@", error.description)
+                        } else {
+                            NSLog("Draft saved")
+                        }
+                    })
+                }
                 
                 self.navigationController?.popViewControllerAnimated(true)
             }/* else {
@@ -717,12 +717,14 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 NSLog("sent")
                 
                 //Move Email to sent Folder
-                var appendMsgOp = imapSession.appendMessageOperationWithFolder(getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.SentMail), messageData: data, flags: MCOMessageFlag.Seen)
-                appendMsgOp.start({ (error, uid) -> Void in
-                    if error != nil {
-                        NSLog("%@", error.description)
-                    }
-                })
+                if let folder = getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.SentMail) {
+                    var appendMsgOp = imapSession.appendMessageOperationWithFolder(folder, messageData: data, flags: MCOMessageFlag.Seen)
+                    appendMsgOp.start({ (error, uid) -> Void in
+                        if error != nil {
+                            NSLog("%@", error.description)
+                        }
+                    })
+                }
                 
                 self.navigationController?.popViewControllerAnimated(true)
             }
