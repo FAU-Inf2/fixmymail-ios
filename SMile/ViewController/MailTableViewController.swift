@@ -59,6 +59,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         super.viewDidLoad()
         
         //init SearchController
+        definesPresentationContext = true
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchController.searchResultsUpdater = self
         self.searchController.dimsBackgroundDuringPresentation = false
@@ -222,10 +223,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let cell = mailTableView.cellForRowAtIndexPath(indexPath) as! CustomMailTableViewCell
         
         if !(cell.editing) {
-            if searchController.active {
-                searchController.active = false
-            }
-            
             //open Email
             if ((cell.mail.mcomessage as! MCOIMAPMessage).flags & MCOMessageFlag.Draft) == MCOMessageFlag.Draft {
                 //open sendview
