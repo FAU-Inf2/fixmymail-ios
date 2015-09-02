@@ -14,16 +14,16 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ci7-Gy-XSy">
-                        <rect key="frame" x="0.0" y="2" width="40" height="40"/>
+                        <rect key="frame" x="8" y="2" width="40" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="dFb-9X-yke"/>
                             <constraint firstAttribute="width" constant="40" id="ql5-Vh-iOj"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6rE-wQ-SxD">
-                        <rect key="frame" x="48" y="8" width="132" height="21"/>
+                        <rect key="frame" x="59" y="8" width="136" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="132" id="4u5-kg-gwj"/>
+                            <constraint firstAttribute="width" constant="136" id="4u5-kg-gwj"/>
                             <constraint firstAttribute="height" constant="21" id="Geb-bW-Lz0"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -31,7 +31,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hB-aA-rCv">
-                        <rect key="frame" x="188" y="21" width="109" height="21"/>
+                        <rect key="frame" x="203" y="22" width="109" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -39,14 +39,14 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="6rE-wQ-SxD" firstAttribute="top" secondItem="A7h-Fc-RqR" secondAttribute="topMargin" id="0ZZ-UV-cwm"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="1hB-aA-rCv" secondAttribute="trailing" constant="15" id="EsX-bN-jQr"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="1hB-aA-rCv" secondAttribute="trailing" id="EsX-bN-jQr"/>
                     <constraint firstItem="Ci7-Gy-XSy" firstAttribute="top" secondItem="A7h-Fc-RqR" secondAttribute="top" constant="2" id="PFy-x4-K3F"/>
                     <constraint firstAttribute="bottom" secondItem="Ci7-Gy-XSy" secondAttribute="bottom" constant="1.5" id="bvh-PL-l5x"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="1hB-aA-rCv" secondAttribute="bottom" constant="-6.5" id="hVQ-qD-X0x"/>
-                    <constraint firstItem="1hB-aA-rCv" firstAttribute="top" secondItem="A7h-Fc-RqR" secondAttribute="topMargin" constant="13" id="ksk-lA-WpV"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="1hB-aA-rCv" secondAttribute="bottom" constant="-7.5" id="hVQ-qD-X0x"/>
+                    <constraint firstItem="1hB-aA-rCv" firstAttribute="top" secondItem="A7h-Fc-RqR" secondAttribute="topMargin" constant="14" id="ksk-lA-WpV"/>
                     <constraint firstAttribute="bottomMargin" secondItem="6rE-wQ-SxD" secondAttribute="bottom" constant="6.5" id="lnh-eZ-Bhg"/>
-                    <constraint firstItem="Ci7-Gy-XSy" firstAttribute="leading" secondItem="A7h-Fc-RqR" secondAttribute="leading" id="sqy-oe-UjS"/>
-                    <constraint firstItem="6rE-wQ-SxD" firstAttribute="leading" secondItem="Ci7-Gy-XSy" secondAttribute="trailing" constant="8" id="wnp-mE-fqy"/>
+                    <constraint firstItem="Ci7-Gy-XSy" firstAttribute="leading" secondItem="A7h-Fc-RqR" secondAttribute="leading" constant="8" id="sqy-oe-UjS"/>
+                    <constraint firstItem="6rE-wQ-SxD" firstAttribute="leading" secondItem="Ci7-Gy-XSy" secondAttribute="trailing" constant="11" id="wnp-mE-fqy"/>
                     <constraint firstItem="1hB-aA-rCv" firstAttribute="leading" secondItem="6rE-wQ-SxD" secondAttribute="trailing" constant="8" id="xP7-A9-mbC"/>
                 </constraints>
             </tableViewCellContentView>

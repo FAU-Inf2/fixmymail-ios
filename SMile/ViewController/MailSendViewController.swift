@@ -49,6 +49,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.initialTextViewHeight = self.textViewTextBody.frame.size.height
         
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
+        self.sendTableView.registerNib(UINib(nibName: "AttachmentViewCell", bundle: nil), forCellReuseIdentifier: "AttachmentViewCell")
         self.sendTableView.scrollEnabled = false
         for constraint in self.sendTableView.constraints() {
             let cons = constraint as! NSLayoutConstraint
@@ -69,6 +70,10 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.navigationItem.leftBarButtonItem = buttonCancel
         
         self.addSignature()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        self.sendTableView.reloadData()
     }
     
     func initPickerView() {
@@ -219,8 +224,13 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 
                 return cell
             } else { // Cell for attachments
-                var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField") as! SendViewCellWithLabelAndTextField
-                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.whiteColor(), labelText: "", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: UIColor.whiteColor(), textFieldText: "Attachments", textFieldTag: 10, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
+                var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
+                
+                cell.imageViewPreview.image = UIImage(named: "attachedFile.png")!
+                cell.imageViewPreview.image = UIImage(CGImage: cell.imageViewPreview.image!.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
+                cell.labelFilesAttached.text = "\t\(self.attachmentView.keys.count) files attached"
+                cell.labelFilesAttached.textColor = UIColor.grayColor()
+                
                 cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
                 cell.selectionStyle = UITableViewCellSelectionStyle.Default
                 
@@ -236,8 +246,13 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             
             return cell
         case 5: // Cell for attachments
-            var cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField") as! SendViewCellWithLabelAndTextField
-            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.whiteColor(), labelText: "", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: UIColor.whiteColor(), textFieldText: "Attachments", textFieldTag: 10, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
+            var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
+            
+            cell.imageViewPreview.image = UIImage(named: "attachedFile.png")!
+            cell.imageViewPreview.image = UIImage(CGImage: cell.imageViewPreview.image!.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
+            cell.labelFilesAttached.text = "\t\(self.attachmentView.keys.count) files attached"
+            cell.labelFilesAttached.textColor = UIColor.grayColor()
+            
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.selectionStyle = UITableViewCellSelectionStyle.Default
             

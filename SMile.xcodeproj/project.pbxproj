@@ -146,6 +146,8 @@
 		8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */; };
 		8E63CE561B53E03E00DC9B04 /* MoveEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */; };
 		8E84EAC71B8C9B5B00621926 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */; };
+		8EAB86DB1B9785CA0051532F /* AttachmentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */; };
+		8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */; };
 		A57032F3C67E01D83552C847 /* libPods-SMile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 442C288A316BE4CDB9E2D43B /* libPods-SMile.a */; };
 		A917E2001B208ADF0069BC91 /* MailSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
@@ -442,6 +444,8 @@
 		8E63CE531B53E00600DC9B04 /* MoveEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveEmailViewController.swift; sourceTree = "<group>"; };
 		8E63CE551B53E03E00DC9B04 /* MoveEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoveEmailViewController.xib; sourceTree = "<group>"; };
 		8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentViewCell.swift; sourceTree = "<group>"; };
+		8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentViewCell.xib; sourceTree = "<group>"; };
 		948593F7BA81284FFBF715C1 /* Pods-SMile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMile.release.xcconfig"; path = "Pods/Target Support Files/Pods-SMile/Pods-SMile.release.xcconfig"; sourceTree = "<group>"; };
 		A917E1FF1B208ADF0069BC91 /* MailSendViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailSendViewController.xib; sourceTree = "<group>"; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
@@ -943,6 +947,8 @@
 			children = (
 				8E50152C1B95A24C00A69702 /* AttachmentCell.swift */,
 				8E50152A1B95A23E00A69702 /* AttachmentCell.xib */,
+				8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */,
+				8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */,
 				8E1441161B1DEFFA00F1A023 /* SendViewCellWithLabelAndTextField.swift */,
 				8E14411B1B1DF78E00F1A023 /* SendViewCellWithLabelAndTextField.xib */,
 			);
@@ -1290,6 +1296,7 @@
 				AD43C80A1B71199900C8F286 /* fileicon_standard.png in Resources */,
 				3D69ECB01B83AB9A0082EF5C /* page_white_acrobat@2x.png in Resources */,
 				3D69ECB81B83AB9A0082EF5C /* page_white_code@2x.png in Resources */,
+				8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */,
 				3D69ECE71B83AB9A0082EF5C /* page_white_word.png in Resources */,
 				3D69ECCA1B83AB9A0082EF5C /* page_white_gear@2x.png in Resources */,
 				AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */,
@@ -1551,6 +1558,7 @@
 				3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */,
 				AD4FB1311B88BFF1004D18CB /* NSData+PGPUtils.m in Sources */,
 				AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */,
+				8EAB86DB1B9785CA0051532F /* AttachmentViewCell.swift in Sources */,
 				AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */,
 				AD4FB1461B88BFF1004D18CB /* PGPSecretSubKeyPacket.m in Sources */,
 				3D69ED0B1B83ABE20082EF5C /* UIColor+FlatUI.m in Sources */,
