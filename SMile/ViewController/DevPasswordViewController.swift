@@ -62,6 +62,7 @@ class DevPasswordViewController: UIViewController {
 						let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
 						if NewRequestError == nil {
 							NSLog("saving data for " + emailAcc.emailAddress)
+							createNewSession(emailAcc)
 						} else {
 							NSLog("could not save data for " + emailAcc.emailAddress)
 						}

@@ -522,6 +522,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							
 							// write | update entity
 							self.saveEntriesToCoreData()
+							if self.newEmailAcc != nil {
+								createNewSession(self.newEmailAcc!)
+							}
+							
 							
 							self.delay(1.0) {
 								self.navigationController?.popViewControllerAnimated(true)
@@ -611,8 +615,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			newEntry.setValue("", forKey: "sentFolder")
 			newEntry.setValue("", forKey: "deletedFolder")
 			newEntry.setValue("", forKey: "archiveFolder")
-
-
+			
+			self.newEmailAcc = newEntry
 			
 		} else {
 			
@@ -622,7 +626,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
 				if fetchResults.count != 0{
 					
-					var managedObject = fetchResults[0]
+					var managedObject = fetchResults[0] as! EmailAccount
 					
 					for (key, value) in self.entries {
 						switch key {
@@ -667,6 +671,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						managedObject.setValue(self.accountBehaviorVC!.entries["Deleted"], forKey: "deletedFolder")
 						managedObject.setValue(self.accountBehaviorVC!.entries["Archive"], forKey: "archiveFolder")
 					}
+					
+					self.newEmailAcc = managedObject
 
 				}
 			}
