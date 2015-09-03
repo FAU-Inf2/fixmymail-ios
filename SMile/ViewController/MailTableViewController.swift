@@ -58,8 +58,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        testData()
-        
         //init SearchController
         definesPresentationContext = true
         self.searchController = UISearchController(searchResultsController: nil)
@@ -113,7 +111,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
         
-        //mapSynchronize()
+        imapSynchronize()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -266,14 +264,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             setToolbarWhileEditing()
         }
     }
-    
-    
-    func testData() {
-        var cal = NSCalendar.currentCalendar()
-        var components: NSDateComponents = cal.components(NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay, fromDate: NSDate())
-        
-        var today: NSDate = cal.dateFromComponents(components)!
-    }
+
     
     
     // MARK: - IMAP functions
@@ -469,33 +460,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationController?.setToolbarHidden(false, animated: false)
     }
     
-    
-    /*func setToolbarWhileEditingAndNothingSelected() {
-    var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-    var markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
-    var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: nil, action: "")
-    var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: nil, action: "")
-    
-    moveButton.enabled = false
-    deleteButton.enabled = false
-    
-    var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
-    self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
-    self.navigationController?.setToolbarHidden(false, animated: false)
-    
-    }
-    
-    func setToolbarWhileEditingAndSomethingSelected() {
-    var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-    var markAllButton = UIBarButtonItem(title: "Mark", style: UIBarButtonItemStyle.Plain, target: self, action: "markButtonAction")
-    var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
-    var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
-    
-    var items = [markAllButton, flexibleSpace, moveButton, flexibleSpace, deleteButton]
-    self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
-    self.navigationController?.setToolbarHidden(false, animated: false)
-    }*/
-    
     func showEmptyMailSendView(sender: AnyObject) {
         (sender as! UIBarButtonItem).enabled = false
         self.showMailSendView(nil, ccRecipients: nil, bccRecipients: nil, subject: nil, textBody: nil)
@@ -643,25 +607,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //MARK: - Help functions for tableview
     func refreshTableView() {
-        //Load Emails from CoreData
-        /*emails.removeAll()
-        if let accs = accounts {
-        for account in accs {
-        for mail in account.emails {
-        emails.append(mail as! Email)
-        }
-        }
-        
-        emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
-        }*/
-        /*var error: NSError? = nil
-        if (fetchedResultsController.performFetch(&error) == false) {
-        print("An error occurred: \(error?.localizedDescription)")
-        }*/
-        
         mailTableView.reloadData()
-        //mailTableView.layoutIfNeeded()
-        //self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func removeEmailFromArray(email: Email) {
@@ -671,14 +617,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if index != NSNotFound {
             emails.removeAtIndex(index)
         }
-        /*for var i = 0; i < emails.count; i++ {
-        if emails[i] == email {
-        NSLog("removedEmailFromArray")
-        emails.removeAtIndex(i)
-        }
-        }*/
-        
-        
         objc_sync_exit(self.emails)
     }
     
@@ -703,12 +641,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
-        
-        /*if let sections = fetchedResultsController.sections {
-        return sections.count
-        }*/
-        
-        //return 0
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
