@@ -59,6 +59,31 @@ func StringToConnectionType(connectionType: String) -> MCOConnectionType {
 	}
 }
 
+/**
+Date until mails should be downloaded
+
+:param: duration:	the textual expression from EmailAccount.downloadMailDuration
+
+:returns: The Date or nil for no selection.
+*/
+func getDateFromPreferencesDurationString(duration: String) -> NSDate? {
+	var calendar = NSCalendar.currentCalendar()
+	var date: NSDate?
+	switch duration {
+	case "One week":
+		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: -7, toDate: NSDate(), options: nil)
+	case "One month":
+		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitMonth, value: -1, toDate: NSDate(), options: nil)
+	case "Six months":
+		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitMonth, value: -6, toDate: NSDate(), options: nil)
+	case "One year":
+		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitYear, value: -1, toDate: NSDate(), options: nil)
+	//"Ever"
+	default: date = nil
+	}
+	return date
+}
+
 
 
 

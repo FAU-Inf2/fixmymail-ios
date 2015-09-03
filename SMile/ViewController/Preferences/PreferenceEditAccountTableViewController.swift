@@ -615,6 +615,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			newEntry.setValue("", forKey: "sentFolder")
 			newEntry.setValue("", forKey: "deletedFolder")
 			newEntry.setValue("", forKey: "archiveFolder")
+			newEntry.setValue("One month", forKey: "downloadMailDuration")
 			
 			self.newEmailAcc = newEntry
 			
@@ -670,6 +671,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						managedObject.setValue(self.accountBehaviorVC!.entries["Sent"], forKey: "sentFolder")
 						managedObject.setValue(self.accountBehaviorVC!.entries["Deleted"], forKey: "deletedFolder")
 						managedObject.setValue(self.accountBehaviorVC!.entries["Archive"], forKey: "archiveFolder")
+						managedObject.setValue(self.accountBehaviorVC!.entries["Download mails for:"], forKey: "downloadMailDuration")
 					}
 					
 					self.newEmailAcc = managedObject

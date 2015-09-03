@@ -34,5 +34,6 @@ class EmailAccount: NSManagedObject {
 	@NSManaged var sentFolder: String
 	@NSManaged var deletedFolder: String
 	@NSManaged var archiveFolder: String
+	@NSManaged var downloadMailDuration: String
 
 }

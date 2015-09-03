@@ -155,6 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmailAccount.sentFolder = ""
 			gmailAccount.deletedFolder = ""
 			gmailAccount.archiveFolder = ""
+			gmailAccount.downloadMailDuration = "Ever"
 			let errorLocksmithGmail = Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
 			if errorLocksmithGmail == nil {
 				NSLog("found old data -> deleted!")
@@ -183,7 +184,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmxAccount.sentFolder = ""
 			gmxAccount.deletedFolder = ""
 			gmxAccount.archiveFolder = ""
-
+			gmxAccount.downloadMailDuration = "Ever"
 			let errorLocksmithGmx = Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
 			if errorLocksmithGmx == nil {
 				NSLog("found old data -> deleted!")
@@ -211,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			webAccount.sentFolder = ""
 			webAccount.deletedFolder = ""
 			webAccount.archiveFolder = ""
-
+			webAccount.downloadMailDuration = "Ever"
 			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
 			if errorLocksmithWeb == nil {
 				NSLog("found old data -> deleted!")
@@ -238,7 +239,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			tcomAccount.sentFolder = ""
 			tcomAccount.deletedFolder = ""
 			tcomAccount.archiveFolder = ""
-
+			tcomAccount.downloadMailDuration = "Ever"
 			let errorLocksmithTcom = Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
 			if errorLocksmithTcom == nil {
 				NSLog("found old data -> deleted!")
@@ -265,7 +266,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			iCloudAccount.sentFolder = ""
 			iCloudAccount.deletedFolder = ""
 			iCloudAccount.archiveFolder = ""
-
+			iCloudAccount.downloadMailDuration = "Ever"
 			let errorLocksmithiCloud = Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
 			if errorLocksmithiCloud == nil {
 				NSLog("found old data -> deleted!")
@@ -292,7 +293,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			YahooAccount.sentFolder = ""
 			YahooAccount.deletedFolder = ""
 			YahooAccount.archiveFolder = ""
-
+			YahooAccount.downloadMailDuration = "Ever"
 			let errorLocksmithYahoo = Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
 			if errorLocksmithYahoo == nil {
 				NSLog("found old data -> deleted!")
@@ -319,7 +320,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			OutlookAccount.sentFolder = ""
 			OutlookAccount.deletedFolder = ""
 			OutlookAccount.archiveFolder = ""
-
+			OutlookAccount.downloadMailDuration = "Ever"
 			let errorLocksmithOutlook = Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
 			if errorLocksmithOutlook == nil {
 				NSLog("found old data -> deleted!")
