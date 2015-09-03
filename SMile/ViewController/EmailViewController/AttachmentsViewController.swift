@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AssetsLibrary
 
-class AttachmentsViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate/*, AttachmentCellDelegate*/ {
+class AttachmentsViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate {
     
     @IBOutlet var attachmentsTableView: UITableView!
     
