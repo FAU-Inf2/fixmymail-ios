@@ -18,8 +18,7 @@ import UIKit
 import CoreData
 
 class SMileCrypto: NSObject {
-	private var pgp: ObjectivePGP
-	private var unnetpgp: UNNetPGP
+	private var pgp: UNNetPGP
 	private var fileManager: NSFileManager
 	private var pubringURL: NSURL
 	private var secringURL: NSURL
@@ -39,8 +38,7 @@ class SMileCrypto: NSObject {
 	
 	
 	override init() {
-		self.pgp = ObjectivePGP()
-		self.unnetpgp = UNNetPGP()
+		self.pgp = UNNetPGP()
 		self.fileManager = NSFileManager.defaultManager()
 		self.pubringURL = NSUserDefaults.standardUserDefaults().URLForKey("pubring")!
 		self.secringURL = NSUserDefaults.standardUserDefaults().URLForKey("secring")!
@@ -71,7 +69,7 @@ class SMileCrypto: NSObject {
 			if self.keysInCoreData != nil {
 				if self.keysInCoreData!.count > 0 {
 					for key in self.keysInCoreData! {
-						pgp.importKeysFromData(key.keyData, allowDuplicates: false)
+//						pgp.importKeysFromData(key.keyData, allowDuplicates: false)
 					}
 				} else {
 					self.keysInCoreData = nil
@@ -83,47 +81,7 @@ class SMileCrypto: NSObject {
 		
 	
 	}
-/*
-	init(pgp: ObjectivePGP, unnetpgp: UNNetPGP, fileManager: NSFileManager, pubringURL: NSURL, secringURL: NSURL) {
-		self.pgp = pgp
-		self.unnetpgp = unnetpgp
-		self.fileManager = fileManager
-		self.pubringURL = pubringURL
-		self.secringURL = secringURL
-		
-		// pgp settings
-	//	self.pgp.importKeysFromFile(self.pubringURL.path!, allowDuplicates: false)
-	//	self.pgp.importKeysFromFile(self.secringURL.path!, allowDuplicates: false)
-		
-		// get documentDirectory
-		self.documentDirectory = ""
-		let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
-		let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
-		if let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true) {
-			if paths.count > 0 {
-				if let dirPath = paths[0] as? String {
-					self.documentDirectory = dirPath
-				}
-			}
-		}
-		
-		// fetch key from coreData and load them to ObjectivePGP
-		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
-		if let appDelegate = appDel {
-			self.managedObjectContext = appDelegate.managedObjectContext!
-			var keyFetchRequest = NSFetchRequest(entityName: "Key")
-			var error: NSError?
-			self.keysInCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
-			if self.keysInCoreData != nil {
-				for key in self.keysInCoreData! {
-					pgp.importKeysFromData(key.keyData, allowDuplicates: false)
-				}
-			}
-			
-		}
-		
-	}
-*/
+	
 	// MARK: - Decryption
 	/**
 	Decrypt File
@@ -148,7 +106,7 @@ class SMileCrypto: NSObject {
 			if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
 				encryptedData = NSData(contentsOfURL: copyItem)
 				if encryptedData != nil {
-					decryptedData = self.pgp.decryptData(encryptedData!, passphrase: passphrase, error: &error)
+	//				decryptedData = self.pgp.decryptData(encryptedData!, passphrase: passphrase, error: &error)
 					if decryptedData != nil && error == nil {
 						// cut of .asc or .gpg to get the original extention
 						// for files not conforming to encrypted filenames like test.pdf.asc we have to implement some magic number checking
@@ -162,18 +120,7 @@ class SMileCrypto: NSObject {
 				// TODO
 				// Do smime stuff
 			}
-			
-	/*
-			self.unnetpgp = UNNetPGP(userId: "fixmymail2015@gmail.com")
-			self.unnetpgp.armored = true
-			self.unnetpgp.publicKeyRingPath = self.pubringURL.path!
-			self.unnetpgp.secretKeyRingPath = self.secringURL.path!
-			self.unnetpgp.password = passphrase
-			var newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
-			
-			self.unnetpgp.decryptFileAtPath(copyItem.path!, toFileAtPath: newFilePath)
-			decryptedFile = NSURL(fileURLWithPath: newFilePath)
-	*/	
+
 			
 		}
 		return (error, decryptedFile)
@@ -193,7 +140,7 @@ class SMileCrypto: NSObject {
 		var error: NSError?
 		var decryptedData: NSData?
 		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
-			decryptedData = self.pgp.decryptData(data, passphrase: passphrase, error: &error)
+//			decryptedData = self.pgp.decryptData(data, passphrase: passphrase, error: &error)
 			
 		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
 			// TODO
@@ -220,7 +167,7 @@ class SMileCrypto: NSObject {
 		var encryptedFile: NSURL?
 		var encryptedData: NSData?
 		var dataToEncrypt: NSData?
-		
+/*
 		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory.stringByAppendingPathComponent(self.fileManager.displayNameAtPath(file.path!)))!
 		self.fileManager.copyItemAtURL(file, toURL: copyItem, error: &error)
 		if error == nil {
@@ -244,7 +191,7 @@ class SMileCrypto: NSObject {
 				// Do smime stuff
 			}
 		}
-		
+*/
 		return (error, encryptedFile)
 	}
 	
@@ -262,7 +209,7 @@ class SMileCrypto: NSObject {
 	func encryptData(data: NSData, keyIdentifier: String, encryptionType: String) -> (NSError?, NSData?) {
 		var error: NSError?
 		var encryptedData: NSData?
-		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+/*		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
 			var keyToEncrypt: PGPKey = self.pgp.getKeyForIdentifier(keyIdentifier, type: PGPKeyType.Public)
 						
 			encryptedData = self.pgp.encryptData(data, usingPublicKey: keyToEncrypt, armored: true, error: &error)
@@ -272,7 +219,7 @@ class SMileCrypto: NSObject {
 			// Do smime stuff
 		}
 		
-		
+*/
 		return (error, encryptedData)
 	}
 	
@@ -298,8 +245,8 @@ class SMileCrypto: NSObject {
 				//	NSLog("pubKeyBlock: \n" + pubKeyBlock)
 				//	NSLog("fileContent: \n" + fileContent)
 					var keyData: NSData = pubKeyBlock.dataUsingEncoding(NSUTF8StringEncoding)!
-					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
-					resultPublic = importedOjbects.count > 0
+//					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
+//					resultPublic = importedOjbects.count > 0
 					// DEBUG
 					if resultPublic != nil {
 						NSLog("Public key imported")
@@ -316,8 +263,8 @@ class SMileCrypto: NSObject {
 					var secKeyBlock = fileContent.substringWithRange(Range<String.Index>(start: beginRange!.startIndex, end: endRange!.endIndex))
 				//	NSLog("secKeyBlock: " + secKeyBlock)
 					var keyData: NSData = secKeyBlock.dataUsingEncoding(NSUTF8StringEncoding)!
-					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
-					resultSecret = importedOjbects.count > 0
+//					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
+//					resultSecret = importedOjbects.count > 0
 					// DEBUG
 					if resultSecret != nil {
 						NSLog("Secret key imported")
@@ -329,12 +276,7 @@ class SMileCrypto: NSObject {
 				// TODO
 				// do smime stuff
 			}
-
-
 			
-		//	var keyData: NSData = fileContent.dataUsingEncoding(NSUTF8StringEncoding)!
-		//	pgp.importKeysFromData(keyData, allowDuplicates: false)
-
 		}
 
 		self.printAllPublicKeys(true)
@@ -346,7 +288,7 @@ class SMileCrypto: NSObject {
 		var error: NSError?
 		self.keysInCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
 		
-		// save new pubkeys to core data
+/*		// save new pubkeys to core data
 		var pubKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Public)
 		for anyPubkey in pubKeys {
 			let pubkey = anyPubkey as! PGPKey
@@ -406,6 +348,7 @@ class SMileCrypto: NSObject {
 			}
 			
 		}
+*/
 /*
 		if self.keysInCoreData != nil {
 			if self.keysInCoreData!.count > 0 {
@@ -478,7 +421,7 @@ class SMileCrypto: NSObject {
 	
 	*/
 	func printAllPublicKeys(fromActiveInstance: Bool) {
-		var pubKeyStrings: [String] = [String]()
+/*		var pubKeyStrings: [String] = [String]()
 		if fromActiveInstance {
 			var pubkeys = pgp.getKeysOfType(PGPKeyType.Public) as! [PGPKey]
 			for key in pubkeys {
@@ -500,6 +443,7 @@ class SMileCrypto: NSObject {
 			}
 			println("Public Keys: " + ",".join(pubKeyStrings))
 		}
+*/
 	}
 	
 	/**
@@ -510,7 +454,7 @@ class SMileCrypto: NSObject {
 	
 	*/
 	func printAllSecretKeys(fromActiveInstance: Bool) {
-		var secKeyStrings: [String] = [String]()
+/*		var secKeyStrings: [String] = [String]()
 		if fromActiveInstance {
 			var seckeys = pgp.getKeysOfType(PGPKeyType.Secret) as! [PGPKey]
 			for key in seckeys {
@@ -532,6 +476,7 @@ class SMileCrypto: NSObject {
 			}
 			println("Secret Keys: " + ",".join(secKeyStrings))
 		}
+*/
 	}
 	
 	func printPGPKeyFull(key: Key) -> Void {
@@ -613,7 +558,7 @@ class SMileCrypto: NSObject {
 	
 	private func saveKeyToCoreData(keyToSave: PGPKey) -> Bool {
 		var error: NSError?
-		if self.managedObjectContext != nil {
+/*		if self.managedObjectContext != nil {
 			var newKeyEntry = NSEntityDescription.insertNewObjectForEntityForName("Key", inManagedObjectContext: self.managedObjectContext!) as! Key
 			
 			var (name, address) = self.extractNameAndMailAddressFromUserID((keyToSave.users.firstObject as! PGPUser).userID)
@@ -649,15 +594,16 @@ class SMileCrypto: NSObject {
 			self.managedObjectContext!.save(&error)
 		}
 			
-		
+*/
 		if error != nil {
 			NSLog("Error saving to CoreData: \(error?.localizedDescription)")
 			return false
 		} else {
 			return true
 		}
+
 	}
-	
+
 	/**
 	Get name and address from userID String
 	
