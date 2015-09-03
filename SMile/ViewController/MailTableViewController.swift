@@ -58,6 +58,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        testData()
+        
         //init SearchController
         definesPresentationContext = true
         self.searchController = UISearchController(searchResultsController: nil)
@@ -266,15 +268,18 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     
+    func testData() {
+        var cal = NSCalendar.currentCalendar()
+        var components: NSDateComponents = cal.components(NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay, fromDate: NSDate())
+        
+        var today: NSDate = cal.dateFromComponents(components)!
+    }
     
     
     // MARK: - IMAP functions
     func imapSynchronize() {
         NSLog("refeshing..")
         if let accs = self.accounts {
-            var accountCounter: Int32 = Int32(accs.count)
-            var emailsToDownload: Int32 = 0
-            
             for account in accs {
                 NSLog("emailAdresse in imapSynchronize:  " + account.emailAddress)
                 let session = getSession(account)
@@ -343,8 +348,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         self.refreshTableView()
                     })
                 }
-                
-                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID + 1), UINT64_MAX)))
+
+                let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX - UInt64(currentMaxUID+2))))
                 
                 fetchNewEmailsOp.start({ (error, messages, range) -> Void in
                     if error != nil {
@@ -352,18 +357,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                     } else {
                         NSLog("%i new Emails", messages.count)
                         //Load new Emails
-                        OSAtomicAdd32(Int32(messages.count), &emailsToDownload)
                         
                         for message in messages {
-                            //Workaround
-                            if (message as! MCOIMAPMessage).uid == currentMaxUID {
-                                NSLog("EmailsToDownlaod:  " + String(emailsToDownload) + " - 1")
-                                OSAtomicDecrement32(&emailsToDownload)
-                                if accountCounter == 0 && emailsToDownload == 0 {
-                                    self.refreshControl.endRefreshing()
-                                }
-                                continue
-                            }
                             var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: self.managedObjectContext!) as! Email
                             newEmail.mcomessage = message
                             
@@ -406,23 +401,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                     
                                     self.saveCoreDataChanges()
                                     self.refreshTableView()
-                                    
-                                    NSLog("EmailsToDownlaod:  " + String(emailsToDownload) + " - 1")
-                                }
-                                OSAtomicDecrement32(&emailsToDownload)
-                                if accountCounter == 0 && emailsToDownload == 0 {
-                                    self.refreshControl.endRefreshing()
                                 }
                             })
                             newEmail.toAccount = account
                         }
                     }
-                    NSLog("AccountCounter: " + String(accountCounter) + " - 1")
-                    OSAtomicDecrement32(&accountCounter)
+                    self.refreshControl.endRefreshing()
                 })
-            }
-            if accountCounter == 0 && emailsToDownload == 0 {
-                self.refreshControl.endRefreshing()
             }
         }
     }
