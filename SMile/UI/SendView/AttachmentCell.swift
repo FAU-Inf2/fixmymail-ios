@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 
+
 class AttachmentCell: UITableViewCell {
     
     @IBOutlet weak var imageViewPreview: UIImageView!

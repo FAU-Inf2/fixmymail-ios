@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AssetsLibrary
 
-class AttachmentsViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate {
+class AttachmentsViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate/*, AttachmentCellDelegate*/ {
     
     @IBOutlet var attachmentsTableView: UITableView!
     
@@ -47,6 +47,10 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         return keys.count
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 50
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentCell", forIndexPath: indexPath) as! AttachmentCell
         cell.imageViewPreview.image = self.images[indexPath.row]
@@ -62,14 +66,15 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         } else {
             cell.labelFileSize.text = "\(Int(fileSize)) B"
         }
-        
-        var deleteButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
-        deleteButton.tag = indexPath.row
-        deleteButton.frame = CGRectMake(0, 0, 20, 20)
-        deleteButton.addTarget(self, action: "deleteAttachmentWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
-        cell.accessoryView = deleteButton
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            self.deleteAttachment(indexPath.row)
+        }
     }
     
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
@@ -115,7 +120,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         } else {
             let data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
             self.attachFile("image.JPG", data: data, mimetype: "JPG")
-            self.attachmentsTableView.reloadData()
+            self.attachmentsTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
     
@@ -143,11 +148,10 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         self.images.append(image)
     }
     
-    func deleteAttachmentWithSender(sender: AnyObject) {
-        var removeIndex = (sender as! UIButton).tag
+    func deleteAttachment(removeIndex: Int) {
         self.images.removeAtIndex(removeIndex)
         self.attachments.removeObjectForKey(self.keys.removeAtIndex(removeIndex))
-        self.attachmentsTableView.reloadData()
+        self.attachmentsTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
     }
     
 }
