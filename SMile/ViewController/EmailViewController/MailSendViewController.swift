@@ -24,9 +24,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     var bccRecipients: NSMutableArray = NSMutableArray()
     var subject: String = ""
     var textBody: String = ""
-    /*var attachments: NSMutableDictionary = NSMutableDictionary()
-    var keys: [String] = [String]()
-    var inlineImages: [NSTextAttachment] = [NSTextAttachment]()*/
     
     var account: EmailAccount!
     var allAccounts: [EmailAccount]!
@@ -42,6 +39,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         } else {
             self.title = subject
         }
+        
+        attachmentView.isSendAttachment = true
         
         self.textViewTextBody.delegate = self
         self.textViewTextBody.scrollEnabled = false
@@ -63,8 +62,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         }
         
         var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmailWithSender:")
-        //var buttonImagePicker: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "pushImagePickerViewWithSender:")
-        //self.navigationItem.rightBarButtonItems = [buttonSend, buttonImagePicker]
         self.navigationItem.rightBarButtonItem = buttonSend
         var buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "performCancelWithSender:")
         self.navigationItem.leftBarButtonItem = buttonCancel
@@ -384,41 +381,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.isResponder = nil
     }
     
-    /*func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text == "" {
-            self.backspacePressed = true
-        }
-        return true
-    }*/
-    
     func textViewDidChange(textView: UITextView) {
-        /*// Check if an attachment got deleted
-        if self.backspacePressed {
-            var indexOfAttachment = 0
-            var indexOfChar = self.textBody.startIndex
-            var textWithDeletedChar = textView.text
-            for char in self.textBody {
-                if indexOfChar == textWithDeletedChar.endIndex {
-                    textWithDeletedChar.append(Character(" "))
-                }
-                var c = textWithDeletedChar.removeAtIndex(indexOfChar)
-                if c == Character(UnicodeScalar(NSAttachmentCharacter)) {
-                    indexOfAttachment++
-                }
-                if char != c {
-                    if char == Character(UnicodeScalar(NSAttachmentCharacter)) {
-                        println(indexOfAttachment)
-                        self.inlineImages.removeAtIndex(indexOfAttachment)
-                        self.attachments.removeObjectForKey(self.keys.removeAtIndex(indexOfAttachment))
-                    }
-                    break
-                }
-                textWithDeletedChar.insert(c, atIndex: indexOfChar)
-                indexOfChar = indexOfChar.successor()
-            }
-            self.backspacePressed = false
-        }
-        self.textBody = textView.text*/
         // Resize the textView if needed
         let newSize = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.max))
         for constraint in textView.constraints() {
@@ -502,15 +465,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             if actionSheet.tag == 1 {
                 self.navigationController?.popViewControllerAnimated(true)
             }
-        /*case 1:
-            if actionSheet.tag == 2 {
-                let imagePicker = UIImagePickerController()
-                imagePicker.delegate = self
-                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-                imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.Rear
-                imagePicker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                self.presentViewController(imagePicker, animated: true, completion: nil)
-            }*/
         case 2:
             if actionSheet.tag == 1 {
                 //Move Email to drafts Folder
@@ -529,44 +483,11 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 }
                 
                 self.navigationController?.popViewControllerAnimated(true)
-            }/* else {
-                let imagePicker = UIImagePickerController()
-                imagePicker.delegate = self
-                imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-                self.presentViewController(imagePicker, animated: true, completion: nil)
-            }*/
+            }
         default:
             break
         }
     }
-    
-    /*//MARK: - UIImagePickerControllerDelegate
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
-        let dictionary = NSDictionary(dictionary: info)
-        
-        if picker.sourceType == UIImagePickerControllerSourceType.PhotoLibrary {
-            let refURL: NSURL = dictionary.valueForKey(UIImagePickerControllerReferenceURL) as! NSURL
-            
-            let assetsLibrary: ALAssetsLibrary = ALAssetsLibrary()
-            assetsLibrary.assetForURL(refURL, resultBlock: { (imageAsset) -> Void in
-                let imageRep: ALAssetRepresentation = imageAsset.defaultRepresentation()
-                println(imageRep.filename().pathExtension)
-                var data = NSData()
-                switch imageRep.filename().pathExtension {
-                    case "PNG", "png": data = UIImagePNGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage)
-                    case "JPG", "JPEG": data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
-                    default: break
-                }
-                self.attachFile(imageRep.filename(), data: data, mimetype: imageRep.filename().pathExtension)
-                }) { (error) -> Void in
-                    
-            }
-        } else {
-            let data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
-            self.attachFile("image.JPG", data: data, mimetype: "JPG")
-        }
-    }*/
     
     //MARK: - Supportive methods
     func initSendViewCellWithLabelAndTextFieldWithCell(cell: SendViewCellWithLabelAndTextField, labelColor: UIColor, labelText: String, textFieldTextColor: UIColor, textFieldTintColor: UIColor, textFieldText: String, textFieldTag: Int, textFieldDelegate: UITextFieldDelegate, textFieldInputView: UIView?, cellAccessoryView: UIView?) {
@@ -632,12 +553,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
-    /*func pushImagePickerViewWithSender(sender: AnyObject) {
-        var attachmentActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Take Photo or Video", "Choose existing")
-        attachmentActionSheet.tag = 2
-        attachmentActionSheet.showInView(self.view)
-    }*/
-    
     func addSignature() {
         if self.account.signature != "" {
             self.textBody = self.textBody + "\n" + self.account.signature
@@ -656,30 +571,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     
     //MARK: - Build and send E-Mail
     func attachFile(filename: String, data: NSData, mimetype: String) {
-        /*self.attachmentView.attachments.setValue(data, forKey: filename)
-        self.attachmentView.keys.append(filename)
-        var inlineImage = NSTextAttachment()
-        var scaleFactor: CGFloat = 0
-        var image = UIImage()
-        if mimetype == "png" || mimetype == "PNG" || mimetype == "JPG" || mimetype == "JPEG" {
-            image = UIImage(data: data)!
-        } else {
-            image = UIImage(named: "attachedFile.png")!
-        }
-        image = UIImage(CGImage: image.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
-        self.attachmentView.images.append(image)
-        var attributedString = NSMutableAttributedString(string: self.textBody + String(Character(UnicodeScalar(NSAttachmentCharacter))))
-        var i = 0
-        var image = 0
-        for char in attributedString.string {
-            if char == Character(UnicodeScalar(NSAttachmentCharacter)) {
-                attributedString.replaceCharactersInRange(NSMakeRange(i, 1), withAttributedString: NSAttributedString(attachment: self.inlineImages[image++]))
-            }
-            i++
-        }
-        self.textViewTextBody.attributedText = attributedString
-        self.textBody = attributedString.string
-        textViewDidChange(self.textViewTextBody)*/
         self.attachmentView.attachFile(filename, data: data, mimetype: mimetype)
     }
     
