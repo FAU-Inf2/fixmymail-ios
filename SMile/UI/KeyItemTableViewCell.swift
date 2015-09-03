@@ -15,7 +15,6 @@ class KeyItemTableViewCell: UITableViewCell {
 	@IBOutlet weak var LabelKeyOwner: UILabel!
 	@IBOutlet weak var LabelMailAddress: UILabel!
 	@IBOutlet weak var LabelKeyID: UILabel!
-	@IBOutlet weak var LabelValidThru: UILabel!
 	@IBOutlet weak var secKey: UIImageView!
 	@IBOutlet weak var pubKey: UIImageView!
 	@IBOutlet weak var smime: UIImageView!
