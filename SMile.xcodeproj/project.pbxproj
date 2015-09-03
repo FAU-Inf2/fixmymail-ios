@@ -176,6 +176,8 @@
 		AD44E0381B1B528400751FFA /* fau-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0371B1B528400751FFA /* fau-logo.png */; };
 		AD4742F31B98434200A2A1BC /* PGPKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F21B98434200A2A1BC /* PGPKey.swift */; };
 		AD4742F51B98478B00A2A1BC /* PGPKeyID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */; };
+		AD4742F91B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */; };
+		AD4742FA1B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */; };
 		AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */; };
 		AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */; };
 		AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */; };
@@ -439,6 +441,9 @@
 		AD44E0371B1B528400751FFA /* fau-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fau-logo.png"; sourceTree = "<group>"; };
 		AD4742F21B98434200A2A1BC /* PGPKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PGPKey.swift; sourceTree = "<group>"; };
 		AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PGPKeyID.swift; sourceTree = "<group>"; };
+		AD4742F61B984E9000A2A1BC /* SMile v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v3.xcdatamodel"; sourceTree = "<group>"; };
+		AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefDownloadMailDurationTableViewController.swift; sourceTree = "<group>"; };
+		AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefDownloadMailDurationTableViewController.xib; sourceTree = "<group>"; };
 		AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewController.swift; sourceTree = "<group>"; };
 		AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewController.xib; sourceTree = "<group>"; };
 		AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewCell.swift; sourceTree = "<group>"; };
@@ -880,6 +885,8 @@
 				ADBF50AB1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.xib */,
 				AD5292611B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift */,
 				AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */,
+				AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */,
+				AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1110,6 +1117,7 @@
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				3D69ECC61B83AB9A0082EF5C /* page_white_film@2x.png in Resources */,
 				3D69ECDF1B83AB9A0082EF5C /* page_white_text.png in Resources */,
+				AD4742FA1B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib in Resources */,
 				ADEF086A1B826819008AC0D0 /* KeyDetailTableViewCell.xib in Resources */,
 				ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */,
 				ADEF085D1B8205B9008AC0D0 /* red_indicator.png in Resources */,
@@ -1311,6 +1319,7 @@
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				3D69ED0F1B83ABE20082EF5C /* MCOCIDURLProtocol.mm in Sources */,
 				3D69EBA31B83A4CB0082EF5C /* SenderInfoTableViewCell.swift in Sources */,
+				AD4742F91B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
 				AD5292631B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift in Sources */,
 				AD4E57DA1B7F781000E8C521 /* UserIdItem.swift in Sources */,
@@ -1650,10 +1659,11 @@
 		3DF253AE1AF7611D00B99BC8 /* SMile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				AD4742F61B984E9000A2A1BC /* SMile v3.xcdatamodel */,
 				AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */,
 				3DF253AF1AF7611D00B99BC8 /* SMile.xcdatamodel */,
 			);
-			currentVersion = AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */;
+			currentVersion = AD4742F61B984E9000A2A1BC /* SMile v3.xcdatamodel */;
 			path = SMile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
