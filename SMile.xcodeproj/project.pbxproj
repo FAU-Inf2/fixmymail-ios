@@ -176,48 +176,14 @@
 		AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */; };
 		AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0351B1B51ED00751FFA /* icloud-icon.png */; };
 		AD44E0381B1B528400751FFA /* fau-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0371B1B528400751FFA /* fau-logo.png */; };
+		AD4742F31B98434200A2A1BC /* PGPKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F21B98434200A2A1BC /* PGPKey.swift */; };
+		AD4742F51B98478B00A2A1BC /* PGPKeyID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */; };
 		AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */; };
 		AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */; };
 		AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */; };
 		AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */; };
 		AD4E57DA1B7F781000E8C521 /* UserIdItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4E57D91B7F781000E8C521 /* UserIdItem.swift */; };
 		AD4E57DC1B7F782300E8C521 /* SubKeyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4E57DB1B7F782300E8C521 /* SubKeyItem.swift */; };
-		AD4FB12D1B88BFF1004D18CB /* PGPSecretKeyPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0E31B88BFF1004D18CB /* PGPSecretKeyPacket.m */; };
-		AD4FB12E1B88BFF1004D18CB /* PGPS2K.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0E41B88BFF1004D18CB /* PGPS2K.m */; };
-		AD4FB12F1B88BFF1004D18CB /* ObjectivePGP.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0E51B88BFF1004D18CB /* ObjectivePGP.m */; };
-		AD4FB1301B88BFF1004D18CB /* NSData+compression.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0E81B88BFF1004D18CB /* NSData+compression.m */; };
-		AD4FB1311B88BFF1004D18CB /* NSData+PGPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0EA1B88BFF1004D18CB /* NSData+PGPUtils.m */; };
-		AD4FB1321B88BFF1004D18CB /* NSValue+PGPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0EC1B88BFF1004D18CB /* NSValue+PGPUtils.m */; };
-		AD4FB1331B88BFF1004D18CB /* PGPArmor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0F01B88BFF1004D18CB /* PGPArmor.m */; };
-		AD4FB1341B88BFF1004D18CB /* PGPCompressedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0F21B88BFF1004D18CB /* PGPCompressedPacket.m */; };
-		AD4FB1351B88BFF1004D18CB /* PGPCryptoCFB.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0F41B88BFF1004D18CB /* PGPCryptoCFB.m */; };
-		AD4FB1361B88BFF1004D18CB /* PGPCryptoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0F61B88BFF1004D18CB /* PGPCryptoUtils.m */; };
-		AD4FB1371B88BFF1004D18CB /* PGPFingerprint.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0F81B88BFF1004D18CB /* PGPFingerprint.m */; };
-		AD4FB1381B88BFF1004D18CB /* PGPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0F91B88BFF1004D18CB /* PGPKey.m */; };
-		AD4FB1391B88BFF1004D18CB /* PGPKeyID.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0FB1B88BFF1004D18CB /* PGPKeyID.m */; };
-		AD4FB13A1B88BFF1004D18CB /* PGPLiteralPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0FD1B88BFF1004D18CB /* PGPLiteralPacket.m */; };
-		AD4FB13B1B88BFF1004D18CB /* PGPModificationDetectionCodePacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB0FF1B88BFF1004D18CB /* PGPModificationDetectionCodePacket.m */; };
-		AD4FB13C1B88BFF1004D18CB /* PGPMPI.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1011B88BFF1004D18CB /* PGPMPI.m */; };
-		AD4FB13D1B88BFF1004D18CB /* PGPOnePassSignaturePacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1031B88BFF1004D18CB /* PGPOnePassSignaturePacket.m */; };
-		AD4FB13E1B88BFF1004D18CB /* PGPPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1051B88BFF1004D18CB /* PGPPacket.m */; };
-		AD4FB13F1B88BFF1004D18CB /* PGPPacketFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1071B88BFF1004D18CB /* PGPPacketFactory.m */; };
-		AD4FB1401B88BFF1004D18CB /* PGPPKCSEme.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1091B88BFF1004D18CB /* PGPPKCSEme.m */; };
-		AD4FB1411B88BFF1004D18CB /* PGPPKCSEmsa.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB10B1B88BFF1004D18CB /* PGPPKCSEmsa.m */; };
-		AD4FB1421B88BFF1004D18CB /* PGPPublicKeyEncryptedSessionKeyPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB10D1B88BFF1004D18CB /* PGPPublicKeyEncryptedSessionKeyPacket.m */; };
-		AD4FB1431B88BFF1004D18CB /* PGPPublicKeyPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB10F1B88BFF1004D18CB /* PGPPublicKeyPacket.m */; };
-		AD4FB1441B88BFF1004D18CB /* PGPPublicKeyRSA.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1111B88BFF1004D18CB /* PGPPublicKeyRSA.m */; };
-		AD4FB1451B88BFF1004D18CB /* PGPPublicSubKeyPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1131B88BFF1004D18CB /* PGPPublicSubKeyPacket.m */; };
-		AD4FB1461B88BFF1004D18CB /* PGPSecretSubKeyPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1171B88BFF1004D18CB /* PGPSecretSubKeyPacket.m */; };
-		AD4FB1471B88BFF1004D18CB /* PGPSignaturePacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1191B88BFF1004D18CB /* PGPSignaturePacket.m */; };
-		AD4FB1481B88BFF1004D18CB /* PGPSignatureSubpacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB11B1B88BFF1004D18CB /* PGPSignatureSubpacket.m */; };
-		AD4FB1491B88BFF1004D18CB /* PGPSubKey.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB11D1B88BFF1004D18CB /* PGPSubKey.m */; };
-		AD4FB14A1B88BFF1004D18CB /* PGPSymmetricallyEncryptedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB11F1B88BFF1004D18CB /* PGPSymmetricallyEncryptedDataPacket.m */; };
-		AD4FB14B1B88BFF1004D18CB /* PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1211B88BFF1004D18CB /* PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.m */; };
-		AD4FB14C1B88BFF1004D18CB /* PGPTrustPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1231B88BFF1004D18CB /* PGPTrustPacket.m */; };
-		AD4FB14D1B88BFF1004D18CB /* PGPUser.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1261B88BFF1004D18CB /* PGPUser.m */; };
-		AD4FB14E1B88BFF1004D18CB /* PGPUserAttributePacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1281B88BFF1004D18CB /* PGPUserAttributePacket.m */; };
-		AD4FB14F1B88BFF1004D18CB /* PGPUserAttributeSubpacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB12A1B88BFF1004D18CB /* PGPUserAttributeSubpacket.m */; };
-		AD4FB1501B88BFF1004D18CB /* PGPUserIDPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB12C1B88BFF1004D18CB /* PGPUserIDPacket.m */; };
 		AD4FB15E1B88C08C004D18CB /* MyRNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1521B88C08C004D18CB /* MyRNEncryptor.m */; };
 		AD4FB15F1B88C08C004D18CB /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1551B88C08C004D18CB /* RNCryptor.m */; };
 		AD4FB1601B88C08C004D18CB /* RNCryptorEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1591B88C08C004D18CB /* RNCryptorEngine.m */; };
@@ -475,86 +441,14 @@
 		AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextfieldWithPadding.swift; sourceTree = "<group>"; };
 		AD44E0351B1B51ED00751FFA /* icloud-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icloud-icon.png"; sourceTree = "<group>"; };
 		AD44E0371B1B528400751FFA /* fau-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fau-logo.png"; sourceTree = "<group>"; };
+		AD4742F21B98434200A2A1BC /* PGPKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PGPKey.swift; sourceTree = "<group>"; };
+		AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PGPKeyID.swift; sourceTree = "<group>"; };
 		AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewController.swift; sourceTree = "<group>"; };
 		AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewController.xib; sourceTree = "<group>"; };
 		AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewCell.swift; sourceTree = "<group>"; };
 		AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewCell.xib; sourceTree = "<group>"; };
 		AD4E57D91B7F781000E8C521 /* UserIdItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserIdItem.swift; sourceTree = "<group>"; };
 		AD4E57DB1B7F782300E8C521 /* SubKeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubKeyItem.swift; sourceTree = "<group>"; };
-		AD4FB0E31B88BFF1004D18CB /* PGPSecretKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPSecretKeyPacket.m; sourceTree = "<group>"; };
-		AD4FB0E41B88BFF1004D18CB /* PGPS2K.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPS2K.m; sourceTree = "<group>"; };
-		AD4FB0E51B88BFF1004D18CB /* ObjectivePGP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectivePGP.m; sourceTree = "<group>"; };
-		AD4FB0E61B88BFF1004D18CB /* PGPKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPKey.h; sourceTree = "<group>"; };
-		AD4FB0E71B88BFF1004D18CB /* NSData+compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+compression.h"; sourceTree = "<group>"; };
-		AD4FB0E81B88BFF1004D18CB /* NSData+compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+compression.m"; sourceTree = "<group>"; };
-		AD4FB0E91B88BFF1004D18CB /* NSData+PGPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+PGPUtils.h"; sourceTree = "<group>"; };
-		AD4FB0EA1B88BFF1004D18CB /* NSData+PGPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+PGPUtils.m"; sourceTree = "<group>"; };
-		AD4FB0EB1B88BFF1004D18CB /* NSValue+PGPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValue+PGPUtils.h"; sourceTree = "<group>"; };
-		AD4FB0EC1B88BFF1004D18CB /* NSValue+PGPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValue+PGPUtils.m"; sourceTree = "<group>"; };
-		AD4FB0ED1B88BFF1004D18CB /* ObjectivePGP-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObjectivePGP-Prefix.pch"; sourceTree = "<group>"; };
-		AD4FB0EE1B88BFF1004D18CB /* ObjectivePGP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectivePGP.h; sourceTree = "<group>"; };
-		AD4FB0EF1B88BFF1004D18CB /* PGPArmor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPArmor.h; sourceTree = "<group>"; };
-		AD4FB0F01B88BFF1004D18CB /* PGPArmor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPArmor.m; sourceTree = "<group>"; };
-		AD4FB0F11B88BFF1004D18CB /* PGPCompressedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPCompressedPacket.h; sourceTree = "<group>"; };
-		AD4FB0F21B88BFF1004D18CB /* PGPCompressedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPCompressedPacket.m; sourceTree = "<group>"; };
-		AD4FB0F31B88BFF1004D18CB /* PGPCryptoCFB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPCryptoCFB.h; sourceTree = "<group>"; };
-		AD4FB0F41B88BFF1004D18CB /* PGPCryptoCFB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPCryptoCFB.m; sourceTree = "<group>"; };
-		AD4FB0F51B88BFF1004D18CB /* PGPCryptoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPCryptoUtils.h; sourceTree = "<group>"; };
-		AD4FB0F61B88BFF1004D18CB /* PGPCryptoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPCryptoUtils.m; sourceTree = "<group>"; };
-		AD4FB0F71B88BFF1004D18CB /* PGPFingerprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPFingerprint.h; sourceTree = "<group>"; };
-		AD4FB0F81B88BFF1004D18CB /* PGPFingerprint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPFingerprint.m; sourceTree = "<group>"; };
-		AD4FB0F91B88BFF1004D18CB /* PGPKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPKey.m; sourceTree = "<group>"; };
-		AD4FB0FA1B88BFF1004D18CB /* PGPKeyID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPKeyID.h; sourceTree = "<group>"; };
-		AD4FB0FB1B88BFF1004D18CB /* PGPKeyID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPKeyID.m; sourceTree = "<group>"; };
-		AD4FB0FC1B88BFF1004D18CB /* PGPLiteralPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPLiteralPacket.h; sourceTree = "<group>"; };
-		AD4FB0FD1B88BFF1004D18CB /* PGPLiteralPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPLiteralPacket.m; sourceTree = "<group>"; };
-		AD4FB0FE1B88BFF1004D18CB /* PGPModificationDetectionCodePacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPModificationDetectionCodePacket.h; sourceTree = "<group>"; };
-		AD4FB0FF1B88BFF1004D18CB /* PGPModificationDetectionCodePacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPModificationDetectionCodePacket.m; sourceTree = "<group>"; };
-		AD4FB1001B88BFF1004D18CB /* PGPMPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPMPI.h; sourceTree = "<group>"; };
-		AD4FB1011B88BFF1004D18CB /* PGPMPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPMPI.m; sourceTree = "<group>"; };
-		AD4FB1021B88BFF1004D18CB /* PGPOnePassSignaturePacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPOnePassSignaturePacket.h; sourceTree = "<group>"; };
-		AD4FB1031B88BFF1004D18CB /* PGPOnePassSignaturePacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPOnePassSignaturePacket.m; sourceTree = "<group>"; };
-		AD4FB1041B88BFF1004D18CB /* PGPPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPacket.h; sourceTree = "<group>"; };
-		AD4FB1051B88BFF1004D18CB /* PGPPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPacket.m; sourceTree = "<group>"; };
-		AD4FB1061B88BFF1004D18CB /* PGPPacketFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPacketFactory.h; sourceTree = "<group>"; };
-		AD4FB1071B88BFF1004D18CB /* PGPPacketFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPacketFactory.m; sourceTree = "<group>"; };
-		AD4FB1081B88BFF1004D18CB /* PGPPKCSEme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPKCSEme.h; sourceTree = "<group>"; };
-		AD4FB1091B88BFF1004D18CB /* PGPPKCSEme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPKCSEme.m; sourceTree = "<group>"; };
-		AD4FB10A1B88BFF1004D18CB /* PGPPKCSEmsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPKCSEmsa.h; sourceTree = "<group>"; };
-		AD4FB10B1B88BFF1004D18CB /* PGPPKCSEmsa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPKCSEmsa.m; sourceTree = "<group>"; };
-		AD4FB10C1B88BFF1004D18CB /* PGPPublicKeyEncryptedSessionKeyPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPublicKeyEncryptedSessionKeyPacket.h; sourceTree = "<group>"; };
-		AD4FB10D1B88BFF1004D18CB /* PGPPublicKeyEncryptedSessionKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPublicKeyEncryptedSessionKeyPacket.m; sourceTree = "<group>"; };
-		AD4FB10E1B88BFF1004D18CB /* PGPPublicKeyPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPublicKeyPacket.h; sourceTree = "<group>"; };
-		AD4FB10F1B88BFF1004D18CB /* PGPPublicKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPublicKeyPacket.m; sourceTree = "<group>"; };
-		AD4FB1101B88BFF1004D18CB /* PGPPublicKeyRSA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPublicKeyRSA.h; sourceTree = "<group>"; };
-		AD4FB1111B88BFF1004D18CB /* PGPPublicKeyRSA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPublicKeyRSA.m; sourceTree = "<group>"; };
-		AD4FB1121B88BFF1004D18CB /* PGPPublicSubKeyPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPPublicSubKeyPacket.h; sourceTree = "<group>"; };
-		AD4FB1131B88BFF1004D18CB /* PGPPublicSubKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPPublicSubKeyPacket.m; sourceTree = "<group>"; };
-		AD4FB1141B88BFF1004D18CB /* PGPS2K.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPS2K.h; sourceTree = "<group>"; };
-		AD4FB1151B88BFF1004D18CB /* PGPSecretKeyPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPSecretKeyPacket.h; sourceTree = "<group>"; };
-		AD4FB1161B88BFF1004D18CB /* PGPSecretSubKeyPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPSecretSubKeyPacket.h; sourceTree = "<group>"; };
-		AD4FB1171B88BFF1004D18CB /* PGPSecretSubKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPSecretSubKeyPacket.m; sourceTree = "<group>"; };
-		AD4FB1181B88BFF1004D18CB /* PGPSignaturePacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPSignaturePacket.h; sourceTree = "<group>"; };
-		AD4FB1191B88BFF1004D18CB /* PGPSignaturePacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPSignaturePacket.m; sourceTree = "<group>"; };
-		AD4FB11A1B88BFF1004D18CB /* PGPSignatureSubpacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPSignatureSubpacket.h; sourceTree = "<group>"; };
-		AD4FB11B1B88BFF1004D18CB /* PGPSignatureSubpacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPSignatureSubpacket.m; sourceTree = "<group>"; };
-		AD4FB11C1B88BFF1004D18CB /* PGPSubKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPSubKey.h; sourceTree = "<group>"; };
-		AD4FB11D1B88BFF1004D18CB /* PGPSubKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPSubKey.m; sourceTree = "<group>"; };
-		AD4FB11E1B88BFF1004D18CB /* PGPSymmetricallyEncryptedDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPSymmetricallyEncryptedDataPacket.h; sourceTree = "<group>"; };
-		AD4FB11F1B88BFF1004D18CB /* PGPSymmetricallyEncryptedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPSymmetricallyEncryptedDataPacket.m; sourceTree = "<group>"; };
-		AD4FB1201B88BFF1004D18CB /* PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.h; sourceTree = "<group>"; };
-		AD4FB1211B88BFF1004D18CB /* PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.m; sourceTree = "<group>"; };
-		AD4FB1221B88BFF1004D18CB /* PGPTrustPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPTrustPacket.h; sourceTree = "<group>"; };
-		AD4FB1231B88BFF1004D18CB /* PGPTrustPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPTrustPacket.m; sourceTree = "<group>"; };
-		AD4FB1241B88BFF1004D18CB /* PGPTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPTypes.h; sourceTree = "<group>"; };
-		AD4FB1251B88BFF1004D18CB /* PGPUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPUser.h; sourceTree = "<group>"; };
-		AD4FB1261B88BFF1004D18CB /* PGPUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPUser.m; sourceTree = "<group>"; };
-		AD4FB1271B88BFF1004D18CB /* PGPUserAttributePacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPUserAttributePacket.h; sourceTree = "<group>"; };
-		AD4FB1281B88BFF1004D18CB /* PGPUserAttributePacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPUserAttributePacket.m; sourceTree = "<group>"; };
-		AD4FB1291B88BFF1004D18CB /* PGPUserAttributeSubpacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPUserAttributeSubpacket.h; sourceTree = "<group>"; };
-		AD4FB12A1B88BFF1004D18CB /* PGPUserAttributeSubpacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPUserAttributeSubpacket.m; sourceTree = "<group>"; };
-		AD4FB12B1B88BFF1004D18CB /* PGPUserIDPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPUserIDPacket.h; sourceTree = "<group>"; };
-		AD4FB12C1B88BFF1004D18CB /* PGPUserIDPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPUserIDPacket.m; sourceTree = "<group>"; };
 		AD4FB1511B88C08C004D18CB /* MyRNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRNEncryptor.h; sourceTree = "<group>"; };
 		AD4FB1521B88C08C004D18CB /* MyRNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRNEncryptor.m; sourceTree = "<group>"; };
 		AD4FB1531B88C08C004D18CB /* RNCryptor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCryptor-Prefix.pch"; sourceTree = "<group>"; };
@@ -861,7 +755,6 @@
 			children = (
 				3D69EBAC1B83A5260082EF5C /* DetailMessageViewHelper */,
 				3D69EB981B83709C0082EF5C /* EmailCache.swift */,
-				ADD80D7E1B7CEADD00A32D59 /* ObjectivePGP */,
 				3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */,
 				5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */,
 			);
@@ -1100,6 +993,8 @@
 			isa = PBXGroup;
 			children = (
 				AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */,
+				AD4742F21B98434200A2A1BC /* PGPKey.swift */,
+				AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */,
 			);
 			path = SMile_Crypto;
 			sourceTree = "<group>";
@@ -1113,87 +1008,6 @@
 				AD4E57DB1B7F782300E8C521 /* SubKeyItem.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		ADD80D7E1B7CEADD00A32D59 /* ObjectivePGP */ = {
-			isa = PBXGroup;
-			children = (
-				AD4FB0E31B88BFF1004D18CB /* PGPSecretKeyPacket.m */,
-				AD4FB0E41B88BFF1004D18CB /* PGPS2K.m */,
-				AD4FB0E51B88BFF1004D18CB /* ObjectivePGP.m */,
-				AD4FB0E61B88BFF1004D18CB /* PGPKey.h */,
-				AD4FB0E71B88BFF1004D18CB /* NSData+compression.h */,
-				AD4FB0E81B88BFF1004D18CB /* NSData+compression.m */,
-				AD4FB0E91B88BFF1004D18CB /* NSData+PGPUtils.h */,
-				AD4FB0EA1B88BFF1004D18CB /* NSData+PGPUtils.m */,
-				AD4FB0EB1B88BFF1004D18CB /* NSValue+PGPUtils.h */,
-				AD4FB0EC1B88BFF1004D18CB /* NSValue+PGPUtils.m */,
-				AD4FB0ED1B88BFF1004D18CB /* ObjectivePGP-Prefix.pch */,
-				AD4FB0EE1B88BFF1004D18CB /* ObjectivePGP.h */,
-				AD4FB0EF1B88BFF1004D18CB /* PGPArmor.h */,
-				AD4FB0F01B88BFF1004D18CB /* PGPArmor.m */,
-				AD4FB0F11B88BFF1004D18CB /* PGPCompressedPacket.h */,
-				AD4FB0F21B88BFF1004D18CB /* PGPCompressedPacket.m */,
-				AD4FB0F31B88BFF1004D18CB /* PGPCryptoCFB.h */,
-				AD4FB0F41B88BFF1004D18CB /* PGPCryptoCFB.m */,
-				AD4FB0F51B88BFF1004D18CB /* PGPCryptoUtils.h */,
-				AD4FB0F61B88BFF1004D18CB /* PGPCryptoUtils.m */,
-				AD4FB0F71B88BFF1004D18CB /* PGPFingerprint.h */,
-				AD4FB0F81B88BFF1004D18CB /* PGPFingerprint.m */,
-				AD4FB0F91B88BFF1004D18CB /* PGPKey.m */,
-				AD4FB0FA1B88BFF1004D18CB /* PGPKeyID.h */,
-				AD4FB0FB1B88BFF1004D18CB /* PGPKeyID.m */,
-				AD4FB0FC1B88BFF1004D18CB /* PGPLiteralPacket.h */,
-				AD4FB0FD1B88BFF1004D18CB /* PGPLiteralPacket.m */,
-				AD4FB0FE1B88BFF1004D18CB /* PGPModificationDetectionCodePacket.h */,
-				AD4FB0FF1B88BFF1004D18CB /* PGPModificationDetectionCodePacket.m */,
-				AD4FB1001B88BFF1004D18CB /* PGPMPI.h */,
-				AD4FB1011B88BFF1004D18CB /* PGPMPI.m */,
-				AD4FB1021B88BFF1004D18CB /* PGPOnePassSignaturePacket.h */,
-				AD4FB1031B88BFF1004D18CB /* PGPOnePassSignaturePacket.m */,
-				AD4FB1041B88BFF1004D18CB /* PGPPacket.h */,
-				AD4FB1051B88BFF1004D18CB /* PGPPacket.m */,
-				AD4FB1061B88BFF1004D18CB /* PGPPacketFactory.h */,
-				AD4FB1071B88BFF1004D18CB /* PGPPacketFactory.m */,
-				AD4FB1081B88BFF1004D18CB /* PGPPKCSEme.h */,
-				AD4FB1091B88BFF1004D18CB /* PGPPKCSEme.m */,
-				AD4FB10A1B88BFF1004D18CB /* PGPPKCSEmsa.h */,
-				AD4FB10B1B88BFF1004D18CB /* PGPPKCSEmsa.m */,
-				AD4FB10C1B88BFF1004D18CB /* PGPPublicKeyEncryptedSessionKeyPacket.h */,
-				AD4FB10D1B88BFF1004D18CB /* PGPPublicKeyEncryptedSessionKeyPacket.m */,
-				AD4FB10E1B88BFF1004D18CB /* PGPPublicKeyPacket.h */,
-				AD4FB10F1B88BFF1004D18CB /* PGPPublicKeyPacket.m */,
-				AD4FB1101B88BFF1004D18CB /* PGPPublicKeyRSA.h */,
-				AD4FB1111B88BFF1004D18CB /* PGPPublicKeyRSA.m */,
-				AD4FB1121B88BFF1004D18CB /* PGPPublicSubKeyPacket.h */,
-				AD4FB1131B88BFF1004D18CB /* PGPPublicSubKeyPacket.m */,
-				AD4FB1141B88BFF1004D18CB /* PGPS2K.h */,
-				AD4FB1151B88BFF1004D18CB /* PGPSecretKeyPacket.h */,
-				AD4FB1161B88BFF1004D18CB /* PGPSecretSubKeyPacket.h */,
-				AD4FB1171B88BFF1004D18CB /* PGPSecretSubKeyPacket.m */,
-				AD4FB1181B88BFF1004D18CB /* PGPSignaturePacket.h */,
-				AD4FB1191B88BFF1004D18CB /* PGPSignaturePacket.m */,
-				AD4FB11A1B88BFF1004D18CB /* PGPSignatureSubpacket.h */,
-				AD4FB11B1B88BFF1004D18CB /* PGPSignatureSubpacket.m */,
-				AD4FB11C1B88BFF1004D18CB /* PGPSubKey.h */,
-				AD4FB11D1B88BFF1004D18CB /* PGPSubKey.m */,
-				AD4FB11E1B88BFF1004D18CB /* PGPSymmetricallyEncryptedDataPacket.h */,
-				AD4FB11F1B88BFF1004D18CB /* PGPSymmetricallyEncryptedDataPacket.m */,
-				AD4FB1201B88BFF1004D18CB /* PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.h */,
-				AD4FB1211B88BFF1004D18CB /* PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.m */,
-				AD4FB1221B88BFF1004D18CB /* PGPTrustPacket.h */,
-				AD4FB1231B88BFF1004D18CB /* PGPTrustPacket.m */,
-				AD4FB1241B88BFF1004D18CB /* PGPTypes.h */,
-				AD4FB1251B88BFF1004D18CB /* PGPUser.h */,
-				AD4FB1261B88BFF1004D18CB /* PGPUser.m */,
-				AD4FB1271B88BFF1004D18CB /* PGPUserAttributePacket.h */,
-				AD4FB1281B88BFF1004D18CB /* PGPUserAttributePacket.m */,
-				AD4FB1291B88BFF1004D18CB /* PGPUserAttributeSubpacket.h */,
-				AD4FB12A1B88BFF1004D18CB /* PGPUserAttributeSubpacket.m */,
-				AD4FB12B1B88BFF1004D18CB /* PGPUserIDPacket.h */,
-				AD4FB12C1B88BFF1004D18CB /* PGPUserIDPacket.m */,
-			);
-			path = ObjectivePGP;
 			sourceTree = "<group>";
 		};
 		D7DD74CA526362FA7BB68475 /* Pods */ = {
@@ -1491,7 +1305,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD4FB13D1B88BFF1004D18CB /* PGPOnePassSignaturePacket.m in Sources */,
 				ADEF08651B824F95008AC0D0 /* KeyDetailTableViewController.swift in Sources */,
 				3D69ED081B83ABE20082EF5C /* UIPopoverController+FlatUI.m in Sources */,
 				3D69EC621B83AB410082EF5C /* MBProgressHUD.m in Sources */,
@@ -1499,115 +1312,82 @@
 				3D69EB9B1B8370AA0082EF5C /* EmailView.swift in Sources */,
 				3D69EBAB1B83A5100082EF5C /* HTMLRenderDelegateBridge.m in Sources */,
 				3D69ED0C1B83ABE20082EF5C /* OpenInChromeController.m in Sources */,
-				AD4FB14D1B88BFF1004D18CB /* PGPUser.m in Sources */,
-				AD4FB12F1B88BFF1004D18CB /* ObjectivePGP.m in Sources */,
-				AD4FB14B1B88BFF1004D18CB /* PGPSymmetricallyEncryptedIntegrityProtectedDataPacket.m in Sources */,
 				AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */,
 				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				3D69ED0F1B83ABE20082EF5C /* MCOCIDURLProtocol.mm in Sources */,
-				AD4FB14A1B88BFF1004D18CB /* PGPSymmetricallyEncryptedDataPacket.m in Sources */,
 				3D69EBA31B83A4CB0082EF5C /* SenderInfoTableViewCell.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
-				AD4FB13B1B88BFF1004D18CB /* PGPModificationDetectionCodePacket.m in Sources */,
-				AD4FB1371B88BFF1004D18CB /* PGPFingerprint.m in Sources */,
 				AD5292631B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift in Sources */,
 				AD4E57DA1B7F781000E8C521 /* UserIdItem.swift in Sources */,
 				3D21286E1B2DF57100C9FC4C /* Email.swift in Sources */,
 				3D3654E31B385566003B38F0 /* SideBarSubFolderTableViewCell.swift in Sources */,
-				AD4FB1471B88BFF1004D18CB /* PGPSignaturePacket.m in Sources */,
-				AD4FB13E1B88BFF1004D18CB /* PGPPacket.m in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
-				AD4FB1481B88BFF1004D18CB /* PGPSignatureSubpacket.m in Sources */,
 				AD6F68451B6E17400015B79E /* SwiftyJSON.swift in Sources */,
 				8E63CE541B53E00600DC9B04 /* MoveEmailViewController.swift in Sources */,
-				AD4FB1421B88BFF1004D18CB /* PGPPublicKeyEncryptedSessionKeyPacket.m in Sources */,
 				AD43C7FC1B6FEE9200C8F286 /* DevPasswordViewController.swift in Sources */,
-				AD4FB1351B88BFF1004D18CB /* PGPCryptoCFB.m in Sources */,
 				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
-				AD4FB12D1B88BFF1004D18CB /* PGPSecretKeyPacket.m in Sources */,
+				AD4742F31B98434200A2A1BC /* PGPKey.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
 				3D69ED101B83ABE20082EF5C /* MCOMessageView.mm in Sources */,
 				3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */,
 				ADBF50AC1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift in Sources */,
-				AD4FB1341B88BFF1004D18CB /* PGPCompressedPacket.m in Sources */,
 				3D37FFA91B01DBC200388F81 /* ContentViewController.swift in Sources */,
 				8E50152D1B95A24C00A69702 /* AttachmentCell.swift in Sources */,
-				AD4FB14E1B88BFF1004D18CB /* PGPUserAttributePacket.m in Sources */,
 				8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */,
-				AD4FB1431B88BFF1004D18CB /* PGPPublicKeyPacket.m in Sources */,
 				3D69EB991B83709C0082EF5C /* EmailCache.swift in Sources */,
 				AD4E57DC1B7F782300E8C521 /* SubKeyItem.swift in Sources */,
 				ADD135C71B15B56300A9B31A /* KeyChainListTableViewController.swift in Sources */,
 				5B66C33E1B4E660600BDF3D6 /* IMAPFunctions.swift in Sources */,
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
-				AD4FB13F1B88BFF1004D18CB /* PGPPacketFactory.m in Sources */,
 				3D69ED111B83ABE20082EF5C /* MCTMsgViewController.mm in Sources */,
 				3D69ECEF1B83ABC80082EF5C /* DelayedAttachment.m in Sources */,
 				3D69ECF01B83ABC80082EF5C /* FPMimetype.m in Sources */,
 				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
 				AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */,
-				AD4FB1411B88BFF1004D18CB /* PGPPKCSEmsa.m in Sources */,
 				3D69EBA71B83A5020082EF5C /* SubjectInfoTableViewCell.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* SMile.xcdatamodeld in Sources */,
-				AD4FB1331B88BFF1004D18CB /* PGPArmor.m in Sources */,
-				AD4FB1501B88BFF1004D18CB /* PGPUserIDPacket.m in Sources */,
 				3D58BC471B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift in Sources */,
-				AD4FB1311B88BFF1004D18CB /* NSData+PGPUtils.m in Sources */,
 				AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */,
 				8EAB86DB1B9785CA0051532F /* AttachmentViewCell.swift in Sources */,
 				AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */,
-				AD4FB1461B88BFF1004D18CB /* PGPSecretSubKeyPacket.m in Sources */,
 				3D69ED0B1B83ABE20082EF5C /* UIColor+FlatUI.m in Sources */,
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
 				3D69EB9D1B8370B20082EF5C /* EmailViewController.swift in Sources */,
 				8E450BAC1B15BBF0001E37B9 /* MailSendViewController.swift in Sources */,
+				AD4742F51B98478B00A2A1BC /* PGPKeyID.swift in Sources */,
 				AD4FB15F1B88C08C004D18CB /* RNCryptor.m in Sources */,
 				ADEF08691B826819008AC0D0 /* KeyDetailTableViewCell.swift in Sources */,
-				AD4FB1491B88BFF1004D18CB /* PGPSubKey.m in Sources */,
 				3D69ED091B83ABE20082EF5C /* FUIPopoverBackgroundView.m in Sources */,
-				AD4FB1401B88BFF1004D18CB /* PGPPKCSEme.m in Sources */,
 				AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */,
 				AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */,
 				AD43C8041B70F92600C8F286 /* ReceivedFileViewController.swift in Sources */,
 				8E5015271B95938A00A69702 /* AttachmentsViewController.swift in Sources */,
 				3D69ED0A1B83ABE20082EF5C /* UIImage+FlatUI.m in Sources */,
 				AD4FB1621B88C08C004D18CB /* RNEncryptor.m in Sources */,
-				AD4FB1441B88BFF1004D18CB /* PGPPublicKeyRSA.m in Sources */,
 				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
 				ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */,
 				3D69ED071B83ABE20082EF5C /* UTIFunctions.m in Sources */,
 				3D69ED0E1B83ABE20082EF5C /* HeaderView.m in Sources */,
-				AD4FB1381B88BFF1004D18CB /* PGPKey.m in Sources */,
 				AD4FB1611B88C08C004D18CB /* RNDecryptor.m in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
-				AD4FB1451B88BFF1004D18CB /* PGPPublicSubKeyPacket.m in Sources */,
-				AD4FB13C1B88BFF1004D18CB /* PGPMPI.m in Sources */,
 				AD4FB15E1B88C08C004D18CB /* MyRNEncryptor.m in Sources */,
-				AD4FB1391B88BFF1004D18CB /* PGPKeyID.m in Sources */,
-				AD4FB1321B88BFF1004D18CB /* NSValue+PGPUtils.m in Sources */,
-				AD4FB12E1B88BFF1004D18CB /* PGPS2K.m in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
 				AD4FB1601B88C08C004D18CB /* RNCryptorEngine.m in Sources */,
-				AD4FB13A1B88BFF1004D18CB /* PGPLiteralPacket.m in Sources */,
 				8E450BAE1B15BBF0001E37B9 /* MailTableViewController.swift in Sources */,
 				AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */,
-				AD4FB14C1B88BFF1004D18CB /* PGPTrustPacket.m in Sources */,
 				3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,
 				ADE6739A1B73551700C920B0 /* Key.swift in Sources */,
 				AD16B2231B1C594B001645A5 /* PreferenceAccountTableViewCell.swift in Sources */,
-				AD4FB1301B88BFF1004D18CB /* NSData+compression.m in Sources */,
 				AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */,
-				AD4FB14F1B88BFF1004D18CB /* PGPUserAttributeSubpacket.m in Sources */,
 				8E1441171B1DEFFA00F1A023 /* SendViewCellWithLabelAndTextField.swift in Sources */,
 				3D69ED0D1B83ABE20082EF5C /* ActionPickerViewController.m in Sources */,
-				AD4FB1361B88BFF1004D18CB /* PGPCryptoUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
