@@ -50,6 +50,48 @@ class KeyChainListTableViewController: UITableViewController {
 		self.tableView.reloadData()
 		
 	}
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
+            if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
+                var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+                var sendAccount: EmailAccount? = nil
+                
+                var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+                let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+                var error: NSError?
+                var result = managedObjectContext!.executeFetchRequest(fetchRequest, error: &error)
+                if error != nil {
+                    NSLog("%@", error!.description)
+                    return
+                } else {
+                    if let emailAccounts = result {
+                        for account in emailAccounts {
+                            if (account as! EmailAccount).accountName == accountName {
+                                sendAccount = account as? EmailAccount
+                                break
+                            }
+                        }
+                        if sendAccount == nil {
+                            sendAccount = emailAccounts.first as? EmailAccount
+                        }
+                    }
+                }
+                
+                if let account = sendAccount {
+                    sendView.account = account
+                    sendView.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                    
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
+                    
+                    self.navigationController?.pushViewController(sendView, animated: true)
+                }
+            }
+        }
+        
+    }
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()

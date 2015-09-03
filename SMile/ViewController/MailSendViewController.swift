@@ -73,6 +73,13 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     override func viewDidAppear(animated: Bool) {
+        if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
+            if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
+                self.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
+                (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
+            }
+        }
         self.sendTableView.reloadData()
     }
     
@@ -616,7 +623,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         }
         var text = self.textBody
         text = self.replaceSignatureWithText(text, toDelete: self.account.signature, toInsert: "")
-        if self.recipients.count != 0 || self.ccRecipients.count != 0 || self.bccRecipients.count != 0 || self.subject != "" || text != "\n" {
+        if self.recipients.count != 0 || self.ccRecipients.count != 0 || self.bccRecipients.count != 0 || self.subject != "" || text != "\n" || self.attachmentView.keys.count > 0 {
             var cancelActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Delete Draft", otherButtonTitles: "Save Draft")
             cancelActionSheet.tag = 1
             cancelActionSheet.showInView(self.view)

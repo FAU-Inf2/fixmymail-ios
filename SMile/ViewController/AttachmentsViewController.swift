@@ -28,6 +28,17 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         self.navigationItem.rightBarButtonItem = buttonImagePicker
     }
     
+    override func viewDidAppear(animated: Bool) {
+        if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
+            if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
+                self.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
+                (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
+            }
+        }
+        self.attachmentsTableView.reloadData()
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -115,6 +126,11 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     }
     
     func attachFile(filename: String, data: NSData, mimetype: String) {
+        if let attachment: AnyObject = self.attachments.valueForKey(filename) {
+            var alert = UIAlertView(title: "Error", message: "Attachment already is part of this E-mail", delegate: nil, cancelButtonTitle: "OK")
+            alert.show()
+            return
+        }
         self.attachments.setValue(data, forKey: filename)
         self.keys.append(filename)
         var image = UIImage()
