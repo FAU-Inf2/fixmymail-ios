@@ -144,7 +144,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         } else {
             image = UIImage(named: "attachedFile.png")!
         }
-        image = UIImage(CGImage: image.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
+        image = UIImage(CGImage: image.CGImage, scale: 1, orientation: image.imageOrientation)!
         self.images.append(image)
     }
     
