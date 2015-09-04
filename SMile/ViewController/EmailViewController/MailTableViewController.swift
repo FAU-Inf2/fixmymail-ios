@@ -57,7 +57,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     //MARK: - Override functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+		
         //init SearchController
         definesPresentationContext = true
         self.searchController = UISearchController(searchResultsController: nil)
@@ -121,16 +121,19 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         } else {
             setToolbarWhileEditing()
         }
-		
-		// Register notification if email account has changed
-		NSNotificationCenter.defaultCenter().addObserver(self,
-			selector: "accountHasChanged",
-			name: accountUpdatedNotificationKey,
-			object: nil)
-    }
+
+	}
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+		
+		// Register notification if email account has changed
+		NSNotificationCenter.defaultCenter().removeObserver(self)
+		NSNotificationCenter.defaultCenter().addObserver(self,
+			selector: "accountHasChanged:",
+			name: accountUpdatedNotificationKey,
+			object: nil)
+		
         self.navigationController?.setToolbarHidden(true, animated: false)
     }
     
@@ -178,7 +181,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                     
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
-                    
                     self.navigationController?.pushViewController(sendView, animated: true)
                 }
             }
@@ -187,8 +189,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
 	
 	// MARK: - Notification
-	func accountHasChanged() {
+	func accountHasChanged(notification: NSNotification) {
 		NSLog("MailTableViewController: Update Notification received!")
+		var receivedUserInfo = notification.userInfo
+		if let userInfo = receivedUserInfo as? Dictionary<String,EmailAccount> {
+			NSLog("Received account is: " + (userInfo["Account"])!.emailAddress)
+		}
 	}
 	
 	deinit {
