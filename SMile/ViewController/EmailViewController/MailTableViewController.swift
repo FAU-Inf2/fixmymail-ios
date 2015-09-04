@@ -111,7 +111,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
         
-        //imapSynchronize()
+        imapSynchronize()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -190,10 +190,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
 	
 	// MARK: - Notification
 	func accountHasChanged(notification: NSNotification) {
-		NSLog("MailTableViewController: Update Notification received!")
+		//NSLog("MailTableViewController: Update Notification received!")
 		var receivedUserInfo = notification.userInfo
 		if let userInfo = receivedUserInfo as? Dictionary<String,EmailAccount> {
-			NSLog("Received account is: " + (userInfo["Account"])!.emailAddress)
+			//NSLog("Received account is: " + (userInfo["Account"])!.emailAddress)
+            fetchOlderEmails(userInfo["Account"]!)
 		}
 	}
 	
@@ -290,10 +291,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     // MARK: - IMAP functions
     func imapSynchronize() {
-        NSLog("refeshing..")
+        //NSLog("refeshing..")
         if let accs = self.accounts {
             for account in accs {
-                NSLog("emailAdresse in imapSynchronize:  " + account.emailAddress)
+                //NSLog("emailAdresse in imapSynchronize:  " + account.emailAddress)
                 let session = getSession(account)
                 
                 let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure)
@@ -353,7 +354,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 for message in messages {
                                     if (message as! MCOIMAPMessage).uid == ((mail as! Email).mcomessage as! MCOIMAPMessage).uid {
                                         if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags{
-                                            NSLog("Updated Flags " + String(((mail as! Email).mcomessage as! MCOIMAPMessage).uid))
+                                            //NSLog("Updated Flags " + String(((mail as! Email).mcomessage as! MCOIMAPMessage).uid))
                                             (mail as! Email).mcomessage = (message as! MCOIMAPMessage)
                                         }
                                         deleted = false
@@ -362,7 +363,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 }
                                 
                                 if deleted {
-                                    NSLog("email has been deleted or moved")
+                                    //NSLog("email has been deleted or moved")
                                     self.managedObjectContext.deleteObject(mail as! NSManagedObject)
                                     self.removeEmailFromArray(mail as! Email)
                                     self.saveCoreDataChanges()
@@ -439,12 +440,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                             })
                             newEmail.toAccount = account
                         }
-                        NSLog("%i new Emails", newEmailsCounter)
+                        //NSLog("%i new Emails", newEmailsCounter)
                     }
                     self.refreshControl.endRefreshing()
                 })
-                
-                fetchOlderEmails(account)
             }
         }
     }
