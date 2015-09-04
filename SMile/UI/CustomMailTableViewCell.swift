@@ -11,6 +11,7 @@ import UIKit
 protocol TableViewCellDelegate {
     func deleteEmail(mail: Email)
     func archiveEmail(mail: Email)
+    func remindEmail(mail: Email)
 }
 
 class CustomMailTableViewCell: UITableViewCell {
@@ -33,6 +34,7 @@ class CustomMailTableViewCell: UITableViewCell {
     var panGestureRecognizer: UIPanGestureRecognizer!
     var deleteIMGView = UIImageView(image: UIImage(named: "Trash.png"))
     var archiveIMGView = UIImageView(image: UIImage(named: "archive.png"))
+    var remindIMGView = UIImageView(image: UIImage(named: "Future-100.png"))
     var subviewDeleteSwipeFromRightToLeft = UIView()
     var subviewArchiveSwipeFromLeftToRight = UIView()
     
@@ -68,6 +70,11 @@ class CustomMailTableViewCell: UITableViewCell {
         subviewArchiveSwipeFromLeftToRight.addSubview(archiveIMGView)
         addSubview(subviewArchiveSwipeFromLeftToRight)
         
+        remindIMGView.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 40, y: (height-35)/2, width: 35, height: 35)
+        subviewArchiveSwipeFromLeftToRight.frame = CGRect(x: -bounds.size.width, y: 0, width: self.bounds.width, height: height)
+        subviewArchiveSwipeFromLeftToRight.addSubview(remindIMGView)
+        
+        
         if recognizer.state == .Began {
             // when the gesture begins, record the current center location
             originalCenter = center
@@ -86,9 +93,12 @@ class CustomMailTableViewCell: UITableViewCell {
             
             if remindMeOnDragRelease {
                 archiveIMGView.hidden = true
+                remindIMGView.hidden = false
+                
                 subviewArchiveSwipeFromLeftToRight.backgroundColor = UIColor.yellowColor()
             }else {
                 archiveIMGView.hidden = false
+                remindIMGView.hidden = true
             }
         }
         
@@ -111,6 +121,7 @@ class CustomMailTableViewCell: UITableViewCell {
             
             if remindMeOnDragRelease {
                 UIView.animateWithDuration(0.2, animations: {self.frame = originalFrame})
+                delegate!.remindEmail(mail)
                 NSLog("REMIND ME")
             } else if archiveOnDragRelease {
                 //archive this email

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MailRemindViewController" customModule="SMile" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" alpha="0.49999999999999961" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Later Today" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ItO-rK-atD">
+                    <rect key="frame" x="142" y="207" width="90" height="21"/>
+                    <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This Weekend" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwN-Rl-FAA">
+                    <rect key="frame" x="133" y="337" width="108" height="21"/>
+                    <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Next Week" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZpK-0U-yTr">
+                    <rect key="frame" x="259" y="337" width="83" height="21"/>
+                    <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This Evening" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XiU-37-OZP">
+                    <rect key="frame" x="251" y="207" width="98" height="21"/>
+                    <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tomorrow" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IAI-Wg-2HC">
+                    <rect key="frame" x="366" y="207" width="77" height="21"/>
+                    <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4KB-Lk-6aL">
+                    <rect key="frame" x="138" y="0.0" width="74" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In a Month" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uny-6Q-Dra">
+                    <rect key="frame" x="363" y="337" width="82" height="21"/>
+                    <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGL-jC-KEa">
+                    <rect key="frame" x="367" y="467" width="74" height="21"/>
+                    <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tab-NA-2nu">
+                    <rect key="frame" x="372" y="398" width="64" height="64"/>
+                    <state key="normal" backgroundImage="Calendar-64.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dRb-O7-mVQ">
+                    <rect key="frame" x="372" y="138" width="64" height="64"/>
+                    <state key="normal" backgroundImage="Cup-64.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qjF-Pq-Whg">
+                    <rect key="frame" x="155" y="138" width="64" height="64"/>
+                    <state key="normal" backgroundImage="Hourglass-64.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S55-ln-tek">
+                    <rect key="frame" x="372" y="268" width="64" height="64"/>
+                    <state key="normal" backgroundImage="Plus 1 Month-64.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yJu-i2-Rdz">
+                    <rect key="frame" x="155" y="268" width="64" height="64"/>
+                    <state key="normal" backgroundImage="Sun-64.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ViF-Nq-gAN">
+                    <rect key="frame" x="268" y="268" width="64" height="64"/>
+                    <state key="normal" backgroundImage="Toolbox-64.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lw0-hb-A3s">
+                    <rect key="frame" x="268" y="138" width="64" height="64"/>
+                    <state key="normal" backgroundImage="Waxing Gibbous Filled-64.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="tintColor" red="1" green="0.97802170954806711" blue="0.63024082283451055" alpha="0.70000000000000007" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="nwN-Rl-FAA" firstAttribute="centerX" secondItem="yJu-i2-Rdz" secondAttribute="centerX" id="3Of-hn-UEL"/>
+                <constraint firstItem="ZpK-0U-yTr" firstAttribute="leading" secondItem="yJu-i2-Rdz" secondAttribute="trailing" constant="40" id="9Gg-Ud-hqn"/>
+                <constraint firstItem="IAI-Wg-2HC" firstAttribute="top" secondItem="dRb-O7-mVQ" secondAttribute="bottom" constant="5" id="BKB-s3-Gsg"/>
+                <constraint firstItem="S55-ln-tek" firstAttribute="leading" secondItem="ViF-Nq-gAN" secondAttribute="trailing" constant="40" id="D3Y-1d-k1k"/>
+                <constraint firstItem="Tab-NA-2nu" firstAttribute="top" secondItem="Uny-6Q-Dra" secondAttribute="bottom" constant="40" id="E14-Rx-0IF"/>
+                <constraint firstItem="ViF-Nq-gAN" firstAttribute="centerY" secondItem="yJu-i2-Rdz" secondAttribute="centerY" id="Ft3-MO-jxe"/>
+                <constraint firstItem="Uny-6Q-Dra" firstAttribute="centerX" secondItem="S55-ln-tek" secondAttribute="centerX" id="ISU-wc-hvg"/>
+                <constraint firstItem="nwN-Rl-FAA" firstAttribute="top" secondItem="yJu-i2-Rdz" secondAttribute="bottom" constant="5" id="N6d-O9-J6o"/>
+                <constraint firstItem="dRb-O7-mVQ" firstAttribute="centerX" secondItem="S55-ln-tek" secondAttribute="centerX" id="R5g-Bz-Flw"/>
+                <constraint firstItem="yJu-i2-Rdz" firstAttribute="top" secondItem="ItO-rK-atD" secondAttribute="bottom" constant="40" id="S38-0B-3BS"/>
+                <constraint firstItem="ViF-Nq-gAN" firstAttribute="centerX" secondItem="Lw0-hb-A3s" secondAttribute="centerX" id="Ugb-85-JO1"/>
+                <constraint firstItem="ViF-Nq-gAN" firstAttribute="centerY" secondItem="S55-ln-tek" secondAttribute="centerY" id="Ukv-5O-9rE"/>
+                <constraint firstAttribute="centerX" secondItem="ViF-Nq-gAN" secondAttribute="centerX" id="Wbj-KF-SWl"/>
+                <constraint firstItem="ViF-Nq-gAN" firstAttribute="top" secondItem="XiU-37-OZP" secondAttribute="bottom" constant="40" id="XFG-m5-c94"/>
+                <constraint firstItem="XiU-37-OZP" firstAttribute="top" secondItem="Lw0-hb-A3s" secondAttribute="bottom" constant="5" id="b4d-vQ-jBv"/>
+                <constraint firstItem="S55-ln-tek" firstAttribute="centerX" secondItem="IAI-Wg-2HC" secondAttribute="centerX" id="bFz-0A-5af"/>
+                <constraint firstItem="ZpK-0U-yTr" firstAttribute="top" secondItem="ViF-Nq-gAN" secondAttribute="bottom" constant="5" id="cVI-Ia-5bY"/>
+                <constraint firstItem="qjF-Pq-Whg" firstAttribute="centerX" secondItem="yJu-i2-Rdz" secondAttribute="centerX" id="d4b-OX-mPi"/>
+                <constraint firstItem="OGL-jC-KEa" firstAttribute="top" secondItem="Tab-NA-2nu" secondAttribute="bottom" constant="5" id="fH5-EN-fat"/>
+                <constraint firstItem="ViF-Nq-gAN" firstAttribute="centerX" secondItem="ZpK-0U-yTr" secondAttribute="centerX" id="hdV-bV-QPI"/>
+                <constraint firstItem="ItO-rK-atD" firstAttribute="centerX" secondItem="yJu-i2-Rdz" secondAttribute="centerX" id="hlu-JM-byZ"/>
+                <constraint firstItem="Uny-6Q-Dra" firstAttribute="top" secondItem="S55-ln-tek" secondAttribute="bottom" constant="5" id="jFz-K9-sZZ"/>
+                <constraint firstItem="S55-ln-tek" firstAttribute="centerX" secondItem="Tab-NA-2nu" secondAttribute="centerX" id="jPE-tU-7r5"/>
+                <constraint firstItem="ItO-rK-atD" firstAttribute="top" secondItem="qjF-Pq-Whg" secondAttribute="bottom" constant="5" id="l19-6J-bI7"/>
+                <constraint firstAttribute="centerY" secondItem="ViF-Nq-gAN" secondAttribute="centerY" id="r0y-vy-ke1"/>
+                <constraint firstItem="OGL-jC-KEa" firstAttribute="centerX" secondItem="Tab-NA-2nu" secondAttribute="centerX" id="rBK-88-9to"/>
+                <constraint firstItem="ViF-Nq-gAN" firstAttribute="centerX" secondItem="XiU-37-OZP" secondAttribute="centerX" id="vri-hX-iqh"/>
+                <constraint firstItem="S55-ln-tek" firstAttribute="top" secondItem="IAI-Wg-2HC" secondAttribute="bottom" constant="40" id="yjO-AV-gRh"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="4KB-Lk-6aL"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="477" y="385"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Calendar-64.png" width="64" height="64"/>
+        <image name="Cup-64.png" width="64" height="64"/>
+        <image name="Hourglass-64.png" width="64" height="64"/>
+        <image name="Plus 1 Month-64.png" width="64" height="64"/>
+        <image name="Sun-64.png" width="64" height="64"/>
+        <image name="Toolbox-64.png" width="64" height="64"/>
+        <image name="Waxing Gibbous Filled-64.png" width="64" height="64"/>
+    </resources>
+</document>
