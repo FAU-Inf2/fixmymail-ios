@@ -121,6 +121,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         } else {
             setToolbarWhileEditing()
         }
+		
+		// Register notification if email account has changed
+		NSNotificationCenter.defaultCenter().addObserver(self,
+			selector: "accountHasChanged",
+			name: accountUpdatedNotificationKey,
+			object: nil)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -179,6 +185,15 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
 
     }
+	
+	// MARK: - Notification
+	func accountHasChanged() {
+		NSLog("MailTableViewController: Update Notification received!")
+	}
+	
+	deinit {
+		NSNotificationCenter.defaultCenter().removeObserver(self)
+	}
     
     // MARK: - TableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

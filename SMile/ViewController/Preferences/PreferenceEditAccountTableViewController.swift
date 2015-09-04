@@ -9,6 +9,9 @@
 import UIKit
 import CoreData
 
+//NotificationKey
+let accountUpdatedNotificationKey = "EmailAccountUpdated"
+
 class PreferenceEditAccountTableViewController: UITableViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 	
 	var emailAcc: EmailAccount?
@@ -52,7 +55,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		tableView.registerNib(UINib(nibName: "SwitchTableViewCell", bundle: nil), forCellReuseIdentifier: "SwitchTableViewCell")
 		self.navigationItem.title = actionItem?.emailAddress
 		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
+		var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
+		self.navigationItem.leftBarButtonItem = cancelButton
 		if actionItem?.emailAddress != "Add New Account" {
 			self.sections = ["Account Details:", "Account behavior", "IMAP Details", "SMTP Details:", "",""]
 		} else {
@@ -113,6 +118,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			name: UIKeyboardWillHideNotification,
 			object: nil)
 		self.tableView.reloadData()
+		
+		// Register notification when done button is tapped
+		NSNotificationCenter.defaultCenter().addObserver(self,
+			selector: "notificationSent",
+			name: accountUpdatedNotificationKey,
+			object: nil)
 		
 	}
 	
@@ -386,6 +397,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {
+		self.navigationController?.popViewControllerAnimated(true)
+	}
+	
+	@IBAction func stopTapped(sender: AnyObject) -> Void {
 		NSLog("Cancel Button tapped!")
 		if self.imapOperation != nil {
 			NSLog("imapOperation is not nil")
@@ -446,9 +461,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			
 			
-			var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel ", style: .Plain, target: self, action: "cancelTapped:")
-			cancelButton.tintColor = UIColor.redColor()
-			self.navigationItem.rightBarButtonItem = cancelButton
+			var stopButton: UIBarButtonItem = UIBarButtonItem(title: "Stop ", style: .Plain, target: self, action: "stopTapped:")
+			stopButton.tintColor = UIColor.redColor()
+			self.navigationItem.rightBarButtonItem = stopButton
 			
 			// test the imap connection
 			self.imapOperation = self.getImapOperation()
@@ -528,6 +543,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							
 							
 							self.delay(1.0) {
+								// Tell other VCs that the account may have changed
+								NSNotificationCenter.defaultCenter().postNotificationName(accountUpdatedNotificationKey, object: self)
 								self.navigationController?.popViewControllerAnimated(true)
 							}
 						}
@@ -848,6 +865,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				Int64(delay * Double(NSEC_PER_SEC))
 			),
 			dispatch_get_main_queue(), closure)
+	}
+	
+	func notificationSent() {
+		NSLog("PreferenceEditAccountTableViewController: Update Notification sent!")
 	}
 	
 }
