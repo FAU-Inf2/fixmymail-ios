@@ -17,6 +17,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var delegate: ContentViewControllerProtocol?
     var emails = [Email]()
     var filterdEmails = [Email]()
+    var alert = UIAlertView(title: "SMile could not delete this Email", message: "Please check your preferences to select a specific Trash", delegate: nil, cancelButtonTitle: "OK", otherButtonTitles: "Preferences")
     
     //required in the edit mode
     var selectedEmails = NSMutableArray()
@@ -299,7 +300,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure)
                 
-                //Check for new Emails
                 var currentMaxUID = self.getMaxUID(account)
                 var localEmails: NSMutableArray = NSMutableArray(array: account.emails.allObjects)
                 for localEmail in localEmails {
@@ -374,7 +374,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         self.refreshTableView()
                     })
                 }
-
+                
+                //Check for new Emails
                 let fetchNewEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX - UInt64(currentMaxUID+2))))
                 
                 fetchNewEmailsOp.start({ (error, messages, range) -> Void in
@@ -530,6 +531,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             }
             self.removeEmailFromArray(mail)
         } else {
+            showAlert("Unable to delete Message", message: "Please check your preferences for \(mail.toAccount.emailAddress) to select a specific Trash")
             NSLog("error: trashFolderName == nil")
         }
         self.refreshTableView()
@@ -542,6 +544,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 self.removeEmailFromArray(mail)
             }
         } else {
+            showAlert("Unable to archive Message", message: "Please check your preferences for \(mail.toAccount.emailAddress) to select a specific Archive")
             NSLog("error: archiveFolderName == nil")
         }
         self.refreshTableView()
@@ -683,7 +686,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     
     
-    //MARK: - editing mode
+    //MARK: - Editing mode
     func editToggled(sender: AnyObject) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
             self.navigationItem.rightBarButtonItem?.title = "Done"
@@ -861,6 +864,29 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         return retaccount
     }
+    
+    
+    //MARK: - Alert View
+    func showAlert(title: String, message: String) {
+        var alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        //Create Actions
+        var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) {
+            UIAlertAction in
+            
+        }
+        var cancelAction = UIAlertAction(title: "Preferences", style: UIAlertActionStyle.Default) {
+            UIAlertAction in
+            //Push Preferences
+            self.navigationController?.pushViewController(PreferenceAccountListTableViewController(nibName: "PreferenceAccountListTableViewController", bundle: NSBundle.mainBundle()), animated: true)
+        }
+    
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
     
     //MARK: - CoreData
     func saveCoreDataChanges(){
