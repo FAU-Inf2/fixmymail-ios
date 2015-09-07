@@ -100,6 +100,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             self.title = folderToQuery
         }
         
+        emails.removeAll(keepCapacity: false)
         //fetch local Emails from CoreData
         if let accs = accounts {
             for account in accs {
