@@ -543,18 +543,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							
 							
 							self.delay(1.0) {
-								// Tell other VCs that the account may have changed
-								var notificationData: Dictionary<String,EmailAccount>?
-								if self.newEmailAcc != nil {
-									notificationData = ["Account": self.newEmailAcc!]
-								} else {
-									notificationData = nil
-								}
-								
-							     NSNotificationCenter.defaultCenter().postNotificationName(
-									accountUpdatedNotificationKey, object: self, userInfo: notificationData)
-                                println(self.navigationController?.viewControllers)
-								
 								self.navigationController?.popViewControllerAnimated(true)
 							}
 						}

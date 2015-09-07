@@ -55,14 +55,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.refreshController = UIRefreshControl()
         self.refreshController.addTarget(self, action: "imapSynchronize", forControlEvents: UIControlEvents.ValueChanged)
         self.mailTableView.addSubview(self.refreshController)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
         
         if self.folderToQuery == nil {
             self.folderToQuery = "INBOX"
         }
+        
         accounts = getRecentlyUsedAccount()
         //set tableView title
         if accounts!.count == 0 {
@@ -73,12 +70,30 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             self.title = folderToQuery
         }
         
+        //Load older Emails if necessary
+        if let accs = accounts {
+            for account in accs {
+                let currentMinUID = getMinUID(account, self.folderToQuery!)
+                fetchEmails(account ,self.folderToQuery!, MCOIndexSet(range: MCORangeMake(1, UInt64(currentMinUID-2))))
+            }
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         emails.removeAll(keepCapacity: false)
         //fetch local Emails from CoreData
         if let accs = accounts {
             for account in accs {
+                var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
                 for mail in account.emails {
                     if mail.folder == folderToQuery {
+                        if let dMD = downloadMailDuration {
+                            if ((mail as! Email).mcomessage as! MCOIMAPMessage).header.receivedDate.laterDate(dMD) == dMD {
+                                continue
+                            }
+                        }
                         emails.append(mail as! Email)
                         
                         //activate Edit Button
@@ -101,15 +116,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-		
-		// Register notification if email account has changed
-		NSNotificationCenter.defaultCenter().removeObserver(self)
-		NSNotificationCenter.defaultCenter().addObserver(self,
-			selector: "accountHasChanged:",
-			name: accountUpdatedNotificationKey,
-			object: nil)
-		
-        self.navigationController?.setToolbarHidden(true, animated: false)
+		self.navigationController?.setToolbarHidden(true, animated: false)
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -207,20 +214,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     
 	// MARK: - Notification
-	func accountHasChanged(notification: NSNotification) {
-		//NSLog("MailTableViewController: Update Notification received!")
-		var receivedUserInfo = notification.userInfo
-		if let userInfo = receivedUserInfo as? Dictionary<String,EmailAccount> {
-            //Fetch older Emails
-            NSLog("received")
-            let currentMinUID = getMinUID(userInfo["Account"]!, self.folderToQuery!)
-            fetchEmails(userInfo["Account"]!, folderToQuery!, MCOIndexSet(range: MCORangeMake(1, UInt64(currentMinUID-2))))
-		}
-	}
-	
-	deinit {
-		NSNotificationCenter.defaultCenter().removeObserver(self)
-	}
+    
     
     // MARK: - TableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
