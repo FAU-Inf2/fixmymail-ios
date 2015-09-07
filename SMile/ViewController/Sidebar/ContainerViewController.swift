@@ -30,7 +30,10 @@ class ContainerViewController: UIViewController {
     var rightSwipeGesture: UISwipeGestureRecognizer!
     var tapGesture: UITapGestureRecognizer!
     var lastSelectedMailAccountName: String? = nil
-
+    var mailTableVC: MailTableViewController!
+    var preferencesVC: PreferenceTableViewController!
+    var keyChainVC : KeyChainListTableViewController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -39,7 +42,7 @@ class ContainerViewController: UIViewController {
         
         self.contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
         self.contentVC.setValue(self, forKey: "delegate")
-        self.contentVC.view.frame = self.view.frame
+        self.contentVC.view.frame = UIApplication.sharedApplication().delegate!.window!!.frame
         self.subNavController = UINavigationController(rootViewController: contentVC)
         //(self.contentVC as! MailTableViewController).rootView = self
         var window: UIWindow = UIApplication.sharedApplication().windows[0] as! UIWindow
@@ -47,13 +50,15 @@ class ContainerViewController: UIViewController {
         window.makeKeyAndVisible()
         self.view.addSubview(self.subNavController.view)
         //(self.contentVC as! MailTableViewController).subNavController = self.subNavController
+        
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 }
 
 extension ContainerViewController : ContentViewControllerProtocol {
@@ -97,7 +102,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
             self.subNavController!.view!.addGestureRecognizer(self.tapGesture)
             currentState = SlideOutState.LeftPanelExpanded
             
-            animateContentPanelXPosition(targetPosition: CGRectGetWidth(contentVC.view.frame) - contentPanelExpandedOffset)
+            animateContentPanelXPosition(targetPosition: CGRectGetWidth(UIApplication.sharedApplication().delegate!.window!!.frame) - contentPanelExpandedOffset)
         } else {
             for view in self.subNavController!.view!.subviews {
                 if let v: UIView = view as? UIView {
@@ -122,7 +127,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
             self.subNavController.view.frame.origin.x = targetPosition
             //self.contentVC.view.frame.origin.x = targetPosition
             
-        }, completion: completion)
+            }, completion: completion)
     }
     
     func showShadowForContentViewController(shouldShowShadow: Bool) {
@@ -143,14 +148,14 @@ extension ContainerViewController: SideBarProtocol {
         self.toggleLeftPanel()
         
         var shouldChangeVC = false
+        var shouldReloadVC = false
         self.lastSelectedMailAccountName = actionItem.cellName != "All" ? actionItem.emailAccount?.accountName : nil
         switch actionItem.viewController {
         case "EmailAll":
-            contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
             shouldChangeVC = true
+            contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
             
             var allAccounts: [EmailAccount] = [EmailAccount]()
-            //set all Accounts active
             let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
             var error: NSError?
             var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
@@ -170,15 +175,18 @@ extension ContainerViewController: SideBarProtocol {
             }
             
             contentVC.setValue(allAccounts, forKey: "accounts")
-
+            contentVC.setValue("INBOX", forKey: "folderToQuery")
+            
         case "EmailSpecific":
-            contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
             shouldChangeVC = true
+            contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
+            
             if actionItem.emailFolder != nil {
                 contentVC.setValue(actionItem.emailFolder!.path, forKey: "folderToQuery")
+            } else {
+                shouldReloadVC = true
             }
             
-            //Do something to load correct mails
             let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
             var error: NSError?
             var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
@@ -200,34 +208,43 @@ extension ContainerViewController: SideBarProtocol {
             }
             managedObjectContext.save(&error)
             if error != nil {
-                NSLog("%@", error!.description)
+                println("%@", error!.description)
             }
-            
-        //case "TODO":
-            //Insert TODO VC here!
         case "KeyChain":
             if contentVC is KeyChainListTableViewController == false {
-                contentVC = KeyChainListTableViewController(nibName: "KeyChainListTableViewController", bundle: NSBundle.mainBundle())
+                contentVC = KeyChainListTableViewController(nibName: "KeyChainListTableViewController", bundle: NSBundle.mainBundle())//self.keyChainVC
                 shouldChangeVC = true
             }
         case "Preferences":
-            //Insert Preferences VC here!
-			if contentVC is PreferenceTableViewController == false {
-				contentVC = PreferenceTableViewController(nibName: "PreferenceTableViewController", bundle: NSBundle.mainBundle())
-				shouldChangeVC = true
-			}
+            if contentVC is PreferenceTableViewController == false {
+                contentVC = PreferenceTableViewController(nibName: "PreferenceTableViewController", bundle: NSBundle.mainBundle())//self.preferencesVC
+                shouldChangeVC = true
+            }
         default:
             break
         }
         if shouldChangeVC == true {
             self.contentVC.setValue(self, forKey: "delegate")
             self.contentVC.view.frame = self.view.frame
-            self.subNavController.pushViewController(contentVC, animated: false)
+            self.subNavController.setViewControllers([contentVC], animated: false)
         }
     }
     
     func tapToToggle(sender: AnyObject) -> Void {
         self.toggleLeftPanel()
+    }
+    
+    func navigationStackContainsTargetViewController(viewController: UIViewController) -> Bool {
+        let vcs = self.subNavController.viewControllers
+        for var i = 0; i < vcs.count; i++ {
+            let vc = vcs[i] as! UIViewController
+            if vc is MailTableViewController && viewController is MailTableViewController ||
+                vc is PreferenceTableViewController && viewController is PreferenceTableViewController ||
+                vc is KeyChainListTableViewController && viewController is KeyChainListTableViewController {
+                    return true
+            }
+        }
+        return false
     }
     
 }
