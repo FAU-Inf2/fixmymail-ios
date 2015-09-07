@@ -553,6 +553,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 								
 							     NSNotificationCenter.defaultCenter().postNotificationName(
 									accountUpdatedNotificationKey, object: self, userInfo: notificationData)
+                                println(self.navigationController?.viewControllers)
 								
 								self.navigationController?.popViewControllerAnimated(true)
 							}
