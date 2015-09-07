@@ -146,6 +146,7 @@
 		8E50152D1B95A24C00A69702 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E50152C1B95A24C00A69702 /* AttachmentCell.swift */; };
 		8E57385B1B1B19C8009AA28A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E57385A1B1B19C8009AA28A /* WebViewController.swift */; };
 		8E5CA95E1B8DD7DE00C02AA4 /* attachedFile.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E5CA95D1B8DD7DE00C02AA4 /* attachedFile.png */; };
+		8E605C311B9DC4EE00F38A81 /* attachment_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E605C301B9DC4EE00F38A81 /* attachment_icon@2x.png */; };
 		8E84EAC71B8C9B5B00621926 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */; };
 		8EAB86DB1B9785CA0051532F /* AttachmentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */; };
 		8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */; };
@@ -422,6 +423,7 @@
 		8E50152C1B95A24C00A69702 /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		8E57385A1B1B19C8009AA28A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		8E5CA95D1B8DD7DE00C02AA4 /* attachedFile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attachedFile.png; sourceTree = "<group>"; };
+		8E605C301B9DC4EE00F38A81 /* attachment_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "attachment_icon@2x.png"; sourceTree = "<group>"; };
 		8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentViewCell.swift; sourceTree = "<group>"; };
 		8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentViewCell.xib; sourceTree = "<group>"; };
@@ -938,6 +940,7 @@
 				A98D03441B99F4ED0029A880 /* Plus 1 Month-64.png */,
 				A98D03451B99F4ED0029A880 /* Calendar-64.png */,
 				8E5CA95D1B8DD7DE00C02AA4 /* attachedFile.png */,
+				8E605C301B9DC4EE00F38A81 /* attachment_icon@2x.png */,
 				ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */,
 				ADEF08531B8205B9008AC0D0 /* green_indicator.png */,
 				ADEF08541B8205B9008AC0D0 /* pgp_label.png */,
@@ -1195,6 +1198,7 @@
 				3D69ECC51B83AB9A0082EF5C /* page_white_film.png in Resources */,
 				3D69ECC81B83AB9A0082EF5C /* page_white_flash@2x.png in Resources */,
 				3D69ECE61B83AB9A0082EF5C /* page_white_visualstudio@2x.png in Resources */,
+				8E605C311B9DC4EE00F38A81 /* attachment_icon@2x.png in Resources */,
 				AD43C7FD1B6FEE9200C8F286 /* DevPasswordViewController.xib in Resources */,
 				5B7EAB081B31870800B888BD /* archive.png in Resources */,
 				ADEF085C1B8205B9008AC0D0 /* pub_label.png in Resources */,
