@@ -14,7 +14,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     @IBOutlet weak var mailTableView: UITableView!
     var refreshController: UIRefreshControl!
     var searchController: UISearchController!
-    var delegate: ContentViewControllerProtocol?
+    weak var delegate: ContentViewControllerProtocol?
     var emails = [Email]()
     var filterdEmails = [Email]()
     

@@ -12,7 +12,7 @@ import UIKit
 class PreferenceAccountListTableViewController: UITableViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 	
 	var emailAcc: EmailAccount?
-	var delegate: ContentViewControllerProtocol?
+	weak var delegate: ContentViewControllerProtocol?
 	var navController: UINavigationController!
 	var managedObjectContext: NSManagedObjectContext!
 	var allAccounts: [EmailAccount] = [EmailAccount]()

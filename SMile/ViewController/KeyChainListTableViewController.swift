@@ -11,8 +11,7 @@ import CoreData
 
 class KeyChainListTableViewController: UITableViewController {
 	
-	var delegate: ContentViewControllerProtocol?
-	var navController: UINavigationController!
+	weak var delegate: ContentViewControllerProtocol?
 	var keyDetailVC: KeyDetailTableViewController?
 	var keyList = [Key]()
 	var keysFromCoreData = [Key]()
