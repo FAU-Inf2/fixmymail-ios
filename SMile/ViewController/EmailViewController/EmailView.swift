@@ -226,14 +226,18 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         var returnDict = [String: String]()
         var header : MCOMessageHeader = message.header
         
-        var fromString: String = (header.from.displayName != nil) ? header.from.displayName : header.from.mailbox
-        returnDict["from"] = "From: \(fromString)"
+        var fromString: String? = (header.from.displayName != nil) ? header.from.displayName : header.from.mailbox
+        if fromString != nil {
+            returnDict["from"] = "From: \(fromString!)"
+        } else {
+            returnDict["from"] = "From: -"
+        }
         
         var toString: String? = self.addressStringFromArray(header.to)
         if let to = toString {
             returnDict["to"] = "To: \(to)"
         } else {
-            returnDict["to"] = toString
+            returnDict["to"] = "To: -"
         }
         
         var ccString: String? = self.addressStringFromArray(header.cc)
