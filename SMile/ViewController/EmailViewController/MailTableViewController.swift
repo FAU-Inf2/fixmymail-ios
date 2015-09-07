@@ -12,12 +12,11 @@ import CoreData
 class MailTableViewController: UIViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UISearchBarDelegate, UISearchResultsUpdating, TableViewCellDelegate {
     
     @IBOutlet weak var mailTableView: UITableView!
-    var refreshControl: UIRefreshControl!
+    var refreshController: UIRefreshControl!
     var searchController: UISearchController!
     var delegate: ContentViewControllerProtocol?
     var emails = [Email]()
     var filterdEmails = [Email]()
-    var alert = UIAlertView(title: "SMile could not delete this Email", message: "Please check your preferences to select a specific Trash", delegate: nil, cancelButtonTitle: "OK", otherButtonTitles: "Preferences")
     
     //required in the edit mode
     var selectedEmails = NSMutableArray()
@@ -27,9 +26,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     var folderToQuery: String?
     var sessionDictionary = [String: MCOIMAPSession]()
     
-    //@IBOutlet weak var cell: CustomMailTableViewCell!
     var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
     
+    
+    //MARK: - Searchfunction
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         self.filterdEmails.removeAll(keepCapacity: false)
         var searchPredicate: NSPredicate!
@@ -79,13 +79,17 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationItem.rightBarButtonItem = editButton
         mailTableView.allowsMultipleSelectionDuringEditing = true
         
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl.addTarget(self, action: "imapSynchronize", forControlEvents: UIControlEvents.ValueChanged)
-        self.mailTableView.addSubview(self.refreshControl)
+        self.refreshController = UIRefreshControl()
+        self.refreshController.addTarget(self, action: "imapSynchronize", forControlEvents: UIControlEvents.ValueChanged)
+        self.mailTableView.addSubview(self.refreshController)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         if self.folderToQuery == nil {
             self.folderToQuery = "INBOX"
         }
-        
         accounts = getRecentlyUsedAccount()
         //set tableView title
         if accounts!.count == 0 {
@@ -112,17 +116,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
         
-        imapSynchronize()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
         if selectedEmails.count == 0 {
             setToolbarWithComposeButton()
         } else {
             setToolbarWhileEditing()
         }
-
+        
+        imapSynchronize()
 	}
     
     override func viewWillDisappear(animated: Bool) {
@@ -324,8 +324,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 if downloadMailDuration != nil {
                                     if mailReceivedData.laterDate(downloadMailDuration!) == downloadMailDuration {
                                         //NSLog("removed local Email (downloadMailDuration)")
-                                        self.managedObjectContext.deleteObject(mail as! NSManagedObject)
                                         self.removeEmailFromArray(mail as! Email)
+                                        self.managedObjectContext.deleteObject(mail as! NSManagedObject)
                                         self.saveCoreDataChanges()
                                         self.refreshTableView()
                                         continue
@@ -364,8 +364,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 
                                 if deleted {
                                     //NSLog("email has been deleted or moved")
-                                    self.managedObjectContext.deleteObject(mail as! NSManagedObject)
                                     self.removeEmailFromArray(mail as! Email)
+                                    self.managedObjectContext.deleteObject(mail as! NSManagedObject)
                                     self.saveCoreDataChanges()
                                     self.refreshTableView()
                                 }
@@ -443,7 +443,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                         }
                         //NSLog("%i new Emails", newEmailsCounter)
                     }
-                    self.refreshControl.endRefreshing()
+                    self.refreshController.endRefreshing()
                 })
             }
         }
@@ -457,17 +457,20 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         let fetchOlderEmailsOp = session.fetchMessagesOperationWithFolder(self.folderToQuery!, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, curMinUID-2)))
         
+        println(MCOIndexSet(range: MCORangeMake(1, curMinUID-2)))
         fetchOlderEmailsOp.start { (error, messages, range) -> Void in
             if error != nil {
                 NSLog("Could not load messages: %@", error)
             } else {
                 //Load Emails
+                println(messages.count)
                 for message in messages {
                     
-                    var msgRecievedData: NSDate = (message as! MCOIMAPMessage).header.receivedDate
+                    var msgReceivedDate: NSDate = (message as! MCOIMAPMessage).header.receivedDate
                     var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
                     if downloadMailDuration != nil {
-                        if msgRecievedData.laterDate(downloadMailDuration!) == downloadMailDuration {
+                        if msgReceivedDate.laterDate(downloadMailDuration!) == downloadMailDuration {
+                            println(msgReceivedDate)
                             continue
                         }
                     }

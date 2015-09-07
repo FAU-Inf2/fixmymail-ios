@@ -104,6 +104,13 @@ func moveEmailToFolder(mail: Email!, destFolder: String!) {
             NSLog("email deleted or moved")
         }
     }
+    //CoreData changes
+    mail.folder = destFolder
+    var error: NSError?
+    managedObjectContext!.save(&error)
+    if error != nil {
+        NSLog("%@", error!.description)
+    }
     
     //set deleteFlag
     addFlagToEmail(mail, MCOMessageFlag.Deleted)

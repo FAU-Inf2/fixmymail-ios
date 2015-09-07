@@ -754,10 +754,7 @@
 			children = (
 				8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */,
 				8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */,
-				ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */,
-				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
-				ADEF08671B826819008AC0D0 /* KeyDetailTableViewCell.swift */,
-				ADEF08681B826819008AC0D0 /* KeyDetailTableViewCell.xib */,
+				5B2A70F11B9DE40B00780523 /* KeyChain */,
 				A98D033A1B99F46A0029A880 /* MailRemindViewController.xib */,
 				A98D033B1B99F46A0029A880 /* MailRemindViewController.swift */,
 				AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */,
@@ -867,6 +864,17 @@
 				3DF253C41AF7611E00B99BC8 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5B2A70F11B9DE40B00780523 /* KeyChain */ = {
+			isa = PBXGroup;
+			children = (
+				ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */,
+				ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */,
+				ADEF08671B826819008AC0D0 /* KeyDetailTableViewCell.swift */,
+				ADEF08681B826819008AC0D0 /* KeyDetailTableViewCell.xib */,
+			);
+			path = KeyChain;
 			sourceTree = "<group>";
 		};
 		8E1441181B1DF00500F1A023 /* SendView */ = {

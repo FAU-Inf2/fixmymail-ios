@@ -92,7 +92,7 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
             if let folder = self.cellItems[indexPath.row].emailFolder {
                 for email in emailsToMove {
                     moveEmailToFolder(email as! Email, folder.path)
-                    println("Email moved")
+                    //println("Email moved")
                 }
                 var button = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: self, action: "closeVCWithSender:")
                 button.tag = 0
