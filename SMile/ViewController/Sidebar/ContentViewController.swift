@@ -15,7 +15,7 @@ protocol ContentViewControllerProtocol {
 
 class ContentViewController: UIViewController {
     
-    var delegate: ContentViewControllerProtocol?
+    weak var delegate: ContentViewControllerProtocol?
     
     
     override func viewDidLoad() {

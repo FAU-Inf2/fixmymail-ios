@@ -24,7 +24,7 @@ class ContainerViewController: UIViewController {
             showShadowForContentViewController(shouldShowShadow)
         }
     }
-    var sideBarVC: SidebarTableViewController?
+    weak var sideBarVC: SidebarTableViewController?
     let contentPanelExpandedOffset: CGFloat = UIScreen.mainScreen().bounds.width / 3
     var leftSwipeGesture: UISwipeGestureRecognizer!
     var rightSwipeGesture: UISwipeGestureRecognizer!

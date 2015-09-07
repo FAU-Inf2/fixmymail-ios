@@ -21,7 +21,7 @@ class SidebarTableViewController: UITableViewController {
     var sections = [String]()
     var rows = [AnyObject]()
     var managedObjectContext: NSManagedObjectContext!
-    var delegate: SideBarProtocol?
+    weak var delegate: SideBarProtocol?
     var emailAccounts: [EmailAccount] = [EmailAccount]()
     var currAccountName: String?
     let leftSpaceIncrement: Float = 20.0
