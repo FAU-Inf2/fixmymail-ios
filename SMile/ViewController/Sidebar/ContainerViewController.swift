@@ -30,9 +30,6 @@ class ContainerViewController: UIViewController {
     var rightSwipeGesture: UISwipeGestureRecognizer!
     var tapGesture: UITapGestureRecognizer!
     var lastSelectedMailAccountName: String? = nil
-    var mailTableVC: MailTableViewController!
-    var preferencesVC: PreferenceTableViewController!
-    var keyChainVC : KeyChainListTableViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,6 +176,7 @@ extension ContainerViewController: SideBarProtocol {
             
         case "EmailSpecific":
             shouldChangeVC = true
+            
             contentVC = MailTableViewController(nibName: "MailTableViewController", bundle: NSBundle.mainBundle())
             
             if actionItem.emailFolder != nil {

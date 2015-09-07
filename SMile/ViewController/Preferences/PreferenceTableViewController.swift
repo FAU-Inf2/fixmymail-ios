@@ -11,7 +11,7 @@ import CoreData
 
 class PreferenceTableViewController: UITableViewController {
 	
-	var delegate: ContentViewControllerProtocol?
+	weak var delegate: ContentViewControllerProtocol?
 	var navController: UINavigationController!
 	var preferenceCellItem: [ActionItem] = [ActionItem]()
 	var otherItem: [ActionItem] = [ActionItem]()
