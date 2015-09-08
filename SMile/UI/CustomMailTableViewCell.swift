@@ -141,4 +141,8 @@ class CustomMailTableViewCell: UITableViewCell {
         }
         return false
     }
+    
+    deinit {
+        self.delegate = nil
+    }
 }
