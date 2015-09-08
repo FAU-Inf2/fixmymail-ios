@@ -70,24 +70,35 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             self.title = folderToQuery
         }
         
-        //Load older Emails if necessary
-        if let accs = accounts {
-            for account in accs {
-                let currentMinUID = getMinUID(account, self.folderToQuery!)
-                if currentMinUID > 1 {
-                    fetchEmails(account ,self.folderToQuery!, MCOIndexSet(range: MCORangeMake(1, UInt64(currentMinUID-2))))
-                }
-            }
-        }
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "updateEmailsArray:",
+            name: fetchedNewEmailsNotificationKey,
+            object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "updateEmailsArray:",
+            name: deleteLocalEmailsNotificationKey,
+            object: nil)
+        
+        imapSynchronize()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "updateEmailsArray:",
-            name: accountFetchedNewEmailsNotificationKey,
+            name: fetchedNewEmailsNotificationKey,
+            object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "updateEmailsArray:",
+            name: deleteLocalEmailsNotificationKey,
             object: nil)
         
         emails.removeAll(keepCapacity: false)
@@ -113,8 +124,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         } else {
             setToolbarWhileEditing()
         }
-        
-        imapSynchronize()
 	}
     
     override func viewWillDisappear(animated: Bool) {
@@ -220,14 +229,39 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
 	// MARK: - Notification
     func updateEmailsArray(notification: NSNotification) {
-        var receivedUserInfo = notification.userInfo
-        if let userInfo = receivedUserInfo as? Dictionary<String,[Email]> {
-            let array: [Email] = userInfo["fetchedNewEmails"]!
-            for email in array {
-                self.insertEmailToArray(email)
+        switch notification.name {
+        case fetchedNewEmailsNotificationKey:
+            var receivedUserInfo = notification.userInfo
+            if let userInfo = receivedUserInfo as? Dictionary<String,[Email]> {
+                let array: [Email] = userInfo["Emails"]!
+                for email in array {
+                    if let accs = accounts {
+                        if accs.count == 1 { //Specific Folder
+                            if email.folder == folderToQuery && email.toAccount == accounts!.first {
+                                self.insertEmailToArray(email)
+                            }
+                        } else { //All
+                            self.insertEmailToArray(email)
+                        }
+                    }
+                }
             }
-            self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+            
+        case deleteLocalEmailsNotificationKey:
+            var receivedUserInfo = notification.userInfo
+            if let userInfo = receivedUserInfo as? Dictionary<String,NSMutableArray> {
+                let array: NSMutableArray = userInfo["Emails"]!
+                for email in array {
+                    self.removeEmailFromArray(email as! Email)
+                    managedObjectContext.deleteObject(email as! Email)
+                    saveCoreDataChanges()
+                }
+            }
+            
+        default: break
         }
+        
+        self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
     }
     
     
@@ -319,6 +353,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if let trashFolder = getFolderPathWithMCOIMAPFolderFlag(mail.toAccount, MCOIMAPFolderFlag.Trash) {
             if self.folderToQuery == trashFolder {
                 addFlagToEmail(mail, MCOMessageFlag.Deleted)
+                managedObjectContext.deleteObject(mail)
+                saveCoreDataChanges()
             } else {
                 moveEmailToFolder(mail, trashFolder)
             }
@@ -561,6 +597,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             self.navigationItem.rightBarButtonItem?.enabled = true
             return
         } else {
+            var array: NSMutableArray = NSMutableArray(array: self.emails)
+            if array.containsObject(newEmail) {
+                return
+            }
             //Binary Search?
             emails.append(newEmail)
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
