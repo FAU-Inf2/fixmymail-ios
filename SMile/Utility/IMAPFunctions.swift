@@ -10,9 +10,14 @@ import Foundation
 import CoreData
 
 var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
+
+//Dictionaries
 var sessionDictionary = [String: MCOIMAPSession]()
 var trashFolderDictionary = [String: String]()
 var archiveFolderDictionary = [String: String]()
+
+//NotificationKey
+let accountFetchedNewEmailsNotificationKey = "EmailAccountUpdated"
 
 func createNewSession(account: EmailAccount) {
     let session = MCOIMAPSession()
@@ -60,11 +65,7 @@ func addFlagToEmail(mail: Email, flag: MCOMessageFlag){
             }
             if flag == MCOMessageFlag.Deleted {
                 managedObjectContext.deleteObject(mail)
-                var error: NSError?
-                managedObjectContext!.save(&error)
-                if error != nil {
-                    NSLog("%@", error!.description)
-                }
+                saveCoreDataChanges()
             }
         })
     }
@@ -154,3 +155,196 @@ func getFolderPathWithMCOIMAPFolderFlag (account: EmailAccount, folderFlag: MCOI
     
     return nil
 }
+
+//MARK: - Help functions for imap
+func getMaxUID(account: EmailAccount, folderToQuery: String) -> UInt32 {
+    var maxUID : UInt32 = 0
+    for email in account.emails {
+        if (email as! Email).folder == folderToQuery {
+            if ((email as! Email).mcomessage as! MCOIMAPMessage).uid > maxUID {
+                maxUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
+            }
+        }
+    }
+    
+    return maxUID
+}
+
+func getMinUID(account: EmailAccount, folderToQuery: String) -> UInt32 {
+    var minUID : UInt32 = UINT32_MAX
+    var nothingFound = true
+    for email in account.emails {
+        if (email as! Email).folder == folderToQuery {
+            if ((email as! Email).mcomessage as! MCOIMAPMessage).uid < minUID {
+                nothingFound = false
+                minUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
+            }
+        }
+    }
+    
+    return nothingFound ? 0 : minUID
+}
+
+//FetchEmails
+func fetchEmails(account: EmailAccount, folderToQuery: String, uidRange: MCOIndexSet) {
+    let session = getSession(account)
+    
+    let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure)
+    
+    let fetchEmailsOp = session.fetchMessagesOperationWithFolder(folderToQuery, requestKind: requestKind, uids: uidRange)
+    fetchEmailsOp.start({ (error, messages, range) -> Void in
+        if error != nil {
+            NSLog("Could not load messages: %@", error)
+        } else {
+            //Load new Emails
+            var msgCount: Int32 = 0
+            var fetchedNewEmails: [Email] = [Email]()
+            for message in messages {
+                //Workaround for YahooAcc
+                if (message as! MCOIMAPMessage).uid == getMaxUID(account, folderToQuery) {
+                    continue
+                }
+                
+                var msgReceivedDate: NSDate = (message as! MCOIMAPMessage).header.receivedDate
+                var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
+                if downloadMailDuration != nil { //!Ever
+                    if msgReceivedDate.laterDate(downloadMailDuration!) == downloadMailDuration {
+                        continue
+                    }
+                }
+                
+                var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: managedObjectContext!) as! Email
+                newEmail.mcomessage = message
+                
+                //Fetch data
+                let fetchEmailDataOp = session.fetchMessageOperationWithFolder(folderToQuery, uid: (message as! MCOIMAPMessage).uid)
+                fetchEmailDataOp.start({(error, data) in
+                    if error != nil {
+                        NSLog("Could not recieve mail: %@", error)
+                    } else {
+                        newEmail.data = data
+                        let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                        newEmail.plainText = parser.plainTextBodyRendering()
+                        
+                        saveCoreDataChanges()
+                        fetchedNewEmails.append(newEmail)
+                        OSAtomicIncrement32(&msgCount)
+                        
+                        if msgCount >= 10 || (messages.last! as! MCOIMAPMessage).uid == (newEmail.mcomessage as! MCOIMAPMessage).uid {
+                            var notificationData: Dictionary<String,[Email]>
+                            notificationData = ["fetchedNewEmails": fetchedNewEmails]
+                            NSNotificationCenter.defaultCenter().postNotificationName(accountFetchedNewEmailsNotificationKey, object: nil, userInfo: notificationData)
+                            
+                            fetchedNewEmails.removeAll(keepCapacity: false)
+                            OSAtomicCompareAndSwap32(msgCount, 0, &msgCount)
+                        }
+                    }
+                })
+                
+                //init database entry
+                if (message as! MCOIMAPMessage).header.from != nil {
+                    if (message as! MCOIMAPMessage).header.from.displayName != "" && (message as! MCOIMAPMessage).header.from.displayName != nil {
+                        newEmail.sender = (message as! MCOIMAPMessage).header.from.displayName
+                    }else {
+                        newEmail.sender = (message as! MCOIMAPMessage).header.from.mailbox
+                    }
+                }else if (message as! MCOIMAPMessage).header.sender != nil {
+                    if (message as! MCOIMAPMessage).header.sender.displayName != "" && (message as! MCOIMAPMessage).header.sender.displayName != nil {
+                        newEmail.sender = (message as! MCOIMAPMessage).header.sender.displayName
+                    }else {
+                        newEmail.sender = (message as! MCOIMAPMessage).header.sender.mailbox
+                    }
+                } else {
+                    newEmail.sender = ""
+                }
+                
+                newEmail.title = (message as! MCOIMAPMessage).header.subject ?? " "
+                newEmail.folder = folderToQuery
+                newEmail.toAccount = account
+            }
+        }
+    })
+}
+
+
+//Update local Emails
+func updateLocalEmail(account: EmailAccount, folderToQuery: String) {
+    let session = getSession(account)
+    let currentMaxUID = getMaxUID(account, folderToQuery)
+    
+    let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure)
+    
+    var localEmails: NSMutableArray = NSMutableArray(array: account.emails.allObjects)
+    for localEmail in localEmails {
+        if (localEmail as! Email).folder != folderToQuery {
+            localEmails.removeObject(localEmail)
+        }
+    }
+    
+    if currentMaxUID > 0 {
+        let fetchMessageInfoForLocalEmails = session.fetchMessagesOperationWithFolder(folderToQuery, requestKind: requestKind, uids: MCOIndexSet(range: MCORangeMake(1, UInt64(currentMaxUID - 1))))
+        
+        fetchMessageInfoForLocalEmails.start({ (error, messages, range) -> Void in
+            if error != nil {
+                NSLog("Could not update local Emails: %@", error)
+            }else {
+                for mail in localEmails {
+                    var deleted = true
+                    
+                    var mailReceivedDate: NSDate = ((mail as! Email).mcomessage as! MCOIMAPMessage).header.receivedDate
+                    var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
+                    if downloadMailDuration != nil {
+                        if mailReceivedDate.laterDate(downloadMailDuration!) == downloadMailDuration {
+                            managedObjectContext.deleteObject(mail as! NSManagedObject)
+                            saveCoreDataChanges()
+                            continue
+                        }
+                    }
+                    
+                    //reload missing data
+                    if (mail as! Email).data.length == 0 {
+                        //Fetch data
+                        let fetchEmailDataOp = session.fetchMessageOperationWithFolder(folderToQuery, uid: ((mail as! Email).mcomessage as! MCOIMAPMessage).uid)
+                        
+                        fetchEmailDataOp.start({(error, data) in
+                            if error != nil {
+                                NSLog("Could not recieve mail: %@", error)
+                            } else {
+                                (mail as! Email).data = data
+                                let parser: MCOMessageParser! = MCOMessageParser(data: data)
+                                (mail as! Email).plainText = parser.plainTextBodyRendering()
+                                saveCoreDataChanges()
+                            }
+                        })
+                    }
+                    
+                    for message in messages {
+                        if (message as! MCOIMAPMessage).uid == ((mail as! Email).mcomessage as! MCOIMAPMessage).uid {
+                            if ((mail as! Email).mcomessage as! MCOIMAPMessage).flags != (message as! MCOIMAPMessage).flags{
+                                (mail as! Email).mcomessage = (message as! MCOIMAPMessage)
+                                saveCoreDataChanges()
+                            }
+                            deleted = false
+                            break
+                        }
+                    }
+                    
+                    if deleted {
+                        managedObjectContext.deleteObject(mail as! NSManagedObject)
+                        saveCoreDataChanges()
+                    }
+                }
+            }
+        })
+    }
+}
+
+//MARK: - CoreData
+func saveCoreDataChanges(){
+    var error: NSError?
+    managedObjectContext!.save(&error)
+    if error != nil {
+        NSLog("%@", error!.description)
+    }
+}
+

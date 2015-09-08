@@ -9,9 +9,6 @@
 import UIKit
 import CoreData
 
-//NotificationKey
-let accountUpdatedNotificationKey = "EmailAccountUpdated"
-
 class PreferenceEditAccountTableViewController: UITableViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 	
 	var emailAcc: EmailAccount?
@@ -118,13 +115,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			name: UIKeyboardWillHideNotification,
 			object: nil)
 		self.tableView.reloadData()
-		
-		// Register notification when done button is tapped
-		NSNotificationCenter.defaultCenter().addObserver(self,
-			selector: "notificationSent",
-			name: accountUpdatedNotificationKey,
-			object: nil)
-		
+        
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
@@ -543,17 +534,6 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							
 							
 							self.delay(1.0) {
-								// Tell other VCs that the account may have changed
-								var notificationData: Dictionary<String,EmailAccount>?
-								if self.newEmailAcc != nil {
-									notificationData = ["Account": self.newEmailAcc!]
-								} else {
-									notificationData = nil
-								}
-								
-							     NSNotificationCenter.defaultCenter().postNotificationName(
-									accountUpdatedNotificationKey, object: self, userInfo: notificationData)
-								
 								self.navigationController?.popViewControllerAnimated(true)
 							}
 						}
