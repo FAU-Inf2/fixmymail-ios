@@ -10,9 +10,14 @@ import Foundation
 import CoreData
 
 var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
+
+//Dictionaries
 var sessionDictionary = [String: MCOIMAPSession]()
 var trashFolderDictionary = [String: String]()
 var archiveFolderDictionary = [String: String]()
+
+//NotificationKey
+let accountFetchedNewEmailsNotificationKey = "EmailAccountUpdated"
 
 func createNewSession(account: EmailAccount) {
     let session = MCOIMAPSession()
@@ -167,15 +172,17 @@ func getMaxUID(account: EmailAccount, folderToQuery: String) -> UInt32 {
 
 func getMinUID(account: EmailAccount, folderToQuery: String) -> UInt32 {
     var minUID : UInt32 = UINT32_MAX
+    var nothingFound = true
     for email in account.emails {
         if (email as! Email).folder == folderToQuery {
             if ((email as! Email).mcomessage as! MCOIMAPMessage).uid < minUID {
+                nothingFound = false
                 minUID = ((email as! Email).mcomessage as! MCOIMAPMessage).uid
             }
         }
     }
     
-    return minUID
+    return nothingFound ? 0 : minUID
 }
 
 //FetchEmails
@@ -190,7 +197,13 @@ func fetchEmails(account: EmailAccount, folderToQuery: String, uidRange: MCOInde
             NSLog("Could not load messages: %@", error)
         } else {
             //Load new Emails
+            var msgCount: Int32 = 0
+            var fetchedNewEmails: [Email] = [Email]()
             for message in messages {
+                //Workaround for YahooAcc
+                if (message as! MCOIMAPMessage).uid == getMaxUID(account, folderToQuery) {
+                    continue
+                }
                 
                 var msgReceivedDate: NSDate = (message as! MCOIMAPMessage).header.receivedDate
                 var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
@@ -214,6 +227,17 @@ func fetchEmails(account: EmailAccount, folderToQuery: String, uidRange: MCOInde
                         newEmail.plainText = parser.plainTextBodyRendering()
                         
                         saveCoreDataChanges()
+                        fetchedNewEmails.append(newEmail)
+                        OSAtomicIncrement32(&msgCount)
+                        
+                        if msgCount >= 10 || (messages.last! as! MCOIMAPMessage).uid == (newEmail.mcomessage as! MCOIMAPMessage).uid {
+                            var notificationData: Dictionary<String,[Email]>
+                            notificationData = ["fetchedNewEmails": fetchedNewEmails]
+                            NSNotificationCenter.defaultCenter().postNotificationName(accountFetchedNewEmailsNotificationKey, object: nil, userInfo: notificationData)
+                            
+                            fetchedNewEmails.removeAll(keepCapacity: false)
+                            OSAtomicCompareAndSwap32(msgCount, 0, &msgCount)
+                        }
                     }
                 })
                 

@@ -74,13 +74,21 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if let accs = accounts {
             for account in accs {
                 let currentMinUID = getMinUID(account, self.folderToQuery!)
-                fetchEmails(account ,self.folderToQuery!, MCOIndexSet(range: MCORangeMake(1, UInt64(currentMinUID-2))))
+                if currentMinUID > 1 {
+                    fetchEmails(account ,self.folderToQuery!, MCOIndexSet(range: MCORangeMake(1, UInt64(currentMinUID-2))))
+                }
             }
         }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "updateEmailsArray:",
+            name: accountFetchedNewEmailsNotificationKey,
+            object: nil)
         
         emails.removeAll(keepCapacity: false)
         //fetch local Emails from CoreData
@@ -94,15 +102,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 continue
                             }
                         }
-                        emails.append(mail as! Email)
-                        
-                        //activate Edit Button
-                        self.navigationItem.rightBarButtonItem?.enabled = true
+                        self.insertEmailToArray(mail as! Email)
                     }
                 }
             }
-            
-            emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
         
         if selectedEmails.count == 0 {
@@ -117,6 +120,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
 		self.navigationController?.setToolbarHidden(true, animated: false)
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -214,6 +219,16 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     
 	// MARK: - Notification
+    func updateEmailsArray(notification: NSNotification) {
+        var receivedUserInfo = notification.userInfo
+        if let userInfo = receivedUserInfo as? Dictionary<String,[Email]> {
+            let array: [Email] = userInfo["fetchedNewEmails"]!
+            for email in array {
+                self.insertEmailToArray(email)
+            }
+            self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+    }
     
     
     // MARK: - TableView
@@ -451,7 +466,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         var moveViewController = MoveEmailViewController(nibName: "MoveEmailViewController", bundle: nil)
         moveViewController.emailsToMove = self.selectedEmails
         self.navigationController?.pushViewController(moveViewController, animated: true)
-        //endEditing()
     }
     
     func deleteButtonAction(){
@@ -532,32 +546,25 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func removeEmailFromArray(email: Email) {
-        objc_sync_enter(self.emails)
         var array = NSMutableArray(array: emails)
         var index = array.indexOfObject(email)
         if index != NSNotFound {
             emails.removeAtIndex(index)
         }
-        objc_sync_exit(self.emails)
     }
     
     func insertEmailToArray(newEmail: Email) {
-        objc_sync_enter(self.emails)
         if emails.count == 0 {
             emails.append(newEmail)
             
             //activate Edit Button
             self.navigationItem.rightBarButtonItem?.enabled = true
             return
-        }
-        if (newEmail.mcomessage as! MCOIMAPMessage).header.receivedDate > (emails.first!.mcomessage as! MCOIMAPMessage).header.receivedDate {
-            emails.insert(newEmail, atIndex: 0)
-        }else {
+        } else {
             //Binary Search?
             emails.append(newEmail)
             emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
         }
-        objc_sync_exit(self.emails)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
