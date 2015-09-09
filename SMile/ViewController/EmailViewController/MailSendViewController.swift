@@ -480,6 +480,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                             NSLog("Draft saved")
                         }
                     })
+                } else {
+                    showAlert("Unable to store message", message: "Please check your preferences for \(self.account.emailAddress) to select a specific draft folder.", viewController: self)
                 }
                 
                 self.navigationController?.popViewControllerAnimated(true)
@@ -487,6 +489,27 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         default:
             break
         }
+    }
+    
+    //MARK: - Alert View
+    func showAlert(title: String, message: String, viewController: UIViewController) {
+        var alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        //Create Actions
+        var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) {
+            UIAlertAction in
+            
+        }
+        var cancelAction = UIAlertAction(title: "Preferences", style: UIAlertActionStyle.Default) {
+            UIAlertAction in
+            //Push Preferences
+            viewController.navigationController?.pushViewController(PreferenceAccountListTableViewController(nibName: "PreferenceAccountListTableViewController", bundle: NSBundle.mainBundle()), animated: true)
+        }
+        
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        viewController.presentViewController(alertController, animated: true, completion: nil)
     }
     
     //MARK: - Supportive methods
@@ -628,7 +651,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 (sender as! UIBarButtonItem).enabled = true
             } else {
                 NSLog("sent")
-                
+                self.navigationController?.popViewControllerAnimated(true)
                 //Move Email to sent Folder
                 if let folder = getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.SentMail) {
                     var appendMsgOp = imapSession.appendMessageOperationWithFolder(folder, messageData: data, flags: MCOMessageFlag.Seen)
@@ -637,9 +660,9 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                             NSLog("%@", error.description)
                         }
                     })
+                } else {
+                    self.showAlert("Unable to store message", message: "Please check your preferences for \(self.account.emailAddress) to select a specific sent folder", viewController: self.navigationController!.topViewController)
                 }
-                
-                self.navigationController?.popViewControllerAnimated(true)
             }
         })
     }
