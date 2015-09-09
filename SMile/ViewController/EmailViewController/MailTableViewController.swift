@@ -218,7 +218,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         let array = (self.emails as NSArray).filteredArrayUsingPredicate(searchPredicate)
         self.filterdEmails = array as! [Email]
-        refreshTableView()
+        self.refreshTableView(false)
     }
     
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
@@ -229,6 +229,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
 	// MARK: - Notification
     func updateEmailsArray(notification: NSNotification) {
+        var removedIndex = -2
+        
         switch notification.name {
         case fetchedNewEmailsNotificationKey:
             var receivedUserInfo = notification.userInfo
@@ -252,7 +254,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             if let userInfo = receivedUserInfo as? Dictionary<String,NSMutableArray> {
                 let array: NSMutableArray = userInfo["Emails"]!
                 for email in array {
-                    self.removeEmailFromArray(email as! Email)
+                    removedIndex = self.removeEmailFromArray(email as! Email)
                     managedObjectContext.deleteObject(email as! Email)
                     saveCoreDataChanges()
                 }
@@ -261,7 +263,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         default: break
         }
         
-        self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+        println(removedIndex)
+        if removedIndex != -1 {
+            self.refreshTableView(true)
+        }
     }
     
     
@@ -332,7 +337,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 
                 addFlagToEmail(cell.mail, MCOMessageFlag.Seen)
             }
-            self.refreshTableView()
+            self.mailTableView.deselectRowAtIndexPath(indexPath, animated: false)
+            //self.refreshTableView()
         } else { //edit mode enabled
             //select Email
             selectedEmails.addObject(cell.mail)
@@ -355,28 +361,26 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 addFlagToEmail(mail, MCOMessageFlag.Deleted)
                 managedObjectContext.deleteObject(mail)
                 saveCoreDataChanges()
+                self.removeEmailFromArray(mail)
+                self.refreshTableView(true)
             } else {
                 moveEmailToFolder(mail, trashFolder)
             }
-            self.removeEmailFromArray(mail)
         } else {
             showAlert("Unable to delete Message", message: "Please check your preferences for \(mail.toAccount.emailAddress) to select a specific Trash")
             NSLog("error: trashFolderName == nil")
         }
-        self.refreshTableView()
     }
     
     func archiveEmail(mail: Email) {
         if let archiveFolder = getFolderPathWithMCOIMAPFolderFlag(mail.toAccount, MCOIMAPFolderFlag.Archive) {
             if self.folderToQuery != archiveFolder {
                 moveEmailToFolder(mail, archiveFolder)
-                self.removeEmailFromArray(mail)
             }
         } else {
             showAlert("Unable to archive Message", message: "Please check your preferences for \(mail.toAccount.emailAddress) to select a specific Archive")
             NSLog("error: archiveFolderName == nil")
         }
-        self.refreshTableView()
     }
     
     func remindEmail(mail: Email){
@@ -399,7 +403,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         // email mit info wann es wieder hochpopen soll in RemindMe ordner schieben
         moveEmailToFolder(mail, folderToQuery)
         self.removeEmailFromArray(mail)
-        self.refreshTableView()
+        //self.refreshTableView(true)
     }
 
     
@@ -421,7 +425,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
         var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
         
-        if selectedEmails.count == 0 {
+        if selectedEmails.count == 0 { //If nothing selected
             markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
             moveButton.enabled = false
             deleteButton.enabled = false
@@ -505,6 +509,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func deleteButtonAction(){
+        setToolbarWithComposeButton()
         for var i = 0; i < selectedEmails.count; i++ {
             deleteEmail(selectedEmails[i] as! Email)
         }
@@ -518,7 +523,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     func editToggled(sender: AnyObject) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
             self.navigationItem.rightBarButtonItem?.title = "Done"
-            setToolbarWhileEditing()//AndNothingSelected()
+            setToolbarWhileEditing()
             mailTableView.setEditing(true, animated: true)
         } else {
             endEditing()
@@ -529,7 +534,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         self.navigationItem.rightBarButtonItem?.title = "Edit"
         selectedEmails.removeAllObjects()
         setToolbarWithComposeButton()
-        self.refreshTableView()
+        //self.refreshTableView()
         mailTableView.layoutIfNeeded()
         mailTableView.setEditing(false, animated: true)
     }
@@ -554,11 +559,13 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             for var i = 0; i < selectedEmails.count; i++ {
                 addFlagToEmail(selectedEmails[i] as! Email, MCOMessageFlag.Seen)
             }
+            self.refreshTableView(false)
             endEditing()
         case 2: //Mark as Unread
             for var i = 0; i < selectedEmails.count; i++ {
                 removeFlagFromEmail(selectedEmails[i] as! Email, MCOMessageFlag.Seen)
             }
+            self.refreshTableView(false)
             endEditing()
         case 3: //Delete All
             deleteButtonAction()
@@ -577,16 +584,27 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     
     //MARK: - Help functions for tableview
-    func refreshTableView() {
-        mailTableView.reloadData()
+    func refreshTableView(animated: Bool) {
+        if emails.count == 0 {
+            self.navigationItem.rightBarButtonItem?.enabled = false
+        }
+        
+        println("hallo")
+        if animated {
+            self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+        }else {
+            self.mailTableView.reloadData()
+        }
     }
     
-    func removeEmailFromArray(email: Email) {
+    func removeEmailFromArray(email: Email) -> Int{
         var array = NSMutableArray(array: emails)
         var index = array.indexOfObject(email)
         if index != NSNotFound {
             emails.removeAtIndex(index)
+            return index
         }
+        return -1
     }
     
     func insertEmailToArray(newEmail: Email) {
@@ -670,11 +688,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         //Create Actions
         var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) {
             UIAlertAction in
-            
+            self.refreshTableView(false)
         }
         var cancelAction = UIAlertAction(title: "Preferences", style: UIAlertActionStyle.Default) {
             UIAlertAction in
             //Push Preferences
+            self.refreshTableView(false)
             self.navigationController?.pushViewController(PreferenceAccountListTableViewController(nibName: "PreferenceAccountListTableViewController", bundle: NSBundle.mainBundle()), animated: true)
         }
     

@@ -107,14 +107,12 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
     func closeVCWithSender(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true)
         if sender.tag != 1 {
-            var updatedEmails = NSMutableArray(array: (self.navigationController?.topViewController as! MailTableViewController).emails)
-            for email in updatedEmails {
-                if self.emailsToMove.containsObject(email) {
-                    updatedEmails.removeObject(email)
-                }
-            }
-            (self.navigationController?.topViewController as! MailTableViewController).emails = updatedEmails.objectsAtIndexes(NSIndexSet(indexesInRange: NSRange(location: 0, length: updatedEmails.count))) as! [Email]
-            (self.navigationController?.topViewController as! MailTableViewController).emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
+            //var updatedEmails = NSMutableArray(array: (self.navigationController?.topViewController as! MailTableViewController).emails)
+            //for email in emailsToMove {
+                //(self.navigationController?.topViewController as! MailTableViewController).removeEmailFromArray(email as! Email)
+            //}
+            //(self.navigationController?.topViewController as! MailTableViewController).emails = updatedEmails.objectsAtIndexes(NSIndexSet(indexesInRange: NSRange(location: 0, length: updatedEmails.count))) as! [Email]
+            //(self.navigationController?.topViewController as! MailTableViewController).emails.sort({($0.mcomessage as! MCOIMAPMessage).header.receivedDate > ($1.mcomessage as! MCOIMAPMessage).header.receivedDate})
             (self.navigationController?.topViewController as! MailTableViewController).endEditing()
         }
     }
