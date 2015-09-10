@@ -151,6 +151,10 @@
 		8EAB86DB1B9785CA0051532F /* AttachmentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */; };
 		8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */; };
 		A57032F3C67E01D83552C847 /* libPods-SMile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 442C288A316BE4CDB9E2D43B /* libPods-SMile.a */; };
+		A93A893D1BA1C5FA0074C08D /* RemindCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93A89391BA1C5FA0074C08D /* RemindCollectionViewCell.xib */; };
+		A93A893E1BA1C5FA0074C08D /* RemindViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93A893A1BA1C5FA0074C08D /* RemindViewController.xib */; };
+		A93A893F1BA1C5FA0074C08D /* RemindCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A893B1BA1C5FA0074C08D /* RemindCollectionViewCell.swift */; };
+		A93A89401BA1C5FA0074C08D /* RemindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A893C1BA1C5FA0074C08D /* RemindViewController.swift */; };
 		A98D033C1B99F46A0029A880 /* MailRemindViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A98D033A1B99F46A0029A880 /* MailRemindViewController.xib */; };
 		A98D033D1B99F46A0029A880 /* MailRemindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98D033B1B99F46A0029A880 /* MailRemindViewController.swift */; };
 		A98D03461B99F4ED0029A880 /* Cup-64.png in Resources */ = {isa = PBXBuildFile; fileRef = A98D033E1B99F4ED0029A880 /* Cup-64.png */; };
@@ -428,6 +432,10 @@
 		8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentViewCell.swift; sourceTree = "<group>"; };
 		8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentViewCell.xib; sourceTree = "<group>"; };
 		948593F7BA81284FFBF715C1 /* Pods-SMile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SMile.release.xcconfig"; path = "Pods/Target Support Files/Pods-SMile/Pods-SMile.release.xcconfig"; sourceTree = "<group>"; };
+		A93A89391BA1C5FA0074C08D /* RemindCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RemindCollectionViewCell.xib; sourceTree = "<group>"; };
+		A93A893A1BA1C5FA0074C08D /* RemindViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RemindViewController.xib; sourceTree = "<group>"; };
+		A93A893B1BA1C5FA0074C08D /* RemindCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemindCollectionViewCell.swift; sourceTree = "<group>"; };
+		A93A893C1BA1C5FA0074C08D /* RemindViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemindViewController.swift; sourceTree = "<group>"; };
 		A98D033A1B99F46A0029A880 /* MailRemindViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MailRemindViewController.xib; sourceTree = "<group>"; };
 		A98D033B1B99F46A0029A880 /* MailRemindViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailRemindViewController.swift; sourceTree = "<group>"; };
 		A98D033E1B99F4ED0029A880 /* Cup-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cup-64.png"; sourceTree = "<group>"; };
@@ -754,6 +762,10 @@
 		3D8D90E21B00A2AF00D5135D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A93A89391BA1C5FA0074C08D /* RemindCollectionViewCell.xib */,
+				A93A893A1BA1C5FA0074C08D /* RemindViewController.xib */,
+				A93A893B1BA1C5FA0074C08D /* RemindCollectionViewCell.swift */,
+				A93A893C1BA1C5FA0074C08D /* RemindViewController.swift */,
 				8E450B941B15BBF0001E37B9 /* CustomMailTableViewCell.swift */,
 				8E450B951B15BBF0001E37B9 /* CustomMailTableViewCell.xib */,
 				5B2A70F11B9DE40B00780523 /* KeyChain */,
@@ -1150,6 +1162,7 @@
 				AD43C80A1B71199900C8F286 /* fileicon_standard.png in Resources */,
 				3D69ECB01B83AB9A0082EF5C /* page_white_acrobat@2x.png in Resources */,
 				3D69ECB81B83AB9A0082EF5C /* page_white_code@2x.png in Resources */,
+				A93A893E1BA1C5FA0074C08D /* RemindViewController.xib in Resources */,
 				8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */,
 				3D69ECE71B83AB9A0082EF5C /* page_white_word.png in Resources */,
 				3D69ECCA1B83AB9A0082EF5C /* page_white_gear@2x.png in Resources */,
@@ -1177,6 +1190,7 @@
 				3D69ECE11B83AB9A0082EF5C /* page_white_tux.png in Resources */,
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
 				A98D034F1B99F5F20029A880 /* Future-100.png in Resources */,
+				A93A893D1BA1C5FA0074C08D /* RemindCollectionViewCell.xib in Resources */,
 				AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */,
 				3D69ECA71B83AB9A0082EF5C /* keynote.png in Resources */,
 				A98D034A1B99F4ED0029A880 /* Toolbox-64.png in Resources */,
@@ -1411,6 +1425,7 @@
 				AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */,
 				3D69ED0B1B83ABE20082EF5C /* UIColor+FlatUI.m in Sources */,
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
+				A93A89401BA1C5FA0074C08D /* RemindViewController.swift in Sources */,
 				3D69EB9D1B8370B20082EF5C /* EmailViewController.swift in Sources */,
 				AD4742F51B98478B00A2A1BC /* PGPKeyID.swift in Sources */,
 				AD4FB15F1B88C08C004D18CB /* RNCryptor.m in Sources */,
@@ -1429,6 +1444,7 @@
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
 				AD4FB15E1B88C08C004D18CB /* MyRNEncryptor.m in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
+				A93A893F1BA1C5FA0074C08D /* RemindCollectionViewCell.swift in Sources */,
 				8E1C054E1B98794E0094B604 /* AttachmentsViewController.swift in Sources */,
 				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,

@@ -386,21 +386,33 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     func remindEmail(mail: Email){
         // view öffnen mit mehreren auswahlmöglichkeiten
-        //Don't touch folderToQuery!!!
-        //folderToQuery = "RemindMe"
-        /*let account = mail.toAccount
+        var folderRemind: String = "RemindMe"
+        var folderStorage: String = "SmileStorage"
+        var remind: Bool = false
+        var storage: Bool = false
+        let account = mail.toAccount
         let session = getSession(account)
         
         for imapFolder in mail.toAccount.folders{
             var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-            if(fol.path == folderToQuery){}
-            else{
-                //folder RemindMe erstellen
-                
+            if(fol.path == folderRemind){
+                remind = true
             }
-        }*/
+            else if(fol.path == folderStorage){
+                storage = true
+                //check if datei existiert
+            }
+            if(remind == false){
+                //ordner erstellen
+            }else{}
+            if(storage == false){
+                //ornder erstellen
+                //datei erstellen
+            }else{}
+        }
+
         
-        var remindView = MailRemindViewController(nibName: "MailRemindViewController", bundle: nil)
+        var remindView = RemindViewController(nibName: "RemindViewController", bundle: nil)
         self.navigationController?.pushViewController(remindView, animated: false)
         // email mit info wann es wieder hochpopen soll in RemindMe ordner schieben
         //moveEmailToFolder(mail, folderToQuery)
