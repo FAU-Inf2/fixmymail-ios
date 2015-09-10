@@ -12,6 +12,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
 
     var mail: Email?
     var collectionView: UICollectionView!
+    var blurimage: UIImage?
     
     var textData: [String] = ["Later Today","ThisEvening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "", "","Pick a Date"]
     var Images:[String] = ["Hourglass-64.png","Waxing Gibbous Filled-64.png","Cup-64.png","Sun-64.png","Toolbox-64.png","Plus 1 Month-64.png","","","Calendar-64.png"]
@@ -26,12 +27,12 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
        // layout.itemSize = CGSize(width: 100, height: 110)
         
         collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        
-        //var blur = UIBlurEffect(style: UIBlurEffectStyle.ExtraLight)
-        //var blurView = UIVisualEffectView(effect: blur)
-        //blurView.frame = collectionView.frame
-        collectionView.backgroundColor = UIColor.grayColor()
-        //self.view.addSubview(blurView)
+        self.view.backgroundColor = UIColor(patternImage: blurimage!)
+        var blur = UIBlurEffect(style: UIBlurEffectStyle.ExtraLight)
+        var blurView = UIVisualEffectView(effect: blur)
+        blurView.frame = collectionView.frame
+        collectionView.backgroundColor = UIColor.clearColor()
+        self.view.addSubview(blurView)
         self.view.addSubview(collectionView)
     }
 
@@ -50,12 +51,10 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         collectionView.registerClass(RemindCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.registerNib(UINib(nibName: "RemindCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "Cell")
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! RemindCollectionViewCell
-        // cell.backgroundColor = UIColor.orangeColor()
         var index = textData[0]
         cell.labels.text = textData[indexPath.row]
         cell.labels.textAlignment = .Center
-        cell.labels.textColor = UIColor.whiteColor()
-        //cell.images.setImage(UIImage(named: Images[indexPath.row]), forState: UIControlState.Normal)
+        //cell.labels.textColor = UIColor.blackColor()
         cell.images.image = UIImage(named: Images[indexPath.row])
         return cell
     }

@@ -410,10 +410,20 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 //datei erstellen
             }else{}
         }
-
+        
         
         var remindView = RemindViewController(nibName: "RemindViewController", bundle: nil)
+        let layer = UIApplication.sharedApplication().keyWindow!.layer
+        let scale = UIScreen.mainScreen().scale
+        UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, scale);
+        
+        layer.renderInContext(UIGraphicsGetCurrentContext())
+        let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        remindView.mail = mail
+        remindView.blurimage = screenshot
         self.navigationController?.pushViewController(remindView, animated: false)
+        
         // email mit info wann es wieder hochpopen soll in RemindMe ordner schieben
         //moveEmailToFolder(mail, folderToQuery)
         //self.refreshTableView(true)

@@ -17,6 +17,7 @@
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" directionalLockEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="keo-4h-O8A">
                     <rect key="frame" x="0.0" y="52" width="600" height="548"/>
+                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="fvg-Oa-0ai">
                         <size key="itemSize" width="50" height="50"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -29,13 +30,14 @@
                     </connections>
                 </collectionView>
             </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="keo-4h-O8A" secondAttribute="bottom" id="JWw-Sn-VWy"/>
                 <constraint firstItem="keo-4h-O8A" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="52" id="RHG-JJ-IqC"/>
                 <constraint firstItem="keo-4h-O8A" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="eVY-Zc-h7a"/>
                 <constraint firstAttribute="trailing" secondItem="keo-4h-O8A" secondAttribute="trailing" id="voR-I9-1RZ"/>
             </constraints>
-            <point key="canvasLocation" x="567" y="226"/>
+            <point key="canvasLocation" x="572" y="225"/>
         </view>
     </objects>
 </document>
