@@ -385,7 +385,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func remindEmail(mail: Email){
-        // view öffnen mit mehreren auswahlmöglichkeiten
+        // open view with more opportunities
         var folderRemind: String = "RemindMe"
         var folderStorage: String = "SmileStorage"
         var remind: Bool = false
@@ -400,19 +400,20 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             }
             else if(fol.path == folderStorage){
                 storage = true
-                //check if datei existiert
+                //check if file exists
             }
             if(remind == false){
-                //ordner erstellen
+                //create folder
             }else{}
             if(storage == false){
-                //ornder erstellen
-                //datei erstellen
+                //create folder
+                //create file
             }else{}
         }
         
         
         var remindView = RemindViewController(nibName: "RemindViewController", bundle: nil)
+        remindView.view.frame = self.view.frame
         let layer = UIApplication.sharedApplication().keyWindow!.layer
         let scale = UIScreen.mainScreen().scale
         UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, scale);
@@ -420,13 +421,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         layer.renderInContext(UIGraphicsGetCurrentContext())
         let screenshot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        remindView.mail = mail
-        remindView.blurimage = screenshot
-        self.navigationController?.pushViewController(remindView, animated: false)
-        
-        // email mit info wann es wieder hochpopen soll in RemindMe ordner schieben
-        //moveEmailToFolder(mail, folderToQuery)
-        //self.refreshTableView(true)
+        remindView.imageView.image = screenshot
+        self.presentViewController(remindView, animated: true, completion: nil)
     }
 
     

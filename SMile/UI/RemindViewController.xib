@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -7,6 +7,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RemindViewController" customModule="SMile" customModuleProvider="target">
             <connections>
                 <outlet property="CollectionView" destination="keo-4h-O8A" id="aX5-74-R8W"/>
+                <outlet property="collectionView" destination="keo-4h-O8A" id="cSo-DR-lSf"/>
+                <outlet property="imageView" destination="gCV-nq-ZRs" id="zbB-bw-IB0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -15,9 +17,11 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" directionalLockEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="keo-4h-O8A">
-                    <rect key="frame" x="0.0" y="52" width="600" height="548"/>
-                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gCV-nq-ZRs">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                </imageView>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="keo-4h-O8A">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="fvg-Oa-0ai">
                         <size key="itemSize" width="50" height="50"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -32,10 +36,14 @@
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="keo-4h-O8A" secondAttribute="bottom" id="JWw-Sn-VWy"/>
-                <constraint firstItem="keo-4h-O8A" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="52" id="RHG-JJ-IqC"/>
-                <constraint firstItem="keo-4h-O8A" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="eVY-Zc-h7a"/>
-                <constraint firstAttribute="trailing" secondItem="keo-4h-O8A" secondAttribute="trailing" id="voR-I9-1RZ"/>
+                <constraint firstItem="gCV-nq-ZRs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="3yh-Pl-1pj"/>
+                <constraint firstAttribute="bottom" secondItem="keo-4h-O8A" secondAttribute="bottom" id="6pX-So-ZeR"/>
+                <constraint firstAttribute="trailing" secondItem="gCV-nq-ZRs" secondAttribute="trailing" id="H67-jq-TV9"/>
+                <constraint firstItem="keo-4h-O8A" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="HzM-3y-84h"/>
+                <constraint firstItem="keo-4h-O8A" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Xao-Qv-I0w"/>
+                <constraint firstAttribute="bottom" secondItem="gCV-nq-ZRs" secondAttribute="bottom" id="i6x-bu-VX7"/>
+                <constraint firstItem="gCV-nq-ZRs" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="uPs-n7-r99"/>
+                <constraint firstAttribute="trailing" secondItem="keo-4h-O8A" secondAttribute="trailing" id="zgp-l1-UE5"/>
             </constraints>
             <point key="canvasLocation" x="572" y="225"/>
         </view>
