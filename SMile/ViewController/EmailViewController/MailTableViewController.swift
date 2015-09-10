@@ -263,7 +263,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         default: break
         }
         
-        println(removedIndex)
         if removedIndex != -1 {
             self.refreshTableView(true)
         }
@@ -374,7 +373,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     func archiveEmail(mail: Email) {
         if let archiveFolder = getFolderPathWithMCOIMAPFolderFlag(mail.toAccount, MCOIMAPFolderFlag.Archive) {
-            if self.folderToQuery != archiveFolder {
+            if self.folderToQuery == archiveFolder {
+                refreshTableView(false)
+            } else {
                 moveEmailToFolder(mail, archiveFolder)
             }
         } else {
@@ -385,8 +386,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     func remindEmail(mail: Email){
         // view öffnen mit mehreren auswahlmöglichkeiten
-        folderToQuery = "RemindMe"
-        let account = mail.toAccount
+        //Don't touch folderToQuery!!!
+        //folderToQuery = "RemindMe"
+        /*let account = mail.toAccount
         let session = getSession(account)
         
         for imapFolder in mail.toAccount.folders{
@@ -396,13 +398,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 //folder RemindMe erstellen
                 
             }
-        }
+        }*/
         
         var remindView = MailRemindViewController(nibName: "MailRemindViewController", bundle: nil)
         self.navigationController?.pushViewController(remindView, animated: false)
         // email mit info wann es wieder hochpopen soll in RemindMe ordner schieben
-        moveEmailToFolder(mail, folderToQuery)
-        self.removeEmailFromArray(mail)
+        //moveEmailToFolder(mail, folderToQuery)
         //self.refreshTableView(true)
     }
 
@@ -588,8 +589,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         if emails.count == 0 {
             self.navigationItem.rightBarButtonItem?.enabled = false
         }
-        
-        println("hallo")
+
         if animated {
             self.mailTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         }else {

@@ -108,10 +108,6 @@ func moveEmailToFolder(mail: Email!, destFolder: String!) {
             //set deleteFlag
             addFlagToEmail(mail, MCOMessageFlag.Deleted)
             
-            //CoreData changes
-            managedObjectContext.deleteObject(mail)
-            saveCoreDataChanges()
-            
             var notificationData: Dictionary<String,NSMutableArray>
             notificationData = ["Emails": NSMutableArray(array: [mail])]
             NSNotificationCenter.defaultCenter().postNotificationName(deleteLocalEmailsNotificationKey, object: nil, userInfo: notificationData)
