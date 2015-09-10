@@ -190,6 +190,10 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
     
     //MARK: - EmailViewDelegate
     
+    func presentAttachmentVC(attachmentVC: AttachmentsViewController) {
+        self.navigationController?.pushViewController(attachmentVC, animated: true)
+    }
+    
     func handleMailtoWithRecipients(recipients: [String], andSubject subject: String, andHTMLString html: String) {
         let mailSendVC: MailSendViewController = MailSendViewController(nibName: "MailSendViewController", bundle: NSBundle.mainBundle())
         var recipientAddressArr = NSMutableArray()

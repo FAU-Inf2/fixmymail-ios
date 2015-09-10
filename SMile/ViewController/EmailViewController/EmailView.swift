@@ -10,6 +10,7 @@ import UIKit
 
 protocol EmailViewDelegate: NSObjectProtocol {
     func handleMailtoWithRecipients(recipients: [String], andSubject subject: String, andHTMLString html: String) -> Void
+    func presentAttachmentVC(attachmentVC: AttachmentsViewController) -> Void
 }
 
 class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, HTMLRenderBridgeDelegate, UIWebViewDelegate {
@@ -24,6 +25,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var messageHeaderInfo = [String: String]()
     var cellSenderHeight: CGFloat!
     var cellSubjectHeight: CGFloat!
+    var cellAttachmentHeight: CGFloat!
     var messageContent: String = ""
     var htmlRenderBridge = HTMLRenderDelegateBridge()
     var imapPartCache = [String: NSData]()
@@ -32,6 +34,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var fromStringHeight: CGFloat!
     var emailViewDelegate: EmailViewDelegate?
     var plainHTMLContent: String!
+    var attachmentVC: AttachmentsViewController!
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -59,6 +62,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         self.bringSubviewToFront(self.webView.scrollView)
         self.messageHeaderInfo = self.getHeaderInformationFromMCOAbstractMessage(self.message)
         
+        self.createAndFillAttachmentVC()
         self.createHeaderView()
         self.layoutWebViewSubviews()
         
@@ -81,6 +85,16 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         
     }
     
+    private func createAndFillAttachmentVC() -> Void {
+        self.attachmentVC = AttachmentsViewController(nibName: "AttachmentsViewController", bundle: nil)
+        self.attachmentVC.isViewAttachment = true
+        var parser = MCOMessageParser(data: self.email.data)
+        var attachments: [MCOAttachment] = parser.attachments() as! [MCOAttachment]
+        for attachment in attachments {
+            self.attachmentVC.attachFile(attachment.filename, data: attachment.data, mimetype: attachment.mimeType)
+        }
+    }
+    
     
     private func createHeaderView() -> Void {
         let boldFont = UIFont.boldSystemFontOfSize(20.0)
@@ -91,16 +105,22 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         self.toStringHeight = self.messageHeaderInfo["to"] != nil ? self.heightForView(self.messageHeaderInfo["to"]!, font: standardFont, width: width): 0.0
         self.fromStringHeight = self.messageHeaderInfo["from"]!.heightForWith(width, usingFont: boldFont)
         self.cellSenderHeight = 8.0 + 2.0 + 2.0 + 8.0 + self.ccStringHeight + self.toStringHeight + self.fromStringHeight
+        if self.message.attachments().count > 0 {
+            self.cellAttachmentHeight = 44.0
+        } else {
+            self.cellAttachmentHeight = 0.0
+        }
         
         let subjectStringHeight: CGFloat = self.messageHeaderInfo["subject"] != nil ? self.messageHeaderInfo["subject"]!.heightForWith(width, usingFont: boldFont) : "".heightForWith(width, usingFont: boldFont)
         let dateStringHeight: CGFloat = self.messageHeaderInfo["date"]!.heightForWith(width, usingFont: standardFont)
         self.cellSubjectHeight = 8.0 + 8.0 + subjectStringHeight + dateStringHeight
         
-        self.embededHeaderView = UITableView(frame: CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.cellSenderHeight + self.cellSubjectHeight))
+        self.embededHeaderView = UITableView(frame: CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.cellSenderHeight + self.cellSubjectHeight + self.cellAttachmentHeight))
         self.embededHeaderView.dataSource = self
         self.embededHeaderView.delegate = self
         self.embededHeaderView.registerNib(UINib(nibName: "SenderInfoTableViewCell", bundle: nil), forCellReuseIdentifier: "senderInfoCell")
         self.embededHeaderView.registerNib(UINib(nibName: "SubjectInfoTableViewCell", bundle: nil), forCellReuseIdentifier: "subjectInfoCell")
+        self.embededHeaderView.registerNib(UINib(nibName: "AttachmentViewCell", bundle: nil), forCellReuseIdentifier: "AttachmentViewCell")
         self.embededHeaderView.scrollEnabled = false
         self.webView.scrollView.addSubview(self.embededHeaderView)
         self.webView.scrollView.bringSubviewToFront(self.embededHeaderView)
@@ -171,14 +191,20 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if self.message.attachments().count > 0 {
+            return 3
+        } else {
+            return 2
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return self.cellSenderHeight
-        } else {
+        } else if indexPath.row == 1 {
             return self.cellSubjectHeight
+        } else {
+            return 44.0
         }
     }
     
@@ -206,7 +232,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             senderInfoCell.accessoryType = .None
             senderInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return senderInfoCell
-        } else {
+        } else if indexPath.row == 1 {
             var subjectInfoCell: SubjectInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("subjectInfoCell", forIndexPath: indexPath) as! SubjectInfoTableViewCell
             
             let subjectLabelString = self.messageHeaderInfo["subject"] != nil ? self.messageHeaderInfo["subject"]! : ""
@@ -217,6 +243,25 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             subjectInfoCell.accessoryType = .None
             subjectInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return subjectInfoCell
+        } else {
+            let attachmentCell: AttachmentViewCell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
+            attachmentCell.imageViewPreview.image = UIImage(named: "attachment_icon@2x.png")!
+            attachmentCell.imageViewPreview.image = UIImage(CGImage: attachmentCell.imageViewPreview.image!.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
+            attachmentCell.labelFilesAttached.text = "\t \(self.message.attachments().count) files attached"
+            attachmentCell.labelFilesAttached.textColor = UIColor.grayColor()
+            
+            attachmentCell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            attachmentCell.selectionStyle = UITableViewCellSelectionStyle.Default
+            return attachmentCell
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == 2 {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            if (self.emailViewDelegate?.respondsToSelector("presentAttachmentVC:") != nil) {
+                self.emailViewDelegate?.presentAttachmentVC(self.attachmentVC)
+            }
         }
     }
     

@@ -457,7 +457,7 @@
 		AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocksmithRequest.swift; sourceTree = "<group>"; };
 		AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
-		AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccountSupport.swift; sourceTree = "<group>"; };
+		AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailAccountSupport.swift; path = "../Supporting Files/EmailAccountSupport.swift"; sourceTree = "<group>"; };
 		AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevPasswordViewController.swift; sourceTree = "<group>"; };
 		AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DevPasswordViewController.xib; sourceTree = "<group>"; };
 		AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceivedFileViewController.swift; sourceTree = "<group>"; };
@@ -525,7 +525,7 @@
 		ADD135C31B15B56300A9B31A /* KeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItem.swift; sourceTree = "<group>"; };
 		ADD135C41B15B56300A9B31A /* KeyItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItemTableViewCell.swift; sourceTree = "<group>"; };
 		ADD135C51B15B56300A9B31A /* KeyItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyItemTableViewCell.xib; sourceTree = "<group>"; };
-		ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedClassExtensions.swift; sourceTree = "<group>"; };
+		ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SharedClassExtensions.swift; path = "../Supporting Files/SharedClassExtensions.swift"; sourceTree = "<group>"; };
 		ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyChainListTableViewController.xib; sourceTree = "<group>"; };
 		ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountTableViewController.swift; sourceTree = "<group>"; };
 		ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountTableViewController.xib; sourceTree = "<group>"; };
@@ -802,6 +802,8 @@
 				3D69EB981B83709C0082EF5C /* EmailCache.swift */,
 				3D58BC461B1CCEE700CCA5F0 /* IMAPFolderFetcher.swift */,
 				5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */,
+				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
+				AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -855,10 +857,8 @@
 				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
 				AD8744161B6A3B7600257AA5 /* RNCryptor */,
 				AD6F68431B6E17240015B79E /* SwiftyJSON */,
-				AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
-				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";

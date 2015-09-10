@@ -93,7 +93,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if self.isViewAttachment {
-            var manager = NSFileManager()
+            var manager = NSFileManager.defaultManager()
             var documentDirectory = ""
             let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
             let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
@@ -105,11 +105,15 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
                 }
             }
             var url = NSURL(fileURLWithPath: documentDirectory.stringByAppendingPathComponent(self.keys[indexPath.row]))
-            manager.createFileAtPath(url!.path!, contents: self.attachments.valueForKey(self.keys[indexPath.row]) as? NSData, attributes: nil)
-            self.createdFiles.append(url!)
-            var docController = UIDocumentInteractionController(URL: url!)
-            docController.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
+            if manager.createFileAtPath(url!.path!, contents: self.attachments.valueForKey(self.keys[indexPath.row]) as? NSData, attributes: nil) {
+                self.createdFiles.append(url!)
+                var docController = UIDocumentInteractionController(URL: url!)
+                docController.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
+            } else {
+                println("Could not write file!")
+            }
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -193,7 +197,8 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         self.attachments.setValue(data, forKey: filename)
         self.keys.append(filename)
         var image = UIImage()
-        if mimetype == "png" || mimetype == "PNG" || mimetype == "JPG" || mimetype == "JPEG" {
+        if mimetype.lowercaseString.rangeOfString("png") != nil || mimetype.lowercaseString.rangeOfString("jpg") != nil || mimetype.lowercaseString.rangeOfString("jpeg") != nil {
+            println(NSString(data: data, encoding: NSUTF8StringEncoding))
             image = UIImage(data: data)!
         } else {
             image = UIImage(named: "attachedFile.png")!
