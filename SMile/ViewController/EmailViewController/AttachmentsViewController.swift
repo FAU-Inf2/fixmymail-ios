@@ -24,6 +24,9 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     var isSendAttachment = false
     var isViewAttachment = false
     
+    var currentShareURL: NSURL?
+    var documentInteractionController: UIDocumentInteractionController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Attachments"
@@ -104,11 +107,11 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
                     }
                 }
             }
-            var url = NSURL(fileURLWithPath: documentDirectory.stringByAppendingPathComponent(self.keys[indexPath.row]))
-            if manager.createFileAtPath(url!.path!, contents: self.attachments.valueForKey(self.keys[indexPath.row]) as? NSData, attributes: nil) {
-                self.createdFiles.append(url!)
-                var docController = UIDocumentInteractionController(URL: url!)
-                docController.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
+            self.currentShareURL = NSURL(fileURLWithPath: documentDirectory.stringByAppendingPathComponent(self.keys[indexPath.row]))
+            if manager.createFileAtPath(self.currentShareURL!.path!, contents: self.attachments.valueForKey(self.keys[indexPath.row]) as? NSData, attributes: nil) {
+                self.createdFiles.append(self.currentShareURL!)
+                self.documentInteractionController = UIDocumentInteractionController(URL: self.currentShareURL!)
+                self.documentInteractionController.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
             } else {
                 println("Could not write file!")
             }
