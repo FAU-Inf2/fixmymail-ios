@@ -23,7 +23,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         self.collectionView.registerNib(UINib(nibName: "RemindCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "RemindCell")
         
         self.collectionView.backgroundColor = UIColor.clearColor()
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
         let effectView = UIVisualEffectView(effect: blurEffect)
         effectView.frame = self.imageView.frame
         self.imageView.addSubview(effectView)
@@ -45,10 +45,12 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("RemindCell", forIndexPath: indexPath) as! RemindCollectionViewCell
         cell.labels.text = textData[indexPath.row]
-        cell.labels.textAlignment = .Center
+        cell.labels.textColor = UIColor.whiteColor()
+        //cell.labels.textAlignment = .Center
         cell.images.image = UIImage(named: Images[indexPath.row])
-        cell.images.layer.cornerRadius = cell.images.frame.size.width / 2
-        cell.images.layer.borderWidth = 4.0
+        
+        //cell.images.layer.cornerRadius = cell.images.frame.size.width / 3
+        //cell.images.layer.borderWidth = 4.0
         cell.images.layer.borderColor = UIColor.whiteColor().CGColor
         cell.images.clipsToBounds = true
         return cell
