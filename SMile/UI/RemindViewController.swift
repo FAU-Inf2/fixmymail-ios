@@ -8,13 +8,13 @@
 
 import UIKit
 
-class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
     var mail: Email?
     
-    var textData: [String] = ["Later Today","ThisEvening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "", "","Pick a Date"]
+    var textData: [String] = ["Later Today","This Evening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "back", "","Pick a Date"]
     var Images:[String] = ["Hourglass-64.png","Waxing Gibbous Filled-64.png","Cup-64.png","Sun-64.png","Toolbox-64.png","Plus 1 Month-64.png","","","Calendar-64.png"]
     
     override func viewDidLoad() {
@@ -27,6 +27,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         let effectView = UIVisualEffectView(effect: blurEffect)
         effectView.frame = self.imageView.frame
         self.imageView.addSubview(effectView)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,30 +63,36 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         
     }
     
-    /*func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
+        let components = NSDateComponents()
+        let date = NSDate()
+        //noch nicht die richtige Date funktion gefunden
         switch (indexPath.row){
         case 0: //Later Today
-            println("0")
+            components.hour = components.hour+2
         case 1: //This Evening
-            println("1")
+            components.hour = 18
+            components.minute = 00
+            components.second = 00
         case 2: //Tomorrow Morning
-            println("2")
+            components.day = components.day+1
+            components.hour = 4
+            components.minute = 00
+            components.second = 00
         case 3: //This Weekend
-            println("3")
+            NSLog("4")
         case 4: //Next Week
-            println("4")
+            NSLog("4")
         case 5: //In 1 Month
-            println("")
+            NSLog("5")
         case 8: //Pick a Date
-            println("8")
+            NSLog("8")
         default:
-            println("other")
+            NSLog("other")
         }
-    }*/
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        var cell = collectionView.cellForItemAtIndexPath(indexPath)
     }
+    
+    
     /*
     // MARK: - Navigation
 
