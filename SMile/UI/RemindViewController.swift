@@ -9,7 +9,10 @@
 import UIKit
 
 class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
-
+    
+    @IBOutlet weak var SetTime: UIButton!
+    @IBOutlet weak var back: UIButton!
+    @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
     var mail: Email?
@@ -19,7 +22,9 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        datePicker.hidden = true
+        back.hidden = true
+        SetTime.hidden = true
         self.collectionView.registerNib(UINib(nibName: "RemindCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "RemindCell")
         
         self.collectionView.backgroundColor = UIColor.clearColor()
@@ -64,32 +69,68 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
-        let components = NSDateComponents()
         let date = NSDate()
-        //noch nicht die richtige Date funktion gefunden
+        println(date)
+        var remindDate:NSDate
+        var components = NSDateComponents()
+
         switch (indexPath.row){
         case 0: //Later Today
-            components.hour = components.hour+2
+            components.hour = 2
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            println("today")
+            println(remindDate)
         case 1: //This Evening
-            components.hour = 18
-            components.minute = 00
-            components.second = 00
+            components.hour = 20 //immer 2 stunden mehr, da 2 Studen abegezogen werden
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: nil)!
+            println("thisEvening")
+            println(remindDate)
         case 2: //Tomorrow Morning
-            components.day = components.day+1
-            components.hour = 4
-            components.minute = 00
-            components.second = 00
+            components.hour = 5  //immer 2 stunden mehr, da 2 Studen abegezogen werden
+            components.day = 1
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            println("tomorrow")
+            println(remindDate)
         case 3: //This Weekend
-            NSLog("4")
+            var day:UnsafeMutablePointer<Int> = nil
+            
+            NSCalendar.currentCalendar().getEra(nil, yearForWeekOfYear: nil, weekOfYear: nil, weekday: day, fromDate: date)
+            println(day)
         case 4: //Next Week
             NSLog("4")
         case 5: //In 1 Month
-            NSLog("5")
+            components.month = 1
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            println("In 1 Month")
+            println(remindDate)
         case 8: //Pick a Date
-            NSLog("8")
+            collectionView.hidden  = true
+            back.hidden = false
+            SetTime.hidden = false
+            datePicker.hidden = false
+            datePicker.datePickerMode = UIDatePickerMode.DateAndTime
+            datePicker.minimumDate = date
+            datePicker.date = date
         default:
             NSLog("other")
         }
+    }
+    
+    @IBAction func Back(sender: AnyObject) {
+        collectionView.hidden=false
+        datePicker.hidden = true
+        back.hidden = true
+        SetTime.hidden = true
+    }
+    
+    @IBAction func SetTime(sender: AnyObject) {
+        collectionView.hidden=false
+        datePicker.hidden = true
+        back.hidden = true
+        SetTime.hidden = true
+        var remindDate = datePicker.date
+        println(remindDate)
     }
     
     
