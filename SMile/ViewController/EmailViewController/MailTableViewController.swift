@@ -413,6 +413,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         
         var remindView = RemindViewController(nibName: "RemindViewController", bundle: nil)
+        remindView.email = mail
         remindView.view.frame = self.view.frame
         let layer = UIApplication.sharedApplication().keyWindow!.layer
         let scale = UIScreen.mainScreen().scale

@@ -10,6 +10,7 @@ import UIKit
 
 class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
     
+    var email:Email?
     @IBOutlet weak var SetTime: UIButton!
     @IBOutlet weak var back: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -69,41 +70,47 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
-        let date = NSDate()
-        println(date)
-        var remindDate:NSDate
+        var date = NSDate()
         var components = NSDateComponents()
-
+        components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
+        date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+        println(date)
+        var remindDate:NSDate = NSDate()
         switch (indexPath.row){
         case 0: //Later Today
-            components.hour = 2
+            components.hour = 4
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
-            println("today")
-            println(remindDate)
+            RemindEmail(email!,date: remindDate)
         case 1: //This Evening
-            components.hour = 20 //immer 2 stunden mehr, da 2 Studen abegezogen werden
+            components.hour = 20
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: nil)!
-            println("thisEvening")
-            println(remindDate)
+            RemindEmail(email!,date: remindDate)
         case 2: //Tomorrow Morning
-            components.hour = 5  //immer 2 stunden mehr, da 2 Studen abegezogen werden
+            components.hour = 5
             components.day = 1
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
-            println("tomorrow")
-            println(remindDate)
+            RemindEmail(email!,date: remindDate)
         case 3: //This Weekend
-            var day:UnsafeMutablePointer<Int> = nil
-            
-            NSCalendar.currentCalendar().getEra(nil, yearForWeekOfYear: nil, weekOfYear: nil, weekday: day, fromDate: date)
-            println(day)
+            var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
+            var friday = 6
+            components.day = friday-day
+            components.hour = 17
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            RemindEmail(email!,date: remindDate)
         case 4: //Next Week
-            NSLog("4")
+            var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
+            var monday = 2
+            components.day = abs(day-monday)
+            components.hour = 5
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            RemindEmail(email!,date: remindDate)
         case 5: //In 1 Month
             components.month = 1
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
-            println("In 1 Month")
-            println(remindDate)
+            RemindEmail(email!,date: remindDate)
         case 8: //Pick a Date
             collectionView.hidden  = true
             back.hidden = false
@@ -114,6 +121,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             datePicker.date = date
         default:
             NSLog("other")
+            break
         }
     }
     
@@ -131,9 +139,12 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         SetTime.hidden = true
         var remindDate = datePicker.date
         println(remindDate)
+        RemindEmail(email!,date: remindDate)
     }
     
-    
+    func RemindEmail(email: Email, date: NSDate){
+        
+    }
     /*
     // MARK: - Navigation
 
