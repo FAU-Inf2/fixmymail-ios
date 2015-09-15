@@ -165,6 +165,8 @@
 		A98D034C1B99F4ED0029A880 /* Plus 1 Month-64.png in Resources */ = {isa = PBXBuildFile; fileRef = A98D03441B99F4ED0029A880 /* Plus 1 Month-64.png */; };
 		A98D034D1B99F4ED0029A880 /* Calendar-64.png in Resources */ = {isa = PBXBuildFile; fileRef = A98D03451B99F4ED0029A880 /* Calendar-64.png */; };
 		A98D034F1B99F5F20029A880 /* Future-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A98D034E1B99F5F20029A880 /* Future-100.png */; };
+		A9E3566D1BA81E5E0037CB17 /* RemindMeRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3566C1BA81E5D0037CB17 /* RemindMeRoot.swift */; };
+		A9F24C481BA720170088EB2D /* RemindMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F24C471BA720170088EB2D /* RemindMe.swift */; };
 		AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */; };
 		AD0100A51B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */; };
 		AD1255DC1B1A223A005EA5CE /* ios7-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DB1B1A223A005EA5CE /* ios7-plus.png */; };
@@ -446,6 +448,8 @@
 		A98D03441B99F4ED0029A880 /* Plus 1 Month-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plus 1 Month-64.png"; sourceTree = "<group>"; };
 		A98D03451B99F4ED0029A880 /* Calendar-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Calendar-64.png"; sourceTree = "<group>"; };
 		A98D034E1B99F5F20029A880 /* Future-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Future-100.png"; sourceTree = "<group>"; };
+		A9E3566C1BA81E5D0037CB17 /* RemindMeRoot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemindMeRoot.swift; sourceTree = "<group>"; };
+		A9F24C471BA720170088EB2D /* RemindMe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RemindMe.swift; path = SMile/UI/RemindMe.swift; sourceTree = SOURCE_ROOT; };
 		AD0100A21B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountListTableViewController.swift; sourceTree = "<group>"; };
 		AD0100A31B19EDB1009E4E18 /* PreferenceAccountListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountListTableViewController.xib; sourceTree = "<group>"; };
 		AD1255DB1B1A223A005EA5CE /* ios7-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-plus.png"; sourceTree = "<group>"; };
@@ -859,6 +863,8 @@
 				AD6F68431B6E17240015B79E /* SwiftyJSON */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
+				A9F24C471BA720170088EB2D /* RemindMe.swift */,
+				A9E3566C1BA81E5D0037CB17 /* RemindMeRoot.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -1382,6 +1388,7 @@
 				AD0100A41B19EDB1009E4E18 /* PreferenceAccountListTableViewController.swift in Sources */,
 				ADD135CA1B15B56300A9B31A /* KeyItem.swift in Sources */,
 				8E450BA81B15BBF0001E37B9 /* CustomMailTableViewCell.swift in Sources */,
+				A9E3566D1BA81E5E0037CB17 /* RemindMeRoot.swift in Sources */,
 				ADD135CD1B15B56300A9B31A /* SharedClassExtensions.swift in Sources */,
 				3D69ED0F1B83ABE20082EF5C /* MCOCIDURLProtocol.mm in Sources */,
 				3D69EBA31B83A4CB0082EF5C /* SenderInfoTableViewCell.swift in Sources */,
@@ -1412,6 +1419,7 @@
 				5B66C33E1B4E660600BDF3D6 /* IMAPFunctions.swift in Sources */,
 				AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */,
 				3D69ED111B83ABE20082EF5C /* MCTMsgViewController.mm in Sources */,
+				A9F24C481BA720170088EB2D /* RemindMe.swift in Sources */,
 				3D69ECEF1B83ABC80082EF5C /* DelayedAttachment.m in Sources */,
 				3D69ECF01B83ABC80082EF5C /* FPMimetype.m in Sources */,
 				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
