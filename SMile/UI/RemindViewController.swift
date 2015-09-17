@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
     
@@ -16,7 +17,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
-    var mail: Email?
+    //var mail: Email?
     
     var textData: [String] = ["Later Today","This Evening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "back", "","Pick a Date"]
     var Images:[String] = ["Hourglass-64.png","Waxing Gibbous Filled-64.png","Cup-64.png","Sun-64.png","Toolbox-64.png","Plus 1 Month-64.png","","","Calendar-64.png"]
@@ -33,7 +34,89 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         let effectView = UIVisualEffectView(effect: blurEffect)
         effectView.frame = self.imageView.frame
         self.imageView.addSubview(effectView)
+        //downlaodJsonAndCheckForUpcomingReminds()
         
+    }
+    
+    func downlaodJsonAndCheckForUpcomingReminds(){ // ich gehe davon aus das SmileStorage vorhanden ist weil ich es vorher ja abgeprüft habe und notfalls erstellt habe
+        //JsonFile aus Folder SmileStorage auslesen
+        var folderStorage: String = "SmileStorage"
+        var remind:Email = email!
+        var folders = email?.toAccount.folders
+        let currentMaxUID = getMaxUID(email!.toAccount, folderStorage)
+        fetchEmails(email!.toAccount, folderStorage, MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
+        var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(email!.toAccount.downloadMailDuration)
+        for mail in email!.toAccount.emails {
+            if mail.folder == folderStorage {
+                if let dMD = downloadMailDuration {
+                    if ((mail as! Email).mcomessage as! MCOIMAPMessage).header.receivedDate.laterDate(dMD) == dMD {
+                        continue
+                    }
+                }
+                remind = mail as! Email
+            }
+        }
+        println(remind.plainText)               // noch rausnehmen
+        if remind == email{
+            println("something went wrong")
+        }
+        //RemindMe Datum auslesen und in NSDate umformen
+        else{
+            if let dataFromString = remind.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                let json = JSON(data: dataFromString)
+                var key = "remindTime"
+                
+                for result in json["allRemindMes"].arrayValue {
+            
+                    let time = result["remindTime"].stringValue
+                    let prefix:String = "/Date("
+                    let suffix:String = ")/"
+                    var time2 = prefix + time + suffix
+                    var now = NSDate()
+                    //RemindMe Datum mit akutellem Datum vergleichen
+                    if let theDate = NSDate(jsonDate: time2)
+                    {
+                        let compareResult = now.compare(theDate)
+                        if compareResult == NSComparisonResult.OrderedDescending {
+                            //move email to Inbox
+                            var id = json["messageId"].stringValue
+                            var upcomingEmail:Email = returnEmailWithSpecificID(email!.toAccount, folder: "RemindMe", id: id) //durch remindMe email (aus Ordner RemindMe mit Messageid id) erstetzen
+                            addFlagToEmail(upcomingEmail, MCOMessageFlag.None) //Flag auf unseen setzten bzw. vielleicht auf remind
+                            //moveEmailToFolder(upcomingEmail, "INBOX")
+                        }
+                        else{
+                            //Do nothing. Its not time yet
+                        }
+                    }
+                    else //Datum hatte falsches Format - Dürfte nicht passieren
+                    {
+                        println("wrong format")
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    //TODO
+    func returnEmailWithSpecificID(account: EmailAccount, folder: String, id: String)->Email{
+        var email:Email?
+        let currentMaxUID = getMaxUID(account, folder)
+        var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
+        for mail in account.emails {
+            if mail.folder == folder {
+                if let dMD = downloadMailDuration {
+                    if ((mail as! Email).mcomessage as! MCOIMAPMessage).header.receivedDate.laterDate(dMD) == dMD {
+                        continue
+                    }
+                }
+                /*if mail.mcomessage.identifier == id { //schauen ob id der mail die selbe ist wie der der remindEmail
+                    email = mail
+                }*/
+                email = mail as? Email
+            }
+        }
+        return email!
     }
 
     override func didReceiveMemoryWarning() {
@@ -155,4 +238,25 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     */
 
+}
+extension NSDate {
+    convenience init?(jsonDate: String) {
+        let prefix = "/Date("
+        let suffix = ")/"
+        // Check for correct format:
+        if jsonDate.hasPrefix(prefix) && jsonDate.hasSuffix(suffix) {
+            // Extract the number as a string:
+            let from = advance(jsonDate.startIndex, count(prefix))
+            let to = advance(jsonDate.endIndex, -count(suffix))
+            let dateString = jsonDate[from ..< to]
+            // Convert to double and from milliseconds to seconds:
+            let timeStamp = (dateString as NSString).doubleValue / 1000.0
+            // Create NSDate with this UNIX timestamp
+            self.init(timeIntervalSince1970: timeStamp)
+        } else {
+            // Wrong format, return nil. (The compiler requires us to
+            // to an initialization first.)
+            self.init(timeIntervalSince1970: 0)
+            return nil
+        }    }
 }

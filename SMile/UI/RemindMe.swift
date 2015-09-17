@@ -17,15 +17,20 @@ class RemindMe: Hashable{
     var folderID:Int? //?
     var uid:String? //?
     var messageId:String?
-    //var remindInterval:String?
     var lastModified:NSDate?
-    //var seen:NSDate?
     var hashValue: Int{
         return self.id!
     }
     
+    func RemindMe(remindDate: NSDate, mail: Email){
+        self.remindTime = remindDate
+        self.mail = mail
+        self.messageId = mail.mcomessage.identifier
+        self.title = mail.title
+    }
     
-    func RemindMe(remindDate: NSDate, mail: Email, folderID: Int, uid: String, messageId: String)-> Void{
+    
+    /*func RemindMe(remindDate: NSDate, mail: Email, folderID: Int, uid: String, messageId: String)-> Void{
         self.remindTime = remindDate
         self.mail = mail
         self.title = mail.title //Betreff
@@ -38,8 +43,11 @@ class RemindMe: Hashable{
         }else{
              self.uid = uid
         }*/
-    }
+    }*/
 }
+
 func ==(lhs: RemindMe, rhs: RemindMe) -> Bool {
     return lhs.hashValue == rhs.hashValue
-    }
+}
+
+
