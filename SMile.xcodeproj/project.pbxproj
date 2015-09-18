@@ -239,6 +239,7 @@
 		ADD135D01B15C17500A9B31A /* KeyChainListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */; };
 		ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */; };
 		ADDE66031B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */; };
+		ADE5F5021BAB5FAE0093CFBB /* SessionPreferenceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE5F5011BAB5FAE0093CFBB /* SessionPreferenceObject.swift */; };
 		ADE6739A1B73551700C920B0 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE673991B73551700C920B0 /* Key.swift */; };
 		ADE6739D1B7365B400C920B0 /* x_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE6739B1B7365B400C920B0 /* x_icon.png */; };
 		ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */; };
@@ -533,6 +534,7 @@
 		ADD135CF1B15C17500A9B31A /* KeyChainListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyChainListTableViewController.xib; sourceTree = "<group>"; };
 		ADDE66001B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceEditAccountTableViewController.swift; sourceTree = "<group>"; };
 		ADDE66011B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceEditAccountTableViewController.xib; sourceTree = "<group>"; };
+		ADE5F5011BAB5FAE0093CFBB /* SessionPreferenceObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionPreferenceObject.swift; sourceTree = "<group>"; };
 		ADE673991B73551700C920B0 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		ADE6739B1B7365B400C920B0 /* x_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_icon.png; sourceTree = "<group>"; };
 		ADE6739C1B7365B400C920B0 /* Checkmark-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Checkmark-icon.png"; sourceTree = "<group>"; };
@@ -1064,6 +1066,7 @@
 				ADD135C31B15B56300A9B31A /* KeyItem.swift */,
 				AD4E57D91B7F781000E8C521 /* UserIdItem.swift */,
 				AD4E57DB1B7F782300E8C521 /* SubKeyItem.swift */,
+				ADE5F5011BAB5FAE0093CFBB /* SessionPreferenceObject.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1394,6 +1397,7 @@
 				3D69EBA31B83A4CB0082EF5C /* SenderInfoTableViewCell.swift in Sources */,
 				AD4742F91B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
+				ADE5F5021BAB5FAE0093CFBB /* SessionPreferenceObject.swift in Sources */,
 				AD5292631B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift in Sources */,
 				AD4E57DA1B7F781000E8C521 /* UserIdItem.swift in Sources */,
 				3D21286E1B2DF57100C9FC4C /* Email.swift in Sources */,

@@ -36,31 +36,37 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	var authConVC: AuthConTableViewController?
 	var accountBehaviorVC: PrefAccountBehaviorTableViewController?
 	var origintableViewInsets: UIEdgeInsets?
-	var isActivated: Bool?
+	var isActivated: Bool = false
 	var imapOperation: MCOIMAPOperation?
 	var smtpOperation: MCOSMTPOperation?
 	var isInImapOperation: Bool = false
 	var isInSmtpOperation: Bool = false
+	var isSimpleWizard: Bool = true
 	
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		if self.emailAcc != nil {
+			self.isSimpleWizard = false
+		}
+		
 		loadAccountDetails()
 		
 		tableView.registerNib(UINib(nibName: "PreferenceAccountTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceAccountCell")
 		tableView.registerNib(UINib(nibName: "SwitchTableViewCell", bundle: nil), forCellReuseIdentifier: "SwitchTableViewCell")
+		
+		// set navigationbar
 		self.navigationItem.title = actionItem?.emailAddress
 		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
 		self.navigationItem.leftBarButtonItem = cancelButton
-		if actionItem?.emailAddress != "Add New Account" {
-			self.sections = ["Account Details:", "Account behavior", "IMAP Details", "SMTP Details:", "",""]
-		} else {
-			self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", "",""]
-		}
 		
+		// set expert button on toolbar if new account
+		if self.emailAcc == nil {
+			self.activateToolbarItems()
+		}
 		
 		// set alert dialog for delete
 		self.alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
@@ -189,7 +195,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			cell.label.text = labelString
 			cell.activateSwitch.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
-			cell.activateSwitch.on = self.isActivated!
+			cell.activateSwitch.on = self.isActivated
 			
 			return cell
 			
@@ -265,13 +271,37 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func loadAccountDetails() {
 		
+		if actionItem?.emailAddress != "Add New Account" {
+			self.sections = ["Account Details:", "Account behavior", "IMAP Details", "SMTP Details:", "",""]
+		} else {
+			if self.isSimpleWizard {
+				self.sections = ["Account Details:", "", "", "",""]
+			} else {
+				self.sections = ["Account Details:", "IMAP Details", "SMTP Details:", "",""]
+			}
+		}
+		// clear arrays when reloading the data
+		self.labelAccountDetailString.removeAll(keepCapacity: false)
+		self.labelImapConnectionDetailString.removeAll(keepCapacity: false)
+		self.labelSmtpConnectionDetailString.removeAll(keepCapacity: false)
+		self.cellAccountTextfielString.removeAll(keepCapacity: false)
+		self.cellImapConnectionTextfielString.removeAll(keepCapacity: false)
+		self.cellSmtpConnectionTextfielString.removeAll(keepCapacity: false)
+		self.labels.removeAll(keepCapacity: false)
+		self.textfields.removeAll(keepCapacity: false)
+		self.isActivatedString.removeAll(keepCapacity: false)
+		self.AccountBehaviorString.removeAll(keepCapacity: false)
+		self.deleteString.removeAll(keepCapacity: false)
+
+		// the cell label strings
 		self.labelAccountDetailString.append("Mailaddress:")
-		self.labelAccountDetailString.append("Realname:")
-		self.labelAccountDetailString.append("Accountname:")
 		self.labelAccountDetailString.append("Username:")
 		self.labelAccountDetailString.append("Password:")
+		self.labelAccountDetailString.append("Realname:")
+		self.labelAccountDetailString.append("Accountname:")
 		self.labelAccountDetailString.append("Signature:")
 		
+		if !self.isSimpleWizard {
 		self.labelImapConnectionDetailString.append("IMAP Hostname:")
 		self.labelImapConnectionDetailString.append("IMAP Port:")
 		self.labelImapConnectionDetailString.append("IMAP Auth:")
@@ -283,13 +313,43 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.labelSmtpConnectionDetailString.append("SMTP ConType:")
 		
 		self.isActivatedString.append("Activate:")
+		}
 		
 		if emailAcc != nil {
+			
+			if self.entries["Mailaddress:"] == nil {self.entries["Mailaddress:"] = emailAcc!.emailAddress}
+			if self.entries["Realname:"] == nil {self.entries["Realname:"] = emailAcc!.realName}
+			if self.entries["Accountname:"] == nil {self.entries["Accountname:"] = emailAcc!.accountName}
+			if self.entries["Username:"] == nil {self.entries["Username:"] = emailAcc!.username}
+			if self.entries["Signature:"] == nil {self.entries["Signature:"] = emailAcc!.signature}
+			
+			// load password for account from iOS keychain
+			if self.entries["Password:"] == nil {
+				let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
+				if error == nil {
+					var value = dictionary?.valueForKey("Password:") as! String
+					self.entries["Password:"] = value
+					NSLog("loaded value from keychain")
+				} else {
+					self.entries["Password:"] = ""
+				}
+			}
+			if self.entries["IMAP Hostname:"] == nil {self.entries["IMAP Hostname:"] = emailAcc!.imapHostname}
+			if self.entries["IMAP Port:"] == nil {self.entries["IMAP Port:"] = String(Int(emailAcc!.imapPort))}
+			if self.entries["IMAP Auth:"] == nil {self.entries["IMAP Auth:"] = emailAcc!.authTypeImap}
+			if self.entries["IMAP ConType:"] == nil {self.entries["IMAP ConType:"] = emailAcc!.connectionTypeImap}
+			
+			if self.entries["SMTP Hostname:"] == nil {self.entries["SMTP Hostname:"] = emailAcc!.smtpHostname}
+			if self.entries["SMTP Port:"] == nil {self.entries["SMTP Port:"] = String(Int(emailAcc!.smtpPort))}
+			if self.entries["SMTP Auth:"] == nil {self.entries["SMTP Auth:"] = emailAcc!.authTypeSmtp}
+			if self.entries["SMTP ConType:"] == nil {self.entries["SMTP ConType:"] = emailAcc!.connectionTypeSmtp}
+			self.isActivated = emailAcc!.isActivated
+
 			self.cellAccountTextfielString.append(emailAcc!.emailAddress)
-			self.cellAccountTextfielString.append(emailAcc!.realName)
-			self.cellAccountTextfielString.append(emailAcc!.accountName)
 			self.cellAccountTextfielString.append(emailAcc!.username)
 			self.cellAccountTextfielString.append(emailAcc!.password)
+			self.cellAccountTextfielString.append(emailAcc!.realName)
+			self.cellAccountTextfielString.append(emailAcc!.accountName)
 			self.cellAccountTextfielString.append(emailAcc!.signature)
 			
 			self.cellImapConnectionTextfielString.append(emailAcc!.imapHostname)
@@ -301,54 +361,26 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			self.cellSmtpConnectionTextfielString.append(String(Int(emailAcc!.smtpPort)))
 			self.cellSmtpConnectionTextfielString.append(emailAcc!.authTypeSmtp)
 			self.cellSmtpConnectionTextfielString.append(emailAcc!.connectionTypeSmtp)
+
 			
-			self.entries["Mailaddress:"] = emailAcc!.emailAddress
-			self.entries["Realname:"] = emailAcc!.realName
-			self.entries["Accountname:"] = emailAcc!.accountName
-			self.entries["Username:"] = emailAcc!.username
-			self.entries["Signature:"] = emailAcc!.signature
-			
-			// load password for account from iOS keychain
-			let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
-			if error == nil {
-				var value = dictionary?.valueForKey("Password:") as! String
-				self.entries["Password:"] = value
-				NSLog("loaded value from keychain")
-			} else {
-				self.entries["Password:"] = ""
-			}
-			
-			self.entries["IMAP Hostname:"] = emailAcc!.imapHostname
-			self.entries["IMAP Port:"] = String(Int(emailAcc!.imapPort))
-			self.entries["IMAP Auth:"] = emailAcc!.authTypeImap
-			self.entries["IMAP ConType:"] = emailAcc!.connectionTypeImap
-			
-			self.entries["SMTP Hostname:"] = emailAcc!.smtpHostname
-			self.entries["SMTP Port:"] = String(Int(emailAcc!.smtpPort))
-			self.entries["SMTP Auth:"] = emailAcc!.authTypeSmtp
-			self.entries["SMTP ConType:"] = emailAcc!.connectionTypeSmtp
-			self.isActivated = emailAcc!.isActivated
 		} else {
-			self.entries["Mailaddress:"] = ""
-			self.entries["Realname:"] = ""
-			self.entries["Accountname:"] = ""
-			self.entries["Username:"] = ""
-			self.entries["Password:"] = ""
-			self.entries["Signature:"] = ""
+			if self.entries["Mailaddress:"] == nil {self.entries["Mailaddress:"] = ""}
+			if self.entries["Realname:"] == nil {self.entries["Realname:"] = ""}
+			if self.entries["Accountname:"] == nil {self.entries["Accountname:"] = ""}
+			if self.entries["Username:"] == nil {self.entries["Username:"] = ""}
+			if self.entries["Password:"] == nil {self.entries["Password:"] = ""}
+			if self.entries["Signature:"] == nil {self.entries["Signature:"] = ""}
 			
-			self.entries["IMAP Hostname:"] = ""
-			self.entries["IMAP Port:"] = ""
-			self.entries["IMAP Auth:"] = ""
-			self.entries["IMAP ConType:"] = ""
+			if self.entries["IMAP Hostname:"] == nil {self.entries["IMAP Hostname:"] = ""}
+			if self.entries["IMAP Port:"] == nil {self.entries["IMAP Port:"] = ""}
+			if self.entries["IMAP Auth:"] == nil {self.entries["IMAP Auth:"] = ""}
+			if self.entries["IMAP ConType:"] == nil {self.entries["IMAP ConType:"] = ""}
 			
-			self.entries["SMTP Hostname:"] = ""
-			self.entries["SMTP Port:"] = ""
-			self.entries["SMTP Auth:"] = ""
-			self.entries["SMTP ConType:"] = ""
-			self.isActivated = false
+			if self.entries["SMTP Hostname:"] == nil {self.entries["SMTP Hostname:"] = ""}
+			if self.entries["SMTP Port:"] == nil {self.entries["SMTP Port:"] = ""}
+			if self.entries["SMTP Auth:"] == nil {self.entries["SMTP Auth:"] = ""}
+			if self.entries["SMTP ConType:"] == nil {self.entries["SMTP ConType:"] = ""}
 		}
-		
-		
 		
 		if actionItem?.emailAddress != "Add New Account" {
 			self.deleteString.append("DELETE")
@@ -383,8 +415,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 
 		}
 		
-		
-		
+	}
+	
+	@IBAction func expertTapped(sender: AnyObject) -> Void {
+		self.isSimpleWizard = !self.isSimpleWizard
+		self.loadAccountDetails()
+		self.tableView.reloadData()
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {
@@ -418,10 +454,24 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.navigationItem.rightBarButtonItem?.enabled = false
 		var doneButton = self.navigationItem.rightBarButtonItem
 		
-		// check if textfields are empty
+		// end textfield editing
 		if (self.selectedTextfield != nil) {
 			self.textFieldShouldReturn(self.selectedTextfield!)
 		}
+		
+		// complete data if simpleWizard
+		if self.isSimpleWizard {
+			if !completeAccountData() {
+				var alert = UIAlertController(title: "Error", message: "Could not automatically get the right settings!", preferredStyle: UIAlertControllerStyle.Alert)
+				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+					self.isSimpleWizard = false
+					self.navigationItem.rightBarButtonItem?.enabled = true
+					self.tableView.reloadData()
+					return
+				}))
+			}
+		}
+		
 		
 		for (key, value) in self.entriesChecked{
 			self.entriesChecked[key] = false
@@ -467,6 +517,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					var alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
 					alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 						self.navigationItem.rightBarButtonItem?.enabled = true
+						self.isSimpleWizard = false
+						self.loadAccountDetails()
+						self.tableView.reloadData()
 						return
 					}))
 					alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
@@ -497,6 +550,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							var alert = UIAlertController(title: "Error", message: "Your Properties for SMTP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
 							alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 								self.navigationItem.rightBarButtonItem?.enabled = true
+								self.isSimpleWizard = false
+								self.loadAccountDetails()
+								self.tableView.reloadData()
 								return
 							}))
 							alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
@@ -510,6 +566,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							
 						} else {
 							// imap and smtp connections returned valid
+							if self.isSimpleWizard {
+								self.isActivated = true
+							}
+							
 							self.navigationItem.rightBarButtonItem = doneButton
 							println("Smpt connection valid")
 							self.entriesChecked["IMAP Hostname:"] = true
@@ -722,6 +782,23 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		return false
 	}
 	
+	func completeAccountData() -> Bool {
+		if let sessionSettings = getSessionPreferences(self.entries["Mailaddress:"]!) {
+			self.entries["IMAP Hostname:"] = sessionSettings.imapHostname
+			self.entries["IMAP Port:"] = String(sessionSettings.imapPort)
+			self.entries["IMAP Auth:"] = authTypeToString(sessionSettings.imapAuthType)
+			self.entries["IMAP ConType:"] = connectionTypeToString(sessionSettings.imapConType)
+			
+			self.entries["SMTP Hostname:"] = sessionSettings.smtpHostname
+			self.entries["SMTP Port:"] = String(sessionSettings.smtpPort)
+			self.entries["SMTP Auth:"] = authTypeToString(sessionSettings.smtpAuthType)
+			self.entries["SMTP ConType:"] = connectionTypeToString(sessionSettings.smtpConType)
+			return true
+		} else {
+			return false
+		}
+	}
+	
 	func checkIfDuplicateAccountName() -> Bool {
 		if !self.allAccounts.isEmpty {
 			
@@ -854,6 +931,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				Int64(delay * Double(NSEC_PER_SEC))
 			),
 			dispatch_get_main_queue(), closure)
+	}
+	
+	func activateToolbarItems() {
+		// set toolbar
+		var expertButton: UIBarButtonItem = UIBarButtonItem(title: "Expert Mode  ", style: .Plain, target: self, action: "expertTapped:")
+		var items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), expertButton]
+		self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
 	}
 	
 	func notificationSent() {

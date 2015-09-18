@@ -84,6 +84,59 @@ func getDateFromPreferencesDurationString(duration: String) -> NSDate? {
 	return date
 }
 
+/**
+Mail provider specific session settings
+
+:param: emailAddress:	The mail address
+
+:returns: SessionPreferenceObject with the session settings for the provider, default settings if provider not known or nil if not a mail address.
+*/
+func getSessionPreferences(emailAddress: String) -> SessionPreferenceObject? {
+	var sessionPreferences: SessionPreferenceObject?
+	
+	switch emailAddress {
+	case let s where s.rangeOfString("@gmail.com") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap.gmail.com", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp.gmail.com", smtpPort: 465, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
+		
+	case let s where s.rangeOfString("@googlemail.com") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap.gmail.com", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp.gmail.com", smtpPort: 465, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
+		
+	case let s where s.rangeOfString("@outlook") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap-mail.outlook.com", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp-mail.outlook.com", smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.StartTLS)
+		
+	case let s where s.rangeOfString("@yahoo") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap.mail.yahoo.com", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp.mail.yahoo.com", smtpPort: 465, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
+		
+	case let s where s.rangeOfString("@web.de") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap.web.de", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp.web.de", smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.StartTLS)
+		
+	case let s where s.rangeOfString("@gmx") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap.gmx.de", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "mail.gmx.net", smtpPort: 465, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
+		
+	case let s where s.rangeOfString("@me.com") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap.mail.me.com", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp.mail.me.com", smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.StartTLS)
+		
+	case let s where s.rangeOfString("@icloud.com") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "imap.mail.me.com", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp.mail.me.com", smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.StartTLS)
+		
+	case let s where s.rangeOfString("@fau.de") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "faumail.uni-erlangen.de", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp-auth.uni-erlangen.de", smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
+		
+	case let s where s.rangeOfString("@studium.fau.de") != nil:
+		sessionPreferences = SessionPreferenceObject(imapHostname: "faumail.uni-erlangen.de", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp-auth.uni-erlangen.de", smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
+		
+	default:
+		if let s = emailAddress.rangeOfString("@") {
+			var serverAddress = emailAddress.substringFromIndex(emailAddress.rangeOfString("@")!.endIndex)
+			sessionPreferences = SessionPreferenceObject(imapHostname: "imap." + serverAddress, imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp." + serverAddress, smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
+		}
+		
+	}
+	
+	return sessionPreferences
+}
+
+
 
 
 
