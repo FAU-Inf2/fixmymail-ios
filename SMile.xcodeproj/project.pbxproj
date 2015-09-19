@@ -208,6 +208,15 @@
 		AD4FB1601B88C08C004D18CB /* RNCryptorEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1591B88C08C004D18CB /* RNCryptorEngine.m */; };
 		AD4FB1611B88C08C004D18CB /* RNDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB15B1B88C08C004D18CB /* RNDecryptor.m */; };
 		AD4FB1621B88C08C004D18CB /* RNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB15D1B88C08C004D18CB /* RNEncryptor.m */; };
+		AD5196371BADB358009468C4 /* Waxing Gibbous Filled-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196301BADB358009468C4 /* Waxing Gibbous Filled-64_black.png */; };
+		AD5196381BADB358009468C4 /* Toolbox-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196311BADB358009468C4 /* Toolbox-64_black.png */; };
+		AD5196391BADB358009468C4 /* Sun-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196321BADB358009468C4 /* Sun-64_black.png */; };
+		AD51963A1BADB358009468C4 /* Plus 1 Month-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196331BADB358009468C4 /* Plus 1 Month-64_black.png */; };
+		AD51963B1BADB358009468C4 /* Hourglass-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196341BADB358009468C4 /* Hourglass-64_black.png */; };
+		AD51963C1BADB358009468C4 /* Cup-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196351BADB358009468C4 /* Cup-64_black.png */; };
+		AD51963D1BADB358009468C4 /* Calendar-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196361BADB358009468C4 /* Calendar-64_black.png */; };
+		AD51963F1BADB3DB009468C4 /* Future-100_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD51963E1BADB3DB009468C4 /* Future-100_black.png */; };
+		AD5196411BADB867009468C4 /* orangedot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196401BADB867009468C4 /* orangedot@2x.png */; };
 		AD5292631B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5292611B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift */; };
 		AD5292641B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */; };
 		AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */; };
@@ -502,6 +511,15 @@
 		AD4FB15B1B88C08C004D18CB /* RNDecryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNDecryptor.m; sourceTree = "<group>"; };
 		AD4FB15C1B88C08C004D18CB /* RNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNEncryptor.h; sourceTree = "<group>"; };
 		AD4FB15D1B88C08C004D18CB /* RNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNEncryptor.m; sourceTree = "<group>"; };
+		AD5196301BADB358009468C4 /* Waxing Gibbous Filled-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Waxing Gibbous Filled-64_black.png"; sourceTree = "<group>"; };
+		AD5196311BADB358009468C4 /* Toolbox-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Toolbox-64_black.png"; sourceTree = "<group>"; };
+		AD5196321BADB358009468C4 /* Sun-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sun-64_black.png"; sourceTree = "<group>"; };
+		AD5196331BADB358009468C4 /* Plus 1 Month-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plus 1 Month-64_black.png"; sourceTree = "<group>"; };
+		AD5196341BADB358009468C4 /* Hourglass-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hourglass-64_black.png"; sourceTree = "<group>"; };
+		AD5196351BADB358009468C4 /* Cup-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cup-64_black.png"; sourceTree = "<group>"; };
+		AD5196361BADB358009468C4 /* Calendar-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Calendar-64_black.png"; sourceTree = "<group>"; };
+		AD51963E1BADB3DB009468C4 /* Future-100_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Future-100_black.png"; sourceTree = "<group>"; };
+		AD5196401BADB867009468C4 /* orangedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orangedot@2x.png"; sourceTree = "<group>"; };
 		AD5292611B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefFolderSelectionTableViewController.swift; sourceTree = "<group>"; };
 		AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefFolderSelectionTableViewController.xib; sourceTree = "<group>"; };
 		AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceStandardAccountTableViewController.swift; sourceTree = "<group>"; };
@@ -959,6 +977,15 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AD5196401BADB867009468C4 /* orangedot@2x.png */,
+				AD51963E1BADB3DB009468C4 /* Future-100_black.png */,
+				AD5196301BADB358009468C4 /* Waxing Gibbous Filled-64_black.png */,
+				AD5196311BADB358009468C4 /* Toolbox-64_black.png */,
+				AD5196321BADB358009468C4 /* Sun-64_black.png */,
+				AD5196331BADB358009468C4 /* Plus 1 Month-64_black.png */,
+				AD5196341BADB358009468C4 /* Hourglass-64_black.png */,
+				AD5196351BADB358009468C4 /* Cup-64_black.png */,
+				AD5196361BADB358009468C4 /* Calendar-64_black.png */,
 				ADE6739B1B7365B400C920B0 /* x_icon.png */,
 				A98D033E1B99F4ED0029A880 /* Cup-64.png */,
 				A98D033F1B99F4ED0029A880 /* Sun-64.png */,
@@ -1182,15 +1209,18 @@
 				AD4742FA1B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib in Resources */,
 				ADEF086A1B826819008AC0D0 /* KeyDetailTableViewCell.xib in Resources */,
 				ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */,
+				AD51963A1BADB358009468C4 /* Plus 1 Month-64_black.png in Resources */,
 				ADEF085D1B8205B9008AC0D0 /* red_indicator.png in Resources */,
 				AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */,
 				AD43C8051B70F92600C8F286 /* ReceivedFileViewController.xib in Resources */,
 				3D69ECC21B83AB9A0082EF5C /* page_white_dvd@2x.png in Resources */,
 				3D69ECCE1B83AB9A0082EF5C /* page_white_import@2x.png in Resources */,
+				AD5196391BADB358009468C4 /* Sun-64_black.png in Resources */,
 				5B8948FB1B317DAA0064F3C0 /* Trash.png in Resources */,
 				ADCAB63C1B3F21240060028E /* PreferencesPreviewLinesTableViewController.xib in Resources */,
 				3D69ECC41B83AB9A0082EF5C /* page_white_excel@2x.png in Resources */,
 				3D69ECBE1B83AB9A0082EF5C /* page_white_csharp@2x.png in Resources */,
+				AD5196371BADB358009468C4 /* Waxing Gibbous Filled-64_black.png in Resources */,
 				3D69ECBD1B83AB9A0082EF5C /* page_white_csharp.png in Resources */,
 				3D69EBA81B83A5020082EF5C /* SubjectInfoTableViewCell.xib in Resources */,
 				3D69ECBF1B83AB9A0082EF5C /* page_white_cup.png in Resources */,
@@ -1200,6 +1230,7 @@
 				AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */,
 				A98D034F1B99F5F20029A880 /* Future-100.png in Resources */,
 				A93A893D1BA1C5FA0074C08D /* RemindCollectionViewCell.xib in Resources */,
+				AD5196381BADB358009468C4 /* Toolbox-64_black.png in Resources */,
 				AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */,
 				3D69ECA71B83AB9A0082EF5C /* keynote.png in Resources */,
 				A98D034A1B99F4ED0029A880 /* Toolbox-64.png in Resources */,
@@ -1214,6 +1245,7 @@
 				3D69ECDA1B83AB9A0082EF5C /* page_white_powerpoint@2x.png in Resources */,
 				3D69EBA41B83A4CB0082EF5C /* SenderInfoTableViewCell.xib in Resources */,
 				3D69ECD71B83AB9A0082EF5C /* page_white_picture.png in Resources */,
+				AD51963C1BADB358009468C4 /* Cup-64_black.png in Resources */,
 				8E1C054F1B98794E0094B604 /* AttachmentsViewController.xib in Resources */,
 				3D69ECD11B83AB9A0082EF5C /* page_white_js.png in Resources */,
 				A98D03471B99F4ED0029A880 /* Sun-64.png in Resources */,
@@ -1236,6 +1268,7 @@
 				ADEF085E1B8205B9008AC0D0 /* sec_label.png in Resources */,
 				3D69ECDD1B83AB9A0082EF5C /* page_white_sound.png in Resources */,
 				AD789D9D1B3054A00001719E /* Feedback.html in Resources */,
+				AD5196411BADB867009468C4 /* orangedot@2x.png in Resources */,
 				3D69ECDC1B83AB9A0082EF5C /* page_white_ruby@2x.png in Resources */,
 				ADEF085B1B8205B9008AC0D0 /* pgp_label.png in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,
@@ -1276,6 +1309,7 @@
 				3D69ECAC1B83AB9A0082EF5C /* package@2x.png in Resources */,
 				3D69ECEA1B83AB9A0082EF5C /* pages@2x.png in Resources */,
 				ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */,
+				AD51963D1BADB358009468C4 /* Calendar-64_black.png in Resources */,
 				8E1C05551B98794E0094B604 /* MoveEmailViewController.xib in Resources */,
 				AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */,
 				3D69ECA81B83AB9A0082EF5C /* keynote@2x.png in Resources */,
@@ -1285,6 +1319,7 @@
 				3D65A4CC1B53014E00E88CC7 /* triangle_bottom.png in Resources */,
 				3D69ECE91B83AB9A0082EF5C /* pages.png in Resources */,
 				8E5CA95E1B8DD7DE00C02AA4 /* attachedFile.png in Resources */,
+				AD51963B1BADB358009468C4 /* Hourglass-64_black.png in Resources */,
 				5B8B6E0B1B2455E60087B124 /* bluedot@2x.png in Resources */,
 				3D0FFD6B1B0A22F100C4F8F6 /* SideBarTableViewCell.xib in Resources */,
 				3D69ECDB1B83AB9A0082EF5C /* page_white_ruby.png in Resources */,
@@ -1313,6 +1348,7 @@
 				3D69ECAD1B83AB9A0082EF5C /* page_white.png in Resources */,
 				ADEF08621B823C3A008AC0D0 /* gray_indicator.png in Resources */,
 				3D69ECAA1B83AB9A0082EF5C /* numbers@2x.png in Resources */,
+				AD51963F1BADB3DB009468C4 /* Future-100_black.png in Resources */,
 				3D69ECAB1B83AB9A0082EF5C /* package.png in Resources */,
 				3D69ECBC1B83AB9A0082EF5C /* page_white_cplusplus@2x.png in Resources */,
 				A98D03481B99F4ED0029A880 /* Waxing Gibbous Filled-64.png in Resources */,

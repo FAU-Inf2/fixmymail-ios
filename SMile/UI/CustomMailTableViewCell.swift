@@ -95,7 +95,7 @@ class CustomMailTableViewCell: UITableViewCell {
                 archiveIMGView.hidden = true
                 remindIMGView.hidden = false
                 
-                subviewArchiveSwipeFromLeftToRight.backgroundColor = UIColor.yellowColor()
+                subviewArchiveSwipeFromLeftToRight.backgroundColor = UIColor.orangeColor()
             }else {
                 archiveIMGView.hidden = false
                 remindIMGView.hidden = true
