@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+
 class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
     
     var email:Email?
@@ -38,10 +39,55 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         
     }
     
+    func setJSONforUpcomingRemind(email:Email, remindTime: NSDate){
+        //moveEmailToFolder(mail, "RemindMe")
+        var folderStorage: String = "SmileStorage"
+        var jsonmail:Email = email
+        var folders = email.toAccount.folders
+        let currentMaxUID = getMaxUID(email.toAccount, folderStorage)
+        fetchEmails(email.toAccount, folderStorage, MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
+        var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(email.toAccount.downloadMailDuration)
+        for mail in email.toAccount.emails {
+            if mail.folder == folderStorage {
+                if let dMD = downloadMailDuration {
+                    if ((mail as! Email).mcomessage as! MCOIMAPMessage).header.receivedDate.laterDate(dMD) == dMD {
+                        continue
+                    }
+                }
+                jsonmail = mail as! Email
+            }
+        }
+        if jsonmail == email{
+            println("something went wrong")
+        }
+            //RemindMe Datum auslesen und in NSDate umformen
+        else{
+            if let dataFromString = jsonmail.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                let json = JSON(data: dataFromString)
+                var json2 = json["allRemindMes"].arrayValue
+                // nach unten verschieben eventuell
+                var anzahl = json2.count
+                var header : MCOMessageHeader = email.mcomessage.header
+                var messageId = header.messageID
+                var now = NSDate().timeIntervalSince1970
+                var remindTimeTimestamp = remindTime.timeIntervalSince1970
+                println("json- online")
+                println(json2)
+                println("new-json")
+                var newjson = JSON(["folderId": NSNull(), "id": NSNull(), "last modified": now, "messageId": messageId, "remindInterval": NSNull(), "remindTime": remindTimeTimestamp, "seen": NSNull(), "title": email.title, "uid": NSNull(), "reference": NSNull()]).array
+                
+                //Add newjson to json2
+                println(json2.count)
+            }
+        }
+    }
+    
+   
+    
     func downlaodJsonAndCheckForUpcomingReminds(){ // ich gehe davon aus das SmileStorage vorhanden ist weil ich es vorher ja abgeprüft habe und notfalls erstellt habe
         //JsonFile aus Folder SmileStorage auslesen
         var folderStorage: String = "SmileStorage"
-        var remind:Email = email!
+        var jsonmail:Email = email!
         var folders = email?.toAccount.folders
         let currentMaxUID = getMaxUID(email!.toAccount, folderStorage)
         fetchEmails(email!.toAccount, folderStorage, MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
@@ -53,16 +99,16 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
                         continue
                     }
                 }
-                remind = mail as! Email
+                jsonmail = mail as! Email
             }
         }
-        println(remind.plainText)               // noch rausnehmen
-        if remind == email{
+        println(jsonmail.plainText)               // noch rausnehmen
+        if jsonmail == email{
             println("something went wrong")
         }
         //RemindMe Datum auslesen und in NSDate umformen
         else{
-            if let dataFromString = remind.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+            if let dataFromString = jsonmail.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                 let json = JSON(data: dataFromString)
                 var key = "remindTime"
                 
@@ -161,19 +207,19 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         var remindDate:NSDate = NSDate()
         switch (indexPath.row){
         case 0: //Later Today
-            components.hour = 4
+            components.hour = 2
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
-            RemindEmail(email!,date: remindDate)
+            setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 1: //This Evening
             components.hour = 20
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: nil)!
-            RemindEmail(email!,date: remindDate)
+            setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 2: //Tomorrow Morning
             components.hour = 5
             components.day = 1
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
-            RemindEmail(email!,date: remindDate)
+           setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 3: //This Weekend
             var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
             var friday = 6
@@ -181,7 +227,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             components.hour = 17
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
-            RemindEmail(email!,date: remindDate)
+            setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 4: //Next Week
             var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
             var monday = 2
@@ -189,11 +235,11 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             components.hour = 5
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
-            RemindEmail(email!,date: remindDate)
+            setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 5: //In 1 Month
             components.month = 1
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
-            RemindEmail(email!,date: remindDate)
+            setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 8: //Pick a Date
             collectionView.hidden  = true
             back.hidden = false
@@ -221,13 +267,10 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         back.hidden = true
         SetTime.hidden = true
         var remindDate = datePicker.date
-        println(remindDate)
-        RemindEmail(email!,date: remindDate)
+        setJSONforUpcomingRemind(email!,remindTime: remindDate)
     }
     
-    func RemindEmail(email: Email, date: NSDate){
-        
-    }
+   
     /*
     // MARK: - Navigation
 
