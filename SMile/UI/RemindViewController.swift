@@ -7,28 +7,40 @@
 //
 
 import UIKit
+import CoreData
 
-class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
+class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
+    var remind:RemindMe?
+    var email:Email?
+    @IBOutlet weak var SetTime: UIButton!
+    @IBOutlet weak var back: UIButton!
+    @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
-    var mail: Email?
+    //var mail: Email?
     
-    var textData: [String] = ["Later Today","ThisEvening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "", "","Pick a Date"]
-    var Images:[String] = ["Hourglass-64.png","Waxing Gibbous Filled-64.png","Cup-64.png","Sun-64.png","Toolbox-64.png","Plus 1 Month-64.png","","","Calendar-64.png"]
+    var textData: [String] = ["Later Today","This Evening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "back", "","Pick a Date"]
+    var Images:[String] = ["Hourglass-64.png","Waxing Gibbous Filled-64.png","Cup-64.png","Sun-64.png","Toolbox-64.png","Plus 1 Month-64.png","Undo Filled-64.png","","Calendar-64.png"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        remind = RemindMe()
+        datePicker.hidden = true
+        back.hidden = true
+        SetTime.hidden = true
         self.collectionView.registerNib(UINib(nibName: "RemindCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "RemindCell")
         
         self.collectionView.backgroundColor = UIColor.clearColor()
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
         let effectView = UIVisualEffectView(effect: blurEffect)
-        effectView.frame = self.imageView.frame
+        self.collectionView.frame = UIScreen.mainScreen().bounds
+        effectView.frame = UIScreen.mainScreen().bounds
         self.imageView.addSubview(effectView)
+        //downlaodJsonAndCheckForUpcomingReminds()
+        remind?.downlaodJsonAndCheckForUpcomingReminds((email?.toAccount)!)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -45,10 +57,12 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("RemindCell", forIndexPath: indexPath) as! RemindCollectionViewCell
         cell.labels.text = textData[indexPath.row]
-        cell.labels.textAlignment = .Center
+        cell.labels.textColor = UIColor.whiteColor()
+        //cell.labels.textAlignment = .Center
         cell.images.image = UIImage(named: Images[indexPath.row])
-        cell.images.layer.cornerRadius = cell.images.frame.size.width / 2
-        cell.images.layer.borderWidth = 4.0
+        
+        //cell.images.layer.cornerRadius = cell.images.frame.size.width / 3
+        //cell.images.layer.borderWidth = 4.0
         cell.images.layer.borderColor = UIColor.whiteColor().CGColor
         cell.images.clipsToBounds = true
         return cell
@@ -56,34 +70,89 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
-        return CGSize(width: collectionView.frame.size.width/3, height: collectionView.frame.size.width/3)
+        return CGSize(width: collectionView.frame.size.width/3, height: collectionView.frame.size.height/3)
         
     }
     
-    /*func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
+        var date = NSDate()
+        var components = NSDateComponents()
+        components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
+        date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+        println(date)
+        var remindDate:NSDate = NSDate()
         switch (indexPath.row){
         case 0: //Later Today
-            println("0")
+            components.hour = 2
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 1: //This Evening
-            println("1")
+            components.hour = 20
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: nil)!
+            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 2: //Tomorrow Morning
-            println("2")
+            components.day = 1
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            components.hour = 5
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+           remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 3: //This Weekend
-            println("3")
+            var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
+            var friday = 6
+            components.day = friday-day
+            if (components.day<0 ){
+                components.day = components.day+7
+            }
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            components.hour = 17
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 4: //Next Week
-            println("4")
+            var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
+            var monday = 2
+            components.day = monday-day
+            if (components.day<0 ){
+                components.day = components.day+7
+            }
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            components.hour = 5
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 5: //In 1 Month
-            println("")
+            components.month = 1
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 8: //Pick a Date
-            println("8")
+            collectionView.hidden  = true
+            back.hidden = false
+            SetTime.hidden = false
+            datePicker.hidden = false
+            datePicker.datePickerMode = UIDatePickerMode.DateAndTime
+            datePicker.minimumDate = date
+            datePicker.date = date
         default:
-            println("other")
+            NSLog("other")
+            break
         }
-    }*/
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        var cell = collectionView.cellForItemAtIndexPath(indexPath)
     }
+    
+    @IBAction func Back(sender: AnyObject) {
+        collectionView.hidden=false
+        datePicker.hidden = true
+        back.hidden = true
+        SetTime.hidden = true
+    }
+    
+    @IBAction func SetTime(sender: AnyObject) {
+        collectionView.hidden=false
+        datePicker.hidden = true
+        back.hidden = true
+        SetTime.hidden = true
+        var remindDate = datePicker.date
+        remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+    }
+    
+   
     /*
     // MARK: - Navigation
 
@@ -94,4 +163,25 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     */
 
+}
+extension NSDate {
+    convenience init?(jsonDate: String) {
+        let prefix = "/Date("
+        let suffix = ")/"
+        // Check for correct format:
+        if jsonDate.hasPrefix(prefix) && jsonDate.hasSuffix(suffix) {
+            // Extract the number as a string:
+            let from = advance(jsonDate.startIndex, count(prefix))
+            let to = advance(jsonDate.endIndex, -count(suffix))
+            let dateString = jsonDate[from ..< to]
+            // Convert to double and from milliseconds to seconds:
+            let timeStamp = (dateString as NSString).doubleValue / 1000.0
+            // Create NSDate with this UNIX timestamp
+            self.init(timeIntervalSince1970: timeStamp)
+        } else {
+            // Wrong format, return nil. (The compiler requires us to
+            // to an initialization first.)
+            self.init(timeIntervalSince1970: 0)
+            return nil
+        }    }
 }

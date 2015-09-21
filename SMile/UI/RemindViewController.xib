@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -7,44 +7,95 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RemindViewController" customModule="SMile" customModuleProvider="target">
             <connections>
                 <outlet property="CollectionView" destination="keo-4h-O8A" id="aX5-74-R8W"/>
+                <outlet property="SetTime" destination="vbe-HX-urI" id="WwP-Pk-mu9"/>
+                <outlet property="back" destination="xkc-Yz-xwA" id="hhq-Tw-GHP"/>
                 <outlet property="collectionView" destination="keo-4h-O8A" id="cSo-DR-lSf"/>
+                <outlet property="datePicker" destination="C9z-ij-Qv0" id="bVK-8P-XXh"/>
                 <outlet property="imageView" destination="gCV-nq-ZRs" id="zbB-bw-IB0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="64" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gCV-nq-ZRs">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gCV-nq-ZRs">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="700"/>
                 </imageView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="keo-4h-O8A">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="fvg-Oa-0ai">
+                    <rect key="frame" x="0.0" y="100" width="600" height="500"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="0.0" id="fvg-Oa-0ai">
                         <size key="itemSize" width="50" height="50"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="10"/>
                     </collectionViewFlowLayout>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="kDr-8g-kti"/>
                         <outlet property="delegate" destination="-1" id="Pyi-54-aP5"/>
                     </connections>
                 </collectionView>
+                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="C9z-ij-Qv0">
+                    <rect key="frame" x="0.0" y="244" width="600" height="162"/>
+                    <date key="date" timeIntervalSinceReferenceDate="463854585.513201">
+                        <!--2015-09-13 16:29:45 +0000-->
+                    </date>
+                </datePicker>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vbe-HX-urI">
+                    <rect key="frame" x="270" y="414" width="60" height="30"/>
+                    <state key="normal" title="Set Date">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="SetTime:" destination="-1" eventType="touchUpInside" id="V8j-UA-FCf"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xkc-Yz-xwA">
+                    <rect key="frame" x="283" y="457" width="34" height="30"/>
+                    <state key="normal" title="back">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="Back:" destination="-1" eventType="touchUpInside" id="0Tb-5n-Djq"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="xkc-Yz-xwA" firstAttribute="top" secondItem="vbe-HX-urI" secondAttribute="bottom" constant="13" id="0BH-yS-Zgs"/>
+                <constraint firstItem="xkc-Yz-xwA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="180" id="0lh-r4-niP"/>
+                <constraint firstAttribute="trailing" secondItem="vbe-HX-urI" secondAttribute="trailing" constant="169" id="2zM-uo-nwC"/>
+                <constraint firstItem="xkc-Yz-xwA" firstAttribute="centerX" secondItem="vbe-HX-urI" secondAttribute="centerX" id="36l-zB-shM"/>
                 <constraint firstItem="gCV-nq-ZRs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="3yh-Pl-1pj"/>
+                <constraint firstItem="C9z-ij-Qv0" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="10" id="53H-N2-B30"/>
                 <constraint firstAttribute="bottom" secondItem="keo-4h-O8A" secondAttribute="bottom" id="6pX-So-ZeR"/>
+                <constraint firstItem="vbe-HX-urI" firstAttribute="top" secondItem="C9z-ij-Qv0" secondAttribute="bottom" constant="10" id="7QU-Mr-Oy0"/>
                 <constraint firstAttribute="trailing" secondItem="gCV-nq-ZRs" secondAttribute="trailing" id="H67-jq-TV9"/>
-                <constraint firstItem="keo-4h-O8A" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="HzM-3y-84h"/>
+                <constraint firstItem="keo-4h-O8A" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="HzM-3y-84h"/>
+                <constraint firstItem="xkc-Yz-xwA" firstAttribute="centerX" secondItem="C9z-ij-Qv0" secondAttribute="centerX" id="Iog-f2-oGl"/>
+                <constraint firstItem="C9z-ij-Qv0" firstAttribute="trailing" secondItem="keo-4h-O8A" secondAttribute="trailing" id="LDZ-Xq-PsZ"/>
+                <constraint firstItem="C9z-ij-Qv0" firstAttribute="leading" secondItem="keo-4h-O8A" secondAttribute="leading" id="QMM-Vf-cuW"/>
+                <constraint firstItem="vbe-HX-urI" firstAttribute="baseline" secondItem="xkc-Yz-xwA" secondAttribute="baseline" id="VIl-CD-yvN"/>
                 <constraint firstItem="keo-4h-O8A" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Xao-Qv-I0w"/>
                 <constraint firstAttribute="bottom" secondItem="gCV-nq-ZRs" secondAttribute="bottom" id="i6x-bu-VX7"/>
+                <constraint firstAttribute="bottom" secondItem="xkc-Yz-xwA" secondAttribute="bottom" constant="113" id="rDe-AJ-BX3"/>
                 <constraint firstItem="gCV-nq-ZRs" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="uPs-n7-r99"/>
+                <constraint firstItem="C9z-ij-Qv0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="244" id="wcR-Qe-ssc"/>
                 <constraint firstAttribute="trailing" secondItem="keo-4h-O8A" secondAttribute="trailing" id="zgp-l1-UE5"/>
             </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="2zM-uo-nwC"/>
+                    <exclude reference="7QU-Mr-Oy0"/>
+                    <exclude reference="VIl-CD-yvN"/>
+                    <exclude reference="0lh-r4-niP"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="572" y="225"/>
         </view>
     </objects>
