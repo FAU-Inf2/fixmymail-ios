@@ -252,7 +252,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 5: // Cell for attachments
             var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
             
-            cell.imageViewPreview.image = UIImage(named: "attachedFile.png")!
+            cell.imageViewPreview.image = UIImage(named: "attachment_icon@2x.png")!
             cell.imageViewPreview.image = UIImage(CGImage: cell.imageViewPreview.image!.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
             cell.labelFilesAttached.text = "\t\(self.attachmentView.keys.count) files attached"
             cell.labelFilesAttached.textColor = UIColor.grayColor()
