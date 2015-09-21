@@ -20,7 +20,7 @@ class DevPasswordViewController: UIViewController {
 
         // Do any additional setup after loading the view.
 		self.navigationItem.title = "Enter password"
-		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
+		let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
 
     }
@@ -49,7 +49,12 @@ class DevPasswordViewController: UIViewController {
 				managedObjectContext = appDelegate.managedObjectContext
 				var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
 				var error: NSError?
-				let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
+				let acc: [EmailAccount]?
+				do {
+					acc = try managedObjectContext.executeFetchRequest(emailAccountsFetchRequest) as? [EmailAccount]
+				} catch {
+					print("CoreData fetch error")
+				}
 				if let account = acc {
 					for emailAcc: EmailAccount in account {
 						let errorLocksmithUpdateAccount = Locksmith.deleteDataForUserAccount(emailAcc.emailAddress)
@@ -57,6 +62,7 @@ class DevPasswordViewController: UIViewController {
 							NSLog("found old data -> deleted!")
 						}
 						// save data to iOS keychain
+						// change for locksmith 2.0
 						let NewSaveRequest = LocksmithRequest(userAccount: emailAcc.emailAddress, requestType: .Create, data: ["Password:": self.textfield.text])
 						NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
 						let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)

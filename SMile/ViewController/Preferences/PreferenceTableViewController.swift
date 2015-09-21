@@ -27,7 +27,7 @@ class PreferenceTableViewController: UITableViewController {
 		tableView.registerNib(UINib(nibName: "PreferenceTableViewCell", bundle: nil),forCellReuseIdentifier:"PreferenceCell")
 
 		
-		var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+		let menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
 		self.navigationItem.title = "Preferences"
 		self.navigationItem.leftBarButtonItem = menuItem
 		
@@ -44,13 +44,19 @@ class PreferenceTableViewController: UITableViewController {
         super.viewDidAppear(animated)
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
-                var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+                let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
                 var sendAccount: EmailAccount? = nil
                 
-                var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+                let accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
                 let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
                 var error: NSError?
-                var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+                var result: [AnyObject]?
+                do {
+                    result = try managedObjectContext.executeFetchRequest(fetchRequest)
+                } catch let error1 as NSError {
+                    error = error1
+                    result = nil
+                }
                 if error != nil {
                     NSLog("%@", error!.description)
                     return
@@ -119,13 +125,13 @@ class PreferenceTableViewController: UITableViewController {
 		let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 		switch actionItem.cellName {
 		case "Accounts":
-			var prefAccountVC = PreferenceAccountListTableViewController(nibName: actionItem.viewController, bundle: nil)
+			let prefAccountVC = PreferenceAccountListTableViewController(nibName: actionItem.viewController, bundle: nil)
 			self.navigationController?.pushViewController(prefAccountVC, animated: true)
 		case "Feedback":
-			var feedbackVC = FeedbackViewController(nibName: actionItem.viewController, bundle: nil)
+			let feedbackVC = FeedbackViewController(nibName: actionItem.viewController, bundle: nil)
 			self.navigationController?.pushViewController(feedbackVC, animated: true)
 		case "About Us":
-			var aboutUsVC = AboutUsViewController(nibName: actionItem.viewController, bundle: nil)
+			let aboutUsVC = AboutUsViewController(nibName: actionItem.viewController, bundle: nil)
 			self.navigationController?.pushViewController(aboutUsVC, animated: true)
 		default:
 			break
@@ -138,11 +144,11 @@ class PreferenceTableViewController: UITableViewController {
 
 	func loadPreferenceCells() {
 		
-		var item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", emailAddress: nil, icon: nil)
-		var item2 = ActionItem(Name: "REMIND ME!", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
-		var item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", emailAddress: nil, icon: nil)
-		var item4 = ActionItem(Name: "About Us", viewController: "AboutUsViewController", emailAddress: nil, icon: nil)
-		var item5 = ActionItem(Name: "Feedback", viewController: "FeedbackViewController", emailAddress: nil, icon: nil)
+		let item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", emailAddress: nil, icon: nil)
+		let item2 = ActionItem(Name: "REMIND ME!", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
+		let item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", emailAddress: nil, icon: nil)
+		let item4 = ActionItem(Name: "About Us", viewController: "AboutUsViewController", emailAddress: nil, icon: nil)
+		let item5 = ActionItem(Name: "Feedback", viewController: "FeedbackViewController", emailAddress: nil, icon: nil)
 		
 		self.otherItem.append(item4)
 		self.otherItem.append(item5)

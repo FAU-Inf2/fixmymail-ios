@@ -58,8 +58,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 		// set navigationbar
 		self.navigationItem.title = actionItem?.emailAddress
-		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
-		var cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
+		let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
+		let cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
 		self.navigationItem.leftBarButtonItem = cancelButton
 		
@@ -72,20 +72,23 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		self.alert = UIAlertController(title: "Delete", message: "Really delete account?", preferredStyle: UIAlertControllerStyle.Alert)
 		self.alert!.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 			// save data to CoreData (respectively deleting data from CoreData)
-			var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-			var context: NSManagedObjectContext = appDel.managedObjectContext!
-			var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+			let context: NSManagedObjectContext = appDel.managedObjectContext!
+			let fetchRequest = NSFetchRequest(entityName: "EmailAccount")
 			fetchRequest.predicate = NSPredicate(format: "emailAddress = %@", self.emailAcc!.emailAddress)
 			
-			if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+			if let fetchResults = (try? appDel.managedObjectContext!.executeFetchRequest(fetchRequest)) as? [NSManagedObject] {
 				if fetchResults.count != 0{
 					
-					var managedObject = fetchResults[0]
+					let managedObject = fetchResults[0]
 					context.deleteObject(managedObject)
 				}
 			}
 			
-			context.save(nil)
+			do {
+				try context.save()
+			} catch _ {
+			}
 			// delete Password from iOS Keychain
 			let errorLocksmith = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
 			if errorLocksmith == nil {
@@ -150,8 +153,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		
-		var labelString = self.labels[indexPath.section][indexPath.row] as! String
-		var textfieldString = self.entries[labelString]
+		let labelString = self.labels[indexPath.section][indexPath.row] as! String
+		let textfieldString = self.entries[labelString]
 		
 		
 		
@@ -174,7 +177,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		// normal cells
 		else {
 			if labelString != "DELETE" && labelString != "Activate:" && labelString != "Advanced" {
-				var cell = tableView.cellForRowAtIndexPath(indexPath) as! PreferenceAccountTableViewCell
+				let cell = tableView.cellForRowAtIndexPath(indexPath) as! PreferenceAccountTableViewCell
 				cell.textfield.becomeFirstResponder()
 			}
 			
@@ -188,7 +191,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		var labelString = self.labels[indexPath.section][indexPath.row] as? String
+		let labelString = self.labels[indexPath.section][indexPath.row] as? String
 		// decide witch cell must be loaded
 		if labelString == "Activate:" {
 			let cell = tableView.dequeueReusableCellWithIdentifier("SwitchTableViewCell", forIndexPath: indexPath) as! SwitchTableViewCell
@@ -327,7 +330,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			if self.entries["Password:"] == nil {
 				let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
 				if error == nil {
-					var value = dictionary?.valueForKey("Password:") as! String
+					let value = dictionary?.valueForKey("Password:") as! String
 					self.entries["Password:"] = value
 					NSLog("loaded value from keychain")
 				} else {
@@ -445,14 +448,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			}
 		}
 		
-		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
+		let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
 	}
 	
 	@IBAction func doneTapped(sender: AnyObject) -> Void {
 		
 		self.navigationItem.rightBarButtonItem?.enabled = false
-		var doneButton = self.navigationItem.rightBarButtonItem
+		let doneButton = self.navigationItem.rightBarButtonItem
 		
 		// end textfield editing
 		if (self.selectedTextfield != nil) {
@@ -462,7 +465,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		// complete data if simpleWizard
 		if self.isSimpleWizard {
 			if !completeAccountData() {
-				var alert = UIAlertController(title: "Error", message: "Could not automatically get the right settings!", preferredStyle: UIAlertControllerStyle.Alert)
+				let alert = UIAlertController(title: "Error", message: "Could not automatically get the right settings!", preferredStyle: UIAlertControllerStyle.Alert)
 				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 					self.isSimpleWizard = false
 					self.navigationItem.rightBarButtonItem?.enabled = true
@@ -481,7 +484,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			// check if duplicate account emailaddress and return if so
 			if self.checkIfDuplicateAccountMailAddress() {
-				var alert = UIAlertController(title: "Duplicate", message: "An account with address: \"" + self.entries["Mailaddress:"]!.lowercaseString + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
+				let alert = UIAlertController(title: "Duplicate", message: "An account with address: \"" + self.entries["Mailaddress:"]!.lowercaseString + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
 				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
 				
 				self.presentViewController(alert, animated: true, completion: nil)
@@ -491,7 +494,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			// check if duplicate accountname and return if so
 			if self.checkIfDuplicateAccountName() {
-				var alert = UIAlertController(title: "Duplicate", message: "An account with name: \"" + self.entries["Accountname:"]! + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
+				let alert = UIAlertController(title: "Duplicate", message: "An account with name: \"" + self.entries["Accountname:"]! + "\" already exists!", preferredStyle: UIAlertControllerStyle.Alert)
 				alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
 				
 				self.presentViewController(alert, animated: true, completion: nil)
@@ -502,7 +505,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			
 			
-			var stopButton: UIBarButtonItem = UIBarButtonItem(title: "Stop ", style: .Plain, target: self, action: "stopTapped:")
+			let stopButton: UIBarButtonItem = UIBarButtonItem(title: "Stop ", style: .Plain, target: self, action: "stopTapped:")
 			stopButton.tintColor = UIColor.redColor()
 			self.navigationItem.rightBarButtonItem = stopButton
 			
@@ -514,7 +517,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				if (error != nil) {
 					self.navigationItem.rightBarButtonItem = doneButton
 					NSLog("can't establish Imap connection: %@", error)
-					var alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
+					let alert = UIAlertController(title: "Error", message: "Your Properties for IMAP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
 					alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 						self.navigationItem.rightBarButtonItem?.enabled = true
 						self.isSimpleWizard = false
@@ -532,7 +535,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					
 				} else {
 					// imap connection valid -> test the smtp connection
-					println("Imap connection valid")
+					print("Imap connection valid")
 					self.entriesChecked["IMAP Hostname:"] = true
 					self.entriesChecked["IMAP Port:"] = true
 					self.entriesChecked["Username:"] = true
@@ -547,7 +550,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						if (error != nil) {
 							self.navigationItem.rightBarButtonItem = doneButton
 							NSLog("can't establish Smpt connection: %@", error)
-							var alert = UIAlertController(title: "Error", message: "Your Properties for SMTP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
+							let alert = UIAlertController(title: "Error", message: "Your Properties for SMTP seem to be wrong!", preferredStyle: UIAlertControllerStyle.Alert)
 							alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
 								self.navigationItem.rightBarButtonItem?.enabled = true
 								self.isSimpleWizard = false
@@ -571,7 +574,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							}
 							
 							self.navigationItem.rightBarButtonItem = doneButton
-							println("Smpt connection valid")
+							print("Smpt connection valid")
 							self.entriesChecked["IMAP Hostname:"] = true
 							self.entriesChecked["IMAP Port:"] = true
 							self.entriesChecked["Username:"] = true
@@ -610,9 +613,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	func checkAllTextfieldsFilled() {
-		for var section = 0; section < self.tableView.numberOfSections(); section++ {
+		for var section = 0; section < self.tableView.numberOfSections; section++ {
 			for var row = 0; row < self.tableView.numberOfRowsInSection(section); row++ {
-				var cellPath = NSIndexPath(forRow: row, inSection: section)
+				let cellPath = NSIndexPath(forRow: row, inSection: section)
 				if let cell = self.tableView.cellForRowAtIndexPath(cellPath) as? PreferenceAccountTableViewCell {
 					
 					if cell.textfield.text.isEmpty {
@@ -634,11 +637,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 
 
 	func saveEntriesToCoreData() {
-		var appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-		var context: NSManagedObjectContext = appDel.managedObjectContext!
+		let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+		let context: NSManagedObjectContext = appDel.managedObjectContext!
 		
 		if self.actionItem?.emailAddress == "Add New Account" {
-			var newEntry = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: context) as!EmailAccount
+			let newEntry = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: context) as!EmailAccount
 			
 			for (key, value) in self.entries {
 				switch key {
@@ -665,11 +668,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					}
 					
 				case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
-				case "IMAP Port:": 			newEntry.setValue(value.toInt(), forKey: "imapPort")
+				case "IMAP Port:": 			newEntry.setValue(Int(value), forKey: "imapPort")
 				case "IMAP Auth:":			newEntry.setValue(value, forKey: "authTypeImap")
 				case "IMAP ConType:":		newEntry.setValue(value, forKey: "connectionTypeImap")
 				case "SMTP Hostname:": 		newEntry.setValue(value, forKey: "smtpHostname")
-				case "SMTP Port:": 			newEntry.setValue(value.toInt(), forKey: "smtpPort")
+				case "SMTP Port:": 			newEntry.setValue(Int(value), forKey: "smtpPort")
 				case "SMTP Auth:": 			newEntry.setValue(value, forKey: "authTypeSmtp")
 				case "SMTP ConType:":		newEntry.setValue(value, forKey: "connectionTypeSmtp")
 				default: break
@@ -687,13 +690,13 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 		} else {
 			
-			var fetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			let fetchRequest = NSFetchRequest(entityName: "EmailAccount")
 			fetchRequest.predicate = NSPredicate(format: "emailAddress = %@", self.emailAcc!.emailAddress)
 			
-			if let fetchResults = appDel.managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [NSManagedObject] {
+			if let fetchResults = (try? appDel.managedObjectContext!.executeFetchRequest(fetchRequest)) as? [NSManagedObject] {
 				if fetchResults.count != 0{
 					
-					var managedObject = fetchResults[0] as! EmailAccount
+					let managedObject = fetchResults[0] as! EmailAccount
 					
 					for (key, value) in self.entries {
 						switch key {
@@ -720,11 +723,11 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							}
 
 						case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
-						case "IMAP Port:": 			managedObject.setValue(value.toInt(), forKey: "imapPort")
+						case "IMAP Port:": 			managedObject.setValue(Int(value), forKey: "imapPort")
 						case "IMAP Auth:":			managedObject.setValue(value, forKey: "authTypeImap")
 						case "IMAP ConType:":		managedObject.setValue(value, forKey: "connectionTypeImap")
 						case "SMTP Hostname:": 		managedObject.setValue(value, forKey: "smtpHostname")
-						case "SMTP Port:": 			managedObject.setValue(value.toInt(), forKey: "smtpPort")
+						case "SMTP Port:": 			managedObject.setValue(Int(value), forKey: "smtpPort")
 						case "SMTP Auth:": 			managedObject.setValue(value, forKey: "authTypeSmtp")
 						case "SMTP ConType:":		managedObject.setValue(value, forKey: "connectionTypeSmtp")
 						default: break
@@ -745,7 +748,10 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				}
 			}
 		}
-		context.save(nil)
+		do {
+			try context.save()
+		} catch _ {
+		}
 	}
 	
 	
@@ -819,9 +825,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 
 	func getImapOperation() -> MCOIMAPOperation {
 		
-		var session = MCOIMAPSession()
+		let session = MCOIMAPSession()
 		session.hostname = self.entries["IMAP Hostname:"]
-		session.port = uint(self.entries["IMAP Port:"]!.toInt()!)
+		session.port = uint(Int(self.entries["IMAP Port:"]!)!)
 		session.username = self.entries["Username:"]
 		session.password = self.entries["Password:"]
 		var con = StringToConnectionType(self.entries["IMAP ConType:"]!)
@@ -835,14 +841,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	func getSmtpOperation() -> MCOSMTPOperation {
-		var session = MCOSMTPSession()
+		let session = MCOSMTPSession()
 		session.hostname = self.entries["SMTP Hostname:"]
-		session.port = uint(self.entries["SMTP Port:"]!.toInt()!)
+		session.port = uint(Int(self.entries["SMTP Port:"]!)!)
 		session.username = self.entries["Username:"]
 		session.password = self.entries["Password:"]
 		session.connectionType = StringToConnectionType(self.entries["SMTP ConType:"]!)
 		session.authType = StringToAuthType(self.entries["SMTP Auth:"]!)
-		var address: MCOAddress = MCOAddress(mailbox: self.entries["Mailaddress:"])
+		let address: MCOAddress = MCOAddress(mailbox: self.entries["Mailaddress:"])
 		let op = session.checkAccountOperationWithFrom(address)
 		return op
 	}
@@ -851,9 +857,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func textFieldDidBeginEditing(textField: UITextField) {
 		self.selectedTextfield = textField
-		var cellView = textField.superview
-		var cell = cellView?.superview as! PreferenceAccountTableViewCell
-		var indexPath = self.tableView.indexPathForCell(cell)
+		let cellView = textField.superview
+		let cell = cellView?.superview as! PreferenceAccountTableViewCell
+		let indexPath = self.tableView.indexPathForCell(cell)
 		self.selectedIndexPath = indexPath
 	}
 	
@@ -867,7 +873,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 		// check if port entries are numbers
 		if textField.placeholder! == "IMAP Port:" || textField.placeholder! == "SMTP Port:" {
-			if textField.text.toInt() == nil {
+			if Int(textField.text) == nil {
 				textField.text = ""
 			}
 		}
@@ -885,14 +891,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	// end editing when tapping somewhere in the view
-	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
 		self.view.endEditing(true)
 	}
 	
 	// add keyboard size to tableView size
 	func keyboardWillShow(notification: NSNotification) {
 		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-			var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
+			let contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
 			
 			if self.origintableViewInsets == nil {
 				self.origintableViewInsets = self.tableView.contentInset

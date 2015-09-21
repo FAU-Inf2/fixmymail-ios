@@ -49,7 +49,7 @@ func getSession(account: EmailAccount) -> MCOIMAPSession {
 }
 
 func addFlagToEmail(mail: Email, flag: MCOMessageFlag){
-    if (mail.mcomessage as! MCOIMAPMessage).flags & flag != flag {
+    if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(flag) != flag {
         //add local
         var newmcomessage = (mail.mcomessage as! MCOIMAPMessage)
         newmcomessage.flags |= flag
@@ -73,7 +73,7 @@ func addFlagToEmail(mail: Email, flag: MCOMessageFlag){
 }
 
 func removeFlagFromEmail(mail: Email, flag: MCOMessageFlag){
-    if (mail.mcomessage as! MCOIMAPMessage).flags & flag == flag {
+    if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(flag) == flag {
         //remove local
         var newmcomessage = (mail.mcomessage as! MCOIMAPMessage)
         newmcomessage.flags &= ~flag
@@ -102,11 +102,11 @@ func moveEmailToFolder(mail: Email!, destFolder: String!) {
     
     copyMessageOp.start {(error, uidMapping) -> Void in
         if let error = error {
-            NSLog("error in moveEmailToFolder in copyMessageOp: \(error.userInfo!)")
+            NSLog("error in moveEmailToFolder in copyMessageOp: \(error.userInfo)")
         } else {
             NSLog("email deleted or moved")
             //set deleteFlag
-            addFlagToEmail(mail, MCOMessageFlag.Deleted)
+            addFlagToEmail(mail, flag: MCOMessageFlag.Deleted)
             
             var notificationData: Dictionary<String,NSMutableArray>
             notificationData = ["Emails": NSMutableArray(array: [mail])]
@@ -145,7 +145,7 @@ func getFolderPathWithMCOIMAPFolderFlag (account: EmailAccount, folderFlag: MCOI
     default:
         for folder in account.folders {
             let curFolder: MCOIMAPFolder = (folder as! ImapFolder).mcoimapfolder
-            if curFolder.flags & folderFlag == folderFlag {
+            if curFolder.flags.intersect(folderFlag) == folderFlag {
                 return curFolder.path
             }
         }
@@ -187,7 +187,7 @@ func getMinUID(account: EmailAccount, folderToQuery: String) -> UInt32 {
 func fetchEmails(account: EmailAccount, folderToQuery: String, uidRange: MCOIndexSet) {
     let session = getSession(account)
     
-    let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure)
+    let requestKind:MCOIMAPMessagesRequestKind = ([MCOIMAPMessagesRequestKind.Uid, MCOIMAPMessagesRequestKind.Flags, MCOIMAPMessagesRequestKind.Headers, MCOIMAPMessagesRequestKind.Structure])
     
     let fetchEmailsOp = session.fetchMessagesOperationWithFolder(folderToQuery, requestKind: requestKind, uids: uidRange)
     fetchEmailsOp.start({ (error, messages, range) -> Void in
@@ -197,7 +197,7 @@ func fetchEmails(account: EmailAccount, folderToQuery: String, uidRange: MCOInde
             //Load new Emails
             for message in messages {
                 //Workaround for YahooAcc
-                if (message as! MCOIMAPMessage).uid == getMaxUID(account, folderToQuery) {
+                if (message as! MCOIMAPMessage).uid == getMaxUID(account, folderToQuery: folderToQuery) {
                     continue
                 }
                 
@@ -209,7 +209,7 @@ func fetchEmails(account: EmailAccount, folderToQuery: String, uidRange: MCOInde
                     }
                 }
                 
-                saveRemoteMessageToCoreData(account, folderToQuery, message as! MCOIMAPMessage, (messages.last! as! MCOIMAPMessage).uid == (message as! MCOIMAPMessage).uid)
+                saveRemoteMessageToCoreData(account, folderToQuery: folderToQuery, message: message as! MCOIMAPMessage, sendNotificationAnyway: (messages.last! as! MCOIMAPMessage).uid == (message as! MCOIMAPMessage).uid)
             }
         }
     })
@@ -218,9 +218,9 @@ func fetchEmails(account: EmailAccount, folderToQuery: String, uidRange: MCOInde
 //Update local Emails
 func updateLocalEmail(account: EmailAccount, folderToQuery: String) {
     let session = getSession(account)
-    let currentMaxUID = getMaxUID(account, folderToQuery)
+    let currentMaxUID = getMaxUID(account, folderToQuery: folderToQuery)
     
-    let requestKind:MCOIMAPMessagesRequestKind = (MCOIMAPMessagesRequestKind.Uid | MCOIMAPMessagesRequestKind.Flags | MCOIMAPMessagesRequestKind.Headers | MCOIMAPMessagesRequestKind.Structure)
+    let requestKind:MCOIMAPMessagesRequestKind = ([MCOIMAPMessagesRequestKind.Uid, MCOIMAPMessagesRequestKind.Flags, MCOIMAPMessagesRequestKind.Headers, MCOIMAPMessagesRequestKind.Structure])
     
     var localEmails: NSMutableArray = NSMutableArray(array: account.emails.allObjects)
     for localEmail in localEmails {
@@ -315,8 +315,8 @@ func updateLocalEmail(account: EmailAccount, folderToQuery: String) {
 
 //MARK: - CoreData
 func saveRemoteMessageToCoreData(account: EmailAccount, folderToQuery: String, message: MCOIMAPMessage, sendNotificationAnyway: Bool) {
-    var session = getSession(account)
-    var newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: managedObjectContext!) as! Email
+    let session = getSession(account)
+    let newEmail: Email = NSEntityDescription.insertNewObjectForEntityForName("Email", inManagedObjectContext: managedObjectContext!) as! Email
     newEmail.mcomessage = message
     
     //Fetch data
@@ -368,7 +368,11 @@ func saveRemoteMessageToCoreData(account: EmailAccount, folderToQuery: String, m
 
 func saveCoreDataChanges(){
     var error: NSError?
-    managedObjectContext!.save(&error)
+    do {
+        try managedObjectContext!.save()
+    } catch let error1 as NSError {
+        error = error1
+    }
     if error != nil {
         NSLog("%@", error!.description)
     }

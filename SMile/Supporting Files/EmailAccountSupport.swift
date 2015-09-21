@@ -62,22 +62,22 @@ func StringToConnectionType(connectionType: String) -> MCOConnectionType {
 /**
 Date until mails should be downloaded
 
-:param: duration:	the textual expression from EmailAccount.downloadMailDuration
+- parameter duration::	the textual expression from EmailAccount.downloadMailDuration
 
-:returns: The Date or nil for no selection.
+- returns: The Date or nil for no selection.
 */
 func getDateFromPreferencesDurationString(duration: String) -> NSDate? {
-	var calendar = NSCalendar.currentCalendar()
+	let calendar = NSCalendar.currentCalendar()
 	var date: NSDate?
 	switch duration {
 	case "One week":
-		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: -7, toDate: NSDate(), options: nil)
+		date = calendar.dateByAddingUnit(NSCalendarUnit.Day, value: -7, toDate: NSDate(), options: [])
 	case "One month":
-		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitMonth, value: -1, toDate: NSDate(), options: nil)
+		date = calendar.dateByAddingUnit(NSCalendarUnit.Month, value: -1, toDate: NSDate(), options: [])
 	case "Six months":
-		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitMonth, value: -6, toDate: NSDate(), options: nil)
+		date = calendar.dateByAddingUnit(NSCalendarUnit.Month, value: -6, toDate: NSDate(), options: [])
 	case "One year":
-		date = calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitYear, value: -1, toDate: NSDate(), options: nil)
+		date = calendar.dateByAddingUnit(NSCalendarUnit.Year, value: -1, toDate: NSDate(), options: [])
 	//"Ever"
 	default: date = nil
 	}
@@ -87,9 +87,9 @@ func getDateFromPreferencesDurationString(duration: String) -> NSDate? {
 /**
 Mail provider specific session settings
 
-:param: emailAddress:	The mail address
+- parameter emailAddress::	The mail address
 
-:returns: SessionPreferenceObject with the session settings for the provider, default settings if provider not known or nil if not a mail address.
+- returns: SessionPreferenceObject with the session settings for the provider, default settings if provider not known or nil if not a mail address.
 */
 func getSessionPreferences(emailAddress: String) -> SessionPreferenceObject? {
 	var sessionPreferences: SessionPreferenceObject?
@@ -127,7 +127,7 @@ func getSessionPreferences(emailAddress: String) -> SessionPreferenceObject? {
 		
 	default:
 		if let s = emailAddress.rangeOfString("@") {
-			var serverAddress = emailAddress.substringFromIndex(emailAddress.rangeOfString("@")!.endIndex)
+			let serverAddress = emailAddress.substringFromIndex(emailAddress.rangeOfString("@")!.endIndex)
 			sessionPreferences = SessionPreferenceObject(imapHostname: "imap." + serverAddress, imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp." + serverAddress, smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
 		}
 		

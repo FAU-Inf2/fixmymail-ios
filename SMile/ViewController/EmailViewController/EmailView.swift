@@ -78,7 +78,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     }
 
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         self.email = aDecoder.decodeObjectForKey("Email") as! Email
         self.message = aDecoder.decodeObjectForKey("MCOIMAPMessage") as! MCOIMAPMessage
         super.init(coder: aDecoder)
@@ -88,8 +88,8 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     private func createAndFillAttachmentVC() -> Void {
         self.attachmentVC = AttachmentsViewController(nibName: "AttachmentsViewController", bundle: nil)
         self.attachmentVC.isViewAttachment = true
-        var parser = MCOMessageParser(data: self.email.data)
-        var attachments: [MCOAttachment] = parser.attachments() as! [MCOAttachment]
+        let parser = MCOMessageParser(data: self.email.data)
+        let attachments: [MCOAttachment] = parser.attachments() as! [MCOAttachment]
         for attachment in attachments {
             self.attachmentVC.attachFile(attachment.filename, data: attachment.data, mimetype: attachment.mimeType)
         }
@@ -137,7 +137,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         
         for view in self.webView.scrollView.subviews {
             if view is UIView {
-                var subview = view as! UIView
+                let subview = view 
                 if subview.isEqual(self.embededHeaderView) {
                     continue
                 }
@@ -173,7 +173,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     
     //MARK: - Key-Value-Observing
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         var newFrame: CGRect = self.calculationView.frame
         newFrame.origin.y = -CGRectGetMinY(self.webView.convertRect(self.embededHeaderView.frame, toView: self.webView.scrollView))
         self.calculationView.frame = newFrame
@@ -210,7 +210,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            var senderInfoCell: SenderInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("senderInfoCell", forIndexPath: indexPath) as! SenderInfoTableViewCell
+            let senderInfoCell: SenderInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("senderInfoCell", forIndexPath: indexPath) as! SenderInfoTableViewCell
             
             senderInfoCell.fromLabel.text = self.messageHeaderInfo["from"]
             
@@ -233,7 +233,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             senderInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return senderInfoCell
         } else if indexPath.row == 1 {
-            var subjectInfoCell: SubjectInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("subjectInfoCell", forIndexPath: indexPath) as! SubjectInfoTableViewCell
+            let subjectInfoCell: SubjectInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("subjectInfoCell", forIndexPath: indexPath) as! SubjectInfoTableViewCell
             
             let subjectLabelString = self.messageHeaderInfo["subject"] != nil ? self.messageHeaderInfo["subject"]! : ""
             subjectInfoCell.subjectLabel.text = subjectLabelString
@@ -246,7 +246,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         } else {
             let attachmentCell: AttachmentViewCell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
             attachmentCell.imageViewPreview.image = UIImage(named: "attachment_icon@2x.png")!
-            attachmentCell.imageViewPreview.image = UIImage(CGImage: attachmentCell.imageViewPreview.image!.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
+            attachmentCell.imageViewPreview.image = UIImage(CGImage: attachmentCell.imageViewPreview.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Up)
             attachmentCell.labelFilesAttached.text = "\t \(self.message.attachments().count) files attached"
             attachmentCell.labelFilesAttached.textColor = UIColor.grayColor()
             
@@ -269,10 +269,10 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     
     private func getHeaderInformationFromMCOAbstractMessage(message: MCOAbstractMessage) -> [String: String] {
         var returnDict = [String: String]()
-        var header : MCOMessageHeader = message.header
+        let header : MCOMessageHeader = message.header
         
         if header.from != nil {
-            var fromString: String? = (header.from.displayName != nil) ? header.from.displayName : header.from.mailbox
+            let fromString: String? = (header.from.displayName != nil) ? header.from.displayName : header.from.mailbox
             if fromString != nil {
                 returnDict["from"] = "From: \(fromString!)"
             } else {
@@ -282,24 +282,24 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             returnDict["from"] = "From: -"
         }
         
-        var toString: String? = self.addressStringFromArray(header.to)
+        let toString: String? = self.addressStringFromArray(header.to)
         if let to = toString {
             returnDict["to"] = "To: \(to)"
         } else {
             returnDict["to"] = "To: -"
         }
         
-        var ccString: String? = self.addressStringFromArray(header.cc)
+        let ccString: String? = self.addressStringFromArray(header.cc)
         if let cc = ccString {
             returnDict["cc"] = "CC: \(cc)"
         } else {
             returnDict["cc"] = ccString
         }
         
-        var subjectString: String? = header.subject != "" ? header.subject : nil
+        let subjectString: String? = header.subject != "" ? header.subject : nil
         returnDict["subject"] = subjectString
         
-        var dateString = NSDateFormatter.localizedStringFromDate(header.date, dateStyle: .MediumStyle, timeStyle: .MediumStyle)
+        let dateString = NSDateFormatter.localizedStringFromDate(header.date, dateStyle: .MediumStyle, timeStyle: .MediumStyle)
         returnDict["date"] = dateString
         
         return returnDict
@@ -321,7 +321,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             return nil
         }
         
-        var addArray = NSMutableArray()
+        let addArray = NSMutableArray()
         for element in array! {
             if element is MCOAddress {
                 let address = element as! MCOAddress
@@ -340,12 +340,12 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         let htmlContent = EmailCache.sharedInstance.getHTMLStringWithUniqueEmailID("\(self.message.uid)")
         if htmlContent != nil {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.webView.loadHTMLString(htmlContent, baseURL: nil)
+                self.webView.loadHTMLString(htmlContent!, baseURL: nil)
                 self.loadingSpinner.hidden = true
                 self.loadingSpinner.stopAnimating()
             })
         } else {
-            var messageParser: MCOMessageParser = MCOMessageParser(data: self.email.data)
+            let messageParser: MCOMessageParser = MCOMessageParser(data: self.email.data)
             var htmlContent: String? = messageParser.htmlRenderingWithDelegate(self.htmlRenderBridge) as String?
             
             if htmlContent == nil {
@@ -389,9 +389,9 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             return EmailCache.sharedInstance.getIMAPPartDataWithUniquePartID("\(self.message.uid).\(partId)")!
         }
         
-        var fetchContentOperation: MCOIMAPFetchContentOperation = getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(folder, number: self.message.uid, partID: imapPart.partID, encoding: imapPart.encoding)
+        let fetchContentOperation: MCOIMAPFetchContentOperation = getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(folder, number: self.message.uid, partID: imapPart.partID, encoding: imapPart.encoding)
         fetchContentOperation.progress = { (current, maximum) -> Void in
-            println("progress content: \(current)/\(maximum)")
+            print("progress content: \(current)/\(maximum)")
         }
         
         self.loadingSpinner.startAnimating()
@@ -400,7 +400,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             fetchContentOperation.start({ (error, data) -> Void in
                 if error != nil {
-                    println(error)
+                    print(error)
                 } else {
                     EmailCache.sharedInstance.imapPartCache["\(self.message.uid).\(imapPart.partID)"] = data
                     returnData = data
@@ -421,13 +421,13 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             dispatch_apply(self.message.attachments().count, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { (i) -> Void in
                 let part: MCOIMAPPart = self.message.attachments()[i] as! MCOIMAPPart
-                var partFetchOp: MCOIMAPFetchContentOperation = getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(self.email.folder, number: self.message.uid, partID: part.partID, encoding: part.encoding)
+                let partFetchOp: MCOIMAPFetchContentOperation = getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(self.email.folder, number: self.message.uid, partID: part.partID, encoding: part.encoding)
                 partFetchOp.start({ (error, data) -> Void in
                     if i == (self.message.attachments().count - 1) {
                         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     }
                     if error != nil {
-                        println(error)
+                        print(error)
                     } else {
                         EmailCache.sharedInstance.imapPartCache["\(self.message.uid).\(part.partID)"] = data
                     }
@@ -481,7 +481,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
 extension String {
     
     func heightForWith(width: CGFloat, usingFont font : UIFont) -> CGFloat {
-        var context: NSStringDrawingContext = NSStringDrawingContext()
+        let context: NSStringDrawingContext = NSStringDrawingContext()
         let labelSize = CGSizeMake(width, CGFloat(FLT_MAX))
         let rect: CGRect = self.boundingRectWithSize(labelSize, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: context)
         return rect.size.height

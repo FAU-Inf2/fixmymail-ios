@@ -37,7 +37,7 @@ class KeyChainListTableViewController: UITableViewController {
 		// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 		//self.navigationItem.rightBarButtonItem = self.editButtonItem()
 		
-		var menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+		let menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
 		self.navigationItem.title = "KeyChain"
 		self.navigationItem.leftBarButtonItem = menuItem
 		self.navigationItem.rightBarButtonItem = self.editButtonItem()
@@ -54,13 +54,19 @@ class KeyChainListTableViewController: UITableViewController {
         super.viewDidAppear(animated)
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
-                var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+                let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
                 var sendAccount: EmailAccount? = nil
                 
-                var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+                let accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
                 let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
                 var error: NSError?
-                var result = managedObjectContext!.executeFetchRequest(fetchRequest, error: &error)
+                var result: [AnyObject]?
+				do {
+					result = try managedObjectContext!.executeFetchRequest(fetchRequest)
+				} catch let error1 as NSError {
+					error = error1
+					result = nil
+				}
                 if error != nil {
                     NSLog("%@", error!.description)
                     return
@@ -118,7 +124,7 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Configure the cell...
 		
-		var keyItem = self.keyList[indexPath.row]
+		let keyItem = self.keyList[indexPath.row]
 		
 		// Fill data to labels
 		cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
@@ -191,7 +197,7 @@ class KeyChainListTableViewController: UITableViewController {
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		let cell = tableView.dequeueReusableCellWithIdentifier("ListPrototypCell", forIndexPath: indexPath) as! KeyItemTableViewCell
-		var keyItem = self.keyList[indexPath.row]
+		let keyItem = self.keyList[indexPath.row]
 		self.keyDetailVC = KeyDetailTableViewController(nibName: "KeyDetailTableViewController", bundle: nil)
 		self.keyDetailVC?.keyItem = keyItem
 		self.navigationController?.pushViewController(self.keyDetailVC!, animated: true)
@@ -205,9 +211,9 @@ class KeyChainListTableViewController: UITableViewController {
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 		if let appDelegate = appDel {
 			self.managedObjectContext = appDelegate.managedObjectContext!
-			var keyFetchRequest = NSFetchRequest(entityName: "Key")
-			var error: NSError?
-			var fetchedKeysFromCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
+			let keyFetchRequest = NSFetchRequest(entityName: "Key")
+			let error: NSError?
+			let fetchedKeysFromCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest) as? [Key]
 			if error != nil {
 				NSLog("Key fetchRequest: \(error?.localizedDescription)")
 			} else {

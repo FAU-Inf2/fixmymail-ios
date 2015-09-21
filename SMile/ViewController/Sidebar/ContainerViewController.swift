@@ -42,7 +42,7 @@ class ContainerViewController: UIViewController {
         self.contentVC.view.frame = UIApplication.sharedApplication().delegate!.window!!.frame
         self.subNavController = UINavigationController(rootViewController: contentVC)
         //(self.contentVC as! MailTableViewController).rootView = self
-        var window: UIWindow = UIApplication.sharedApplication().windows[0] as! UIWindow
+        let window: UIWindow = UIApplication.sharedApplication().windows[0] 
         window.addSubview(self.subNavController.view)
         window.makeKeyAndVisible()
         self.view.addSubview(self.subNavController.view)
@@ -72,7 +72,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
     
     func addLeftPanelViewController() {
         if (self.sideBarVC == nil) {
-            var sidebarVC : SidebarTableViewController = SidebarTableViewController(nibName: "SidebarTableViewController", bundle: NSBundle.mainBundle())
+            let sidebarVC : SidebarTableViewController = SidebarTableViewController(nibName: "SidebarTableViewController", bundle: NSBundle.mainBundle())
             self.sideBarVC = sidebarVC
             self.sideBarVC?.currAccountName = self.lastSelectedMailAccountName
             self.sideBarVC?.delegate = self
@@ -88,7 +88,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
         sidePanelController.didMoveToParentViewController(self)
     }
     
-    func animateLeftPanel(#shouldExpand: Bool) {
+    func animateLeftPanel(shouldExpand shouldExpand: Bool) {
         if(shouldExpand) {
             for view in self.subNavController!.view!.subviews {
                 if let v: UIView = view as? UIView {
@@ -119,7 +119,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
         }
     }
     
-    func animateContentPanelXPosition(#targetPosition: CGFloat, completion: ((Bool) -> Void)! = nil) {
+    func animateContentPanelXPosition(targetPosition targetPosition: CGFloat, completion: ((Bool) -> Void)! = nil) {
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.subNavController.view.frame.origin.x = targetPosition
             //self.contentVC.view.frame.origin.x = targetPosition
@@ -139,7 +139,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
 
 extension ContainerViewController: SideBarProtocol {
     func cellSelected(actionItem: ActionItem) {
-        var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
+        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
         
         NSLog("\(self.contentVC.parentViewController)")
         self.toggleLeftPanel()
@@ -155,7 +155,13 @@ extension ContainerViewController: SideBarProtocol {
             var allAccounts: [EmailAccount] = [EmailAccount]()
             let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
             var error: NSError?
-            var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+            var result: [AnyObject]?
+            do {
+                result = try managedObjectContext.executeFetchRequest(fetchRequest)
+            } catch let error1 as NSError {
+                error = error1
+                result = nil
+            }
             if error != nil {
                 NSLog("%@", error!.description)
             } else {
@@ -166,7 +172,11 @@ extension ContainerViewController: SideBarProtocol {
                     }
                 }
             }
-            managedObjectContext.save(&error)
+            do {
+                try managedObjectContext.save()
+            } catch let error1 as NSError {
+                error = error1
+            }
             if error != nil {
                 NSLog("%@", error!.description)
             }
@@ -187,7 +197,13 @@ extension ContainerViewController: SideBarProtocol {
             
             let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
             var error: NSError?
-            var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+            var result: [AnyObject]?
+            do {
+                result = try managedObjectContext.executeFetchRequest(fetchRequest)
+            } catch let error1 as NSError {
+                error = error1
+                result = nil
+            }
             if error != nil {
                 NSLog("%@", error!.description)
             } else {
@@ -204,9 +220,13 @@ extension ContainerViewController: SideBarProtocol {
                     }
                 }
             }
-            managedObjectContext.save(&error)
+            do {
+                try managedObjectContext.save()
+            } catch let error1 as NSError {
+                error = error1
+            }
             if error != nil {
-                println("%@", error!.description)
+                print("%@", error!.description)
             }
         case "KeyChain":
             if contentVC is KeyChainListTableViewController == false {
@@ -235,7 +255,7 @@ extension ContainerViewController: SideBarProtocol {
     func navigationStackContainsTargetViewController(viewController: UIViewController) -> Bool {
         let vcs = self.subNavController.viewControllers
         for var i = 0; i < vcs.count; i++ {
-            let vc = vcs[i] as! UIViewController
+            let vc = vcs[i] 
             if vc is MailTableViewController && viewController is MailTableViewController ||
                 vc is PreferenceTableViewController && viewController is PreferenceTableViewController ||
                 vc is KeyChainListTableViewController && viewController is KeyChainListTableViewController {

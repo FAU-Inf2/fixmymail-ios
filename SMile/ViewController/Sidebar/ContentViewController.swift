@@ -21,16 +21,16 @@ class ContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var navigationBar: UINavigationBar = UINavigationBar(frame: CGRectMake(0, 0, self.view.frame.width, 55))
+        let navigationBar: UINavigationBar = UINavigationBar(frame: CGRectMake(0, 0, self.view.frame.width, 55))
         navigationBar.barTintColor = UIColor.lightTextColor()
         
         
         self.view.addSubview(navigationBar)
         
-        var menuItem: UIBarButtonItem = UIBarButtonItem(title: "Menu", style: .Plain, target: self, action: "menuTapped:")
-        var flexSpaceItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        let menuItem: UIBarButtonItem = UIBarButtonItem(title: "Menu", style: .Plain, target: self, action: "menuTapped:")
+        let flexSpaceItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         
-        var navItem: UINavigationItem = UINavigationItem(title: "")
+        let navItem: UINavigationItem = UINavigationItem(title: "")
         navItem.leftBarButtonItems = [flexSpaceItem, menuItem, flexSpaceItem]
         
         navigationBar.pushNavigationItem(navItem, animated: true)

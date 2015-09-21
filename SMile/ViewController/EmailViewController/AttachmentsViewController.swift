@@ -34,11 +34,11 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         self.attachmentsTableView.registerNib(UINib(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "AttachmentCell")
         
         if self.isSendAttachment {
-            var buttonImagePicker: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "pushImagePickerViewWithSender:")
+            let buttonImagePicker: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "pushImagePickerViewWithSender:")
             self.navigationItem.rightBarButtonItem = buttonImagePicker
         }
         if self.isViewAttachment {
-            var buttonBack: UIBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: self, action: "backToRootView:")
+            let buttonBack: UIBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: self, action: "backToRootView:")
             self.navigationItem.leftBarButtonItem = buttonBack
         }
     }
@@ -70,12 +70,12 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentCell", forIndexPath: indexPath) as! AttachmentCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("AttachmentCell", forIndexPath: indexPath) as! AttachmentCell
         cell.imageViewPreview.image = self.images[indexPath.row]
         cell.labelFilename.text = self.keys[indexPath.row]
-        var fileSize = Double((self.attachments.valueForKey(self.keys[indexPath.row]) as! NSData).length)
+        let fileSize = Double((self.attachments.valueForKey(self.keys[indexPath.row]) as! NSData).length)
         if (fileSize / 1024) > 1 {
-            var size = fileSize / 1024
+            let size = fileSize / 1024
             if (size / 1024) > 1 {
                 cell.labelFileSize.text = "\(Int(size / 1024)) MB"
             } else {
@@ -113,7 +113,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
                 self.documentInteractionController = UIDocumentInteractionController(URL: self.currentShareURL!)
                 self.documentInteractionController.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
             } else {
-                println("Could not write file!")
+                print("Could not write file!")
             }
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
@@ -148,7 +148,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     }
     
     // MARK: - UIImagePickerControllerdelegate
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
         let dictionary = NSDictionary(dictionary: info)
         
@@ -178,15 +178,18 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     
     // MARK: - Supportive Methods
     func pushImagePickerViewWithSender(sender: AnyObject) {
-        var attachmentActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Take Photo or Video", "Choose existing")
+        let attachmentActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Take Photo or Video", "Choose existing")
         attachmentActionSheet.tag = 2
         attachmentActionSheet.showInView(self.view)
     }
     
     func backToRootView(sender: AnyObject) {
-        var manager = NSFileManager()
+        let manager = NSFileManager()
         for url in self.createdFiles {
-            manager.removeItemAtURL(url, error: nil)
+            do {
+                try manager.removeItemAtURL(url)
+            } catch _ {
+            }
         }
         self.navigationController?.popViewControllerAnimated(true)
     }
@@ -201,7 +204,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         self.keys.append(filename)
         var image = UIImage()
         if mimetype.lowercaseString.rangeOfString("png") != nil || mimetype.lowercaseString.rangeOfString("jpg") != nil || mimetype.lowercaseString.rangeOfString("jpeg") != nil {
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            print(NSString(data: data, encoding: NSUTF8StringEncoding))
             image = UIImage(data: data)!
         } else {
             image = UIImage(named: "attachedFile.png")!

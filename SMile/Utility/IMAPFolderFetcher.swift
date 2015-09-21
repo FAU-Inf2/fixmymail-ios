@@ -20,9 +20,9 @@ class IMAPFolderFetcher: NSObject {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             var fetchReq: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
             var error: NSError?
-            var accounts: [EmailAccount] = self.managedContext.executeFetchRequest(fetchReq, error: &error) as! [EmailAccount]
+            var accounts: [EmailAccount] = (try! self.managedContext.executeFetchRequest(fetchReq)) as! [EmailAccount]
             if error != nil {
-                println(error!.userInfo)
+                print(error!.userInfo)
                 completion(account: nil, folders: nil, sucess: false, newFolders: false)
                 return
             } else {
@@ -47,7 +47,7 @@ class IMAPFolderFetcher: NSObject {
                     let folderFetch = session.fetchAllFoldersOperation()
                     folderFetch.start({ (error, folders) -> Void in
                         if error != nil {
-                            println(error!.userInfo)
+                            print(error!.userInfo)
                             completion(account: nil, folders: nil, sucess: false, newFolders: false)
                             return
                         } else {
@@ -56,9 +56,9 @@ class IMAPFolderFetcher: NSObject {
                             var request: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
                             request.predicate = NSPredicate(format: "toEmailAccount == %@", acc)
                             var e: NSError?
-                            var results = self.managedContext.executeFetchRequest(request, error: &e) as! [ImapFolder]?
+                            var results = self.managedContext.executeFetchRequest(request) as! [ImapFolder]?
                             if error != nil {
-                                println(e!.userInfo)
+                                print(e!.userInfo)
                                 completion(account: acc, folders: nil, sucess: false, newFolders: newFolders)
                             }
                             let foldercount: Int!
@@ -84,11 +84,11 @@ class IMAPFolderFetcher: NSObject {
                                         folderEntity.mcoimapfolder = folWrapper
                                         folderEntity.toEmailAccount = acc
                                         self.foldercount = self.foldercount + 1;
-                                        println(folWrapper.description)
+                                        print(folWrapper.description)
                                         newFolders = true
                                     }
                                     if error != nil {
-                                        println(error!.userInfo)
+                                        print(error!.userInfo)
                                     }
                                 }
                             } else {
@@ -106,18 +106,24 @@ class IMAPFolderFetcher: NSObject {
                                         var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
                                         folderEntity.mcoimapfolder = folWrapper
                                         folderEntity.toEmailAccount = acc
-                                        println(folWrapper.description)
+                                        print(folWrapper.description)
                                         newFolders = true
                                     }
                                 }
                             }
                             var err: NSError?
-                            self.managedContext.save(&err)
+                            do {
+                                try self.managedContext.save()
+                            } catch var error as NSError {
+                                err = error
+                            } catch {
+                                fatalError()
+                            }
                             if error != nil {
-                                println(err!.userInfo)
+                                print(err!.userInfo)
                             }
                             
-                            println(self.foldercount)
+                            print(self.foldercount)
                             completion(account: acc, folders: folders as! [MCOIMAPFolder]?, sucess: true, newFolders: newFolders)
                         }
                     })
@@ -147,16 +153,16 @@ class IMAPFolderFetcher: NSObject {
             let folderFetch = session.fetchAllFoldersOperation()
             folderFetch.start({ (error, folders) -> Void in
                 if error != nil {
-                    println(error!.userInfo)
+                    print(error!.userInfo)
                     completion(folders: nil, sucess: false)
                     return
                 } else {
                     var request: NSFetchRequest = NSFetchRequest(entityName: "ImapFolder")
                     request.predicate = NSPredicate(format: "toEmailAccount == %@", account)
                     var e: NSError?
-                    var results = self.managedContext.executeFetchRequest(request, error: &e) as! [ImapFolder]?
+                    var results = self.managedContext.executeFetchRequest(request) as! [ImapFolder]?
                     if error != nil {
-                        println(e!.userInfo)
+                        print(e!.userInfo)
                         completion(folders: nil, sucess: false)
                     }
                     let foldercount: Int!
@@ -182,7 +188,7 @@ class IMAPFolderFetcher: NSObject {
                                 var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
                                 folderEntity.mcoimapfolder = folWrapper
                                 folderEntity.toEmailAccount = account
-                                println(folWrapper.description)
+                                print(folWrapper.description)
                             }
                         }
                     } else {
@@ -200,16 +206,22 @@ class IMAPFolderFetcher: NSObject {
                                 var folderEntity = NSEntityDescription.insertNewObjectForEntityForName("ImapFolder", inManagedObjectContext: self.managedContext) as! ImapFolder
                                 folderEntity.mcoimapfolder = folWrapper
                                 folderEntity.toEmailAccount = account
-                                println(folWrapper.description)
+                                print(folWrapper.description)
                             }
                         }
                     }
                     
                     
                     var err: NSError?
-                    self.managedContext.save(&err)
+                    do {
+                        try self.managedContext.save()
+                    } catch var error as NSError {
+                        err = error
+                    } catch {
+                        fatalError()
+                    }
                     if error != nil {
-                        println(err!.userInfo)
+                        print(err!.userInfo)
                     }
                     
                     completion(folders: folders as! [MCOIMAPFolder]?, sucess: true)

@@ -16,7 +16,7 @@ class AboutUsViewController: UIViewController {
 
         // Do any additional setup after loading the view.
 		if let html = NSBundle.mainBundle().URLForResource("AboutUs", withExtension: "html") {
-			let attributedString = NSAttributedString(fileURL: html, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil, error: nil)
+			let attributedString = try? NSAttributedString(fileURL: html, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
 			self.textView.attributedText = attributedString
 		}
     }

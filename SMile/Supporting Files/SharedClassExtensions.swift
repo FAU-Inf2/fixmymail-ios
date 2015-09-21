@@ -26,7 +26,7 @@ extension NSDate: Comparable
 	{
 		//Get Year
 		let calendar = NSCalendar.currentCalendar()
-		let components = calendar.components(.CalendarUnitYear, fromDate: self)
+		let components = calendar.components(.Year, fromDate: self)
 		let year = components.year
 		
 		//Return Year
@@ -38,7 +38,7 @@ extension NSDate: Comparable
 	{
 		//Get Month
 		let calendar = NSCalendar.currentCalendar()
-		let components = calendar.components(.CalendarUnitMonth, fromDate: self)
+		let components = calendar.components(.Month, fromDate: self)
 		let month = components.month
 		
 		//Return Month
@@ -49,7 +49,7 @@ extension NSDate: Comparable
 	{
 		//Get Day
 		let calendar = NSCalendar.currentCalendar()
-		let components = calendar.components(.CalendarUnitDay, fromDate: self)
+		let components = calendar.components(.Day, fromDate: self)
 		let day = components.day
 		
 		//Return Day
@@ -62,7 +62,7 @@ extension NSDate: Comparable
 	{
 		//Get Hour
 		let calendar = NSCalendar.currentCalendar()
-		let components = calendar.components(.CalendarUnitHour, fromDate: self)
+		let components = calendar.components(.Hour, fromDate: self)
 		let hour = components.hour
 		
 		//Return Hour
@@ -74,7 +74,7 @@ extension NSDate: Comparable
 	{
 		//Get Minute
 		let calendar = NSCalendar.currentCalendar()
-		let components = calendar.components(.CalendarUnitMinute, fromDate: self)
+		let components = calendar.components(.Minute, fromDate: self)
 		let minute = components.minute
 		
 		//Return Minute

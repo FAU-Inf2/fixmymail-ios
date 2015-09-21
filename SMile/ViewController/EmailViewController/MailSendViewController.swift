@@ -50,8 +50,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.sendTableView.registerNib(UINib(nibName: "SendViewCellWithLabelAndTextField", bundle: nil), forCellReuseIdentifier: "SendViewCellWithLabelAndTextField")
         self.sendTableView.registerNib(UINib(nibName: "AttachmentViewCell", bundle: nil), forCellReuseIdentifier: "AttachmentViewCell")
         self.sendTableView.scrollEnabled = false
-        for constraint in self.sendTableView.constraints() {
-            let cons = constraint as! NSLayoutConstraint
+        for constraint in self.sendTableView.constraints {
+            let cons = constraint 
             if cons.firstAttribute == NSLayoutAttribute.Height {
                 self.initialTableViewHeight = cons.constant
                 if !tableViewIsExpanded {
@@ -61,25 +61,28 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             }
         }
         
-        var buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmailWithSender:")
+        let buttonSend: UIBarButtonItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendEmailWithSender:")
         self.navigationItem.rightBarButtonItem = buttonSend
-        var buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "performCancelWithSender:")
+        let buttonCancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "performCancelWithSender:")
         self.navigationItem.leftBarButtonItem = buttonCancel
         
         self.addSignature()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
-            if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
-                self.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
-                (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
-                (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
-            }
-        }
-        self.sendTableView.reloadData()
-    }
-    
+	override func viewDidAppear(animated: Bool) {
+		if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
+			if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
+				if let mimetype = (UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension {
+					self.attachFile(fileName, data: data, mimetype: mimetype)
+					(UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
+					(UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
+					(UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension = nil
+				}
+			}
+		}
+		self.sendTableView.reloadData()
+	}
+	
     func initPickerView() {
         self.emailAddressPicker = UIPickerView()
         self.emailAddressPicker.delegate = self
@@ -91,7 +94,13 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.allAccounts.append(self.account)
         let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
         var error: NSError?
-        var result = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!.executeFetchRequest(fetchRequest, error: &error)
+        var result: [AnyObject]?
+        do {
+            result = try (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!.executeFetchRequest(fetchRequest)
+        } catch let error1 as NSError {
+            error = error1
+            result = nil
+        }
         if error != nil {
             NSLog("%@", error!.description)
         } else {
@@ -154,7 +163,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 }
             }
             
-            var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+            var buttonOpenContacts: UIButton = UIButton(type: UIButtonType.ContactAdd)
             buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
             buttonOpenContacts.tag = 0
             buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -175,7 +184,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                     }
                 }
                 
-                var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+                var buttonOpenContacts: UIButton = UIButton(type: UIButtonType.ContactAdd)
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
                 buttonOpenContacts.tag = 1
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -203,7 +212,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                     }
                 }
                 
-                var buttonOpenContacts: UIButton = UIButton.buttonWithType(UIButtonType.ContactAdd) as! UIButton
+                var buttonOpenContacts: UIButton = UIButton(type: UIButtonType.ContactAdd)
                 buttonOpenContacts.frame = CGRectMake(0, 0, 20, 20)
                 buttonOpenContacts.tag = 2
                 buttonOpenContacts.addTarget(self, action: "openPeoplePickerWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -231,7 +240,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
                 
                 cell.imageViewPreview.image = UIImage(named: "attachment_icon@2x.png")!
-                cell.imageViewPreview.image = UIImage(CGImage: cell.imageViewPreview.image!.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
+                cell.imageViewPreview.image = UIImage(CGImage: cell.imageViewPreview.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Up)
                 cell.labelFilesAttached.text = "\t\(self.attachmentView.keys.count) files attached"
                 cell.labelFilesAttached.textColor = UIColor.grayColor()
                 
@@ -253,7 +262,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
             
             cell.imageViewPreview.image = UIImage(named: "attachment_icon@2x.png")!
-            cell.imageViewPreview.image = UIImage(CGImage: cell.imageViewPreview.image!.CGImage, scale: 1, orientation: UIImageOrientation.Up)!
+            cell.imageViewPreview.image = UIImage(CGImage: cell.imageViewPreview.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Up)
             cell.labelFilesAttached.text = "\t\(self.attachmentView.keys.count) files attached"
             cell.labelFilesAttached.textColor = UIColor.grayColor()
             
@@ -272,8 +281,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 0: // Cell for To
             if tableViewIsExpanded && self.shouldContractTableView() {
                 tableViewIsExpanded = false
-                for constraint in tableView.constraints() {
-                    let cons = constraint as! NSLayoutConstraint
+                for constraint in tableView.constraints {
+                    let cons = constraint 
                     if cons.firstAttribute == NSLayoutAttribute.Height {
                         cons.constant = 180
                         break
@@ -285,8 +294,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 1: // Cell for CC
             if !tableViewIsExpanded {
                 tableViewIsExpanded = true
-                for constraint in tableView.constraints() {
-                    let cons = constraint as! NSLayoutConstraint
+                for constraint in tableView.constraints {
+                    let cons = constraint 
                     if cons.firstAttribute == NSLayoutAttribute.Height {
                         cons.constant = self.initialTableViewHeight
                         break
@@ -307,8 +316,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 4: // Cell for Subject
             if self.shouldContractTableView() {
                 tableViewIsExpanded = false
-                for constraint in tableView.constraints() {
-                    let cons = constraint as! NSLayoutConstraint
+                for constraint in tableView.constraints {
+                    let cons = constraint 
                     if cons.firstAttribute == NSLayoutAttribute.Height {
                         cons.constant = 180
                         break
@@ -326,7 +335,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             break
         }
         if let newIndexPath = selectIndexPath {
-            var textField = (tableView.cellForRowAtIndexPath(newIndexPath) as! SendViewCellWithLabelAndTextField).textField
+            let textField = (tableView.cellForRowAtIndexPath(newIndexPath) as! SendViewCellWithLabelAndTextField).textField
             if let responder: AnyObject = self.isResponder {
                 if textField.isEqual(responder) {
                     return
@@ -353,7 +362,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        var oldAccount = self.account
+        let oldAccount = self.account
         self.account = self.allAccounts[row]
         (self.isResponder as! UITextField).text = self.account.emailAddress
         self.textBody = self.replaceSignatureWithText(self.textBody, toDelete: oldAccount.signature, toInsert: self.account.signature)
@@ -365,8 +374,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.isResponder = textView
         if tableViewIsExpanded && self.shouldContractTableView() {
             tableViewIsExpanded = false
-            for constraint in self.sendTableView.constraints() {
-                let cons = constraint as! NSLayoutConstraint
+            for constraint in self.sendTableView.constraints {
+                let cons = constraint 
                 if cons.firstAttribute == NSLayoutAttribute.Height {
                     cons.constant = 180
                     break
@@ -384,14 +393,14 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     func textViewDidChange(textView: UITextView) {
         // Resize the textView if needed
         let newSize = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.max))
-        for constraint in textView.constraints() {
-            let cons = constraint as! NSLayoutConstraint
+        for constraint in textView.constraints {
+            let cons = constraint 
             if cons.firstAttribute == NSLayoutAttribute.Height && newSize.height > cons.constant {
                 cons.constant = newSize.height
-                for scrollConstraint in self.scrollView.constraints() {
-                    let scrollCons = scrollConstraint as! NSLayoutConstraint
+                for scrollConstraint in self.scrollView.constraints {
+                    let scrollCons = scrollConstraint 
                     if scrollCons.firstAttribute == NSLayoutAttribute.Height {
-                        scrollCons.constant = self.sendTableView.frame.height + newSize.height + textView.font.lineHeight
+                        scrollCons.constant = self.sendTableView.frame.height + newSize.height + textView.font!.lineHeight
                         break
                     }
                 }
@@ -419,8 +428,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 0:
             self.recipients.removeAllObjects()
             var recipientsAsString = textField.text
-            recipientsAsString = recipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            for recipient in recipientsAsString.componentsSeparatedByString(", ") {
+            recipientsAsString = recipientsAsString!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            for recipient in recipientsAsString!.componentsSeparatedByString(", ") {
                 if recipient != "" {
                     self.recipients.addObject(MCOAddress(mailbox: recipient))
                 }
@@ -431,8 +440,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 1:
             self.ccRecipients.removeAllObjects()
             var ccRecipientsAsString = textField.text
-            ccRecipientsAsString = ccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            for recipient in ccRecipientsAsString.componentsSeparatedByString(", ") {
+            ccRecipientsAsString = ccRecipientsAsString!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            for recipient in ccRecipientsAsString!.componentsSeparatedByString(", ") {
                 if recipient != "" {
                     self.ccRecipients.addObject(MCOAddress(mailbox: recipient))
                 }
@@ -440,8 +449,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 2:
             self.bccRecipients.removeAllObjects()
             var bccRecipientsAsString = textField.text
-            bccRecipientsAsString = bccRecipientsAsString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            for recipient in bccRecipientsAsString.componentsSeparatedByString(", ") {
+            bccRecipientsAsString = bccRecipientsAsString!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            for recipient in bccRecipientsAsString!.componentsSeparatedByString(", ") {
                 if recipient != "" {
                     self.bccRecipients.addObject(MCOAddress(mailbox: recipient))
                 }
@@ -471,8 +480,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 let imapSession = getSession(self.account)
                 
                 //get draftsFolderName
-                if let folder = getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.Drafts) {
-                    var appendMsgOp = imapSession.appendMessageOperationWithFolder(folder, messageData: self.buildEmail(), flags: MCOMessageFlag.Seen|MCOMessageFlag.Draft)
+                if let folder = getFolderPathWithMCOIMAPFolderFlag(self.account, folderFlag: MCOIMAPFolderFlag.Drafts) {
+                    var appendMsgOp = imapSession.appendMessageOperationWithFolder(folder, messageData: self.buildEmail(), flags: [MCOMessageFlag.Seen, MCOMessageFlag.Draft])
                     appendMsgOp.start({ (error, uid) -> Void in
                         if error != nil {
                             NSLog("%@", error.description)
@@ -493,14 +502,14 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     
     //MARK: - Alert View
     func showAlert(title: String, message: String, viewController: UIViewController) {
-        var alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         
         //Create Actions
-        var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) {
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) {
             UIAlertAction in
             
         }
-        var cancelAction = UIAlertAction(title: "Preferences", style: UIAlertActionStyle.Default) {
+        let cancelAction = UIAlertAction(title: "Preferences", style: UIAlertActionStyle.Default) {
             UIAlertAction in
             //Push Preferences
             viewController.navigationController?.pushViewController(PreferenceAccountListTableViewController(nibName: "PreferenceAccountListTableViewController", bundle: NSBundle.mainBundle()), animated: true)
@@ -540,8 +549,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func updateSubjectAndTitleWithSender(sender: AnyObject) {
-        var subject = (sender as! UITextField).text
-        self.subject = subject
+        let subject = (sender as! UITextField).text
+        self.subject = subject!
         if subject == "" {
             self.title = "New Message"
         } else {
@@ -568,7 +577,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         var text = self.textBody
         text = self.replaceSignatureWithText(text, toDelete: self.account.signature, toInsert: "")
         if self.recipients.count != 0 || self.ccRecipients.count != 0 || self.bccRecipients.count != 0 || self.subject != "" || text != "\n" || self.attachmentView.keys.count > 0 {
-            var cancelActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Delete Draft", otherButtonTitles: "Save Draft")
+            let cancelActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Delete Draft", otherButtonTitles: "Save Draft")
             cancelActionSheet.tag = 1
             cancelActionSheet.showInView(self.view)
         } else {
@@ -585,7 +594,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     
     func replaceSignatureWithText(text: String, toDelete: String, toInsert: String) -> String {
         if let range = text.rangeOfString(toDelete) {
-            var newtext = text.substringToIndex(range.startIndex) + toInsert + text.substringFromIndex(range.endIndex)
+            let newtext = text.substringToIndex(range.startIndex) + toInsert + text.substringFromIndex(range.endIndex)
             return newtext
         } else {
             return text + "\n" + toInsert
@@ -598,7 +607,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func buildEmail() -> NSData {
-        var builder = MCOMessageBuilder()
+        let builder = MCOMessageBuilder()
         
         builder.header.from = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
         builder.header.sender = MCOAddress(displayName: self.account.realName, mailbox: self.account.emailAddress)
@@ -653,7 +662,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 NSLog("sent")
                 self.navigationController?.popViewControllerAnimated(true)
                 //Move Email to sent Folder
-                if let folder = getFolderPathWithMCOIMAPFolderFlag(self.account, MCOIMAPFolderFlag.SentMail) {
+                if let folder = getFolderPathWithMCOIMAPFolderFlag(self.account, folderFlag: MCOIMAPFolderFlag.SentMail) {
                     var appendMsgOp = imapSession.appendMessageOperationWithFolder(folder, messageData: data, flags: MCOMessageFlag.Seen)
                     appendMsgOp.start({ (error, uid) -> Void in
                         if error != nil {
@@ -661,7 +670,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                         }
                     })
                 } else {
-                    self.showAlert("Unable to store message", message: "Please check your preferences for \(self.account.emailAddress) to select a specific sent folder", viewController: self.navigationController!.topViewController)
+                    self.showAlert("Unable to store message", message: "Please check your preferences for \(self.account.emailAddress) to select a specific sent folder", viewController: self.navigationController!.topViewController!)
                 }
             }
         })
@@ -673,20 +682,19 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
             
             self.scrollView.contentInset = contentInsets
-            self.scrollView.contentInset.bottom = self.scrollView.contentInset.bottom + self.textViewTextBody.font.lineHeight
+            self.scrollView.contentInset.bottom = self.scrollView.contentInset.bottom + self.textViewTextBody.font!.lineHeight
             self.scrollView.scrollIndicatorInsets = contentInsets
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-            var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, 0.0, 0.0)
-            
-            self.scrollView.contentInset = contentInsets
-            self.scrollView.scrollIndicatorInsets = contentInsets
-        }
-    }
-    
+	func keyboardWillHide(notification: NSNotification) {
+		let contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, 0.0, 0.0)
+		
+		self.scrollView.contentInset = contentInsets
+		self.scrollView.scrollIndicatorInsets = contentInsets
+		
+	}
+	
     //MARK: - Methods to show Addressbook
     func openPeoplePickerWithSender(sender:AnyObject!) {
         let picker = ABPeoplePickerNavigationController()
@@ -704,13 +712,13 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.presentViewController(picker, animated:true, completion:nil)
     }
     
-    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecordRef!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
-        println("person and property")
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController, didSelectPerson person: ABRecordRef, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
+        print("person and property")
         let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
         let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
         let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
-        println(email)
-        var address = MCOAddress(mailbox: email)
+        print(email)
+        let address = MCOAddress(mailbox: email)
         
         switch peoplePicker.title! {
         case "To:": self.recipients.addObject(address)

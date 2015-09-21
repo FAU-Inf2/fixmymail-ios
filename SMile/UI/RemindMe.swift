@@ -11,12 +11,12 @@ import Foundation
 
 class RemindMe{
     func setJSONforUpcomingRemind(email:Email, remindTime: NSDate){
-        println(remindTime)
+        print(remindTime)
         //moveEmailToFolder(mail, "RemindMe")
         var folderStorage: String = "SmileStorage"
         var jsonmail:Email = email
         var folders = email.toAccount.folders
-        let currentMaxUID = getMaxUID(email.toAccount, folderStorage)
+        let currentMaxUID = getMaxUID(email.toAccount, folderToQuery: folderStorage)
         fetchEmails(email.toAccount, folderStorage, MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
         var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(email.toAccount.downloadMailDuration)
         for mail in email.toAccount.emails {
@@ -30,7 +30,7 @@ class RemindMe{
             }
         }
         if jsonmail == email{
-            println("something went wrong")
+            print("something went wrong")
         }
             //RemindMe Datum auslesen und in NSDate umformen
         else{
@@ -56,7 +56,7 @@ class RemindMe{
         var folderStorage: String = "SmileStorage"
         var jsonmail:Email? //= Email()
         var folders = toAccount.folders
-        let currentMaxUID = getMaxUID(toAccount, folderStorage)
+        let currentMaxUID = getMaxUID(toAccount, folderToQuery: folderStorage)
         fetchEmails(toAccount, folderStorage, MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
         var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(toAccount.downloadMailDuration)
         for mail in toAccount.emails {
@@ -69,7 +69,7 @@ class RemindMe{
                 jsonmail = (mail as! Email)
             }
         }
-        println(jsonmail!.plainText)               // noch rausnehmen
+        print(jsonmail!.plainText)               // noch rausnehmen
         //RemindMe Datum auslesen und in NSDate umformen
         
             if let dataFromString = jsonmail!.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
@@ -91,18 +91,18 @@ class RemindMe{
                             //move email to Inbox
                             var id = json["messageId"].stringValue
                             var upcomingEmail:Email = returnEmailWithSpecificID(toAccount, folder: "RemindMe", id: id)
-                            addFlagToEmail(upcomingEmail, MCOMessageFlag.None) //Flag auf unseen setzten bzw. vielleicht auf remind
-                            moveEmailToFolder(upcomingEmail, "INBOX")
-                            println("push email")
+                            addFlagToEmail(upcomingEmail, flag: MCOMessageFlag.None) //Flag auf unseen setzten bzw. vielleicht auf remind
+                            moveEmailToFolder(upcomingEmail, destFolder: "INBOX")
+                            print("push email")
                         }
                         else{
                             //Do nothing. Its not time yet
-                            println("time in future")
+                            print("time in future")
                         }
                     }
                     else //Datum hatte falsches Format - Dürfte nicht passieren
                     {
-                        println("wrong format")
+                        print("wrong format")
                     }
                 }
             
@@ -113,7 +113,7 @@ class RemindMe{
     
     func returnEmailWithSpecificID(account: EmailAccount, folder: String, id: String)->Email{
         var email:Email?
-        let currentMaxUID = getMaxUID(account, folder)
+        let currentMaxUID = getMaxUID(account, folderToQuery: folder)
         var downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
         for mail in account.emails {
             if mail.folder == folder {

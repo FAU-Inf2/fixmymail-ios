@@ -89,7 +89,7 @@ class PreferencesPreviewLinesTableViewController: UITableViewController {
 	func loadCellData() {
 		//load numbers
 		for i in 0...5 {
-			var entry: String = String(i)
+			let entry: String = String(i)
 			self.options.append(entry)
 			if self.selectedString == entry {
 				self.isChecked.append(true)

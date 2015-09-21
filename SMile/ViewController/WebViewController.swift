@@ -22,7 +22,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     
     override func viewDidLoad() {
         messageView = MCOMessageView(frame: self.view.bounds)
-        messageView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+        messageView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
         self.view.addSubview(messageView)
         var parser: MCOMessageParser = MCOMessageParser(data: message.data)
         messageView.message = parser
@@ -52,7 +52,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         fetchFoldersOp.start({ (error, folders) -> Void in
             var trashFolderName: String?
             for folder in folders {
-                if ((folder as! MCOIMAPFolder).flags & MCOIMAPFolderFlag.Trash) == MCOIMAPFolderFlag.Trash {
+                if ((folder as! MCOIMAPFolder).flags.intersect(MCOIMAPFolderFlag.Trash)) == MCOIMAPFolderFlag.Trash {
                     trashFolderName = (folder as! MCOIMAPFolder).path
                     //NSLog("found it" + self.trashFolderName!)
                     break
@@ -64,7 +64,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
                 
                 localCopyMessageOperation.start {(error, uidMapping) -> Void in
                     if let error = error {
-                        NSLog("error in deleting email : \(error.userInfo!)")
+                        NSLog("error in deleting email : \(error.userInfo)")
                     }
                 }
                 
@@ -86,7 +86,13 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
                 managedObjectContext.deleteObject(self.message)
                 
                 var error: NSError? = nil
-                managedObjectContext.save(&error)
+                do {
+                    try managedObjectContext.save()
+                } catch var error1 as NSError {
+                    error = error1
+                } catch {
+                    fatalError()
+                }
                 if error != nil {
                     NSLog("%@", error!.description)
                 }
@@ -99,7 +105,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     }
     
     func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
-        var replyAll: Bool = !((self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
+        let replyAll: Bool = !((self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
                              (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil)
         switch buttonIndex {
         case 1:
@@ -122,26 +128,26 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     func replyButtonPressed() {
         if (self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
            (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil {
-                var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Forward")
+                let replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Forward")
                 replyActionSheet.showInView(self.view)
         } else {
-            var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all", "Forward")
+            let replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all", "Forward")
             replyActionSheet.showInView(self.view)
         }
     }
     
     func reply(replyAll: Bool) {
-        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         if replyAll {
             sendView.tableViewIsExpanded = true
             var array: [MCOAddress] = [MCOAddress]()
-            var recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
+            let recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
             for recipient in recipients {
                 if (recipient as! MCOAddress).mailbox != self.message.toAccount.emailAddress {
                     array.append(recipient as! MCOAddress)
                 }
             }
-            var ccRecipients = (self.message.mcomessage as! MCOIMAPMessage).header.cc
+            let ccRecipients = (self.message.mcomessage as! MCOIMAPMessage).header.cc
             if ccRecipients != nil {
                 for ccRecipient in ccRecipients {
                     array.append(ccRecipient as! MCOAddress)
@@ -156,23 +162,23 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         sendView.recipients.addObject((self.message.mcomessage as! MCOIMAPMessage).header.from)
         sendView.account = self.message.toAccount
         sendView.subject = "Re: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
-        var parser = MCOMessageParser(data: self.message.data)
-        var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
+        let parser = MCOMessageParser(data: self.message.data)
+        let date = (self.message.mcomessage as! MCOIMAPMessage).header.date
         sendView.textBody = "On \(date.day()) \(date.month()) \(date.year()), at \(date.hour()):\(date.minute()), " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + " wrote:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     
     func forward() {
-        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         sendView.account = self.message.toAccount
         sendView.subject = "Fwd: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
-        var parser = MCOMessageParser(data: self.message.data)
+        let parser = MCOMessageParser(data: self.message.data)
         sendView.textBody = "\n\nBegin forwarded message:\n" + parser.plainTextBodyRenderingAndStripWhitespace(false)
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     
     func compose() {
-        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         sendView.account = self.message.toAccount
         self.navigationController?.pushViewController(sendView, animated: true)
     }
@@ -191,9 +197,9 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         if pending.containsObject(partUniqueID) {
             return nil
         }
-        var part: MCOIMAPPart = (message.mcomessage as! MCOIMAPMessage).partForUniqueID(partUniqueID) as! MCOIMAPPart
+        let part: MCOIMAPPart = (message.mcomessage as! MCOIMAPMessage).partForUniqueID(partUniqueID) as! MCOIMAPPart
         pending.addObject(partUniqueID)
-        var op: MCOIMAPFetchContentOperation = session.fetchMessageAttachmentOperationWithFolder(folder, uid: (message.mcomessage as! MCOIMAPMessage).uid, partID: part.partID, encoding: part.encoding)
+        let op: MCOIMAPFetchContentOperation = session.fetchMessageAttachmentOperationWithFolder(folder, uid: (message.mcomessage as! MCOIMAPMessage).uid, partID: part.partID, encoding: part.encoding)
         ops.addObject(op)
         op.start {(error, data) -> Void in
             if error.code != MCOErrorCode.None.rawValue {
@@ -211,7 +217,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     typealias DownloadCallback = (error: NSError?) -> Void
     
     func callbackForPartUniqueID(partUniqueID: String, error: NSError?) {
-        var blocks: NSArray = callbacks.objectForKey(partUniqueID) as! NSArray
+        let blocks: NSArray = callbacks.objectForKey(partUniqueID) as! NSArray
         for block in blocks {
             (block as! DownloadCallback)(error: error)
         }
@@ -222,7 +228,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     }
     
     func messageView(view: MCOMessageView!, canPreviewPart part: MCOAbstractPart!) -> Bool {
-        var mimeType: String = part.mimeType.lowercaseString
+        let mimeType: String = part.mimeType.lowercaseString
         if mimeType == "image/tiff" {
             return true
         }
@@ -259,12 +265,12 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     }
     
     func messageView(view: MCOMessageView!, dataForPartWithUniqueID partUniqueID: String!) -> NSData! {
-        var attachement: MCOAttachment = self.messageView.message.partForUniqueID(partUniqueID) as! MCOAttachment
+        let attachement: MCOAttachment = self.messageView.message.partForUniqueID(partUniqueID) as! MCOAttachment
         return attachement.data
     }
     
     func messageView(view: MCOMessageView!, fetchDataForPartWithUniqueID partUniqueID: String!, downloadedFinished downloadFinished: ((NSError!) -> Void)!) {
-        var op: MCOIMAPFetchContentOperation? = self.fetchIMAPPartWithUniqueID(partUniqueID, folder: "INBOX")
+        let op: MCOIMAPFetchContentOperation? = self.fetchIMAPPartWithUniqueID(partUniqueID, folder: "INBOX")
         if op != nil {
             self.ops.addObject(op!)
         }

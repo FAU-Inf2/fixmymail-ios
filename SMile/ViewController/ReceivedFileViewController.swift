@@ -34,10 +34,10 @@ class ReceivedFileViewController: UIViewController {
 		// set navigationbar
 		let navItem: UINavigationItem = UINavigationItem(title: "Received File")
 		var flexSpaceItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-		var cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
-		var importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
-		var decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
-		var encryptButton: UIBarButtonItem = UIBarButtonItem(title: "Encrypt file", style: .Plain, target: self, action: "encryptTapped:")
+		let cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
+		let importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
+		let decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
+		let encryptButton: UIBarButtonItem = UIBarButtonItem(title: "Encrypt file", style: .Plain, target: self, action: "encryptTapped:")
 		// file is a .asc or .gpg file
 		if self.fileIsKeyfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
 			if self.isPGPKey(self.url!) == true {
@@ -54,9 +54,9 @@ class ReceivedFileViewController: UIViewController {
 		navigationBar.items = [navItem]
 		
 		// set toolbar
-		var composeButton: UIBarButtonItem = UIBarButtonItem(title: "Attach to Email", style: .Plain,  target: self, action: "showEmptyMailSendView:")
-		var actionButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "actionTapped:")
-		var items = [actionButton, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
+		let composeButton: UIBarButtonItem = UIBarButtonItem(title: "Attach to Email", style: .Plain,  target: self, action: "showEmptyMailSendView:")
+		let actionButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "actionTapped:")
+		let items = [actionButton, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
 		self.toolbar.setItems(items, animated: false)
 		
 		// set view content
@@ -78,27 +78,32 @@ class ReceivedFileViewController: UIViewController {
 		// use file for email attachment
         (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = self.fileManager!.displayNameAtPath(self.url!.path!)
         (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = file
+	(UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension = self.fileManager!.displayNameAtPath(self.url!.pathExtension!)
         cancelTapped(self)
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {
-		if self.fileManager!.removeItemAtURL(self.url!, error: nil) {
+		do {
+			try self.fileManager!.removeItemAtURL(self.url!)
 			NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
+		} catch _ {
 		}
 		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
 	}
 	
 	@IBAction func importTapped(sender: AnyObject) -> Void {
 		// import key
-		var success = crypto.importKey(self.url!)
+		let success = crypto.importKey(self.url!)
 		if success {
-			var button = sender as! UIBarButtonItem
+			let button = sender as! UIBarButtonItem
 			button.enabled = false
 			self.label.text = "Import Successful"
 			self.image.image = UIImage(named: "Checkmark-icon.png")
 			self.delay(1.0) {
-				if self.fileManager!.removeItemAtURL(self.url!, error: nil) {
+				do {
+					try self.fileManager!.removeItemAtURL(self.url!)
 					NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
+				} catch _ {
 				}
 				self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
 			}
@@ -111,20 +116,23 @@ class ReceivedFileViewController: UIViewController {
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
 		// DEBUG ###########
-		var fileReadError: NSError?
+		let fileReadError: NSError?
 		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
 		var pw = ""
 		if path != nil {
-			pw = String(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &fileReadError)!
+			pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
 		}
 		
 		if fileReadError == nil {
 		// ##################
 			var (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: pw, encryptionType: "PGP")
 			if decryptedFile != nil && error == nil {
-				var button = sender as! UIBarButtonItem
+				let button = sender as! UIBarButtonItem
 				button.enabled = false
-				self.fileManager!.removeItemAtURL(self.url!, error: nil)
+				do {
+					try self.fileManager!.removeItemAtURL(self.url!)
+				} catch _ {
+				}
 				self.url = decryptedFile!
 				self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
 				self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
@@ -141,9 +149,12 @@ class ReceivedFileViewController: UIViewController {
 	@IBAction func encryptTapped(sender: AnyObject) -> Void {
 		var (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
 		if encryptedFile != nil && error == nil {
-			var button = sender as! UIBarButtonItem
+			let button = sender as! UIBarButtonItem
 			button.enabled = false
-			self.fileManager!.removeItemAtURL(self.url!, error: nil)
+			do {
+				try self.fileManager!.removeItemAtURL(self.url!)
+			} catch _ {
+			}
 			self.url = encryptedFile!
 			self.file = self.fileManager!.contentsAtPath(self.url!.path!)
 			self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
@@ -187,7 +198,7 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	func isPGPKey(fileUrl: NSURL) -> Bool {
-		if let fileContent = String(contentsOfFile: fileUrl.path!, encoding: NSUTF8StringEncoding, error: nil) {
+		if let fileContent = try? String(contentsOfFile: fileUrl.path!, encoding: NSUTF8StringEncoding) {
 			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil
 				|| fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----") != nil {
 				return true

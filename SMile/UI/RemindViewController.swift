@@ -76,51 +76,51 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
         var date = NSDate()
-        var components = NSDateComponents()
+        let components = NSDateComponents()
         components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
-        date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
-        println(date)
+        date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
+        print(date)
         var remindDate:NSDate = NSDate()
         switch (indexPath.row){
         case 0: //Later Today
             components.hour = 2
-            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 1: //This Evening
             components.hour = 20
-            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 2: //Tomorrow Morning
             components.day = 1
-            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             components.hour = 5
-            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: [])!
            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 3: //This Weekend
-            var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
-            var friday = 6
+            let day = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
+            let friday = 6
             components.day = friday-day
             if (components.day<0 ){
                 components.day = components.day+7
             }
-            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             components.hour = 17
-            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 4: //Next Week
-            var day = NSCalendar.currentCalendar().component(.CalendarUnitWeekday, fromDate: date)
-            var monday = 2
+            let day = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
+            let monday = 2
             components.day = monday-day
             if (components.day<0 ){
                 components.day = components.day+7
             }
-            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             components.hour = 5
-            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 5: //In 1 Month
             components.month = 1
-            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: nil)!
+            remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 8: //Pick a Date
             collectionView.hidden  = true
@@ -148,7 +148,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         datePicker.hidden = true
         back.hidden = true
         SetTime.hidden = true
-        var remindDate = datePicker.date
+        let remindDate = datePicker.date
         remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
     }
     
@@ -171,8 +171,8 @@ extension NSDate {
         // Check for correct format:
         if jsonDate.hasPrefix(prefix) && jsonDate.hasSuffix(suffix) {
             // Extract the number as a string:
-            let from = advance(jsonDate.startIndex, count(prefix))
-            let to = advance(jsonDate.endIndex, -count(suffix))
+            let from = jsonDate.startIndex.advancedBy(prefix.characters.count)
+            let to = jsonDate.endIndex.advancedBy(-suffix.characters.count)
             let dateString = jsonDate[from ..< to]
             // Convert to double and from milliseconds to seconds:
             let timeStamp = (dateString as NSString).doubleValue / 1000.0
