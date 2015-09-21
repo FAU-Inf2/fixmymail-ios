@@ -375,7 +375,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func createAddressBook(){
         var error: Unmanaged<CFError>?
-        addressBook = ABAddressBookCreateWithOptions(nil, &error).takeRetainedValue()
+        addressBook = ABAddressBookCreateWithOptions(nil, &error).takeUnretainedValue()
+        if error != nil {
+            print("Error while creating AddressBook: \(error)")
+        }
     }
     
     //MARK: - UserDefaults
