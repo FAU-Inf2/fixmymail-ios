@@ -376,7 +376,10 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
         switch emailAccount.emailAddress {
         case let s where s.rangeOfString("@gmail.com") != nil:
             accountImage = UIImage(named: "Gmail-128.png")
-            
+			
+		case let s where s.rangeOfString("@googlemail.com") != nil:
+			accountImage = UIImage(named: "Gmail-128.png")
+			
         case let s where s.rangeOfString("@outlook") != nil:
             accountImage = UIImage(named: "outlook.png")
             
@@ -400,7 +403,10 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
             
         case let s where s.rangeOfString("@studium.fau.de") != nil:
             accountImage = UIImage(named: "fau-logo.png")
-            
+			
+		case let s where s.rangeOfString("@t-online") != nil:
+			accountImage = UIImage(named: "smile_tcom_icon.png")
+			
         default:
             accountImage = UIImage(named: "smile-gray.png")
             

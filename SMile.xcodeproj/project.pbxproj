@@ -178,6 +178,7 @@
 		AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */; };
 		AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */; };
 		AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */; };
+		AD3D6F391BB05BE200127466 /* smile_tcom_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD3D6F381BB05BE200127466 /* smile_tcom_icon.png */; };
 		AD43C7FC1B6FEE9200C8F286 /* DevPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */; };
 		AD43C7FD1B6FEE9200C8F286 /* DevPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */; };
 		AD43C8041B70F92600C8F286 /* ReceivedFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */; };
@@ -472,6 +473,7 @@
 		AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailAccountSupport.swift; path = "../Supporting Files/EmailAccountSupport.swift"; sourceTree = "<group>"; };
+		AD3D6F381BB05BE200127466 /* smile_tcom_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smile_tcom_icon.png; sourceTree = "<group>"; };
 		AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevPasswordViewController.swift; sourceTree = "<group>"; };
 		AD43C7FB1B6FEE9200C8F286 /* DevPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DevPasswordViewController.xib; sourceTree = "<group>"; };
 		AD43C8021B70F92600C8F286 /* ReceivedFileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceivedFileViewController.swift; sourceTree = "<group>"; };
@@ -976,6 +978,7 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AD3D6F381BB05BE200127466 /* smile_tcom_icon.png */,
 				A9A125F31BADEA9B00BCE62B /* Undo Filled-64.png */,
 				AD5196401BADB867009468C4 /* orangedot@2x.png */,
 				AD51963E1BADB3DB009468C4 /* Future-100_black.png */,
@@ -1260,6 +1263,7 @@
 				3D69ECD51B83AB9A0082EF5C /* page_white_php.png in Resources */,
 				3D65A4CD1B53014E00E88CC7 /* triangle_right.png in Resources */,
 				3D69ECC51B83AB9A0082EF5C /* page_white_film.png in Resources */,
+				AD3D6F391BB05BE200127466 /* smile_tcom_icon.png in Resources */,
 				3D69ECC81B83AB9A0082EF5C /* page_white_flash@2x.png in Resources */,
 				3D69ECE61B83AB9A0082EF5C /* page_white_visualstudio@2x.png in Resources */,
 				8E605C311B9DC4EE00F38A81 /* attachment_icon@2x.png in Resources */,
