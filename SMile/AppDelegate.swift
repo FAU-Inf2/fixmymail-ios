@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import AddressBook
+import Locksmith
 
 var addressBook : ABAddressBookRef?
 
@@ -31,14 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.initCoreDataTestEntries()
 		self.printKeys()
 	//	self.cryptoTest()
-		
-		
-		
-		
-		
-		
-		
-		
+			
         return true
     }
 
@@ -167,10 +161,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmailAccount.deletedFolder = ""
 			gmailAccount.archiveFolder = ""
 			gmailAccount.downloadMailDuration = "Ever"
-			let errorLocksmithGmail = Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
-			if errorLocksmithGmail == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithGmail = Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
+//			if errorLocksmithGmail == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			
@@ -196,10 +197,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmxAccount.deletedFolder = ""
 			gmxAccount.archiveFolder = ""
 			gmxAccount.downloadMailDuration = "Ever"
-			let errorLocksmithGmx = Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
-			if errorLocksmithGmx == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithGmx = Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
+//			if errorLocksmithGmx == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			
@@ -224,10 +232,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			webAccount.deletedFolder = ""
 			webAccount.archiveFolder = ""
 			webAccount.downloadMailDuration = "Ever"
-			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
-			if errorLocksmithWeb == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail@web.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
+//			if errorLocksmithWeb == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			let tcomAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
@@ -251,10 +266,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			tcomAccount.deletedFolder = ""
 			tcomAccount.archiveFolder = ""
 			tcomAccount.downloadMailDuration = "Ever"
-			let errorLocksmithTcom = Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
-			if errorLocksmithTcom == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithTcom = Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
+//			if errorLocksmithTcom == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			let iCloudAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
@@ -278,10 +300,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			iCloudAccount.deletedFolder = ""
 			iCloudAccount.archiveFolder = ""
 			iCloudAccount.downloadMailDuration = "Ever"
-			let errorLocksmithiCloud = Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
-			if errorLocksmithiCloud == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithiCloud = Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
+//			if errorLocksmithiCloud == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			let YahooAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
@@ -305,10 +334,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			YahooAccount.deletedFolder = ""
 			YahooAccount.archiveFolder = ""
 			YahooAccount.downloadMailDuration = "Ever"
-			let errorLocksmithYahoo = Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
-			if errorLocksmithYahoo == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithYahoo = Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
+//			if errorLocksmithYahoo == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			let OutlookAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
@@ -332,10 +368,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			OutlookAccount.deletedFolder = ""
 			OutlookAccount.archiveFolder = ""
 			OutlookAccount.downloadMailDuration = "Ever"
-			let errorLocksmithOutlook = Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
-			if errorLocksmithOutlook == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithOutlook = Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
+//			if errorLocksmithOutlook == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			
@@ -382,9 +425,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         case .Restricted:
             print("Access restricted")
-            
-        default:
-            print("Other Problem")
         }
     }
     
@@ -421,42 +461,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	// MARK: - Create GPG ring files
-	func createRingFiles() -> Void {
-		let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-		if(!defaults.boolForKey("RingfilesCreated")) {
-			var fileManager = NSFileManager.defaultManager()
-			let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
-			let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
-			if let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true) {
-				if paths.count > 0 {
-					if let dirPath = paths[0] as? String {
-						// create public ring file
-						var pubringPath = dirPath.stringByAppendingPathComponent("smile_pubring.gpg")
-						if fileManager.createFileAtPath(pubringPath, contents: nil, attributes: nil) == false {
-							NSLog("public ringfile not created!")
-							return
-						}
-						
-						// create secret ring file
-						var secringPath = dirPath.stringByAppendingPathComponent("smile_secring.gpg")
-						if fileManager.createFileAtPath(secringPath, contents: nil, attributes: nil) == false {
-							NSLog("secret ringfile not created!")
-							return
-						}
-						
-						// no error checking here. if something went wrong function would have returned earlier
-						defaults.setURL(NSURL(fileURLWithPath: pubringPath)!, forKey: "pubring")
-						defaults.setURL(NSURL(fileURLWithPath: secringPath)!, forKey: "secring")
-						defaults.setBool(true, forKey: "RingfilesCreated")
-
-						// DEBUG
-						//NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
-						//NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
-					}
-				}
-			}
-		}
-	}
+    func createRingFiles() -> Void {
+        let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if(!defaults.boolForKey("RingfilesCreated")) {
+            let fileManager = NSFileManager.defaultManager()
+            let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
+            let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
+            let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+            if paths.count > 0 {
+                // create public ring file
+                let dirPath = paths[0]
+                let pubringPath = NSURL(fileURLWithPath: dirPath).URLByAppendingPathComponent("smile_pubring.gpg").path!
+                if fileManager.createFileAtPath(pubringPath, contents: nil, attributes: nil) == false {
+                    NSLog("public ringfile not created!")
+                    return
+                }
+                
+                // create secret ring file
+                let secringPath = NSURL(fileURLWithPath: dirPath).URLByAppendingPathComponent("smile_secring.gpg") //dirPath.stringByAppendingPathComponent("smile_secring.gpg")
+                if fileManager.createFileAtPath(secringPath.path!, contents: nil, attributes: nil) == false {
+                    NSLog("secret ringfile not created!")
+                    return
+                }
+                
+                // no error checking here. if something went wrong function would have returned earlier
+                defaults.setURL(NSURL(fileURLWithPath: pubringPath), forKey: "pubring")
+                defaults.setURL(secringPath, forKey: "secring")
+                defaults.setBool(true, forKey: "RingfilesCreated")
+                
+                // DEBUG
+                //NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
+                //NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
+            }
+        }
+    }
 	
 	// MARK: - DELETE BEFORE RELEASE
 	
@@ -477,7 +515,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		//WARNING: DELETE BEFORE RELEASE
 		let crypto = SMileCrypto()
-		let fileReadError: NSError?
+		let fileReadError: NSError? = nil
 		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
 		var pw = ""
 		if path != nil {
@@ -488,13 +526,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			
 			let data = ("THIS IS A ENCRYPTION TEST").dataUsingEncoding(NSUTF8StringEncoding)
 			print("Original message: " + (NSString(data: data!, encoding: NSUTF8StringEncoding) as! String))
-			var (error, encryptedData) = crypto.encryptData(data!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+			let (error, encryptedData) = crypto.encryptData(data!, keyIdentifier: "42486EB9", encryptionType: "PGP")
 			if error != nil {
 				NSLog("Encryption Error: " + error!.localizedDescription)
 			} else {
 				if encryptedData != nil {
 					print("Encrypted Data: " + (NSString(data: encryptedData!, encoding: NSUTF8StringEncoding) as! String))
-					var (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: pw, encryptionType: "PGP")
+					let (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: pw, encryptionType: "PGP")
 					if error2 != nil {
 						NSLog("Decrytption Error: " + error2!.localizedDescription)
 					} else {

@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreData
+import Locksmith
 
-class PreferenceEditAccountTableViewController: UITableViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class PreferenceEditAccountTableViewController: UITableViewController, UITextFieldDelegate {
 	
 	var emailAcc: EmailAccount?
 	var newEmailAcc: EmailAccount?
@@ -90,10 +91,15 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			} catch _ {
 			}
 			// delete Password from iOS Keychain
-			let errorLocksmith = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
-			if errorLocksmith == nil {
-				NSLog("deleting data for " + self.entries["Mailaddress:"]!)
-			}
+//			let errorLocksmith = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+//			if errorLocksmith == nil {
+//				NSLog("deleting data for " + self.entries["Mailaddress:"]!)
+//			}
+            do {
+                try Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+            } catch _ {
+                print("Locksmitherror while trying to delete data for useraccount!")
+            }
 			
 			self.navigationController?.popViewControllerAnimated(true)
 		}))
@@ -328,14 +334,22 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 			
 			// load password for account from iOS keychain
 			if self.entries["Password:"] == nil {
-				let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
-				if error == nil {
-					let value = dictionary?.valueForKey("Password:") as! String
-					self.entries["Password:"] = value
-					NSLog("loaded value from keychain")
-				} else {
-					self.entries["Password:"] = ""
-				}
+//				let (dictionary, error) = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
+//				if error == nil {
+//					let value = dictionary?.valueForKey("Password:") as! String
+//					self.entries["Password:"] = value
+//					NSLog("loaded value from keychain")
+//				} else {
+//					self.entries["Password:"] = ""
+//				}
+                let dict = Locksmith.loadDataForUserAccount(self.entries["Mailaddress:"]!)
+                if dict == nil {
+                    self.entries["Password:"] = ""
+                } else {
+                    let value = dict!["Password:"] as! String
+                    self.entries["Password:"] = value
+                    print("loaded value from keychain")
+                }
 			}
 			if self.entries["IMAP Hostname:"] == nil {self.entries["IMAP Hostname:"] = emailAcc!.imapHostname}
 			if self.entries["IMAP Port:"] == nil {self.entries["IMAP Port:"] = String(Int(emailAcc!.imapPort))}
@@ -476,7 +490,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		}
 		
 		
-		for (key, value) in self.entriesChecked{
+		for (key, _) in self.entriesChecked{
 			self.entriesChecked[key] = false
 		}
 		self.tableView.reloadData()
@@ -592,7 +606,12 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							// write | update entity
 							self.saveEntriesToCoreData()
 							if self.newEmailAcc != nil {
-								createNewSession(self.newEmailAcc!)
+                                do {
+                                    try createNewSession(self.newEmailAcc!)
+                                } catch _ {
+                                    print("Could not create new imapsession for new emailaccount!")
+                                }
+//								createNewSession(self.newEmailAcc!)
 							}
 							
 							
@@ -618,7 +637,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				let cellPath = NSIndexPath(forRow: row, inSection: section)
 				if let cell = self.tableView.cellForRowAtIndexPath(cellPath) as? PreferenceAccountTableViewCell {
 					
-					if cell.textfield.text.isEmpty {
+					if cell.textfield.text!.isEmpty {
 						if cell.labelCellContent.text == "Signature:" {}
 						else if cell.labelCellContent.text == "Activate:" {}
 						else if cell.labelCellContent.text == "Advanced" {}
@@ -653,19 +672,30 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 				case "Password:":
 					newEntry.setValue("*", forKey: "password")
 					// assure to create key for useraccount
-					let errorLocksmithNewAccount = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
-					if errorLocksmithNewAccount == nil {
-						NSLog("found old data -> deleted!")
-					}
+                    do {
+                        try Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+                    } catch _ {
+                        print("Locksmitherror while trying to delete data for useraccount")
+                    }
+//					let errorLocksmithNewAccount = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+//					if errorLocksmithNewAccount == nil {
+//						NSLog("found old data -> deleted!")
+//					}
 					// save password to iOS keychain
-					let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
-					NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-					let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
-					if NewRequestError == nil {
-						NSLog("saving data for " + self.entries["Mailaddress:"]!)
-					} else {
-						NSLog("could not save data for " + self.entries["Mailaddress:"]!)
-					}
+//					let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
+//					NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+//					let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
+//					if NewRequestError == nil {
+//						NSLog("saving data for " + self.entries["Mailaddress:"]!)
+//					} else {
+//						NSLog("could not save data for " + self.entries["Mailaddress:"]!)
+//					}
+                    do {
+                        try Locksmith.saveData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
+                    } catch _ {
+                        let account = self.entries["Mailaddress"]!
+                        print("could not save data for \(account)")
+                    }
 					
 				case "IMAP Hostname:": 		newEntry.setValue(value, forKey: "imapHostname")
 				case "IMAP Port:": 			newEntry.setValue(Int(value), forKey: "imapPort")
@@ -708,19 +738,31 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 						case "Password:":
 							managedObject.setValue("*", forKey: "password")
 							// assure to create key for useraccount
-							let errorLocksmithUpdateAccount = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
-							if errorLocksmithUpdateAccount == nil {
-								NSLog("found old data -> deleted!")
-							}
+                            do {
+                                try Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+                            } catch _ {
+                                print("found old data -> deleted!")
+                            }
+                            
+//							let errorLocksmithUpdateAccount = Locksmith.deleteDataForUserAccount(self.entries["Mailaddress:"]!)
+//							if errorLocksmithUpdateAccount == nil {
+//								NSLog("found old data -> deleted!")
+//							}
 							// save data to iOS keychain
-							let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
-							NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-							let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
-							if NewRequestError == nil {
-								NSLog("saving data for " + self.entries["Mailaddress:"]!)
-							} else {
-								NSLog("could not save data for " + self.entries["Mailaddress:"]!)
-							}
+//							let NewSaveRequest = LocksmithRequest(userAccount: self.entries["Mailaddress:"]!, requestType: .Create, data: [key: value])
+//							NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+//							let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
+//							if NewRequestError == nil {
+//								NSLog("saving data for " + self.entries["Mailaddress:"]!)
+//							} else {
+//								NSLog("could not save data for " + self.entries["Mailaddress:"]!)
+//							}
+                            do {
+                                try Locksmith.saveData([key: value], forUserAccount: self.entries["Mailaddress:"]!)
+                            } catch _ {
+                                let mailaddress = self.entries["Mailaddress:"]!
+                                print("could not save data for \(mailaddress)")
+                            }
 
 						case "IMAP Hostname:": 		managedObject.setValue(value, forKey: "imapHostname")
 						case "IMAP Port:": 			managedObject.setValue(Int(value), forKey: "imapPort")
@@ -830,11 +872,8 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		session.port = uint(Int(self.entries["IMAP Port:"]!)!)
 		session.username = self.entries["Username:"]
 		session.password = self.entries["Password:"]
-		var con = StringToConnectionType(self.entries["IMAP ConType:"]!)
-		var auth = StringToAuthType(self.entries["IMAP Auth:"]!)
 		session.connectionType = StringToConnectionType(self.entries["IMAP ConType:"]!)
 		session.authType = StringToAuthType(self.entries["IMAP Auth:"]!)
-		var address: MCOAddress = MCOAddress(mailbox: self.entries["Mailaddress:"])
 		let op = session.checkAccountOperation()
 		return op!
 		
@@ -866,14 +905,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	func textFieldDidEndEditing(textField: UITextField) {
 		if textField.placeholder! == "Mailaddress:" {
 			// check if mail address
-			if !(textField.text.rangeOfString("@") != nil) {
+			if !(textField.text!.rangeOfString("@") != nil) {
 				textField.text = ""
 			}
 		}
 		
 		// check if port entries are numbers
 		if textField.placeholder! == "IMAP Port:" || textField.placeholder! == "SMTP Port:" {
-			if Int(textField.text) == nil {
+			if Int(textField.text!) == nil {
 				textField.text = ""
 			}
 		}
@@ -941,9 +980,9 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	
 	func activateToolbarItems() {
 		// set toolbar
-		var expertButton: UIBarButtonItem = UIBarButtonItem(title: "Expert Mode  ", style: .Plain, target: self, action: "expertTapped:")
-		var items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), expertButton]
-		self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
+		let expertButton: UIBarButtonItem = UIBarButtonItem(title: "Expert Mode  ", style: .Plain, target: self, action: "expertTapped:")
+		let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), expertButton]
+		self.navigationController?.visibleViewController!.setToolbarItems(items, animated: false)
 	}
 	
 	func notificationSent() {

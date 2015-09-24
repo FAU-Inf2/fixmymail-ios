@@ -126,7 +126,7 @@ func getSessionPreferences(emailAddress: String) -> SessionPreferenceObject? {
 		sessionPreferences = SessionPreferenceObject(imapHostname: "faumail.uni-erlangen.de", imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp-auth.uni-erlangen.de", smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
 		
 	default:
-		if let s = emailAddress.rangeOfString("@") {
+		if let _ = emailAddress.rangeOfString("@") where emailAddress.rangeOfString("@") != nil {
 			let serverAddress = emailAddress.substringFromIndex(emailAddress.rangeOfString("@")!.endIndex)
 			sessionPreferences = SessionPreferenceObject(imapHostname: "imap." + serverAddress, imapPort: 993, imapAuthType: MCOAuthType.SASLPlain, imapConType: MCOConnectionType.TLS, smtpHostname: "smtp." + serverAddress, smtpPort: 587, smtpAuthType: MCOAuthType.SASLPlain, smtpConType: MCOConnectionType.TLS)
 		}

@@ -76,7 +76,7 @@ class PreferenceTableViewController: UITableViewController {
                 
                 if let account = sendAccount {
                     sendView.account = account
-                    sendView.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                    sendView.attachFile(fileName, data: data, mimetype: getPathExtensionFromString(fileName)!)
                     
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil

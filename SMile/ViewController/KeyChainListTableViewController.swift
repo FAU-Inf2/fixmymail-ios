@@ -86,7 +86,7 @@ class KeyChainListTableViewController: UITableViewController {
                 
                 if let account = sendAccount {
                     sendView.account = account
-                    sendView.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                    sendView.attachFile(fileName, data: data, mimetype: getPathExtensionFromString(fileName)!)
                     
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
@@ -196,7 +196,6 @@ class KeyChainListTableViewController: UITableViewController {
 	}
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		let cell = tableView.dequeueReusableCellWithIdentifier("ListPrototypCell", forIndexPath: indexPath) as! KeyItemTableViewCell
 		let keyItem = self.keyList[indexPath.row]
 		self.keyDetailVC = KeyDetailTableViewController(nibName: "KeyDetailTableViewController", bundle: nil)
 		self.keyDetailVC?.keyItem = keyItem
@@ -212,14 +211,13 @@ class KeyChainListTableViewController: UITableViewController {
 		if let appDelegate = appDel {
 			self.managedObjectContext = appDelegate.managedObjectContext!
 			let keyFetchRequest = NSFetchRequest(entityName: "Key")
-			let error: NSError?
-			let fetchedKeysFromCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest) as? [Key]
-			if error != nil {
-				NSLog("Key fetchRequest: \(error?.localizedDescription)")
-			} else {
-				self.keysFromCoreData = fetchedKeysFromCoreData!
-				
-			}
+            
+            do {
+                let fetchedKeysFromCoreData = try managedObjectContext!.executeFetchRequest(keyFetchRequest) as? [Key]
+                self.keysFromCoreData = fetchedKeysFromCoreData!
+            } catch _ {
+                print("Error while trying to fetch keys")
+            }
 			
 			// check if sec and pub key with same keyID
 			var secKeys = [Key]()

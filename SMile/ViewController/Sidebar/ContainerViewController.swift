@@ -91,7 +91,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
     func animateLeftPanel(shouldExpand shouldExpand: Bool) {
         if(shouldExpand) {
             for view in self.subNavController!.view!.subviews {
-                if let v: UIView = view as? UIView {
+                if let v: UIView = view {
                     v.userInteractionEnabled = false
                 }
             }
@@ -102,7 +102,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
             animateContentPanelXPosition(targetPosition: CGRectGetWidth(UIApplication.sharedApplication().delegate!.window!!.frame) - contentPanelExpandedOffset)
         } else {
             for view in self.subNavController!.view!.subviews {
-                if let v: UIView = view as? UIView {
+                if let v: UIView = view {
                     v.userInteractionEnabled = true
                 }
             }
@@ -111,7 +111,7 @@ extension ContainerViewController : ContentViewControllerProtocol {
                 finished in
                 self.currentState = SlideOutState.PanelCollapsed
                 
-                if let sideBarViewController = self.sideBarVC {
+                if self.sideBarVC != nil {
                     self.sideBarVC!.view.removeFromSuperview()
                     self.sideBarVC = nil
                 }
@@ -145,7 +145,6 @@ extension ContainerViewController: SideBarProtocol {
         self.toggleLeftPanel()
         
         var shouldChangeVC = false
-        var shouldReloadVC = false
         self.lastSelectedMailAccountName = actionItem.cellName != "All" ? actionItem.emailAccount?.accountName : nil
         switch actionItem.viewController {
         case "EmailAll":
@@ -191,8 +190,6 @@ extension ContainerViewController: SideBarProtocol {
             
             if actionItem.emailFolder != nil {
                 contentVC.setValue(actionItem.emailFolder!.path, forKey: "folderToQuery")
-            } else {
-                shouldReloadVC = true
             }
             
             let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")

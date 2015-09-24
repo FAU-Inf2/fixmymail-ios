@@ -122,26 +122,26 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
         var subItems = [ActionItem]()
         for imapFolder in emailAccount.folders {
             let fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-            var pathComponents = fol.path.pathComponents
-            if pathComponents.count > 1 {
-                for var i = 0; i < (pathComponents.count - 1); i++ {
-                    let parentFolderName = pathComponents[i]
+            var pathComponents = getPathComponentsFromString(fol.path)
+            if pathComponents!.count > 1 {
+                for var i = 0; i < (pathComponents!.count - 1); i++ {
+                    let parentFolderName = pathComponents![i]
                     var parentItem: ActionItem? = self.getParentItemFromItems(subItems, andParentFolderName: parentFolderName)
                     if parentItem == nil {
-                        let acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                        let acItem = ActionItem(Name: pathComponents![i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                         acItem.pathComponentNumber = i
                         acItem.actionItems = [ActionItem]()
                         parentItem = acItem
                         if i == 0 {
                             subItems.append(acItem)
                         } else {
-                            self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents[i - 1])
+                            self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents![i - 1])
                         }
                     }
                     if let parItem = parentItem {
                         parItem.viewController = "SubFolder"
-                        if pathComponents[i + 1] != fol.path.lastPathComponent {
-                            let acItem = ActionItem(Name: pathComponents[i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                        if pathComponents![i + 1] != getLastPathComponentFromString(fol.path) {
+                            let acItem = ActionItem(Name: pathComponents![i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                             var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                             if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
                                 subItemArr.append(acItem)
@@ -149,7 +149,7 @@ class MoveEmailViewController: UIViewController, UITableViewDataSource, UITableV
                                 acItem.actionItems = subItemArr
                             }
                         } else {
-                            let acItem = ActionItem(Name: pathComponents[i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
+                            let acItem = ActionItem(Name: pathComponents![i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
                             acItem.pathComponentNumber = i + 1
                             var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                             if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {

@@ -134,7 +134,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     override func viewDidDisappear(animated: Bool) {
-        for (key, session) in sessionDictionary {
+        for (_, session) in sessionDictionary {
             session.disconnectOperation().start({ (error) -> Void in
                 if error != nil {
                     NSLog("%@", error!.description)
@@ -335,12 +335,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             } else {
                 
                 let mail: MCOIMAPMessage = cell.mail.mcomessage as! MCOIMAPMessage
-                var messageParser : MCOMessageParser = MCOMessageParser(data: cell.mail.data)
                 
                 let emailVC = EmailViewController()
                 emailVC.message = cell.mail
                 emailVC.mcoimapmessage = mail
-                emailVC.session = getSession(cell.mail.toAccount)
+                emailVC.session = try! getSession(cell.mail.toAccount)
                 self.navigationController?.pushViewController(emailVC, animated: true)
                 
                 addFlagToEmail(cell.mail, flag: MCOMessageFlag.Seen)
@@ -399,8 +398,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let folderStorage: String = "SmileStorage"
         var remind: Bool = false
         var storage: Bool = false
-        let account = mail.toAccount
-        let session = getSession(account)
         
         for imapFolder in mail.toAccount.folders{
             let fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
@@ -449,10 +446,10 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func setToolbarWhileEditing(){
-        var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         var markAllButton = UIBarButtonItem(title: "Mark", style: UIBarButtonItemStyle.Plain, target: self, action: "markButtonAction")
-        var moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
-        var deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
+        let moveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Organize, target: self, action: "moveButtonAction")
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonAction")
         
         if selectedEmails.count == 0 { //If nothing selected
             markAllButton = UIBarButtonItem(title: "Mark All", style: UIBarButtonItemStyle.Plain, target: self, action: "markAllButtonAction")
@@ -576,47 +573,46 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //MARK: - Actionsheets
     func viewActionSheetWithDeleteAll(){
-        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Mark as Read", "Mark as Unread", "Delete All")
-        actionSheet.destructiveButtonIndex = 3
-        actionSheet.showInView(self.view)
+        self.presentViewController(self.getAlertControllerWithDeleteAllOption(true), animated: true, completion: nil)
     }
     
     func viewActionSheet() {
-        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Mark as Read", "Mark as Unread")
-        actionSheet.showInView(self.view)
+        self.presentViewController(self.getAlertControllerWithDeleteAllOption(false), animated: true, completion: nil)
     }
     
-    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        var actionSheetWithDeleteAll = (actionSheet.destructiveButtonIndex == 3)
-        
-        switch buttonIndex {
-        case 1: //Mark as Read
-            for var i = 0; i < selectedEmails.count; i++ {
-                addFlagToEmail(selectedEmails[i] as! Email, flag: MCOMessageFlag.Seen)
+    private func getAlertControllerWithDeleteAllOption(deleteAllOption: Bool) -> UIAlertController {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) -> Void in
+            if self.allCellsSelected {
+                self.selectedEmails.removeAllObjects()
+            }
+            self.allCellsSelected = false
+        })
+        actionSheet.addAction(cancelAction)
+        let markAsReadAction = UIAlertAction(title: "Mark as read", style: .Default) { (action) -> Void in
+            for var i = 0; i < self.selectedEmails.count; i++ {
+                addFlagToEmail(self.selectedEmails[i] as! Email, flag: MCOMessageFlag.Seen)
             }
             self.refreshTableView(false)
-            endEditing()
-        case 2: //Mark as Unread
-            for var i = 0; i < selectedEmails.count; i++ {
-                removeFlagFromEmail(selectedEmails[i] as! Email, flag: MCOMessageFlag.Seen)
-            }
-            self.refreshTableView(false)
-            endEditing()
-        case 3: //Delete All
-            deleteButtonAction()
-        case 0: //Cancel
-            if allCellsSelected {
-                selectedEmails.removeAllObjects()
-            }
-            allCellsSelected = false
-        default:
-            break
+            self.endEditing()
         }
-        
+        actionSheet.addAction(markAsReadAction)
+        let markAsUnreadAction = UIAlertAction(title: "Mark as unread", style: .Default) { (action) -> Void in
+            for var i = 0; i < self.selectedEmails.count; i++ {
+                removeFlagFromEmail(self.selectedEmails[i] as! Email, flag: MCOMessageFlag.Seen)
+            }
+            self.refreshTableView(false)
+            self.endEditing()
+        }
+        actionSheet.addAction(markAsUnreadAction)
+        if deleteAllOption == true {
+            let deleteAllAction = UIAlertAction(title: "Delete All", style: .Default, handler: { (action) -> Void in
+                self.deleteButtonAction()
+            })
+            actionSheet.addAction(deleteAllAction)
+        }
+        return actionSheet
     }
-    
-    
-    
     
     //MARK: - Help functions for tableview
     func refreshTableView(animated: Bool) {

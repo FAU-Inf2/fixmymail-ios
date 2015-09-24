@@ -33,7 +33,6 @@ class ReceivedFileViewController: UIViewController {
         // Do any additional setup after loading the view.
 		// set navigationbar
 		let navItem: UINavigationItem = UINavigationItem(title: "Received File")
-		var flexSpaceItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
 		let cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		let importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
 		let decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
@@ -116,7 +115,7 @@ class ReceivedFileViewController: UIViewController {
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
 		// DEBUG ###########
-		let fileReadError: NSError?
+		let fileReadError: NSError? = nil
 		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
 		var pw = ""
 		if path != nil {
@@ -125,7 +124,7 @@ class ReceivedFileViewController: UIViewController {
 		
 		if fileReadError == nil {
 		// ##################
-			var (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: pw, encryptionType: "PGP")
+			let (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: pw, encryptionType: "PGP")
 			if decryptedFile != nil && error == nil {
 				let button = sender as! UIBarButtonItem
 				button.enabled = false
@@ -147,7 +146,7 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func encryptTapped(sender: AnyObject) -> Void {
-		var (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+		let (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
 		if encryptedFile != nil && error == nil {
 			let button = sender as! UIBarButtonItem
 			button.enabled = false

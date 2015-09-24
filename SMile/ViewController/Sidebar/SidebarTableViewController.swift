@@ -34,23 +34,22 @@ class SidebarTableViewController: UITableViewController {
 		if let appDelegate = appDel {
 			managedObjectContext = appDelegate.managedObjectContext
 			let emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-			let error: NSError?
-			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest) as? [EmailAccount]
+			var acc: [EmailAccount]? = nil
+            do {
+                acc = try managedObjectContext.executeFetchRequest(emailAccountsFetchRequest) as? [EmailAccount]
+            } catch _ {
+                print("Error while fetching emailaccounts from CoreData")
+            }
 			
-			if let account = acc {
+			if acc != nil {
 				//For fist expand comand
-				if account.count > 0 {
-					self.currAccountName = self.currAccountName == nil ? account[0].accountName : self.currAccountName
-					for emailAcc: EmailAccount in account {
+				if acc!.count > 0 {
+					self.currAccountName = self.currAccountName == nil ? acc![0].accountName : self.currAccountName
+					for emailAcc: EmailAccount in acc! {
 						accountArr.append(emailAcc)
 					}
 				}
-			} else {
-				if((error) != nil) {
-					NSLog(error!.description)
-				}
 			}
-			
 		}
 		
         self.sections = ["Inboxes", "Accounts", ""]
@@ -77,7 +76,7 @@ class SidebarTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        if let currAccName = self.currAccountName {
+        if self.currAccountName != nil {
             var sectionItems: [ActionItem] = self.rows[1] as! [ActionItem]
             var indexOfLastAcc: Int!
             for item in sectionItems {
@@ -307,26 +306,26 @@ class SidebarTableViewController: UITableViewController {
         var subItems = [ActionItem]()
             for imapFolder in emailAccount.folders {
                 let fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-                var pathComponents = fol.path.pathComponents
-                if pathComponents.count > 1 {
-                    for var i = 0; i < (pathComponents.count - 1); i++ {
-                        let parentFolderName = pathComponents[i]
+                var pathComponents = getPathComponentsFromString(fol.path)
+                if pathComponents!.count > 1 {
+                    for var i = 0; i < (pathComponents!.count - 1); i++ {
+                        let parentFolderName = pathComponents![i]
                         var parentItem: ActionItem? = self.getParentItemFromItems(subItems, andParentFolderName: parentFolderName)
                         if parentItem == nil {
-                            let acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                            let acItem = ActionItem(Name: pathComponents![i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                             acItem.pathComponentNumber = i
                             acItem.actionItems = [ActionItem]()
                             parentItem = acItem
                             if i == 0 {
                                 subItems.append(acItem)
                             } else {
-                                self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents[i - 1])
+                                self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents![i - 1])
                             }
                         }
                         if let parItem = parentItem {
                             parItem.viewController = "SubFolder"
-                            if pathComponents[i + 1] != fol.path.lastPathComponent {
-                                let acItem = ActionItem(Name: pathComponents[i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                            if pathComponents![i + 1] != getLastPathComponentFromString(fol.path) {
+                                let acItem = ActionItem(Name: pathComponents![i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                                 if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
                                     subItemArr.append(acItem)
@@ -334,7 +333,7 @@ class SidebarTableViewController: UITableViewController {
                                     acItem.actionItems = subItemArr
                                 }
                             } else {
-                                let acItem = ActionItem(Name: pathComponents[i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
+                                let acItem = ActionItem(Name: pathComponents![i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
                                 acItem.pathComponentNumber = i + 1
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                                 if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {

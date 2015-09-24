@@ -118,7 +118,7 @@ class PrefFolderSelectionTableViewController: UITableViewController {
 		var subItems = [ActionItem]()
 		for imapFolder in emailAccount.folders {
 			let fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-			var folderUrl = NSURL(fileURLWithPath: fol.path)
+			let folderUrl = NSURL(fileURLWithPath: fol.path)
 			var pathComponents = folderUrl.pathComponents
 			if pathComponents!.count > 1 {
 				for var i = 0; i < (pathComponents!.count - 1); i++ {

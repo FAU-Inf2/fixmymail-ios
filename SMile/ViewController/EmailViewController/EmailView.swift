@@ -136,15 +136,13 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         super.layoutSubviews()
         
         for view in self.webView.scrollView.subviews {
-            if view is UIView {
-                let subview = view 
-                if subview.isEqual(self.embededHeaderView) {
-                    continue
-                }
-                var newFrame = subview.frame
-                newFrame.origin.y = CGRectGetHeight(self.embededHeaderView.frame)
-                subview.frame = newFrame
+            let subview = view
+            if subview.isEqual(self.embededHeaderView) {
+                continue
             }
+            var newFrame = subview.frame
+            newFrame.origin.y = CGRectGetHeight(self.embededHeaderView.frame)
+            subview.frame = newFrame
         }
     }
     
@@ -389,7 +387,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             return EmailCache.sharedInstance.getIMAPPartDataWithUniquePartID("\(self.message.uid).\(partId)")!
         }
         
-        let fetchContentOperation: MCOIMAPFetchContentOperation = getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(folder, number: self.message.uid, partID: imapPart.partID, encoding: imapPart.encoding)
+        let fetchContentOperation: MCOIMAPFetchContentOperation = try! getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(folder, number: self.message.uid, partID: imapPart.partID, encoding: imapPart.encoding)
         fetchContentOperation.progress = { (current, maximum) -> Void in
             print("progress content: \(current)/\(maximum)")
         }
@@ -421,7 +419,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             dispatch_apply(self.message.attachments().count, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { (i) -> Void in
                 let part: MCOIMAPPart = self.message.attachments()[i] as! MCOIMAPPart
-                let partFetchOp: MCOIMAPFetchContentOperation = getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(self.email.folder, number: self.message.uid, partID: part.partID, encoding: part.encoding)
+                let partFetchOp: MCOIMAPFetchContentOperation = try! getSession(self.email.toAccount).fetchMessageAttachmentOperationWithFolder(self.email.folder, number: self.message.uid, partID: part.partID, encoding: part.encoding)
                 partFetchOp.start({ (error, data) -> Void in
                     if i == (self.message.attachments().count - 1) {
                         UIApplication.sharedApplication().networkActivityIndicatorVisible = false

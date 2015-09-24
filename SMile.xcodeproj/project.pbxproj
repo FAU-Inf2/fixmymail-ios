@@ -113,6 +113,7 @@
 		3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */; };
 		3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */; };
 		3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D90275D1AF97167000D3E72 /* CoreData.framework */; };
+		3D9E00A01BB2F4DD005D541D /* PathExtensionFromString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E009F1BB2F4DD005D541D /* PathExtensionFromString.swift */; settings = {ASSET_TAGS = (); }; };
 		3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA302941B2ED122003CE16A /* ImapFolder.swift */; };
 		3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */; };
 		3DB242141B38BADB00095634 /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB242131B38BADB00095634 /* folder.png */; };
@@ -150,7 +151,6 @@
 		8E84EAC71B8C9B5B00621926 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */; };
 		8EAB86DB1B9785CA0051532F /* AttachmentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAB86DA1B9785CA0051532F /* AttachmentViewCell.swift */; };
 		8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAB86DC1B9786190051532F /* AttachmentViewCell.xib */; };
-		A57032F3C67E01D83552C847 /* libPods-SMile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 442C288A316BE4CDB9E2D43B /* libPods-SMile.a */; };
 		A93A893D1BA1C5FA0074C08D /* RemindCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93A89391BA1C5FA0074C08D /* RemindCollectionViewCell.xib */; };
 		A93A893E1BA1C5FA0074C08D /* RemindViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93A893A1BA1C5FA0074C08D /* RemindViewController.xib */; };
 		A93A893F1BA1C5FA0074C08D /* RemindCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A893B1BA1C5FA0074C08D /* RemindCollectionViewCell.swift */; };
@@ -174,8 +174,6 @@
 		AD1255E01B1A302F005EA5CE /* sources.txt in Resources */ = {isa = PBXBuildFile; fileRef = AD1255DF1B1A302F005EA5CE /* sources.txt */; };
 		AD16B2231B1C594B001645A5 /* PreferenceAccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD16B2211B1C594B001645A5 /* PreferenceAccountTableViewCell.swift */; };
 		AD16B2241B1C594B001645A5 /* PreferenceAccountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */; };
-		AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */; };
-		AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */; };
 		AD1CDFE11B283DED00E05B66 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */; };
 		AD1CDFE21B283DED00E05B66 /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */; };
 		AD43C7FC1B6FEE9200C8F286 /* DevPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD43C7FA1B6FEE9200C8F286 /* DevPasswordViewController.swift */; };
@@ -221,7 +219,6 @@
 		AD5292641B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */; };
 		AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */; };
 		AD6E5DF51B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */; };
-		AD6F68451B6E17400015B79E /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6F68441B6E17400015B79E /* SwiftyJSON.swift */; };
 		AD789D991B3050640001719E /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD789D971B3050640001719E /* FeedbackViewController.xib */; };
 		AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD789D981B3050640001719E /* FeedbackViewController.swift */; };
 		AD789D9D1B3054A00001719E /* Feedback.html in Resources */ = {isa = PBXBuildFile; fileRef = AD789D9C1B3054A00001719E /* Feedback.html */; };
@@ -265,6 +262,7 @@
 		ADEF08661B824F95008AC0D0 /* KeyDetailTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08641B824F95008AC0D0 /* KeyDetailTableViewController.xib */; };
 		ADEF08691B826819008AC0D0 /* KeyDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF08671B826819008AC0D0 /* KeyDetailTableViewCell.swift */; };
 		ADEF086A1B826819008AC0D0 /* KeyDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADEF08681B826819008AC0D0 /* KeyDetailTableViewCell.xib */; };
+		F35022C8855A6683DC725178 /* Pods_SMile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F50E39FE7F19E78F41DC20A /* Pods_SMile.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -398,6 +396,7 @@
 		3D8D90E01B00A1F900D5135D /* SidebarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarTableViewController.swift; sourceTree = "<group>"; };
 		3D8D90E31B00A2CA00D5135D /* SideBarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarTableViewCell.swift; sourceTree = "<group>"; };
 		3D90275D1AF97167000D3E72 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		3D9E009F1BB2F4DD005D541D /* PathExtensionFromString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathExtensionFromString.swift; sourceTree = "<group>"; };
 		3DA302941B2ED122003CE16A /* ImapFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImapFolder.swift; sourceTree = "<group>"; };
 		3DA3029A1B321467003CE16A /* MCOIMAPFolderWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCOIMAPFolderWrapper.h; sourceTree = "<group>"; };
 		3DA3029B1B321467003CE16A /* MCOIMAPFolderWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCOIMAPFolderWrapper.m; sourceTree = "<group>"; };
@@ -415,7 +414,7 @@
 		3DF253C41AF7611E00B99BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DF253C51AF7611E00B99BC8 /* SMileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMileTests.swift; sourceTree = "<group>"; };
 		3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MailCore2-Bridging-Header.h"; path = "SMileTests/MailCore2-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
-		442C288A316BE4CDB9E2D43B /* libPods-SMile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SMile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F50E39FE7F19E78F41DC20A /* Pods_SMile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SMile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPFunctions.swift; sourceTree = "<group>"; };
 		5B7EAB071B31870800B888BD /* archive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archive.png; sourceTree = "<group>"; };
 		5B8948FA1B317DAA0064F3C0 /* Trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trash.png; sourceTree = "<group>"; };
@@ -467,8 +466,6 @@
 		AD1255DF1B1A302F005EA5CE /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
 		AD16B2211B1C594B001645A5 /* PreferenceAccountTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceAccountTableViewCell.swift; sourceTree = "<group>"; };
 		AD16B2221B1C594B001645A5 /* PreferenceAccountTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceAccountTableViewCell.xib; sourceTree = "<group>"; };
-		AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locksmith.swift; sourceTree = "<group>"; };
-		AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocksmithRequest.swift; sourceTree = "<group>"; };
 		AD1CDFDF1B283DED00E05B66 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		AD1CDFE01B283DED00E05B66 /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailAccountSupport.swift; path = "../Supporting Files/EmailAccountSupport.swift"; sourceTree = "<group>"; };
@@ -524,7 +521,6 @@
 		AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefFolderSelectionTableViewController.xib; sourceTree = "<group>"; };
 		AD6E5DF21B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceStandardAccountTableViewController.swift; sourceTree = "<group>"; };
 		AD6E5DF31B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceStandardAccountTableViewController.xib; sourceTree = "<group>"; };
-		AD6F68441B6E17400015B79E /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		AD789D971B3050640001719E /* FeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedbackViewController.xib; sourceTree = "<group>"; };
 		AD789D981B3050640001719E /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		AD789D9C1B3054A00001719E /* Feedback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Feedback.html; sourceTree = "<group>"; };
@@ -581,7 +577,7 @@
 				8E450BBA1B15BD35001E37B9 /* ImageIO.framework in Frameworks */,
 				8E450BB81B15BD2F001E37B9 /* CoreImage.framework in Frameworks */,
 				3D90275E1AF97167000D3E72 /* CoreData.framework in Frameworks */,
-				A57032F3C67E01D83552C847 /* libPods-SMile.a in Frameworks */,
+				F35022C8855A6683DC725178 /* Pods_SMile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -600,7 +596,7 @@
 			children = (
 				8E84EAC61B8C9B5B00621926 /* AssetsLibrary.framework */,
 				3DD3C74A1B7BD02D00F53EAA /* MobileCoreServices.framework */,
-				442C288A316BE4CDB9E2D43B /* libPods-SMile.a */,
+				4F50E39FE7F19E78F41DC20A /* Pods_SMile.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -828,6 +824,7 @@
 				5B66C33D1B4E660600BDF3D6 /* IMAPFunctions.swift */,
 				ADD135C61B15B56300A9B31A /* SharedClassExtensions.swift */,
 				AD24BE1F1B23042500804732 /* EmailAccountSupport.swift */,
+				3D9E009F1BB2F4DD005D541D /* PathExtensionFromString.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -878,9 +875,7 @@
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
-				AD187B1F1B1FB4D8007806D9 /* Locksmith */,
 				AD8744161B6A3B7600257AA5 /* RNCryptor */,
-				AD6F68431B6E17240015B79E /* SwiftyJSON */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				A9F24C471BA720170088EB2D /* RemindMe.swift */,
@@ -1030,23 +1025,6 @@
 			path = Icons;
 			sourceTree = "<group>";
 		};
-		AD187B1F1B1FB4D8007806D9 /* Locksmith */ = {
-			isa = PBXGroup;
-			children = (
-				AD187B1B1B1FB4C2007806D9 /* Locksmith.swift */,
-				AD187B1C1B1FB4C2007806D9 /* LocksmithRequest.swift */,
-			);
-			path = Locksmith;
-			sourceTree = "<group>";
-		};
-		AD6F68431B6E17240015B79E /* SwiftyJSON */ = {
-			isa = PBXGroup;
-			children = (
-				AD6F68441B6E17400015B79E /* SwiftyJSON.swift */,
-			);
-			path = SwiftyJSON;
-			sourceTree = "<group>";
-		};
 		AD789D9B1B3054420001719E /* HTML_Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -1120,6 +1098,7 @@
 				3DF253A51AF7611D00B99BC8 /* Resources */,
 				3DF253CF1AF766A200B99BC8 /* ShellScript */,
 				BD16F529DA2B2C5ADD5BC647 /* Copy Pods Resources */,
+				DB36B2158AE6D385E73BF107 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1156,12 +1135,17 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = SMile;
 				TargetAttributes = {
 					3DF253A61AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = 3928PFTW6V;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					3DF253BE1AF7611D00B99BC8 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -1411,6 +1395,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SMile/Pods-SMile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DB36B2158AE6D385E73BF107 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SMile/Pods-SMile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1442,7 +1441,6 @@
 				3D3654E31B385566003B38F0 /* SideBarSubFolderTableViewCell.swift in Sources */,
 				3DF253B21AF7611D00B99BC8 /* ContainerViewController.swift in Sources */,
 				3D2128721B2DF57200C9FC4C /* EmailAccount.swift in Sources */,
-				AD6F68451B6E17400015B79E /* SwiftyJSON.swift in Sources */,
 				AD43C7FC1B6FEE9200C8F286 /* DevPasswordViewController.swift in Sources */,
 				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				8E1C05541B98794E0094B604 /* MoveEmailViewController.swift in Sources */,
@@ -1464,7 +1462,6 @@
 				A9F24C481BA720170088EB2D /* RemindMe.swift in Sources */,
 				3D69ECEF1B83ABC80082EF5C /* DelayedAttachment.m in Sources */,
 				3D69ECF01B83ABC80082EF5C /* FPMimetype.m in Sources */,
-				AD187B1E1B1FB4C2007806D9 /* LocksmithRequest.swift in Sources */,
 				AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */,
 				3D69EBA71B83A5020082EF5C /* SubjectInfoTableViewCell.swift in Sources */,
 				3DF253B01AF7611D00B99BC8 /* SMile.xcdatamodeld in Sources */,
@@ -1486,7 +1483,6 @@
 				AD43C8041B70F92600C8F286 /* ReceivedFileViewController.swift in Sources */,
 				3D69ED0A1B83ABE20082EF5C /* UIImage+FlatUI.m in Sources */,
 				AD4FB1621B88C08C004D18CB /* RNEncryptor.m in Sources */,
-				AD187B1D1B1FB4C2007806D9 /* Locksmith.swift in Sources */,
 				ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */,
 				3D69ED071B83ABE20082EF5C /* UTIFunctions.m in Sources */,
 				3D69ED0E1B83ABE20082EF5C /* HeaderView.m in Sources */,
@@ -1497,6 +1493,7 @@
 				A93A893F1BA1C5FA0074C08D /* RemindCollectionViewCell.swift in Sources */,
 				8E1C054E1B98794E0094B604 /* AttachmentsViewController.swift in Sources */,
 				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,
+				3D9E00A01BB2F4DD005D541D /* PathExtensionFromString.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
 				AD4FB1601B88C08C004D18CB /* RNCryptorEngine.m in Sources */,
 				AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */,
@@ -1570,6 +1567,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1658,12 +1656,11 @@
 					"-l\"MailCore-ios\"",
 					"-l\"bz2\"",
 					"-l\"c++\"",
-					"-l\"crypto\"",
 					"-l\"iconv\"",
-					"-l\"ssl\"",
 					"-l\"xml2\"",
 					"-l\"z\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.fau.cs.mad.smile.ios;
 				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
@@ -1694,12 +1691,11 @@
 					"-l\"MailCore-ios\"",
 					"-l\"bz2\"",
 					"-l\"c++\"",
-					"-l\"crypto\"",
 					"-l\"iconv\"",
-					"-l\"ssl\"",
 					"-l\"xml2\"",
 					"-l\"z\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.fau.cs.mad.smile.ios;
 				PRODUCT_NAME = SMile;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SMileTests/MailCore2-Bridging-Header.h";
@@ -1721,6 +1717,7 @@
 				);
 				INFOPLIST_FILE = SMileTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.SMile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = SMileTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SMile.app/SMile";
 			};
@@ -1736,6 +1733,7 @@
 				);
 				INFOPLIST_FILE = SMileTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.SMile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = SMileTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SMile.app/SMile";
 			};

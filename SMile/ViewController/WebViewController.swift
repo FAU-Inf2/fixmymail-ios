@@ -21,22 +21,23 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     var session: MCOIMAPSession!
     
     override func viewDidLoad() {
-        messageView = MCOMessageView(frame: self.view.bounds)
-        messageView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
-        self.view.addSubview(messageView)
-        var parser: MCOMessageParser = MCOMessageParser(data: message.data)
-        messageView.message = parser
-        messageView.folder = "INBOX"
-        messageView.delegate = self
+//        messageView = MCOMessageView(frame: self.view.bounds)
+//        messageView.frame = self.view.bounds
+//        messageView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
+//        self.view.addSubview(messageView)
+//        var parser: MCOMessageParser = MCOMessageParser(data: message.data)
+//        messageView.message = parser
+//        messageView.folder = "INBOX"
+//        messageView.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        var buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
-        var buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "replyButtonPressed")
-        var buttonCompose = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "compose")
-        var items = [buttonDelete, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonReply,UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonCompose]
-        self.navigationController?.visibleViewController.setToolbarItems(items, animated: animated)
+        let buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
+        let buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "replyButtonPressed")
+        let buttonCompose = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "compose")
+        let items = [buttonDelete, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonReply,UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonCompose]
+        self.navigationController?.visibleViewController!.setToolbarItems(items, animated: animated)
         self.navigationController?.setToolbarHidden(false, animated: false)
     }
     
@@ -48,7 +49,6 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     func delete() {        
         //get trashFolderName
         let fetchFoldersOp = session.fetchAllFoldersOperation()
-        var folders = [MCOIMAPFolder]()
         fetchFoldersOp.start({ (error, folders) -> Void in
             var trashFolderName: String?
             for folder in folders {
@@ -82,13 +82,13 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
                     }
                 })
                 
-                var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
+                let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
                 managedObjectContext.deleteObject(self.message)
                 
                 var error: NSError? = nil
                 do {
                     try managedObjectContext.save()
-                } catch var error1 as NSError {
+                } catch let error1 as NSError {
                     error = error1
                 } catch {
                     fatalError()
@@ -104,37 +104,37 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
-        let replyAll: Bool = !((self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
-                             (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil)
-        switch buttonIndex {
-        case 1:
-            self.reply(false)
-        case 2:
-            if replyAll {
-                self.reply(true)
-            } else {
-                self.forward()
-            }
-        case 3:
-            if replyAll {
-                self.forward()
-            }
-        default:
-            return
-        }
-    }
-    
-    func replyButtonPressed() {
-        if (self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
-           (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil {
-                let replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Forward")
-                replyActionSheet.showInView(self.view)
-        } else {
-            let replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all", "Forward")
-            replyActionSheet.showInView(self.view)
-        }
-    }
+//    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+//        let replyAll: Bool = !((self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
+//                             (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil)
+//        switch buttonIndex {
+//        case 1:
+//            self.reply(false)
+//        case 2:
+//            if replyAll {
+//                self.reply(true)
+//            } else {
+//                self.forward()
+//            }
+//        case 3:
+//            if replyAll {
+//                self.forward()
+//            }
+//        default:
+//            return
+//        }
+//    }
+//    
+//    func replyButtonPressed() {
+//        if (self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
+//           (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil {
+//                let replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Forward")
+//                replyActionSheet.showInView(self.view)
+//        } else {
+//            let replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all", "Forward")
+//            replyActionSheet.showInView(self.view)
+//        }
+//    }
     
     func reply(replyAll: Bool) {
         let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
@@ -240,7 +240,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         }
         var pathExtension: String? = nil
         if part.filename != nil {
-            pathExtension = part.filename.pathExtension.lowercaseString
+            pathExtension = getPathExtensionFromString(part.filename)!.lowercaseString
         }
         if let ext = pathExtension {
             if ext == "tiff" {
@@ -298,10 +298,7 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
     func convertToJPEGData(data: NSData) -> NSData? {
         var imageSource: CGImageSourceRef?
         var thumbnail: CGImageRef
-        var info: NSMutableDictionary = NSMutableDictionary()
-        let width = IMAGE_PREVIEW_WIDTH
-        let height = IMAGE_PREVIEW_HEIGHT
-        let quality: float_t = 1.0
+        let info: NSMutableDictionary = NSMutableDictionary()
         
         imageSource = CGImageSourceCreateWithData(data, nil)
         if imageSource == nil {
@@ -310,10 +307,10 @@ class WebViewController: UIViewController, UIActionSheetDelegate, MCOMessageView
         info.setObject(kCFBooleanTrue as AnyObject, forKey: kCGImageSourceCreateThumbnailWithTransform as String)
         info.setObject(kCFBooleanTrue as AnyObject, forKey: kCGImageSourceCreateThumbnailFromImageAlways as String)
         info.setObject(NSNumber(float: Float(IMAGE_PREVIEW_WIDTH)), forKey: kCGImageSourceThumbnailMaxPixelSize as String)
-        thumbnail = CGImageSourceCreateThumbnailAtIndex(imageSource!, 0, info)
+        thumbnail = CGImageSourceCreateThumbnailAtIndex(imageSource!, 0, info)!
         var destination: CGImageDestinationRef
-        var destData: NSMutableData = NSMutableData(data: data)
-        destination = CGImageDestinationCreateWithData(destData, "public.jpeg" as CFStringRef, 1, nil)
+        let destData: NSMutableData = NSMutableData(data: data)
+        destination = CGImageDestinationCreateWithData(destData, "public.jpeg" as CFStringRef, 1, nil)!
         CGImageDestinationAddImage(destination, thumbnail, nil)
         CGImageDestinationFinalize(destination)
         
