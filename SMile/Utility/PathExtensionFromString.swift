@@ -17,7 +17,13 @@ func appendPathExtensionToString(stingToAppend: String, andPathExtension pathExt
 }
 
 func getPathComponentsFromString(string: String) -> [String]? {
-    return NSURL(fileURLWithPath: string).pathComponents
+    var urlParts = NSURL(fileURLWithPath: string).pathComponents
+    if urlParts != nil {
+        if urlParts![0] == "/" {
+            urlParts!.removeFirst()
+        }
+    }
+    return urlParts
 }
 
 func getLastPathComponentFromString(string: String) -> String? {

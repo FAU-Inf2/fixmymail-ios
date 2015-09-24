@@ -67,8 +67,9 @@ class SidebarTableViewController: UITableViewController {
         settingsArr.append(ActionItem(Name: "Preferences", viewController: "Preferences"))
 
         self.rows.append(inboxRows)
-        self.rows.append(self.getIMAPFoldersFromCoreData(WithEmailAccounts: accountArr))
+        self.rows.append([ActionItem]())
         self.rows.append(settingsArr)
+        self.rows[1] = self.getIMAPFoldersFromCoreData(WithEmailAccounts: accountArr)
         self.tableView.reloadData()
         
         self.emailAccounts = accountArr
