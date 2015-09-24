@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDelegate {
+class EmailViewController: UIViewController, EmailViewDelegate {
 
     var mcoimapmessage: MCOIMAPMessage!
     var message: Email!
@@ -36,11 +36,11 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setToolbarHidden(false, animated: false)
-        var buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
-        var buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "replyButtonPressed")
-        var buttonCompose = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "compose")
-        var items = [buttonDelete, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonReply,UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonCompose]
-        self.navigationController?.visibleViewController.setToolbarItems(items, animated: false)
+        let buttonDelete = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "delete")
+        let buttonReply = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Reply, target: self, action: "replyButtonPressed")
+        let buttonCompose = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "compose")
+        let items = [buttonDelete, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonReply,UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), buttonCompose]
+        self.navigationController?.visibleViewController!.setToolbarItems(items, animated: false)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -52,13 +52,19 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
         super.viewDidAppear(animated)
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
-                var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+                let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
                 var sendAccount: EmailAccount? = nil
                 
-                var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+                let accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
                 let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
                 var error: NSError?
-                var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+                var result: [AnyObject]?
+                do {
+                    result = try managedObjectContext.executeFetchRequest(fetchRequest)
+                } catch let error1 as NSError {
+                    error = error1
+                    result = nil
+                }
                 if error != nil {
                     NSLog("%@", error!.description)
                     return
@@ -78,7 +84,7 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
                 
                 if let account = sendAccount {
                     sendView.account = account
-                    sendView.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                    sendView.attachFile(fileName, data: data, mimetype: getPathExtensionFromString(fileName)!)
                     
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
@@ -100,57 +106,47 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
     func delete() {
         for var i = 0; i < self.navigationController?.viewControllers.count; i++ {
             if self.navigationController?.viewControllers[i] is MailTableViewController {
-                var mailTableVC: MailTableViewController = self.navigationController?.viewControllers[i] as! MailTableViewController
+                let mailTableVC: MailTableViewController = self.navigationController?.viewControllers[i] as! MailTableViewController
                 mailTableVC.deleteEmail(self.message)
             }
         }
         self.navigationController?.popViewControllerAnimated(true)
     }
-
-    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
-        var replyAll: Bool = !((self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
-            (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil)
-        switch buttonIndex {
-        case 1:
-            self.reply(false)
-        case 2:
-            if replyAll {
-                self.reply(true)
-            } else {
-                self.forward()
-            }
-        case 3:
-            if replyAll {
-                self.forward()
-            }
-        default:
-            return
-        }
-    }
     
     func replyButtonPressed() {
-        if (self.message.mcomessage as! MCOIMAPMessage).header.cc == nil &&
-            (self.message.mcomessage as! MCOIMAPMessage).header.bcc == nil {
-                var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Forward")
-                replyActionSheet.showInView(self.view)
-        } else {
-            var replyActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Reply", "Reply all", "Forward")
-            replyActionSheet.showInView(self.view)
+        let replyActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let replyAction = UIAlertAction(title: "Reply", style: .Default) { (action) -> Void in
+            self.reply(false)
         }
+        replyActionSheet.addAction(replyAction)
+        
+        if (self.message.mcomessage as! MCOIMAPMessage).header.cc != nil &&
+            (self.message.mcomessage as! MCOIMAPMessage).header.bcc != nil {
+                let replyAllAction = UIAlertAction(title: "Reply all", style: .Default, handler: { (action) -> Void in
+                    self.reply(true)
+                })
+                replyActionSheet.addAction(replyAllAction)
+        }
+        
+        let forwardAction = UIAlertAction(title: "Forward", style: .Default) { (action) -> Void in
+            self.forward()
+        }
+        replyActionSheet.addAction(forwardAction)
+        self.presentViewController(replyActionSheet, animated: true, completion: nil)
     }
     
     func reply(replyAll: Bool) {
-        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         if replyAll {
             sendView.tableViewIsExpanded = true
             var array: [MCOAddress] = [MCOAddress]()
-            var recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
+            let recipients = (self.message.mcomessage as! MCOIMAPMessage).header.to
             for recipient in recipients {
                 if (recipient as! MCOAddress).mailbox != self.message.toAccount.emailAddress {
                     array.append(recipient as! MCOAddress)
                 }
             }
-            var ccRecipients = (self.message.mcomessage as! MCOIMAPMessage).header.cc
+            let ccRecipients = (self.message.mcomessage as! MCOIMAPMessage).header.cc
             if ccRecipients != nil {
                 for ccRecipient in ccRecipients {
                     array.append(ccRecipient as! MCOAddress)
@@ -167,23 +163,22 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
         sendView.subject = "Re: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
         
         let msgContent: String = (self.emailView.plainHTMLContent as NSString).mco_flattenHTML().stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) as String
-        var date = (self.message.mcomessage as! MCOIMAPMessage).header.date
+        let date = (self.message.mcomessage as! MCOIMAPMessage).header.date
         sendView.textBody = "\n\n\n\n\nOn \(date.day()) \(date.month()) \(date.year()), at \(date.hour()):\(date.minute()), " + (self.message.mcomessage as! MCOIMAPMessage).header.from.displayName + " wrote:\n\n" + msgContent
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     
     func forward() {
-        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         sendView.account = self.message.toAccount
         sendView.subject = "Fwd: " + (self.message.mcomessage as! MCOIMAPMessage).header.subject
-        var parser = MCOMessageParser(data: self.message.data)
         let msgContent: String = (self.emailView.plainHTMLContent as NSString).mco_flattenHTML().stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) as String
         sendView.textBody = "\n\n\n\n\nBegin forwarded message:\n\n" + msgContent
         self.navigationController?.pushViewController(sendView, animated: true)
     }
     
     func compose() {
-        var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+        let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
         sendView.account = self.message.toAccount
         self.navigationController?.pushViewController(sendView, animated: true)
     }
@@ -196,15 +191,13 @@ class EmailViewController: UIViewController, EmailViewDelegate, UIActionSheetDel
     
     func handleMailtoWithRecipients(recipients: [String], andSubject subject: String, andHTMLString html: String) {
         let mailSendVC: MailSendViewController = MailSendViewController(nibName: "MailSendViewController", bundle: NSBundle.mainBundle())
-        var recipientAddressArr = NSMutableArray()
+        let recipientAddressArr = NSMutableArray()
         for recipient in recipients {
             recipientAddressArr.addObject(MCOAddress(mailbox: recipient))
         }
         mailSendVC.recipients = recipientAddressArr
         mailSendVC.account = self.message.toAccount
         
-        let parser = MCOMessageParser(data: self.message.data)
-        var error: NSError?
         //For Reply with only plain text
         let msgContent: String = (self.emailView.plainHTMLContent as NSString).mco_flattenHTML().stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) as String
         mailSendVC.textBody = msgContent

@@ -33,34 +33,33 @@ class SidebarTableViewController: UITableViewController {
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 		if let appDelegate = appDel {
 			managedObjectContext = appDelegate.managedObjectContext
-			var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-			var error: NSError?
-			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
+			let emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			var acc: [EmailAccount]? = nil
+            do {
+                acc = try managedObjectContext.executeFetchRequest(emailAccountsFetchRequest) as? [EmailAccount]
+            } catch _ {
+                print("Error while fetching emailaccounts from CoreData")
+            }
 			
-			if let account = acc {
+			if acc != nil {
 				//For fist expand comand
-				if account.count > 0 {
-					self.currAccountName = self.currAccountName == nil ? account[0].accountName : self.currAccountName
-					for emailAcc: EmailAccount in account {
+				if acc!.count > 0 {
+					self.currAccountName = self.currAccountName == nil ? acc![0].accountName : self.currAccountName
+					for emailAcc: EmailAccount in acc! {
 						accountArr.append(emailAcc)
 					}
 				}
-			} else {
-				if((error) != nil) {
-					NSLog(error!.description)
-				}
 			}
-			
 		}
 		
         self.sections = ["Inboxes", "Accounts", ""]
         var inboxRows: [ActionItem] = [ActionItem]()
         inboxRows.append(ActionItem(Name: "All", viewController: "EmailAll", icon: UIImage(named: "smile-gray.png")))
         for emailAcc: EmailAccount in accountArr {
-            var actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAccount: emailAcc, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc))
+            let actionItem = ActionItem(Name: emailAcc.accountName, viewController: "EmailSpecific", emailAccount: emailAcc, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc))
             inboxRows.append(actionItem)
         }
-        inboxRows = inboxRows.sorted{ $0.cellName < $1.cellName }
+        inboxRows = inboxRows.sort{ $0.cellName < $1.cellName }
         
         var settingsArr: [ActionItem] = [ActionItem]()
         settingsArr.append(ActionItem(Name: "REMIND ME!", viewController: "TODO"))
@@ -68,8 +67,9 @@ class SidebarTableViewController: UITableViewController {
         settingsArr.append(ActionItem(Name: "Preferences", viewController: "Preferences"))
 
         self.rows.append(inboxRows)
-        self.rows.append(self.getIMAPFoldersFromCoreData(WithEmailAccounts: accountArr))
+        self.rows.append([ActionItem]())
         self.rows.append(settingsArr)
+        self.rows[1] = self.getIMAPFoldersFromCoreData(WithEmailAccounts: accountArr)
         self.tableView.reloadData()
         
         self.emailAccounts = accountArr
@@ -77,15 +77,15 @@ class SidebarTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        if let currAccName = self.currAccountName {
+        if self.currAccountName != nil {
             var sectionItems: [ActionItem] = self.rows[1] as! [ActionItem]
             var indexOfLastAcc: Int!
             for item in sectionItems {
                 if item.cellName == self.currAccountName! {
-                    indexOfLastAcc = find(sectionItems, item)
+                    indexOfLastAcc = sectionItems.indexOf(item)
                     
                     var firstPart: [ActionItem] = Array(sectionItems[0...indexOfLastAcc])
-                    var lastPart: [ActionItem]? = (sectionItems.count - 1) == indexOfLastAcc ? nil : Array(sectionItems[(indexOfLastAcc + 1)...(sectionItems.count - 1)])
+                    let lastPart: [ActionItem]? = (sectionItems.count - 1) == indexOfLastAcc ? nil : Array(sectionItems[(indexOfLastAcc + 1)...(sectionItems.count - 1)])
                     for item: ActionItem in item.actionItems! {
                         firstPart.append(item)
                     }
@@ -127,7 +127,7 @@ class SidebarTableViewController: UITableViewController {
             if indexPath.row == 0 {
                 let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
-                    var sideBarCell: SideBarTableViewCell = self.sidebarCell
+                    let sideBarCell: SideBarTableViewCell = self.sidebarCell
                     self.sidebarCell = nil
                     if(indexPath.row == 0) {
                         sideBarCell.menuLabel.text = "All"
@@ -143,7 +143,7 @@ class SidebarTableViewController: UITableViewController {
                     return sideBarCell
             } else {
                     var viewArr = NSBundle.mainBundle().loadNibNamed("SideBarSubFolderTableViewCell", owner: self, options: nil)
-                    var cell = viewArr[0] as! SideBarSubFolderTableViewCell
+                    let cell = viewArr[0] as! SideBarSubFolderTableViewCell
                     let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     cell.menuLabel.text = mailAcc.cellName
                     if let icon = mailAcc.cellIcon {
@@ -156,7 +156,7 @@ class SidebarTableViewController: UITableViewController {
         } else if indexPath.section == 1 {
             let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
             if actionItem.viewController == "NoVC" {
-                var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
+                let inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
                 if let cell = inboxCell {
                     cell.selectionStyle = UITableViewCellSelectionStyle.Default
                     cell.menuLabel.text = actionItem.cellName
@@ -168,7 +168,7 @@ class SidebarTableViewController: UITableViewController {
                     return cell
                 } else {
                     NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
-                    var sideBarCell: SideBarTableViewCell = self.sidebarCell
+                    let sideBarCell: SideBarTableViewCell = self.sidebarCell
                     self.sidebarCell = nil
                     let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                     if actionItem.viewController == "NoVC" {
@@ -184,7 +184,7 @@ class SidebarTableViewController: UITableViewController {
                 }
             } else {
                 var viewArr = NSBundle.mainBundle().loadNibNamed("SideBarSubFolderTableViewCell", owner: self, options: nil)
-                var cell = viewArr[0] as! SideBarSubFolderTableViewCell
+                let cell = viewArr[0] as! SideBarSubFolderTableViewCell
                 let mailAcc: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                 cell.menuLabel.text = mailAcc.cellName
                 self.setConstraintsForSubFolderCell(cell, andPathComponentNumber: mailAcc.pathComponentNumber)
@@ -197,7 +197,7 @@ class SidebarTableViewController: UITableViewController {
                         } else {
                             img = UIImage(named: "triangle_right.png")
                         }
-                        var triangleImageView: UIImageView = UIImageView(image: img)
+                        let triangleImageView: UIImageView = UIImageView(image: img)
                         triangleImageView.contentMode = UIViewContentMode.ScaleAspectFill
                         triangleImageView.frame.size = CGSize(width: cell.menuImg.frame.size.width / 4, height: cell.menuImg.frame.size.height / 4)
                         triangleImageView.center = CGPointMake(cell.menuImg.center.x, cell.menuImg.center.y + cell.menuImg.frame.size.height / 8)
@@ -209,7 +209,7 @@ class SidebarTableViewController: UITableViewController {
                 return cell
             }
         } else if indexPath.section == 2 {
-            var inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
+            let inboxCell = tableView.dequeueReusableCellWithIdentifier("SideBarCell") as? SideBarTableViewCell
             if let cell = inboxCell {
                 let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                 cell.menuLabel.text = actionItem.cellName
@@ -221,7 +221,7 @@ class SidebarTableViewController: UITableViewController {
                 return cell
             } else {
                 NSBundle.mainBundle().loadNibNamed("SideBarTableViewCell", owner: self, options: nil)
-                var sideBarCell: SideBarTableViewCell = self.sidebarCell
+                let sideBarCell: SideBarTableViewCell = self.sidebarCell
                 self.sidebarCell = nil
                 let actionItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
                 sideBarCell.menuLabel.text = actionItem.cellName
@@ -248,7 +248,7 @@ class SidebarTableViewController: UITableViewController {
                 if actionItem.folderExpanded == false {
                     var sectionItems: [ActionItem] = self.rows[indexPath.section] as! [ActionItem]
                     var firstPart: [ActionItem] = Array(sectionItems[0...indexPath.row])
-                    var lastPart: [ActionItem]? = (sectionItems.count - 1) == indexPath.row ? nil : Array(sectionItems[(indexPath.row + 1)...(sectionItems.count - 1)])
+                    let lastPart: [ActionItem]? = (sectionItems.count - 1) == indexPath.row ? nil : Array(sectionItems[(indexPath.row + 1)...(sectionItems.count - 1)])
                     for item: ActionItem in actionItem.actionItems! {
                         firstPart.append(item)
                     }
@@ -277,15 +277,15 @@ class SidebarTableViewController: UITableViewController {
         IMAPFolderFetcher.sharedInstance.getAllIMAPFoldersWithAccounts { (account, folders, sucess, newFolders) -> Void in
             if sucess == true && newFolders == true {
                 var sectionItems = self.rows[1] as! [ActionItem]
-                var newActionItem = self.getActionItemsFromEmailAccount(account!)
+                let newActionItem = self.getActionItemsFromEmailAccount(account!)
                 if self.containsActionItem(newActionItem, inActionItemArray: self.rows[1] as! [ActionItem]) == false {
                     sectionItems.append(newActionItem)
                 } else {
-                    let indexOfObject = find(sectionItems, newActionItem)
+                    let indexOfObject = sectionItems.indexOf(newActionItem)
                     sectionItems.removeAtIndex(indexOfObject!)
                     sectionItems.append(newActionItem)
                 }
-                sectionItems = sectionItems.sorted { $0.cellName < $1.cellName }
+                sectionItems = sectionItems.sort { $0.cellName < $1.cellName }
                 self.rows[1] = sectionItems
                 self.tableView.reloadData()
             }
@@ -299,47 +299,47 @@ class SidebarTableViewController: UITableViewController {
                 resultItems.append(self.getActionItemsFromEmailAccount(account))
             }
         }
-        return resultItems.sorted{ $0.cellName < $1.cellName }
+        return resultItems.sort{ $0.cellName < $1.cellName }
     }
     
     private func getActionItemsFromEmailAccount(emailAccount: EmailAccount) -> ActionItem {
-        var actionItem = ActionItem(Name: emailAccount.accountName, viewController: "NoVC", emailAccount: emailAccount, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAccount))
+        let actionItem = ActionItem(Name: emailAccount.accountName, viewController: "NoVC", emailAccount: emailAccount, icon: PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAccount))
         var subItems = [ActionItem]()
             for imapFolder in emailAccount.folders {
-                var fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-                var pathComponents = fol.path.pathComponents
-                if pathComponents.count > 1 {
-                    for var i = 0; i < (pathComponents.count - 1); i++ {
-                        let parentFolderName = pathComponents[i]
+                let fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
+                var pathComponents = getPathComponentsFromString(fol.path)
+                if pathComponents!.count > 1 {
+                    for var i = 0; i < (pathComponents!.count - 1); i++ {
+                        let parentFolderName = pathComponents![i]
                         var parentItem: ActionItem? = self.getParentItemFromItems(subItems, andParentFolderName: parentFolderName)
                         if parentItem == nil {
-                            var acItem = ActionItem(Name: pathComponents[i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                            let acItem = ActionItem(Name: pathComponents![i], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                             acItem.pathComponentNumber = i
                             acItem.actionItems = [ActionItem]()
                             parentItem = acItem
                             if i == 0 {
                                 subItems.append(acItem)
                             } else {
-                                self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents[i - 1])
+                                self.addItemToParentItemWithItem(acItem, andParentItemName: pathComponents![i - 1])
                             }
                         }
                         if let parItem = parentItem {
                             parItem.viewController = "SubFolder"
-                            if pathComponents[i + 1] != fol.path.lastPathComponent {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
+                            if pathComponents![i + 1] != getLastPathComponentFromString(fol.path) {
+                                let acItem = ActionItem(Name: pathComponents![i + 1], viewController: "SubFolder", emailAccount: emailAccount, icon: UIImage(named: "folder.png"))
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                                 if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
                                     subItemArr.append(acItem)
-                                    subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
+                                    subItemArr = subItemArr.sort { $0.cellName < $1.cellName }
                                     acItem.actionItems = subItemArr
                                 }
                             } else {
-                                var acItem = ActionItem(Name: pathComponents[i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
+                                let acItem = ActionItem(Name: pathComponents![i + 1], viewController: "EmailSpecific", emailAccount: emailAccount, icon: UIImage(named: "folder.png"), emailFolder: fol)
                                 acItem.pathComponentNumber = i + 1
                                 var subItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
                                 if self.containsActionItem(acItem, inActionItemArray: subItemArr) == false {
                                     subItemArr.append(acItem)
-                                    subItemArr = subItemArr.sorted { $0.cellName < $1.cellName }
+                                    subItemArr = subItemArr.sort { $0.cellName < $1.cellName }
                                     parItem.actionItems = subItemArr
                                 }
                             }
@@ -348,9 +348,9 @@ class SidebarTableViewController: UITableViewController {
                 } else {
                     var isParentFolder = false
                     for imapFolder in emailAccount.folders {
-                        var folder: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-                        var folPath: NSString = NSString(string: folder.path)
-                        var range: NSRange = folPath.rangeOfString(NSString(format: "%@/", fol.path) as String)
+                        let folder: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
+                        let folPath: NSString = NSString(string: folder.path)
+                        let range: NSRange = folPath.rangeOfString(NSString(format: "%@/", fol.path) as String)
                         if range.location != NSNotFound {
                             isParentFolder = true
                             break;
@@ -369,7 +369,7 @@ class SidebarTableViewController: UITableViewController {
         }
         
         
-        actionItem.actionItems = subItems.sorted { $0.cellName < $1.cellName }
+        actionItem.actionItems = subItems.sort { $0.cellName < $1.cellName }
         actionItem.folderExpanded = false
         return actionItem
     }
@@ -394,28 +394,28 @@ class SidebarTableViewController: UITableViewController {
     
     private func setConstraintsForSubFolderCell(cell: SideBarSubFolderTableViewCell, andPathComponentNumber pathComponentNumber: Int) -> Void {
         
-        cell.menuImg.removeConstraints(cell.menuImg.constraints())
-        cell.contentView.removeConstraints(cell.contentView.constraints())
+        cell.menuImg.removeConstraints(cell.menuImg.constraints)
+        cell.contentView.removeConstraints(cell.contentView.constraints)
         
-        var constraint1: NSLayoutConstraint = NSLayoutConstraint(item: cell.menuImg, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: cell.contentView, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: (CGFloat(pathComponentNumber) * CGFloat(self.leftSpaceIncrement) + 33.0))
+        let constraint1: NSLayoutConstraint = NSLayoutConstraint(item: cell.menuImg, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: cell.contentView, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: (CGFloat(pathComponentNumber) * CGFloat(self.leftSpaceIncrement) + 33.0))
         cell.addConstraint(constraint1)
         
-        var constraint2 = NSLayoutConstraint(item: cell.menuImg, attribute: .Top, relatedBy: .Equal, toItem: cell.contentView, attribute: .Top, multiplier: 1.0, constant: 0.0)
+        let constraint2 = NSLayoutConstraint(item: cell.menuImg, attribute: .Top, relatedBy: .Equal, toItem: cell.contentView, attribute: .Top, multiplier: 1.0, constant: 0.0)
         cell.addConstraint(constraint2)
         
-        var constraint3 = NSLayoutConstraint(item: cell.menuLabel, attribute: .Leading, relatedBy: .Equal, toItem: cell.menuImg, attribute: .Trailing, multiplier: 1.0, constant: 8.0)
+        let constraint3 = NSLayoutConstraint(item: cell.menuLabel, attribute: .Leading, relatedBy: .Equal, toItem: cell.menuImg, attribute: .Trailing, multiplier: 1.0, constant: 8.0)
         cell.addConstraint(constraint3)
         
-        var constraint4 = NSLayoutConstraint(item: cell.contentView, attribute: .Trailing, relatedBy: .Equal, toItem: cell.menuLabel, attribute: .Trailing, multiplier: 1.0, constant: 20.0)
+        let constraint4 = NSLayoutConstraint(item: cell.contentView, attribute: .Trailing, relatedBy: .Equal, toItem: cell.menuLabel, attribute: .Trailing, multiplier: 1.0, constant: 20.0)
         cell.addConstraint(constraint4)
         
-        var constraint5 = NSLayoutConstraint(item: cell.menuLabel, attribute: .Top, relatedBy: .Equal, toItem: cell.contentView, attribute: .Top, multiplier: 1.0, constant: 11.0)
+        let constraint5 = NSLayoutConstraint(item: cell.menuLabel, attribute: .Top, relatedBy: .Equal, toItem: cell.contentView, attribute: .Top, multiplier: 1.0, constant: 11.0)
         cell.addConstraint(constraint5)
         
-        var constraint6 = NSLayoutConstraint(item: cell.menuImg, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 43.0)
+        let constraint6 = NSLayoutConstraint(item: cell.menuImg, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 43.0)
         cell.menuImg.addConstraint(constraint6)
         
-        var constraint7 = NSLayoutConstraint(item: cell.menuImg, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 43.0)
+        let constraint7 = NSLayoutConstraint(item: cell.menuImg, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 43.0)
         cell.menuImg.addConstraint(constraint7)
         
         cell.updateConstraints()
@@ -429,7 +429,7 @@ class SidebarTableViewController: UITableViewController {
                 }
                 if item.folderExpanded == true {
                     var section: [ActionItem] = self.rows[1] as! [ActionItem]
-                    let index: Int? = find(section, item)
+                    let index: Int? = section.indexOf(item)
                     if let i = index {
                         section.removeRange((i + 1)...(item.actionItems!.count + i))
                         item.folderExpanded = false
@@ -452,7 +452,7 @@ class SidebarTableViewController: UITableViewController {
     }
     
     private func addItemToParentItemWithItem(childItem: ActionItem, andParentItemName parentName: String) -> Bool {
-        var actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
+        let actionItems: [ActionItem] = self.rows[1] as! [ActionItem]
         var parentItem: ActionItem?
         for item in actionItems {
             if item.cellName == parentName {
@@ -470,7 +470,7 @@ class SidebarTableViewController: UITableViewController {
         } else {
             var parItemArr: [ActionItem] = parentItem?.actionItems ?? [ActionItem]()
             parItemArr.append(childItem)
-            parentItem?.actionItems = parItemArr.sorted{ $0.cellName < $1.cellName }
+            parentItem?.actionItems = parItemArr.sort{ $0.cellName < $1.cellName }
             return true
         }
     }

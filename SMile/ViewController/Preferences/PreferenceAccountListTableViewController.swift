@@ -9,7 +9,7 @@
 import CoreData
 import UIKit
 
-class PreferenceAccountListTableViewController: UITableViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class PreferenceAccountListTableViewController: UITableViewController, UITextFieldDelegate {
 	
 	var emailAcc: EmailAccount?
 	weak var delegate: ContentViewControllerProtocol?
@@ -42,7 +42,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		
 		
 		//DELETE before release
-		var buttonInfo: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Bookmarks, target: self, action: "showPasswordView")
+		let buttonInfo: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Bookmarks, target: self, action: "showPasswordView")
 		self.navigationItem.rightBarButtonItem = buttonInfo
 
     }
@@ -51,13 +51,20 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
         super.viewDidAppear(animated)
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
-                var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+				if let mimetype = (UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension {
+                let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
                 var sendAccount: EmailAccount? = nil
                 
-                var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+                let accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
                 let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
                 var error: NSError?
-                var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+                var result: [AnyObject]?
+				do {
+					result = try managedObjectContext.executeFetchRequest(fetchRequest)
+				} catch let error1 as NSError {
+					error = error1
+					result = nil
+				}
                 if error != nil {
                     NSLog("%@", error!.description)
                     return
@@ -77,13 +84,15 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
                 
                 if let account = sendAccount {
                     sendView.account = account
-                    sendView.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                    sendView.attachFile(fileName, data: data, mimetype: mimetype)
                     
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
+					(UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension = nil
                     
                     self.navigationController?.pushViewController(sendView, animated: true)
                 }
+				}
             }
         }
         
@@ -124,7 +133,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		
 		// get selection from preview lines VC
 		if self.previewLinesVC != nil {
-			NSUserDefaults.standardUserDefaults().setInteger(self.previewLinesVC!.selectedString.toInt()!, forKey: "previewLines")
+			NSUserDefaults.standardUserDefaults().setInteger(Int(self.previewLinesVC!.selectedString)!, forKey: "previewLines")
 		}
 		
 		loadCoreDataAccounts()
@@ -205,7 +214,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		var actionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
+		let actionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 
 		switch actionItem.viewController {
 		case "PreferencesPreviewLinesTableViewController":
@@ -223,7 +232,7 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 			tableView.deselectRowAtIndexPath(indexPath, animated: true)
 		case "PreferenceAccountView":
 			// PreferenceAccountView
-			var editAccountVC = PreferenceEditAccountTableViewController(nibName:"PreferenceEditAccountTableViewController", bundle: nil)
+			let editAccountVC = PreferenceEditAccountTableViewController(nibName:"PreferenceEditAccountTableViewController", bundle: nil)
 			if let emailAccountItem = self.sectionsContent[indexPath.section][indexPath.row] as? EmailAccount {
 				editAccountVC.emailAcc = emailAccountItem
 			}
@@ -247,16 +256,17 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 		if let appDelegate = appDel {
 			managedObjectContext = appDelegate.managedObjectContext
-			var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-			var error: NSError?
-			let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
+			let emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+			var acc: [EmailAccount]?
+			do {
+				acc = try managedObjectContext.executeFetchRequest(emailAccountsFetchRequest) as? [EmailAccount]
+			} catch {
+				print("CoreData fetch error!")
+			}
+			
 			if let account = acc {
 				for emailAcc: EmailAccount in account {
 					allAccounts.append(emailAcc)
-				}
-			} else {
-				if((error) != nil) {
-					NSLog(error!.description)
 				}
 			}
 			
@@ -265,9 +275,9 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		// create ActionItems for mail accounts
 		for emailAcc: EmailAccount in allAccounts {
 			
-            var accountImage: UIImage? = PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc)
+            let accountImage: UIImage? = PreferenceAccountListTableViewController.getImageFromEmailAccount(emailAcc)
 			
-			var actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView",emailAddress: emailAcc.emailAddress, icon: accountImage)
+			let actionItem = ActionItem(Name: emailAcc.username, viewController: "PreferenceAccountView",emailAddress: emailAcc.emailAddress, icon: accountImage)
 			accountPreferenceCellItem.append(actionItem)
 		}
 
@@ -286,12 +296,12 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
             NSUserDefaults.standardUserDefaults().setObject("", forKey: "standardAccount")
 		}
 	
-		var standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!, icon: nil)
+		let standardAccountItem = ActionItem(Name: "Standardaccount:", viewController: "PreferenceStandardAccountTableViewController", emailAddress: NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")!, icon: nil)
 		
-		var previewLinesItem = ActionItem(Name: "Preview lines:", viewController: "PreferencesPreviewLinesTableViewController", emailAddress: String(NSUserDefaults.standardUserDefaults().integerForKey("previewLines")), icon: nil)
+		let previewLinesItem = ActionItem(Name: "Preview lines:", viewController: "PreferencesPreviewLinesTableViewController", emailAddress: String(NSUserDefaults.standardUserDefaults().integerForKey("previewLines")), icon: nil)
 		
 		
-		var loadPictureItem = ActionItem(Name: "Load pictures automatically:", viewController: "", emailAddress: nil, icon: nil)
+		let loadPictureItem = ActionItem(Name: "Load pictures automatically:", viewController: "", emailAddress: nil, icon: nil)
 		if self.loadPictures == nil {
 			self.loadPictures = NSUserDefaults.standardUserDefaults().boolForKey("loadPictures")
 		}
@@ -318,9 +328,9 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	
 	func textFieldDidBeginEditing(textField: UITextField) {
 		self.selectedTextfield = textField
-		var cellView = textField.superview
-		var cell = cellView?.superview as! PreferenceAccountTableViewCell
-		var indexPath = self.tableView.indexPathForCell(cell)
+		let cellView = textField.superview
+		let cell = cellView?.superview as! PreferenceAccountTableViewCell
+		let indexPath = self.tableView.indexPathForCell(cell)
 		self.selectedIndexPath = indexPath
 	}
 	
@@ -336,14 +346,14 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 	}
 	
 	// end editing when tapping somewhere in the view
-	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
 		self.view.endEditing(true)
 	}
 	
 	// add keyboard size to tableView size
 	func keyboardWillShow(notification: NSNotification) {
 		if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size {
-            var contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
+            let contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, keyboardSize.height, 0.0)
 			
 			if self.origintableViewInsets == nil {
 				self.origintableViewInsets = self.tableView.contentInset

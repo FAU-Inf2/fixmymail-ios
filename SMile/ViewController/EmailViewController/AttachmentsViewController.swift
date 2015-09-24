@@ -34,11 +34,11 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         self.attachmentsTableView.registerNib(UINib(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "AttachmentCell")
         
         if self.isSendAttachment {
-            var buttonImagePicker: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "pushImagePickerViewWithSender:")
+            let buttonImagePicker: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "pushImagePickerViewWithSender:")
             self.navigationItem.rightBarButtonItem = buttonImagePicker
         }
         if self.isViewAttachment {
-            var buttonBack: UIBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: self, action: "backToRootView:")
+            let buttonBack: UIBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: self, action: "backToRootView:")
             self.navigationItem.leftBarButtonItem = buttonBack
         }
     }
@@ -47,7 +47,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
                 if self.isSendAttachment {
-                    self.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                    self.attachFile(fileName, data: data, mimetype: getPathExtensionFromString(fileName)!)
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
                 }
@@ -70,12 +70,12 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("AttachmentCell", forIndexPath: indexPath) as! AttachmentCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("AttachmentCell", forIndexPath: indexPath) as! AttachmentCell
         cell.imageViewPreview.image = self.images[indexPath.row]
         cell.labelFilename.text = self.keys[indexPath.row]
-        var fileSize = Double((self.attachments.valueForKey(self.keys[indexPath.row]) as! NSData).length)
+        let fileSize = Double((self.attachments.valueForKey(self.keys[indexPath.row]) as! NSData).length)
         if (fileSize / 1024) > 1 {
-            var size = fileSize / 1024
+            let size = fileSize / 1024
             if (size / 1024) > 1 {
                 cell.labelFileSize.text = "\(Int(size / 1024)) MB"
             } else {
@@ -96,24 +96,24 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if self.isViewAttachment {
-            var manager = NSFileManager.defaultManager()
+            let manager = NSFileManager.defaultManager()
             var documentDirectory = ""
             let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
             let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
-            if let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true) {
+            let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+            if paths.count > 0 {
                 if paths.count > 0 {
-                    if let dirPath = paths[0] as? String {
-                        documentDirectory = dirPath
-                    }
+                    let dirPath = paths[0]
+                    documentDirectory = dirPath
                 }
             }
-            self.currentShareURL = NSURL(fileURLWithPath: documentDirectory.stringByAppendingPathComponent(self.keys[indexPath.row]))
+            self.currentShareURL = NSURL(fileURLWithPath: appendPathExtensionToString(documentDirectory, andPathExtension: self.keys[indexPath.row])!)
             if manager.createFileAtPath(self.currentShareURL!.path!, contents: self.attachments.valueForKey(self.keys[indexPath.row]) as? NSData, attributes: nil) {
                 self.createdFiles.append(self.currentShareURL!)
                 self.documentInteractionController = UIDocumentInteractionController(URL: self.currentShareURL!)
                 self.documentInteractionController.presentOpenInMenuFromRect(CGRectZero, inView: self.view, animated: true)
             } else {
-                println("Could not write file!")
+                print("Could not write file!")
             }
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
@@ -127,28 +127,8 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         }
     }
     
-    // MARK: - UIActionSheetDelegate
-    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
-        switch buttonIndex {
-        case 1:
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.Rear
-            imagePicker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-        case 2:
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-        default:
-            break
-        }
-    }
-    
     // MARK: - UIImagePickerControllerdelegate
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
         let dictionary = NSDictionary(dictionary: info)
         
@@ -159,54 +139,79 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
             assetsLibrary.assetForURL(refURL, resultBlock: { (imageAsset) -> Void in
                 let imageRep: ALAssetRepresentation = imageAsset.defaultRepresentation()
                 var data = NSData()
-                switch imageRep.filename().pathExtension {
-                case "PNG", "png": data = UIImagePNGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage)
-                case "JPG", "JPEG": data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
+                switch getPathExtensionFromString(imageRep.filename())! {
+                case "PNG", "png": data = UIImagePNGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage)!
+                case "JPG", "JPEG": data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)!
                 default: break
                 }
-                self.attachFile(imageRep.filename(), data: data, mimetype: imageRep.filename().pathExtension)
+                self.attachFile(imageRep.filename(), data: data, mimetype: getPathExtensionFromString(imageRep.filename())!)
                 self.attachmentsTableView.reloadData()
                 }) { (error) -> Void in
                     
             }
         } else {
             let data = UIImageJPEGRepresentation(dictionary.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage, 0.9)
-            self.attachFile("image.JPG", data: data, mimetype: "JPG")
+            self.attachFile("image.JPG", data: data!, mimetype: "JPG")
             self.attachmentsTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
     
     // MARK: - Supportive Methods
     func pushImagePickerViewWithSender(sender: AnyObject) {
-        var attachmentActionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Take Photo or Video", "Choose existing")
-        attachmentActionSheet.tag = 2
-        attachmentActionSheet.showInView(self.view)
+        
+        let attachmentActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default) { (action) -> Void in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.Rear
+            imagePicker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
+        let choosePhotoAction = UIAlertAction(title: "Choose existing", style: .Default) { (action) -> Void in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
+        attachmentActionSheet.addAction(cancelAction)
+        attachmentActionSheet.addAction(takePhotoAction)
+        attachmentActionSheet.addAction(choosePhotoAction)
     }
     
     func backToRootView(sender: AnyObject) {
-        var manager = NSFileManager()
+        let manager = NSFileManager()
         for url in self.createdFiles {
-            manager.removeItemAtURL(url, error: nil)
+            do {
+                try manager.removeItemAtURL(url)
+            } catch _ {
+            }
         }
         self.navigationController?.popViewControllerAnimated(true)
     }
     
     func attachFile(filename: String, data: NSData, mimetype: String) {
-        if let attachment: AnyObject = self.attachments.valueForKey(filename) {
-            var alert = UIAlertView(title: "Error", message: "Attachment already is part of this E-mail", delegate: nil, cancelButtonTitle: "OK")
-            alert.show()
+        if let _: AnyObject = self.attachments.valueForKey(filename) {
+            
+            let alert = UIAlertController(title: "Error", message: "Attachment already is part of this E-mail", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+            alert.addAction(cancelAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+            
             return
         }
         self.attachments.setValue(data, forKey: filename)
         self.keys.append(filename)
         var image = UIImage()
         if mimetype.lowercaseString.rangeOfString("png") != nil || mimetype.lowercaseString.rangeOfString("jpg") != nil || mimetype.lowercaseString.rangeOfString("jpeg") != nil {
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            print(NSString(data: data, encoding: NSUTF8StringEncoding))
             image = UIImage(data: data)!
         } else {
             image = UIImage(named: "attachedFile.png")!
         }
-        image = UIImage(CGImage: image.CGImage, scale: 1, orientation: image.imageOrientation)!
+        image = UIImage(CGImage: image.CGImage!, scale: 1, orientation: image.imageOrientation)
         self.images.append(image)
     }
     

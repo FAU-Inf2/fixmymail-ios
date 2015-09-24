@@ -21,7 +21,7 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
         super.viewDidLoad()
 		
 		if let html = NSBundle.mainBundle().URLForResource("Feedback", withExtension: "html") {
-			let attributedString = NSAttributedString(fileURL: html, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil, error: nil)
+			let attributedString = try? NSAttributedString(fileURL: html, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
 			self.textView.attributedText = attributedString
 		}
 		
@@ -38,9 +38,9 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
     
 	@IBAction func buttonFeedbackTapped(sender: UIButton) {
 		var standardAccount: EmailAccount?
-		var recipient = MCOAddress(mailbox: "fixmymail@i2.cs.fau.de")
-		var subject = "Feedback for SMile on iOS"
-		var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+		let recipient = MCOAddress(mailbox: "fixmymail@i2.cs.fau.de")
+		let subject = "Feedback for SMile on iOS"
+		let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
 		sendView.recipients.addObject(recipient)
 		sendView.subject = subject
 		
@@ -67,7 +67,7 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
 			
 		} else {
 			// user has no accounts declared
-			var alert = UIAlertController(title: "Sorry", message: "It seems you have not declared an Email account, please use the provided link or add a new account in Preferences > Accounts > \"Add New Account\".", preferredStyle: UIAlertControllerStyle.Alert)
+			let alert = UIAlertController(title: "Sorry", message: "It seems you have not declared an Email account, please use the provided link or add a new account in Preferences > Accounts > \"Add New Account\".", preferredStyle: UIAlertControllerStyle.Alert)
 			alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in }))
 			self.presentViewController(alert, animated: true, completion: nil)
 			
@@ -76,11 +76,17 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
     
 	
 	func getAccount() -> [EmailAccount]? {
-		var managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
+		let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext as NSManagedObjectContext!
 		var retaccount = [EmailAccount]()
 		let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
 		var error: NSError?
-		var result = managedObjectContext!.executeFetchRequest(fetchRequest, error: &error)
+		var result: [AnyObject]?
+		do {
+			result = try managedObjectContext!.executeFetchRequest(fetchRequest)
+		} catch let error1 as NSError {
+			error = error1
+			result = nil
+		}
 		if error != nil {
 			NSLog("%@", error!.description)
 		} else {

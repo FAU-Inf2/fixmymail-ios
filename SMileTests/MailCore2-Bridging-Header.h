@@ -17,8 +17,9 @@
 #import "RNEncryptor.h"
 #import "RNDecryptor.h"
 #import "MyRNEncryptor.h"
-#import "UNNetPGP.h"
+//#import "UNNetPGP.h"
 #import "HTMLRenderDelegateBridge.h"
+#import "MCOMessageView.h"
 
 
 //#endif

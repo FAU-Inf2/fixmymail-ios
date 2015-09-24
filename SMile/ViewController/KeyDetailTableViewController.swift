@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class KeyDetailTableViewController: UITableViewController, UITableViewDelegate, UITableViewDataSource {
+class KeyDetailTableViewController: UITableViewController {
 	
 	var keyItem: Key?
 	var keyInfoLabelStrings: [String] = [String]()
@@ -47,13 +47,20 @@ class KeyDetailTableViewController: UITableViewController, UITableViewDelegate, 
         super.viewDidAppear(animated)
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
-                var sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
+				if let mimetype = (UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension {
+                let sendView = MailSendViewController(nibName: "MailSendViewController", bundle: nil)
                 var sendAccount: EmailAccount? = nil
                 
-                var accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
+                let accountName = NSUserDefaults.standardUserDefaults().stringForKey("standardAccount")
                 let fetchRequest: NSFetchRequest = NSFetchRequest(entityName: "EmailAccount")
                 var error: NSError?
-                var result = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+                var result: [AnyObject]?
+				do {
+					result = try managedObjectContext.executeFetchRequest(fetchRequest)
+				} catch let error1 as NSError {
+					error = error1
+					result = nil
+				}
                 if error != nil {
                     NSLog("%@", error!.description)
                     return
@@ -73,13 +80,14 @@ class KeyDetailTableViewController: UITableViewController, UITableViewDelegate, 
                 
                 if let account = sendAccount {
                     sendView.account = account
-                    sendView.attachFile(fileName, data: data, mimetype: fileName.pathExtension)
+                    sendView.attachFile(fileName, data: data, mimetype: mimetype)
                     
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
                     (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
                     
                     self.navigationController?.pushViewController(sendView, animated: true)
                 }
+				}
             }
         }
         
@@ -106,8 +114,8 @@ class KeyDetailTableViewController: UITableViewController, UITableViewDelegate, 
 	
 	override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
 		let header = view as! UITableViewHeaderFooterView
-		header.textLabel.textColor = UIColor.blackColor()
-		header.textLabel.font = UIFont.boldSystemFontOfSize(18.0)
+		header.textLabel!.textColor = UIColor.blackColor()
+		header.textLabel!.font = UIFont.boldSystemFontOfSize(18.0)
 	}
 	
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -144,7 +152,7 @@ class KeyDetailTableViewController: UITableViewController, UITableViewDelegate, 
 			self.keyInfoContentStrings.append(self.keyItem!.validThru.toLongDateString())
 			
 			self.keyInfoLabelStrings.append("Key Length:")
-			var keylength = Int(self.keyItem!.keyLength) * 8
+			let keylength = Int(self.keyItem!.keyLength) * 8
 			self.keyInfoContentStrings.append(keylength.description)
 			
 			self.keyInfoLabelStrings.append("Algorithm:")

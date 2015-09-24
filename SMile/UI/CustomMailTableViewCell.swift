@@ -38,7 +38,7 @@ class CustomMailTableViewCell: UITableViewCell {
     var subviewDeleteSwipeFromRightToLeft = UIView()
     var subviewArchiveSwipeFromLeftToRight = UIView()
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "panHandler:")
         panGestureRecognizer.delegate = self

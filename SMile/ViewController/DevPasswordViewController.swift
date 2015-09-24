@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Locksmith
 
 class DevPasswordViewController: UIViewController {
 	@IBOutlet weak var label: UILabel!
@@ -20,7 +21,7 @@ class DevPasswordViewController: UIViewController {
 
         // Do any additional setup after loading the view.
 		self.navigationItem.title = "Enter password"
-		var doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
+		let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done  ", style: .Plain, target: self, action: "doneTapped:")
 		self.navigationItem.rightBarButtonItem = doneButton
 
     }
@@ -30,16 +31,6 @@ class DevPasswordViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 	
 	func doneTapped(sender: AnyObject) -> Void {
 		if self.textfield.text != "" {
@@ -47,29 +38,44 @@ class DevPasswordViewController: UIViewController {
 			let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 			if let appDelegate = appDel {
 				managedObjectContext = appDelegate.managedObjectContext
-				var emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
-				var error: NSError?
-				let acc: [EmailAccount]? = managedObjectContext.executeFetchRequest(emailAccountsFetchRequest, error: &error) as? [EmailAccount]
+				let emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+				var acc: [EmailAccount]? = nil
+				do {
+					acc = try managedObjectContext.executeFetchRequest(emailAccountsFetchRequest) as? [EmailAccount]
+				} catch {
+					print("CoreData fetch error")
+				}
 				if let account = acc {
 					for emailAcc: EmailAccount in account {
-						let errorLocksmithUpdateAccount = Locksmith.deleteDataForUserAccount(emailAcc.emailAddress)
-						if errorLocksmithUpdateAccount == nil {
-							NSLog("found old data -> deleted!")
-						}
+//						let errorLocksmithUpdateAccount = Locksmith.deleteDataForUserAccount(emailAcc.emailAddress)
+//						if errorLocksmithUpdateAccount == nil {
+//							NSLog("found old data -> deleted!")
+//						}
+                        do {
+                            try Locksmith.deleteDataForUserAccount(emailAcc.emailAddress)
+                        } catch _ {
+                            print("LocksmithError while deleting data for useraccount: \(emailAcc.emailAddress)")
+                        }
 						// save data to iOS keychain
-						let NewSaveRequest = LocksmithRequest(userAccount: emailAcc.emailAddress, requestType: .Create, data: ["Password:": self.textfield.text])
-						NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
-						let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
-						if NewRequestError == nil {
-							NSLog("saving data for " + emailAcc.emailAddress)
-							createNewSession(emailAcc)
-						} else {
-							NSLog("could not save data for " + emailAcc.emailAddress)
-						}
-					}
-				} else {
-					if((error) != nil) {
-						NSLog(error!.description)
+						// change for locksmith 2.0
+//						let NewSaveRequest = LocksmithRequest(userAccount: emailAcc.emailAddress, requestType: .Create, data: ["Password:": self.textfield.text])
+//						NewSaveRequest.accessible = .AfterFirstUnlockThisDeviceOnly
+//						let (NewDictionary, NewRequestError) = Locksmith.performRequest(NewSaveRequest)
+//						if NewRequestError == nil {
+//							NSLog("saving data for " + emailAcc.emailAddress)
+//							createNewSession(emailAcc)
+//						} else {
+//							NSLog("could not save data for " + emailAcc.emailAddress)
+//						}
+                        do {
+                            try Locksmith.saveData(["Password:": self.textfield.text!], forUserAccount: emailAcc.emailAddress)
+                            print("Locksmith: saving data for \(emailAcc.emailAddress)")
+                            try createNewSession(emailAcc)
+                        } catch SessionError.NoDataForUserAccount {
+                            print("There are no userdata to create an imapsession!")
+                        } catch _ {
+                            print("LocksmithError while trying to save data for useraccount: \(emailAcc.emailAddress)")
+                        }
 					}
 				}
 			}

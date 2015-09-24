@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import AddressBook
+import Locksmith
 
 var addressBook : ABAddressBookRef?
 
@@ -20,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Needed if attaching recieved file to email
     var fileName: String?
     var fileData: NSData?
+	var fileExtension: String?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -30,14 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.initCoreDataTestEntries()
 		self.printKeys()
 	//	self.cryptoTest()
-		
-		
-		
-		
-		
-		
-		
-		
+			
         return true
     }
 
@@ -71,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "de.fixMyMail.FixMyMail" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as! NSURL
+        return urls[urls.count-1] 
     }()
 
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -87,7 +82,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("SMile.sqlite")
         var error: NSError? = nil
         var failureReason = "There was an error creating or loading the application's saved data."
-        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: [NSMigratePersistentStoresAutomaticallyOption : true, NSInferMappingModelAutomaticallyOption : true], error: &error) == nil {
+        do {
+			try coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: [NSMigratePersistentStoresAutomaticallyOption : true, NSInferMappingModelAutomaticallyOption : true])
+		} catch var error1 as NSError {
+			error = error1
             coordinator = nil
             // Report any error we got.
             var dict = [String: AnyObject]()
@@ -99,7 +97,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog("Unresolved error \(error), \(error!.userInfo)")
             abort()
-        }
+        } catch {
+			fatalError()
+		}
         
         return coordinator
     }()
@@ -121,12 +121,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //objc_sync_enter(self.managedObjectContext)
         if let moc = self.managedObjectContext {
             var error: NSError? = nil
-            if moc.hasChanges && !moc.save(&error) {
-                // Replace this implementation with code to handle the error appropriately.
-                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                NSLog("Unresolved error \(error), \(error!.userInfo)")
-                abort()
-            }
+            if moc.hasChanges {
+				do {
+					try moc.save()
+				} catch let error1 as NSError {
+					error = error1
+					// Replace this implementation with code to handle the error appropriately.
+					// abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+					NSLog("Unresolved error \(error), \(error!.userInfo)")
+					abort()
+				}
+			}
         }
         //objc_sync_exit(self.managedObjectContext)
     }
@@ -135,7 +140,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func initCoreDataTestEntries() {
         let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if(!defaults.boolForKey("TestEntriesInserted")) {
-            var gmailAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            let gmailAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             gmailAccount.username = "fixmymail2015"
             gmailAccount.password = "*"
             gmailAccount.emailAddress = "fixmymail2015@gmail.com"
@@ -156,15 +161,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmailAccount.deletedFolder = ""
 			gmailAccount.archiveFolder = ""
 			gmailAccount.downloadMailDuration = "Ever"
-			let errorLocksmithGmail = Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
-			if errorLocksmithGmail == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithGmail = Locksmith.deleteDataForUserAccount("fixmymail2015@gmail.com")
+//			if errorLocksmithGmail == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			
 			
-            var gmxAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            let gmxAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             gmxAccount.username = "fixmymail@gmx.de"
             gmxAccount.password = "*"
             gmxAccount.emailAddress = "fixmymail@gmx.de"
@@ -185,14 +197,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			gmxAccount.deletedFolder = ""
 			gmxAccount.archiveFolder = ""
 			gmxAccount.downloadMailDuration = "Ever"
-			let errorLocksmithGmx = Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
-			if errorLocksmithGmx == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithGmx = Locksmith.deleteDataForUserAccount("fixmymail@gmx.de")
+//			if errorLocksmithGmx == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			
-            var webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+            let webAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
             webAccount.username = "fixmymail@web.de"
             webAccount.password = "*"
             webAccount.emailAddress = "fixmymail@web.de"
@@ -213,13 +232,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			webAccount.deletedFolder = ""
 			webAccount.archiveFolder = ""
 			webAccount.downloadMailDuration = "Ever"
-			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
-			if errorLocksmithWeb == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail@web.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithWeb = Locksmith.deleteDataForUserAccount("fixmymail@web.de")
+//			if errorLocksmithWeb == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
-			var tcomAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			let tcomAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
 			tcomAccount.username = "fixmymail@t-online.de"
 			tcomAccount.password = "*"
 			tcomAccount.emailAddress = "fixmymail@t-online.de"
@@ -240,13 +266,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			tcomAccount.deletedFolder = ""
 			tcomAccount.archiveFolder = ""
 			tcomAccount.downloadMailDuration = "Ever"
-			let errorLocksmithTcom = Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
-			if errorLocksmithTcom == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithTcom = Locksmith.deleteDataForUserAccount("fixmymail@t-online.de")
+//			if errorLocksmithTcom == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
-			var iCloudAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			let iCloudAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
 			iCloudAccount.username = "fixmymail2015"
 			iCloudAccount.password = "*"
 			iCloudAccount.emailAddress = "fixmymail2015@icloud.com"
@@ -267,13 +300,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			iCloudAccount.deletedFolder = ""
 			iCloudAccount.archiveFolder = ""
 			iCloudAccount.downloadMailDuration = "Ever"
-			let errorLocksmithiCloud = Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
-			if errorLocksmithiCloud == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithiCloud = Locksmith.deleteDataForUserAccount("fixmymail2015@icloud.com")
+//			if errorLocksmithiCloud == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
-			var YahooAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			let YahooAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
 			YahooAccount.username = "fixmymail2015"
 			YahooAccount.password = "*"
 			YahooAccount.emailAddress = "fixmymail2015@yahoo.de"
@@ -294,13 +334,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			YahooAccount.deletedFolder = ""
 			YahooAccount.archiveFolder = ""
 			YahooAccount.downloadMailDuration = "Ever"
-			let errorLocksmithYahoo = Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
-			if errorLocksmithYahoo == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithYahoo = Locksmith.deleteDataForUserAccount("fixmymail2015@yahoo.de")
+//			if errorLocksmithYahoo == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
-			var OutlookAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
+			let OutlookAccount = NSEntityDescription.insertNewObjectForEntityForName("EmailAccount", inManagedObjectContext: self.managedObjectContext!) as! EmailAccount
 			OutlookAccount.username = "fixme2015@outlook.de"
 			OutlookAccount.password = "*"
 			OutlookAccount.emailAddress = "fixme2015@outlook.de"
@@ -321,15 +368,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			OutlookAccount.deletedFolder = ""
 			OutlookAccount.archiveFolder = ""
 			OutlookAccount.downloadMailDuration = "Ever"
-			let errorLocksmithOutlook = Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
-			if errorLocksmithOutlook == nil {
-				NSLog("found old data -> deleted!")
-			}
+            
+            do {
+                try Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
+            } catch _ {
+                print("Locksmitherror while trying to delete useraccount!")
+            }
+            
+//			let errorLocksmithOutlook = Locksmith.deleteDataForUserAccount("fixme2015@outlook.de")
+//			if errorLocksmithOutlook == nil {
+//				NSLog("found old data -> deleted!")
+//			}
 			
 			
 			
             var error: NSError?
-            self.managedObjectContext!.save(&error)
+            do {
+				try self.managedObjectContext!.save()
+			} catch let error1 as NSError {
+				error = error1
+			}
       
             if error != nil {
                 NSLog("%@", error!.description)
@@ -344,11 +402,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
    func AccessAddressBook() {
         switch ABAddressBookGetAuthorizationStatus(){
         case .Authorized:
-            println("Already authorized")
+            print("Already authorized")
             createAddressBook()
             /* Access the address book */
         case .Denied:
-            println("Denied access to address book")
+            print("Denied access to address book")
             
         case .NotDetermined:
             createAddressBook()
@@ -357,19 +415,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     {(granted: Bool, error: CFError!) in
                         
                         if granted{
-                            println("Access granted")
+                            print("Access granted")
                         } else {
-                            println("Access not granted")
+                            print("Access not granted")
                         }
                         
                 })
             }
             
         case .Restricted:
-            println("Access restricted")
-            
-        default:
-            println("Other Problem")
+            print("Access restricted")
         }
     }
     
@@ -377,7 +432,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var error: Unmanaged<CFError>?
         addressBook = ABAddressBookCreateWithOptions(nil, &error).takeUnretainedValue()
         if error != nil {
-            print("Error while creating AddressBook: \(error)")
+            print("Error while creating AddressBook: \(error)", terminator: "")
         }
     }
     
@@ -390,11 +445,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	//MARK: - AirDrop Support
 		
-	func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-		var fileManager = NSFileManager.defaultManager()
+	func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+		let fileManager = NSFileManager.defaultManager()
 		if fileManager.fileExistsAtPath(url.path!) == true {
 			NSLog("File exists. File path: " + url.path!)
-			var receivedFileVC = ReceivedFileViewController(nibName: "ReceivedFileViewController", bundle: nil)
+			let receivedFileVC = ReceivedFileViewController(nibName: "ReceivedFileViewController", bundle: nil)
 			receivedFileVC.url = url
 			self.window?.rootViewController?.presentViewController(receivedFileVC, animated: true, completion: nil)
 			
@@ -406,85 +461,83 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	// MARK: - Create GPG ring files
-	func createRingFiles() -> Void {
-		let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-		if(!defaults.boolForKey("RingfilesCreated")) {
-			var fileManager = NSFileManager.defaultManager()
-			let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
-			let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
-			if let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true) {
-				if paths.count > 0 {
-					if let dirPath = paths[0] as? String {
-						// create public ring file
-						var pubringPath = dirPath.stringByAppendingPathComponent("smile_pubring.gpg")
-						if fileManager.createFileAtPath(pubringPath, contents: nil, attributes: nil) == false {
-							NSLog("public ringfile not created!")
-							return
-						}
-						
-						// create secret ring file
-						var secringPath = dirPath.stringByAppendingPathComponent("smile_secring.gpg")
-						if fileManager.createFileAtPath(secringPath, contents: nil, attributes: nil) == false {
-							NSLog("secret ringfile not created!")
-							return
-						}
-						
-						// no error checking here. if something went wrong function would have returned earlier
-						defaults.setURL(NSURL(fileURLWithPath: pubringPath)!, forKey: "pubring")
-						defaults.setURL(NSURL(fileURLWithPath: secringPath)!, forKey: "secring")
-						defaults.setBool(true, forKey: "RingfilesCreated")
-
-						// DEBUG
-						//NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
-						//NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
-					}
-				}
-			}
-		}
-	}
+    func createRingFiles() -> Void {
+        let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if(!defaults.boolForKey("RingfilesCreated")) {
+            let fileManager = NSFileManager.defaultManager()
+            let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
+            let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
+            let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+            if paths.count > 0 {
+                // create public ring file
+                let dirPath = paths[0]
+                let pubringPath = NSURL(fileURLWithPath: dirPath).URLByAppendingPathComponent("smile_pubring.gpg").path!
+                if fileManager.createFileAtPath(pubringPath, contents: nil, attributes: nil) == false {
+                    NSLog("public ringfile not created!")
+                    return
+                }
+                
+                // create secret ring file
+                let secringPath = NSURL(fileURLWithPath: dirPath).URLByAppendingPathComponent("smile_secring.gpg") //dirPath.stringByAppendingPathComponent("smile_secring.gpg")
+                if fileManager.createFileAtPath(secringPath.path!, contents: nil, attributes: nil) == false {
+                    NSLog("secret ringfile not created!")
+                    return
+                }
+                
+                // no error checking here. if something went wrong function would have returned earlier
+                defaults.setURL(NSURL(fileURLWithPath: pubringPath), forKey: "pubring")
+                defaults.setURL(secringPath, forKey: "secring")
+                defaults.setBool(true, forKey: "RingfilesCreated")
+                
+                // DEBUG
+                //NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
+                //NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
+            }
+        }
+    }
 	
 	// MARK: - DELETE BEFORE RELEASE
 	
 	func printKeys() -> Void {
 		//WARNING: DELETE BEFORE RELEASE
-		var crypto = SMileCrypto()
-		println("KEYS IN PGP INSTANCE")
+		let crypto = SMileCrypto()
+		print("KEYS IN PGP INSTANCE")
 		crypto.printAllPublicKeys(true)
 		crypto.printAllSecretKeys(true)
-		println("######################")
-		println("KEYS IN CORE DATA")
+		print("######################")
+		print("KEYS IN CORE DATA")
 		crypto.printAllPublicKeys(false)
 		crypto.printAllSecretKeys(false)
-		println("######################")
+		print("######################")
 	}
 	
 	func cryptoTest() -> Void {
 		
 		//WARNING: DELETE BEFORE RELEASE
-		var crypto = SMileCrypto()
-		var fileReadError: NSError?
+		let crypto = SMileCrypto()
+		let fileReadError: NSError? = nil
 		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
 		var pw = ""
 		if path != nil {
-			 pw = String(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &fileReadError)!
+			 pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
 		}
 		
 		if fileReadError == nil {
 			
-			var data = ("THIS IS A ENCRYPTION TEST").dataUsingEncoding(NSUTF8StringEncoding)
-			println("Original message: " + (NSString(data: data!, encoding: NSUTF8StringEncoding) as! String))
-			var (error, encryptedData) = crypto.encryptData(data!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+			let data = ("THIS IS A ENCRYPTION TEST").dataUsingEncoding(NSUTF8StringEncoding)
+			print("Original message: " + (NSString(data: data!, encoding: NSUTF8StringEncoding) as! String))
+			let (error, encryptedData) = crypto.encryptData(data!, keyIdentifier: "42486EB9", encryptionType: "PGP")
 			if error != nil {
 				NSLog("Encryption Error: " + error!.localizedDescription)
 			} else {
 				if encryptedData != nil {
-					println("Encrypted Data: " + (NSString(data: encryptedData!, encoding: NSUTF8StringEncoding) as! String))
-					var (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: pw, encryptionType: "PGP")
+					print("Encrypted Data: " + (NSString(data: encryptedData!, encoding: NSUTF8StringEncoding) as! String))
+					let (error2, decrytpedData) = crypto.decryptData(encryptedData!, passphrase: pw, encryptionType: "PGP")
 					if error2 != nil {
 						NSLog("Decrytption Error: " + error2!.localizedDescription)
 					} else {
 						if decrytpedData != nil {
-							println("Decrypted Data: " + (NSString(data: decrytpedData!, encoding: NSUTF8StringEncoding) as! String))
+							print("Decrypted Data: " + (NSString(data: decrytpedData!, encoding: NSUTF8StringEncoding) as! String))
 						} else {
 							NSLog("Nothing was decrytped!")
 						}
