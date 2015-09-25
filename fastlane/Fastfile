@@ -86,6 +86,16 @@ platform :ios do
     ipa(
       scheme: "SMile"
     )
+    #gym(
+    #  workspace: "SMile.xcworkspace",
+    #  configuration: "Release",
+    #  scheme: "SMile",
+    #  #silent: true,
+    #  clean: true,
+    #  #output_directory: "../", # Destination directory. Defaults to current directory.
+    #  output_name: "SMile.ipa",       # specify the name of the .ipa file to generate (including file extension)
+    #  #sdk: "10.0"                     # use SDK as the name or path of the base SDK when building the project.
+    #)
 
     if ENV["HIPCHAT_API_TOKEN"]
       sh "sh deploy.sh"
