@@ -270,6 +270,10 @@ func updateLocalEmail(account: EmailAccount, folderToQuery: String) {
                     var missingEmails: [MCOIMAPMessage] = [MCOIMAPMessage]()
                     var notificationNeeded = false
                     
+                    if messages.count < localEmails.count {
+                        notificationNeeded = true
+                    }
+                    
                     for remoteEmail in messages {
                         var emailIsMissing = true
                         for localEmail in localEmails {

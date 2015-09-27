@@ -345,7 +345,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                 addFlagToEmail(cell.mail, flag: MCOMessageFlag.Seen)
             }
             self.mailTableView.deselectRowAtIndexPath(indexPath, animated: false)
-            //self.refreshTableView()
+            self.refreshTableView(false)
         } else { //edit mode enabled
             //select Email
             selectedEmails.addObject(cell.mail)
