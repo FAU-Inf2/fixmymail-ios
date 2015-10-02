@@ -21,7 +21,7 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
         super.viewDidLoad()
 		
 		if let html = NSBundle.mainBundle().URLForResource("Feedback", withExtension: "html") {
-			let attributedString = try? NSAttributedString(fileURL: html, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
+			let attributedString = try? NSAttributedString(URL: html, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
 			self.textView.attributedText = attributedString
 		}
 		

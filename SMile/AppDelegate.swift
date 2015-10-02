@@ -8,10 +8,11 @@
 
 import UIKit
 import CoreData
-import AddressBook
+//import AddressBook
 import Locksmith
+import Contacts
 
-var addressBook : ABAddressBookRef?
+//var addressBook : ABAddressBookRef?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -398,36 +399,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     //MARK: - AdressBook
-    
-   func AccessAddressBook() {
-        switch ABAddressBookGetAuthorizationStatus(){
-        case .Authorized:
-            print("Already authorized")
-            createAddressBook()
-            /* Access the address book */
-        case .Denied:
-            print("Denied access to address book")
-            
-        case .NotDetermined:
-            createAddressBook()
-            if let theBook: ABAddressBookRef = addressBook{
-                ABAddressBookRequestAccessWithCompletion(theBook,
-                    {(granted: Bool, error: CFError!) in
-                        
-                        if granted{
-                            print("Access granted")
-                        } else {
-                            print("Access not granted")
-                        }
-                        
-                })
-            }
-            
-        case .Restricted:
-            print("Access restricted")
-        }
-    }
-    
+ 
+	func AccessAddressBook() {
+		switch CNContactStore.authorizationStatusForEntityType(.Contacts) {
+		case .Authorized:
+			print("Already authorized")
+		case .NotDetermined:
+			let contactStore  = CNContactStore()
+			contactStore.requestAccessForEntityType(.Contacts){succeeded, err in
+				guard err == nil && succeeded else{
+					print("Access not granted")
+					return
+				}
+				print("Access granted")
+			}
+		case .Restricted:
+			print("Access restricted")
+		default:
+			print("No Access")
+		}
+	}
+ /*
     func createAddressBook(){
         var error: Unmanaged<CFError>?
         addressBook = ABAddressBookCreateWithOptions(nil, &error).takeUnretainedValue()
@@ -435,7 +427,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Error while creating AddressBook: \(error)", terminator: "")
         }
     }
-    
+ */
     //MARK: - UserDefaults
     
     private func registerUserDefaults() -> Void {

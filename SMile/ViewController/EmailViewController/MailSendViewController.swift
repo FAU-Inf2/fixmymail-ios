@@ -1,11 +1,13 @@
 import UIKit
 import CoreData
-import AddressBook
+//import AddressBook
 import Foundation
-import AddressBookUI
+//import AddressBookUI
 import Locksmith
+import Contacts
+import ContactsUI
 
-class MailSendViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class MailSendViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate,/*ABPeoplePickerNavigationControllerDelegate,*/ UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, CNContactPickerDelegate {
     
     //MARK: - Variables
     @IBOutlet weak var sendTableView: UITableView!
@@ -30,6 +32,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     var allAccounts: [EmailAccount]!
     
     var isResponder: AnyObject? = nil
+	
+	var contactStore = CNContactStore()
     
     //MARK: - Initialisation
     override func viewDidLoad() {
@@ -713,22 +717,74 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
 	}
 	
     //MARK: - Methods to show Addressbook
+	
+	func checkContactAccess() -> Bool {
+		switch CNContactStore.authorizationStatusForEntityType(.Contacts) {
+		case .Authorized:
+			return true
+		default:
+			return false
+		}
+		
+	}
+	
     func openPeoplePickerWithSender(sender:AnyObject!) {
-        let picker = ABPeoplePickerNavigationController()
-        picker.peoplePickerDelegate = self
-        picker.displayedProperties = [Int(kABPersonEmailProperty)]
-        picker.predicateForEnablingPerson = NSPredicate(format: "emailAddresses.@count > 0")
-        picker.predicateForSelectionOfPerson = NSPredicate(value:false)
-        picker.predicateForSelectionOfProperty = NSPredicate(value:true)
-        switch (sender as! UIButton).tag {
-        case 0: picker.title = "To:"
-        case 1: picker.title = "Cc:"
-        case 2: picker.title = "Bcc:"
-        default: picker.title = ""
-        }
-        self.presentViewController(picker, animated:true, completion:nil)
+		if self.checkContactAccess() {
+			let picker = CNContactPickerViewController()
+			picker.delegate = self
+			picker.predicateForEnablingContact = NSPredicate(format: "emailAddresses.@count > 0")
+			//		picker.predicateForSelectionOfProperty = NSPredicate(format: "key == 'emailAddresses'")
+			
+			
+			// deprecated to iOS 9
+			/*      let picker = ABPeoplePickerNavigationController()
+			picker.peoplePickerDelegate = self
+			picker.displayedProperties = [Int(kABPersonEmailProperty)]
+			picker.predicateForEnablingPerson = NSPredicate(format: "emailAddresses.@count > 0")
+			picker.predicateForSelectionOfPerson = NSPredicate(value:false)
+			picker.predicateForSelectionOfProperty = NSPredicate(value:true)
+   */
+			switch (sender as! UIButton).tag {
+			case 0: picker.title = "To:"
+			case 1: picker.title = "Cc:"
+			case 2: picker.title = "Bcc:"
+			default: picker.title = ""
+			}
+			self.presentViewController(picker, animated:true, completion:nil)
+		} else {
+			let alert: UIAlertController = UIAlertController(title: "Access denied!", message: "No permission to access your contacts. Please go to iOS settings > privacy > contacts and allow SMile", preferredStyle: UIAlertControllerStyle.Alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { action in
+			}))
+			self.presentViewController(alert, animated: true, completion: nil)
+		}
+	
     }
-    
+	
+	func contactPicker(picker: CNContactPickerViewController, didSelectContactProperty contactProperty: CNContactProperty) {
+		let contact = contactProperty.contact
+		print("property:" + contactProperty.key)
+		print(contact.emailAddresses)
+		if contactProperty.key == "emailAddresses" {
+			var email = ""
+			for mailaddress in contact.emailAddresses {
+				if mailaddress.label == contactProperty.label! {
+					email = mailaddress.value as! String
+				}
+			}
+			let address = MCOAddress(mailbox: email)
+			
+			switch picker.title! {
+			case "To:": self.recipients.addObject(address)
+			case "Cc:": self.ccRecipients.addObject(address)
+			case "Bcc:": self.bccRecipients.addObject(address)
+			default: break
+			}
+		}
+		
+		
+		self.sendTableView.reloadData()
+	}
+/*	// deprecated to iOS 9
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController, didSelectPerson person: ABRecordRef, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
         print("person and property")
         let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
@@ -746,5 +802,5 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         
         self.sendTableView.reloadData()
     }
-    
+*/
 }
