@@ -227,8 +227,15 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 return cell
             } else { // Cell for Subject
                 let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+				
+				// encrypt sign
+				let buttonImage: UIImage = UIImage(named: "Lock_open_grey@2x.png")!
+				let  buttonEncrypted: UIButton = UIButton(type: UIButtonType.Custom)
+				buttonEncrypted.frame = CGRectMake(0, 0, 22, 28)
+				buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+				buttonEncrypted.backgroundColor = UIColor.clearColor()
                 
-                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
+                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonEncrypted)
                 
                 cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
                 
@@ -257,11 +264,26 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             
         case 4: // Cell for Subject
             let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-            
-            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
+			
+			// encrypt sign
+			let buttonImage: UIImage = UIImage(named: "Lock_open_grey@2x.png")!
+			let  buttonEncrypted: UIButton = UIButton(type: UIButtonType.Custom)
+			buttonEncrypted.frame = CGRectMake(0, 0, 22, 28)
+			buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+			buttonEncrypted.backgroundColor = UIColor.clearColor()
+			
+				
+            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonEncrypted)
             
             cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
-            
+			
+			// Encrypt sign
+		/*	let encryptSign: UIButton = UIButton(type: UIButtonType.RoundedRect)
+			encryptSign.frame = CGRectMake(0, 0, 25, 25)
+			encryptSign.imageView?.image = UIImage(named: "x_icon")
+			cell.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton
+			cell.accessoryView = encryptSign
+         */
             return cell
         case 5: // Cell for attachments
             let cell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
