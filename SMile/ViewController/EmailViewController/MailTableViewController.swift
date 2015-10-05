@@ -429,7 +429,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         let screenshot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         remindView.imageView.image = screenshot
-        self.presentViewController(remindView, animated: true, completion: nil)
+        self.navigationController?.pushViewController(remindView, animated: true)
     }
 
     

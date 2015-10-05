@@ -75,10 +75,10 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
-        var date = NSDate()
+        let date = NSDate()
         let components = NSDateComponents()
-        components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
-        date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
+        //components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
+        //date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
         print(date)
         var remindDate:NSDate = NSDate()
         switch (indexPath.row){
@@ -87,15 +87,21 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 1: //This Evening
-            components.hour = 20
-            remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: [])!
-            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            print(date.hour())
+            if (date.hour()>18){
+                remind!.setJSONforUpcomingRemind(email!,remindTime: date)
+            }
+            else{
+                components.hour = 20
+                remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: [])!
+                remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            }
         case 2: //Tomorrow Morning
             components.day = 1
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             components.hour = 5
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: [])!
-           remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
         case 3: //This Weekend
             let day = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
             let friday = 6
@@ -134,6 +140,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             NSLog("other")
             break
         }
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     @IBAction func Back(sender: AnyObject) {
@@ -152,17 +159,17 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
     }
     
-   
+    
     /*
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // Get the new view controller using segue.destinationViewController.
+    // Pass the selected object to the new view controller.
     }
     */
-
+    
 }
 extension NSDate {
     convenience init?(jsonDate: String) {
