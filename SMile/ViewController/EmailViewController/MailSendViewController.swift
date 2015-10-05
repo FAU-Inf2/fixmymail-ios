@@ -733,6 +733,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
 			let picker = CNContactPickerViewController()
 			picker.delegate = self
 			picker.predicateForEnablingContact = NSPredicate(format: "emailAddresses.@count > 0")
+			picker.displayedPropertyKeys = [CNContactEmailAddressesKey]
 			//		picker.predicateForSelectionOfProperty = NSPredicate(format: "key == 'emailAddresses'")
 			
 			
@@ -762,12 +763,9 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
 	
 	func contactPicker(picker: CNContactPickerViewController, didSelectContactProperty contactProperty: CNContactProperty) {
 		let contact = contactProperty.contact
-		print("property:" + contactProperty.key)
-		print(contact.emailAddresses)
-		if contactProperty.key == "emailAddresses" {
 			var email = ""
 			for mailaddress in contact.emailAddresses {
-				if mailaddress.label == contactProperty.label! {
+				if mailaddress.identifier == contactProperty.identifier! {
 					email = mailaddress.value as! String
 				}
 			}
@@ -779,8 +777,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
 			case "Bcc:": self.bccRecipients.addObject(address)
 			default: break
 			}
-		}
-		
 		
 		self.sendTableView.reloadData()
 	}
