@@ -1614,6 +1614,15 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/SMilePGP/openssl\"",
+					"\"${PODS_ROOT}/Headers/Public/mailcore2-ios\"",
+					"\"${PODS_ROOT}/Headers/Public/mailcore2-ios/MailCore\"",
+					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper/PGPPackets\"",
+					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper\"",
+					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper\"",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/SMile/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1649,6 +1658,15 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/SMilePGP/openssl\"",
+					"\"${PODS_ROOT}/Headers/Public/mailcore2-ios\"",
+					"\"${PODS_ROOT}/Headers/Public/mailcore2-ios/MailCore\"",
+					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper/PGPPackets\"",
+					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper\"",
+					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SMile/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

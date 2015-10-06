@@ -16,6 +16,8 @@
 #import "MCOIMAPFolderWrapper.h"
 #import "HTMLRenderDelegateBridge.h"
 #import "MCOMessageView.h"
+#import "SMilePGP.h"
+#import "PGPKey.h"
 
 
 //#endif
