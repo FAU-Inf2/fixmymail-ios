@@ -17,14 +17,16 @@ extension JSON {
 }
 
 class RemindMe{
+    var jsonmail:Email?
+    
     func setJSONforUpcomingRemind(email:Email, remindTime: NSDate){
         let folderStorage: String = "SmileStorage"
-        var jsonmail:Email = email
+        jsonmail = email
         let currentMaxUID = getMaxUID(email.toAccount, folderToQuery: folderStorage)
         fetchEmails(email.toAccount, folderToQuery: folderStorage, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
         for mail in email.toAccount.emails {
             if mail.folder == folderStorage {
-                jsonmail = mail as! Email
+                jsonmail = mail as? Email
             }
         }
         if jsonmail == email{
@@ -32,10 +34,9 @@ class RemindMe{
         }
             
         else{
-            let dataFromString = jsonmail.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+            let dataFromString = jsonmail!.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
             if dataFromString != nil {
                 var json = JSON(data: dataFromString!)
-                print(json)
                 var json2 = json["allRemindMes"].arrayValue
                 let header : MCOMessageHeader = email.mcomessage.header
                 let messageId = header.messageID
@@ -46,56 +47,53 @@ class RemindMe{
                 //Add newjson to json2
                 json2.append(newjson)
                 json["allRemindMes"] = JSON(json2)
-                print(json)
-                jsonmail.plainText = json.rawString()!
-                uploadEmailToSmileStorage(jsonmail)
+                
+                jsonmail!.plainText = json.rawString()!
+                
+                saveCoreDataChanges()
+                
+                
+                var imapSession: MCOIMAPSession!
+                do {
+                    imapSession = try getSession(email.toAccount)
+                } catch _ {
+                    print("Error while trying to move email to drafts folder")
+                    return
+                }
+                
+                let appendMsgOp = imapSession.appendMessageOperationWithFolder(folderStorage, messageData: self.buildEmail(), flags: [MCOMessageFlag.Seen])
+                appendMsgOp.start({ (error, uid) -> Void in
+                    if error != nil {
+                        NSLog("%@", error.description)
+                    } else {
+                        NSLog("Draft saved")
+                    }
+                })
+                deleteEmail(jsonmail!)
             }
         }
     }
     
-    func uploadEmailToSmileStorage(jsonmail:Email){
-        let session = MCOSMTPSession()
-        session.hostname = jsonmail.toAccount.smtpHostname
-        session.port = UInt32(jsonmail.toAccount.smtpPort.unsignedIntegerValue)
-        session.username = jsonmail.toAccount.username
-        let dictionary =  Locksmith.loadDataForUserAccount(jsonmail.toAccount.emailAddress)
-        if dictionary != nil {
-            session.password = dictionary!["Password:"] as! String
-        } else {
-            return
-        }
-        session.connectionType = StringToConnectionType(jsonmail.toAccount.connectionTypeSmtp)
-        session.authType = StringToAuthType(jsonmail.toAccount.authTypeSmtp)
-        let data = MCOMessageBuilder()
-        data.header.subject = "Internal from Smile"
-        data.textBody = jsonmail.plainText
-        var imapSession:MCOIMAPSession!
-        do{
-            imapSession = try getSession(jsonmail.toAccount)
-        } catch _ {
-            print("Error while trying to send email!")
-            return
-        }
-        let sendOp = session.sendOperationWithData(data.data())
-        print(sendOp)
-        sendOp.start({(error) in
-            if error != nil {
-                print("error with sendop")
-            } else {
-                NSLog("sent")
-                //self.navigationController?.popViewControllerAnimated(true)
-                //Move Email to sent Folder
-                
-                let appendMsgOp = imapSession.appendMessageOperationWithFolder("SmileStorage", messageData: data.data(), flags:MCOMessageFlag.Seen)
-                appendMsgOp.start({ (error, uid) -> Void in
-                    if error != nil {
-                    NSLog("%@", error.description)
-                    }
-                })
-            }
-        })
-
+    func buildEmail() -> NSData {
+        let builder = MCOMessageBuilder()
+        
+        builder.header.subject = "Internal from Smile"
+        print("builder")
+        print(jsonmail!.plainText)
+        builder.textBody = jsonmail!.plainText
+        
+        return builder.data()
     }
+
+    func deleteEmail(mail: Email) {
+        
+        addFlagToEmail(mail, flag: MCOMessageFlag.Deleted)
+        managedObjectContext.deleteObject(mail)
+        saveCoreDataChanges()
+    }
+
+    
+    
     
     func downlaodJsonAndCheckForUpcomingReminds(toAccount: EmailAccount){ // ich gehe davon aus das SmileStorage vorhanden ist weil ich es vorher ja abgeprüft habe und notfalls erstellt habe
         let folderStorage: String = "SmileStorage"

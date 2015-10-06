@@ -650,7 +650,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
 //            return
 //        }
         if dictionary != nil {
-            session.password = dictionary!["Password"] as! String
+            session.password = dictionary!["Password:"] as! String
         } else {
             return
         }

@@ -75,10 +75,10 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
-        let date = NSDate()
+        var date = NSDate()
         let components = NSDateComponents()
-        //components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
-        //date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
+        components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
+        date = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
         print(date)
         var remindDate:NSDate = NSDate()
         switch (indexPath.row){
