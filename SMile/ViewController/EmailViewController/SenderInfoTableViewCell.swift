@@ -10,9 +10,15 @@ import UIKit
 
 class SenderInfoTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var fromLabel: UILabel!
-    @IBOutlet weak var toLabel: UILabel!
-    @IBOutlet weak var ccLabel: UILabel!
+	@IBOutlet weak var fromButton: UIButton!
+	@IBOutlet weak var toButton: UIButton!
+	@IBOutlet weak var fromLabel: UILabel!
+	@IBOutlet weak var toLabel: UILabel!
+	@IBOutlet weak var ccLabel: UILabel!
+	
+	var message: MCOIMAPMessage?
+	
+	
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,6 +31,16 @@ class SenderInfoTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    
+	
+	@IBAction func fromButtonTapped(sender: UIButton) {
+	}
+	
+	@IBAction func toButtonTapped(sender: UIButton) {
+	}
+	
+	
+	
+	
+	
     
 }

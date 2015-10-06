@@ -209,13 +209,16 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let senderInfoCell: SenderInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("senderInfoCell", forIndexPath: indexPath) as! SenderInfoTableViewCell
-            
-            senderInfoCell.fromLabel.text = self.messageHeaderInfo["from"]
+			
+			senderInfoCell.message = self.message
+       
+			senderInfoCell.fromButton.setTitle(self.messageHeaderInfo["from"], forState: UIControlState.Normal)
+			senderInfoCell.fromButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             
             let ccLabelString: String? = self.messageHeaderInfo["cc"] != nil ? self.messageHeaderInfo["cc"]! : nil
             if ccLabelString == nil {
-                senderInfoCell.ccLabel.frame.size = CGSizeZero
-                senderInfoCell.ccLabel.text = ""
+				senderInfoCell.ccLabel.frame.size = CGSizeZero
+				senderInfoCell.ccLabel.text = ""
             } else {
                 senderInfoCell.ccLabel.frame.size = CGSizeMake(senderInfoCell.ccLabel.frame.size.width, self.ccStringHeight)
                 senderInfoCell.ccLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
@@ -223,9 +226,11 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             }
             
             let toLabelString = self.messageHeaderInfo["to"] != nil ? self.messageHeaderInfo["to"]! : "To:"
-            senderInfoCell.toLabel.frame.size = CGSizeMake(senderInfoCell.toLabel.frame.size.width, self.toStringHeight)
-            senderInfoCell.toLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-            senderInfoCell.toLabel.text = toLabelString
+            senderInfoCell.toButton.frame.size = CGSizeMake(senderInfoCell.toButton.frame.size.width, self.toStringHeight)
+           // senderInfoCell.toLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+           // senderInfoCell.toButton.titleLabel?.text = toLabelString
+			senderInfoCell.toButton.setTitle(toLabelString, forState: UIControlState.Normal)
+			senderInfoCell.toButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             
             senderInfoCell.accessoryType = .None
             senderInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -270,21 +275,22 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         let header : MCOMessageHeader = message.header
         
         if header.from != nil {
-            let fromString: String? = (header.from.displayName != nil) ? header.from.displayName : header.from.mailbox
+           let fromString: String? = (header.from.displayName != nil) ? header.from.displayName : header.from.mailbox
+	//		let fromString: String? = header.from.mailbox
             if fromString != nil {
-                returnDict["from"] = "From: \(fromString!)"
+                returnDict["from"] = fromString!
             } else {
-                returnDict["from"] = "From: -"
+                returnDict["from"] = "-"
             }
         } else {
-            returnDict["from"] = "From: -"
+            returnDict["from"] = "-"
         }
         
         let toString: String? = self.addressStringFromArray(header.to)
         if let to = toString {
-            returnDict["to"] = "To: \(to)"
+            returnDict["to"] = to
         } else {
-            returnDict["to"] = "To: -"
+            returnDict["to"] = "-"
         }
         
         let ccString: String? = self.addressStringFromArray(header.cc)
@@ -323,11 +329,11 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         for element in array! {
             if element is MCOAddress {
                 let address = element as! MCOAddress
-                if address.displayName != "" && address.displayName != nil {
-                    addArray.addObject(address.displayName)
-                } else {
+          //      if address.displayName != "" && address.displayName != nil {
+           //         addArray.addObject(address.displayName)
+            //    } else {
                     addArray.addObject(address.mailbox)
-                }
+              //  }
             }
         }
         
