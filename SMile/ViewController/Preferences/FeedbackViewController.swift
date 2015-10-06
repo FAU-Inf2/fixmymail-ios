@@ -12,7 +12,6 @@ import CoreData
 class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelegate{
 
 	@IBOutlet weak var textView: UITextView!
-	@IBOutlet weak var buttonFeedback: UIButton!
 	
 	var accounts: [EmailAccount]?
 
@@ -27,6 +26,13 @@ class FeedbackViewController: UIViewController, NSFetchedResultsControllerDelega
 		
 		self.accounts = self.getAccount()
 		
+		let feedbackButton: UIBarButtonItem = UIBarButtonItem(title: "Send Feedback", style: UIBarButtonItemStyle.Plain, target: self, action: "buttonFeedbackTapped:")
+		
+		let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
+				feedbackButton,
+				UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)]
+		self.navigationController?.visibleViewController!.setToolbarItems(items, animated: false)
+		self.navigationController?.setToolbarHidden(false, animated: false)
 
         // Do any additional setup after loading the view.
     }

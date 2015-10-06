@@ -18,7 +18,6 @@ import UIKit
 import CoreData
 
 class SMileCrypto: NSObject {
-//	private var pgp: UNNetPGP
 	private var fileManager: NSFileManager
 	private var pubringURL: NSURL
 	private var secringURL: NSURL
@@ -38,14 +37,9 @@ class SMileCrypto: NSObject {
 	
 	
 	override init() {
-//		self.pgp = UNNetPGP()
 		self.fileManager = NSFileManager.defaultManager()
 		self.pubringURL = NSUserDefaults.standardUserDefaults().URLForKey("pubring")!
 		self.secringURL = NSUserDefaults.standardUserDefaults().URLForKey("secring")!
-		
-		// pgp settings
-	//	self.pgp.importKeysFromFile(self.pubringURL.path!, allowDuplicates: false)
-	//	self.pgp.importKeysFromFile(self.secringURL.path!, allowDuplicates: false)
 		
 		// get documentDirectory
 		self.documentDirectory = ""
@@ -404,20 +398,6 @@ class SMileCrypto: NSObject {
 //		} else {
 //			return false
 //		}
-	}
-	
-	// MARK: - Encrypt Strings with password
-	func encryptString(estring: String, key: String) -> NSData {
-		let edata = try? MyRNEncryptor.encryptData(estring.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true), password: key)
-		
-		return edata!
-	}
-	
-	func decryptData(edata: NSData, key: String) -> String {
-		
-		let pdata = try? RNDecryptor.decryptData(edata, withPassword: key)
-		let pstring: String = MyRNEncryptor.stringFromData(pdata)
-		return pstring
 	}
 	
 	// MARK: - DEBUG
