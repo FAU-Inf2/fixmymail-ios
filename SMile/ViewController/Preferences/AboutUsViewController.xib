@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AboutUsViewController" customModule="FixMyMail" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AboutUsViewController" customModule="SMile" customModuleProvider="target">
             <connections>
                 <outlet property="textView" destination="cu8-xB-HfC" id="65o-ei-VQZ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -16,10 +16,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cu8-xB-HfC">
-                    <rect key="frame" x="0.0" y="48" width="600" height="552"/>
+                    <rect key="frame" x="0.0" y="65" width="600" height="535"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <accessibility key="accessibilityConfiguration">
-                        <accessibilityTraits key="traits" none="YES" link="YES"/>
+                        <accessibilityTraits key="traits" link="YES"/>
                         <bool key="isElement" value="YES"/>
                     </accessibility>
                     <attributedString key="attributedText"/>
@@ -29,10 +29,10 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="cu8-xB-HfC" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="9R1-6k-QqG"/>
-                <constraint firstItem="cu8-xB-HfC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="48" id="TAu-s0-Q4Q"/>
-                <constraint firstAttribute="trailing" secondItem="cu8-xB-HfC" secondAttribute="trailing" id="TUo-lR-dq2"/>
-                <constraint firstAttribute="bottom" secondItem="cu8-xB-HfC" secondAttribute="bottom" id="k9C-iv-R60"/>
+                <constraint firstAttribute="trailing" secondItem="cu8-xB-HfC" secondAttribute="trailing" id="JTh-Vo-faV"/>
+                <constraint firstAttribute="bottom" secondItem="cu8-xB-HfC" secondAttribute="bottom" id="gAr-6L-6Fc"/>
+                <constraint firstItem="cu8-xB-HfC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="jxG-Fc-wIe"/>
+                <constraint firstItem="cu8-xB-HfC" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="zj8-Ws-WZd"/>
             </constraints>
         </view>
     </objects>

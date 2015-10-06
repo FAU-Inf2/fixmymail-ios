@@ -202,11 +202,6 @@
 		AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */; };
 		AD4E57DA1B7F781000E8C521 /* UserIdItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4E57D91B7F781000E8C521 /* UserIdItem.swift */; };
 		AD4E57DC1B7F782300E8C521 /* SubKeyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4E57DB1B7F782300E8C521 /* SubKeyItem.swift */; };
-		AD4FB15E1B88C08C004D18CB /* MyRNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1521B88C08C004D18CB /* MyRNEncryptor.m */; };
-		AD4FB15F1B88C08C004D18CB /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1551B88C08C004D18CB /* RNCryptor.m */; };
-		AD4FB1601B88C08C004D18CB /* RNCryptorEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB1591B88C08C004D18CB /* RNCryptorEngine.m */; };
-		AD4FB1611B88C08C004D18CB /* RNDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB15B1B88C08C004D18CB /* RNDecryptor.m */; };
-		AD4FB1621B88C08C004D18CB /* RNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4FB15D1B88C08C004D18CB /* RNEncryptor.m */; };
 		AD5196371BADB358009468C4 /* Waxing Gibbous Filled-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196301BADB358009468C4 /* Waxing Gibbous Filled-64_black.png */; };
 		AD5196381BADB358009468C4 /* Toolbox-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196311BADB358009468C4 /* Toolbox-64_black.png */; };
 		AD5196391BADB358009468C4 /* Sun-64_black.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5196321BADB358009468C4 /* Sun-64_black.png */; };
@@ -232,6 +227,8 @@
 		AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */; };
 		AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85401C1B186A7C003F9C92 /* ActionItem.swift */; };
 		AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */; };
+		AD8D474D1BC2CF38005B0F52 /* Lock_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */; settings = {ASSET_TAGS = (); }; };
+		AD8D474E1BC2CF38005B0F52 /* Lock_open_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */; settings = {ASSET_TAGS = (); }; };
 		AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CB1B7DE7250068E542 /* UserID.swift */; };
 		AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CD1B7DEA710068E542 /* SubKey.swift */; };
 		ADBF50AC1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */; };
@@ -497,19 +494,6 @@
 		AD4B41461B2342FD00EF09FC /* AuthConTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewCell.xib; sourceTree = "<group>"; };
 		AD4E57D91B7F781000E8C521 /* UserIdItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserIdItem.swift; sourceTree = "<group>"; };
 		AD4E57DB1B7F782300E8C521 /* SubKeyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubKeyItem.swift; sourceTree = "<group>"; };
-		AD4FB1511B88C08C004D18CB /* MyRNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRNEncryptor.h; sourceTree = "<group>"; };
-		AD4FB1521B88C08C004D18CB /* MyRNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRNEncryptor.m; sourceTree = "<group>"; };
-		AD4FB1531B88C08C004D18CB /* RNCryptor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCryptor-Prefix.pch"; sourceTree = "<group>"; };
-		AD4FB1541B88C08C004D18CB /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
-		AD4FB1551B88C08C004D18CB /* RNCryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCryptor.m; sourceTree = "<group>"; };
-		AD4FB1561B88C08C004D18CB /* RNCryptor+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCryptor+Private.h"; sourceTree = "<group>"; };
-		AD4FB1571B88C08C004D18CB /* RNCryptor+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCryptor+Swift.h"; sourceTree = "<group>"; };
-		AD4FB1581B88C08C004D18CB /* RNCryptorEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptorEngine.h; sourceTree = "<group>"; };
-		AD4FB1591B88C08C004D18CB /* RNCryptorEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCryptorEngine.m; sourceTree = "<group>"; };
-		AD4FB15A1B88C08C004D18CB /* RNDecryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNDecryptor.h; sourceTree = "<group>"; };
-		AD4FB15B1B88C08C004D18CB /* RNDecryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNDecryptor.m; sourceTree = "<group>"; };
-		AD4FB15C1B88C08C004D18CB /* RNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNEncryptor.h; sourceTree = "<group>"; };
-		AD4FB15D1B88C08C004D18CB /* RNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNEncryptor.m; sourceTree = "<group>"; };
 		AD5196301BADB358009468C4 /* Waxing Gibbous Filled-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Waxing Gibbous Filled-64_black.png"; sourceTree = "<group>"; };
 		AD5196311BADB358009468C4 /* Toolbox-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Toolbox-64_black.png"; sourceTree = "<group>"; };
 		AD5196321BADB358009468C4 /* Sun-64_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sun-64_black.png"; sourceTree = "<group>"; };
@@ -535,6 +519,8 @@
 		AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewCell.xib; sourceTree = "<group>"; };
 		AD85401C1B186A7C003F9C92 /* ActionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItem.swift; sourceTree = "<group>"; };
 		AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SMileCrypto.swift; sourceTree = "<group>"; };
+		AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_blue@2x.png"; sourceTree = "<group>"; };
+		AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_open_grey@2x.png"; sourceTree = "<group>"; };
 		AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v2.xcdatamodel"; sourceTree = "<group>"; };
 		AD97A0CB1B7DE7250068E542 /* UserID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserID.swift; sourceTree = "<group>"; };
 		AD97A0CD1B7DEA710068E542 /* SubKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubKey.swift; sourceTree = "<group>"; };
@@ -877,7 +863,6 @@
 				3D90275D1AF97167000D3E72 /* CoreData.framework */,
 				8E450BB91B15BD35001E37B9 /* ImageIO.framework */,
 				8E450BB71B15BD2F001E37B9 /* CoreImage.framework */,
-				AD8744161B6A3B7600257AA5 /* RNCryptor */,
 				3DF253AB1AF7611D00B99BC8 /* Info.plist */,
 				3DF253E91AF76A6A00B99BC8 /* MailCore2-Bridging-Header.h */,
 				A9F24C471BA720170088EB2D /* RemindMe.swift */,
@@ -973,6 +958,8 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */,
+				AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */,
 				AD3D6F381BB05BE200127466 /* smile_tcom_icon.png */,
 				A9A125F31BADEA9B00BCE62B /* Undo Filled-64.png */,
 				AD5196401BADB867009468C4 /* orangedot@2x.png */,
@@ -1035,26 +1022,6 @@
 				AD789D9C1B3054A00001719E /* Feedback.html */,
 			);
 			path = HTML_Files;
-			sourceTree = "<group>";
-		};
-		AD8744161B6A3B7600257AA5 /* RNCryptor */ = {
-			isa = PBXGroup;
-			children = (
-				AD4FB1511B88C08C004D18CB /* MyRNEncryptor.h */,
-				AD4FB1521B88C08C004D18CB /* MyRNEncryptor.m */,
-				AD4FB1531B88C08C004D18CB /* RNCryptor-Prefix.pch */,
-				AD4FB1541B88C08C004D18CB /* RNCryptor.h */,
-				AD4FB1551B88C08C004D18CB /* RNCryptor.m */,
-				AD4FB1561B88C08C004D18CB /* RNCryptor+Private.h */,
-				AD4FB1571B88C08C004D18CB /* RNCryptor+Swift.h */,
-				AD4FB1581B88C08C004D18CB /* RNCryptorEngine.h */,
-				AD4FB1591B88C08C004D18CB /* RNCryptorEngine.m */,
-				AD4FB15A1B88C08C004D18CB /* RNDecryptor.h */,
-				AD4FB15B1B88C08C004D18CB /* RNDecryptor.m */,
-				AD4FB15C1B88C08C004D18CB /* RNEncryptor.h */,
-				AD4FB15D1B88C08C004D18CB /* RNEncryptor.m */,
-			);
-			path = RNCryptor;
 			sourceTree = "<group>";
 		};
 		AD8744391B6A412E00257AA5 /* SMile_Crypto */ = {
@@ -1210,6 +1177,7 @@
 				3D69ECC41B83AB9A0082EF5C /* page_white_excel@2x.png in Resources */,
 				3D69ECBE1B83AB9A0082EF5C /* page_white_csharp@2x.png in Resources */,
 				AD5196371BADB358009468C4 /* Waxing Gibbous Filled-64_black.png in Resources */,
+				AD8D474E1BC2CF38005B0F52 /* Lock_open_grey@2x.png in Resources */,
 				3D69ECBD1B83AB9A0082EF5C /* page_white_csharp.png in Resources */,
 				3D69EBA81B83A5020082EF5C /* SubjectInfoTableViewCell.xib in Resources */,
 				3D69ECBF1B83AB9A0082EF5C /* page_white_cup.png in Resources */,
@@ -1249,6 +1217,7 @@
 				3D69ECD51B83AB9A0082EF5C /* page_white_php.png in Resources */,
 				3D65A4CD1B53014E00E88CC7 /* triangle_right.png in Resources */,
 				3D69ECC51B83AB9A0082EF5C /* page_white_film.png in Resources */,
+				AD8D474D1BC2CF38005B0F52 /* Lock_blue@2x.png in Resources */,
 				AD3D6F391BB05BE200127466 /* smile_tcom_icon.png in Resources */,
 				3D69ECC81B83AB9A0082EF5C /* page_white_flash@2x.png in Resources */,
 				3D69ECE61B83AB9A0082EF5C /* page_white_visualstudio@2x.png in Resources */,
@@ -1479,27 +1448,22 @@
 				A93A89401BA1C5FA0074C08D /* RemindViewController.swift in Sources */,
 				3D69EB9D1B8370B20082EF5C /* EmailViewController.swift in Sources */,
 				AD4742F51B98478B00A2A1BC /* PGPKeyID.swift in Sources */,
-				AD4FB15F1B88C08C004D18CB /* RNCryptor.m in Sources */,
 				ADEF08691B826819008AC0D0 /* KeyDetailTableViewCell.swift in Sources */,
 				3D69ED091B83ABE20082EF5C /* FUIPopoverBackgroundView.m in Sources */,
 				AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */,
 				AD6E5DF41B2DBDC5008B0488 /* PreferenceStandardAccountTableViewController.swift in Sources */,
 				AD43C8041B70F92600C8F286 /* ReceivedFileViewController.swift in Sources */,
 				3D69ED0A1B83ABE20082EF5C /* UIImage+FlatUI.m in Sources */,
-				AD4FB1621B88C08C004D18CB /* RNEncryptor.m in Sources */,
 				ADCAB63B1B3F21240060028E /* PreferencesPreviewLinesTableViewController.swift in Sources */,
 				3D69ED071B83ABE20082EF5C /* UTIFunctions.m in Sources */,
 				3D69ED0E1B83ABE20082EF5C /* HeaderView.m in Sources */,
-				AD4FB1611B88C08C004D18CB /* RNDecryptor.m in Sources */,
 				ADDE66021B1DC81D00880FA1 /* PreferenceEditAccountTableViewController.swift in Sources */,
-				AD4FB15E1B88C08C004D18CB /* MyRNEncryptor.m in Sources */,
 				3D8D90E41B00A2CA00D5135D /* SideBarTableViewCell.swift in Sources */,
 				A93A893F1BA1C5FA0074C08D /* RemindCollectionViewCell.swift in Sources */,
 				8E1C054E1B98794E0094B604 /* AttachmentsViewController.swift in Sources */,
 				AD789D9A1B3050640001719E /* FeedbackViewController.swift in Sources */,
 				3D9E00A01BB2F4DD005D541D /* PathExtensionFromString.swift in Sources */,
 				AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */,
-				AD4FB1601B88C08C004D18CB /* RNCryptorEngine.m in Sources */,
 				AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */,
 				3DA302951B2ED122003CE16A /* ImapFolder.swift in Sources */,
 				3DF253AD1AF7611D00B99BC8 /* AppDelegate.swift in Sources */,

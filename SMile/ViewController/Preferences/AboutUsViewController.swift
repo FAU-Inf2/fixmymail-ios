@@ -18,6 +18,7 @@ class AboutUsViewController: UIViewController {
 		if let html = NSBundle.mainBundle().URLForResource("AboutUs", withExtension: "html") {
 			let attributedString = try? NSAttributedString(URL: html, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
 			self.textView.attributedText = attributedString
+			self.textView.scrollRangeToVisible(NSMakeRange(0, 1))
 		}
     }
 
