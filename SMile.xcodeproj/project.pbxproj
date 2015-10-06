@@ -234,7 +234,6 @@
 		AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */; };
 		AD8D474D1BC2CF38005B0F52 /* Lock_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */; settings = {ASSET_TAGS = (); }; };
 		AD8D474E1BC2CF38005B0F52 /* Lock_open_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */; settings = {ASSET_TAGS = (); }; };
-		AD8D474F1BC2CF38005B0F52 /* UIButtonBarTrashLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8D474C1BC2CF38005B0F52 /* UIButtonBarTrashLandscape@2x.png */; settings = {ASSET_TAGS = (); }; };
 		AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CB1B7DE7250068E542 /* UserID.swift */; };
 		AD97A0CE1B7DEA710068E542 /* SubKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CD1B7DEA710068E542 /* SubKey.swift */; };
 		ADBF50AC1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBF50AA1B68DD340057C2A1 /* PrefAccountBehaviorTableViewController.swift */; };
@@ -540,7 +539,6 @@
 		AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SMileCrypto.swift; sourceTree = "<group>"; };
 		AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_blue@2x.png"; sourceTree = "<group>"; };
 		AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_open_grey@2x.png"; sourceTree = "<group>"; };
-		AD8D474C1BC2CF38005B0F52 /* UIButtonBarTrashLandscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarTrashLandscape@2x.png"; sourceTree = "<group>"; };
 		AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v2.xcdatamodel"; sourceTree = "<group>"; };
 		AD97A0CB1B7DE7250068E542 /* UserID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserID.swift; sourceTree = "<group>"; };
 		AD97A0CD1B7DEA710068E542 /* SubKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubKey.swift; sourceTree = "<group>"; };
@@ -981,7 +979,6 @@
 			children = (
 				AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */,
 				AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */,
-				AD8D474C1BC2CF38005B0F52 /* UIButtonBarTrashLandscape@2x.png */,
 				AD3D6F381BB05BE200127466 /* smile_tcom_icon.png */,
 				A9A125F31BADEA9B00BCE62B /* Undo Filled-64.png */,
 				AD5196401BADB867009468C4 /* orangedot@2x.png */,
@@ -1271,7 +1268,6 @@
 				3D69ECDD1B83AB9A0082EF5C /* page_white_sound.png in Resources */,
 				AD789D9D1B3054A00001719E /* Feedback.html in Resources */,
 				AD5196411BADB867009468C4 /* orangedot@2x.png in Resources */,
-				AD8D474F1BC2CF38005B0F52 /* UIButtonBarTrashLandscape@2x.png in Resources */,
 				3D69ECDC1B83AB9A0082EF5C /* page_white_ruby@2x.png in Resources */,
 				ADEF085B1B8205B9008AC0D0 /* pgp_label.png in Resources */,
 				AD1255E01B1A302F005EA5CE /* sources.txt in Resources */,

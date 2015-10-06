@@ -68,11 +68,12 @@ class CustomMailTableViewCell: UITableViewCell {
         archiveIMGView.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 40, y: (height-35)/2, width: 25, height: 35)
         subviewArchiveSwipeFromLeftToRight.frame = CGRect(x: -bounds.size.width, y: 0, width: self.bounds.width, height: height)
         subviewArchiveSwipeFromLeftToRight.addSubview(archiveIMGView)
-        addSubview(subviewArchiveSwipeFromLeftToRight)
-        
+		
+        //init remindMe subview on the left
         remindIMGView.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 40, y: (height-35)/2, width: 35, height: 35)
         subviewArchiveSwipeFromLeftToRight.frame = CGRect(x: -bounds.size.width, y: 0, width: self.bounds.width, height: height)
         subviewArchiveSwipeFromLeftToRight.addSubview(remindIMGView)
+		addSubview(subviewArchiveSwipeFromLeftToRight)
         
         
         if recognizer.state == .Began {
@@ -84,21 +85,21 @@ class CustomMailTableViewCell: UITableViewCell {
             let translation = recognizer.translationInView(self)
             center = CGPointMake(originalCenter.x + translation.x, originalCenter.y)
             deleteOnDragRelease = frame.origin.x < -frame.size.width / 5.0
-            archiveOnDragRelease = frame.origin.x > frame.size.width / 7.0
-            remindMeOnDragRelease = frame.origin.x > frame.size.width / 2
+            archiveOnDragRelease = frame.origin.x > frame.size.width / 2.0
+            remindMeOnDragRelease = frame.origin.x > frame.size.width / 7.0
             
             // indicate when the user has pulled the item far enough to invoke the given action
             subviewDeleteSwipeFromRightToLeft.backgroundColor = deleteOnDragRelease ? UIColor.redColor() : UIColor.grayColor()
-            subviewArchiveSwipeFromLeftToRight.backgroundColor = archiveOnDragRelease ? UIColor.greenColor() : UIColor.grayColor()
+            subviewArchiveSwipeFromLeftToRight.backgroundColor = remindMeOnDragRelease ? UIColor.orangeColor() : UIColor.grayColor()
             
-            if remindMeOnDragRelease {
-                archiveIMGView.hidden = true
-                remindIMGView.hidden = false
-                
-                subviewArchiveSwipeFromLeftToRight.backgroundColor = UIColor.orangeColor()
-            }else {
+            if archiveOnDragRelease {
                 archiveIMGView.hidden = false
                 remindIMGView.hidden = true
+                
+                subviewArchiveSwipeFromLeftToRight.backgroundColor = UIColor.greenColor()
+            }else {
+                archiveIMGView.hidden = true
+                remindIMGView.hidden = false
             }
         }
         
@@ -118,16 +119,17 @@ class CustomMailTableViewCell: UITableViewCell {
                 UIView.animateWithDuration(0.2, animations: {self.frame = fullLeftFrame})
                 delegate!.deleteEmail(mail)
             }
-            
-            if remindMeOnDragRelease {
-                UIView.animateWithDuration(0.2, animations: {self.frame = originalFrame})
-                delegate!.remindEmail(mail)
-                NSLog("REMIND ME")
-            } else if archiveOnDragRelease {
-                //archive this email
-                UIView.animateWithDuration(0.2, animations: {self.frame = fullRightFrame})
-                delegate!.archiveEmail(mail)
-            }
+			
+			
+			if archiveOnDragRelease {
+				//archive this email
+				UIView.animateWithDuration(0.2, animations: {self.frame = fullRightFrame})
+				delegate!.archiveEmail(mail)
+			} else if remindMeOnDragRelease {
+				UIView.animateWithDuration(0.2, animations: {self.frame = originalFrame})
+				delegate!.remindEmail(mail)
+				NSLog("REMIND ME")
+			}
         }
     }
     
