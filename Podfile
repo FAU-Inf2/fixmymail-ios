@@ -8,7 +8,7 @@ target 'SMile' do
 	#pod 'OpenSSL-Universal', '=1.0.1.h'
 	pod 'Locksmith'
 	pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
-	pod 'CTOpenSSLWrapper', :git => 'https://github.com/FAU-Inf2/CTOpenSSLWrapper.git', :branch => :master
+	pod 'SMilePGP', :git => 'https://github.com/FAU-Inf2/SMilePGP.git', :branch => :master
 
 end
 
