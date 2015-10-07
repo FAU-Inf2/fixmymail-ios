@@ -20,12 +20,13 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     @IBOutlet weak var collectionView: UICollectionView!
     //var mail: Email?
     
-    var textData: [String] = ["Later Today","This Evening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "back", "","Pick a Date"]
-    var Images:[String] = ["Hourglass-64.png","Waxing Gibbous Filled-64.png","Cup-64.png","Sun-64.png","Toolbox-64.png","Plus 1 Month-64.png","Undo Filled-64.png","","Calendar-64.png"]
+    var textData: [String] = ["Later Today","This Evening", "Tomorrow", "This Weekend", "Next Week", "In One Month", "", "","Pick a Date"]
+    var Images:[String] = ["Hourglass-64.png","Waxing Gibbous Filled-64.png","Cup-64.png","Sun-64.png","Toolbox-64.png","Plus 1 Month-64.png","","","Calendar-64.png"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         remind = RemindMe()
+        remind?.checkIfJSONEmailExists(email!)
         datePicker.hidden = true
         back.hidden = true
         SetTime.hidden = true
@@ -38,7 +39,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         effectView.frame = UIScreen.mainScreen().bounds
         self.imageView.addSubview(effectView)
         //downlaodJsonAndCheckForUpcomingReminds()
-        remind?.downlaodJsonAndCheckForUpcomingReminds((email?.toAccount)!)
+        //remind?.downlaodJsonAndCheckForUpcomingReminds((email?.toAccount)!)
     }
     
     override func didReceiveMemoryWarning() {
@@ -86,6 +87,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             components.hour = 2
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            self.navigationController?.popViewControllerAnimated(true)
         case 1: //This Evening
             print(date.hour())
             if (date.hour()>18){
@@ -95,6 +97,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
                 components.hour = 20
                 remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: date, options: [])!
                 remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+                self.navigationController?.popViewControllerAnimated(true)
             }
         case 2: //Tomorrow Morning
             components.day = 1
@@ -102,6 +105,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             components.hour = 5
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            self.navigationController?.popViewControllerAnimated(true)
         case 3: //This Weekend
             let day = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
             let friday = 6
@@ -113,6 +117,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             components.hour = 17
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            self.navigationController?.popViewControllerAnimated(true)
         case 4: //Next Week
             let day = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
             let monday = 2
@@ -124,10 +129,12 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             components.hour = 5
             remindDate = NSCalendar.currentCalendar().dateBySettingHour(components.hour, minute: 0, second: 0, ofDate: remindDate, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            self.navigationController?.popViewControllerAnimated(true)
         case 5: //In 1 Month
             components.month = 1
             remindDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: [])!
             remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+            self.navigationController?.popViewControllerAnimated(true)
         case 8: //Pick a Date
             collectionView.hidden  = true
             back.hidden = false
@@ -135,12 +142,12 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             datePicker.hidden = false
             datePicker.datePickerMode = UIDatePickerMode.DateAndTime
             datePicker.minimumDate = date
+            print(date)
             datePicker.date = date
         default:
             NSLog("other")
             break
         }
-        self.navigationController?.popViewControllerAnimated(true)
     }
     
     @IBAction func Back(sender: AnyObject) {
@@ -157,7 +164,10 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
         SetTime.hidden = true
         let remindDate = datePicker.date
         remind!.setJSONforUpcomingRemind(email!,remindTime: remindDate)
+        self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    
     
     
     /*

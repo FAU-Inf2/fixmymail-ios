@@ -196,13 +196,17 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //MARK: - IMAPSynchronize
     func imapSynchronize() {
+        let remind:RemindMe = RemindMe()
         if let accs = accounts {
             for account in accs {
+                remind.downlaodJsonAndCheckForUpcomingReminds(account)
                 let currentMaxUID = getMaxUID(account, folderToQuery: self.folderToQuery!)
                 updateLocalEmail(account, folderToQuery: self.folderToQuery!)
                 fetchEmails(account, folderToQuery: self.folderToQuery!, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
             }
         }
+        
+        
         self.refreshController.endRefreshing()
     }
     
