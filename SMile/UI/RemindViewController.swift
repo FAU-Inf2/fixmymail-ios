@@ -142,9 +142,8 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             SetTime.hidden = false
             datePicker.hidden = false
             datePicker.datePickerMode = UIDatePickerMode.DateAndTime
-            datePicker.minimumDate = date
-            print(date)
-            datePicker.date = date
+            datePicker.minimumDate = NSDate()
+            datePicker.date = NSDate()
         default:
             NSLog("other")
             break
