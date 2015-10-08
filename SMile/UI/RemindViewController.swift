@@ -26,7 +26,8 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
     override func viewDidLoad() {
         super.viewDidLoad()
         remind = RemindMe()
-        remind?.checkIfJSONEmailExists(email!)
+        remind?.checkIfFolderExist(email!.toAccount)
+        remind?.checkIfJSONEmailExists(email!.toAccount)
         datePicker.hidden = true
         back.hidden = true
         SetTime.hidden = true
@@ -200,5 +201,6 @@ extension NSDate {
             // to an initialization first.)
             self.init(timeIntervalSince1970: 0)
             return nil
-        }    }
+        }
+    }
 }

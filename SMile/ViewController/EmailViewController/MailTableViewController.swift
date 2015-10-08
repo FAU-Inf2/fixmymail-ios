@@ -398,29 +398,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     func remindEmail(mail: Email){
         // open view with more opportunities
-        let folderRemind: String = "RemindMe"
-        let folderStorage: String = "SmileStorage"
-        var remind: Bool = false
-        var storage: Bool = false
-        
-        for imapFolder in mail.toAccount.folders{
-            let fol: MCOIMAPFolder = (imapFolder as! ImapFolder).mcoimapfolder
-            if(fol.path == folderRemind){
-                remind = true
-            }
-            else if(fol.path == folderStorage){
-                storage = true
-                //check if file exists
-            }
-            if(remind == false){
-                //create folder
-            }else{}
-            if(storage == false){
-                //create folder
-                //create file
-            }else{}
-        }
-        
         
         let remindView = RemindViewController(nibName: "RemindViewController", bundle: nil)
         remindView.email = mail

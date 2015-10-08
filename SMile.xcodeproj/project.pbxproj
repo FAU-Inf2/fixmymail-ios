@@ -1614,6 +1614,7 @@
 					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper/PGPPackets\"",
 					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper\"",
 					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper\"",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SMile/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1659,6 +1660,7 @@
 					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper/PGPPackets\"",
 					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper/CTOpenSSLWrapper\"",
 					"\"${PODS_ROOT}/SMilePGP/CTOpenSSLWrapper\"",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SMile/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
