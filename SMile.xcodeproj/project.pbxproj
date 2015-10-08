@@ -192,8 +192,6 @@
 		AD44E0301B1B22E700751FFA /* TextfieldWithPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */; };
 		AD44E0361B1B51ED00751FFA /* icloud-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0351B1B51ED00751FFA /* icloud-icon.png */; };
 		AD44E0381B1B528400751FFA /* fau-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0371B1B528400751FFA /* fau-logo.png */; };
-		AD4742F31B98434200A2A1BC /* PGPKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F21B98434200A2A1BC /* PGPKey.swift */; };
-		AD4742F51B98478B00A2A1BC /* PGPKeyID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */; };
 		AD4742F91B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */; };
 		AD4742FA1B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */; };
 		AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */; };
@@ -483,8 +481,6 @@
 		AD44E02F1B1B22E700751FFA /* TextfieldWithPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextfieldWithPadding.swift; sourceTree = "<group>"; };
 		AD44E0351B1B51ED00751FFA /* icloud-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icloud-icon.png"; sourceTree = "<group>"; };
 		AD44E0371B1B528400751FFA /* fau-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fau-logo.png"; sourceTree = "<group>"; };
-		AD4742F21B98434200A2A1BC /* PGPKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PGPKey.swift; sourceTree = "<group>"; };
-		AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PGPKeyID.swift; sourceTree = "<group>"; };
 		AD4742F61B984E9000A2A1BC /* SMile v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v3.xcdatamodel"; sourceTree = "<group>"; };
 		AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefDownloadMailDurationTableViewController.swift; sourceTree = "<group>"; };
 		AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefDownloadMailDurationTableViewController.xib; sourceTree = "<group>"; };
@@ -1028,8 +1024,6 @@
 			isa = PBXGroup;
 			children = (
 				AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */,
-				AD4742F21B98434200A2A1BC /* PGPKey.swift */,
-				AD4742F41B98478B00A2A1BC /* PGPKeyID.swift */,
 			);
 			path = SMile_Crypto;
 			sourceTree = "<group>";
@@ -1418,7 +1412,6 @@
 				AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */,
 				8E1C05541B98794E0094B604 /* MoveEmailViewController.swift in Sources */,
 				ADD135CB1B15B56300A9B31A /* KeyItemTableViewCell.swift in Sources */,
-				AD4742F31B98434200A2A1BC /* PGPKey.swift in Sources */,
 				3D8D90E11B00A1F900D5135D /* SidebarTableViewController.swift in Sources */,
 				3D69ED101B83ABE20082EF5C /* MCOMessageView.mm in Sources */,
 				3DA3029C1B321467003CE16A /* MCOIMAPFolderWrapper.m in Sources */,
@@ -1447,7 +1440,6 @@
 				AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */,
 				A93A89401BA1C5FA0074C08D /* RemindViewController.swift in Sources */,
 				3D69EB9D1B8370B20082EF5C /* EmailViewController.swift in Sources */,
-				AD4742F51B98478B00A2A1BC /* PGPKeyID.swift in Sources */,
 				ADEF08691B826819008AC0D0 /* KeyDetailTableViewCell.swift in Sources */,
 				3D69ED091B83ABE20082EF5C /* FUIPopoverBackgroundView.m in Sources */,
 				AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */,

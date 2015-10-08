@@ -6,18 +6,18 @@
 //  Copyright (c) 2015 SMile. All rights reserved.
 //
 
-// example for use in other classes:
-// var crypt = SMileCrypto()
-// var edata: NSData = crypt.encryptString("Hello from swift my little swifty", key: "SMile")
-// println("encrytpted: \(edata)")
-// var pdata: String = crypt.decryptData(edata, key: "SMile")
-// println("decrypted: \(pdata)")
-
 
 import UIKit
 import CoreData
+import Foundation
 
 class SMileCrypto: NSObject {
+	
+	private let pubKeyBlockString = "-----BEGIN PGP PUBLIC KEY BLOCK-----"
+	private let secKeyBlockString = "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+	private let smimeFileString = "pkcs7-mime"
+	
+	private var pgp: SMilePGP
 	private var fileManager: NSFileManager
 	private var pubringURL: NSURL
 	private var secringURL: NSURL
@@ -37,6 +37,7 @@ class SMileCrypto: NSObject {
 	
 	
 	override init() {
+		self.pgp = SMilePGP()
 		self.fileManager = NSFileManager.defaultManager()
 		self.pubringURL = NSUserDefaults.standardUserDefaults().URLForKey("pubring")!
 		self.secringURL = NSUserDefaults.standardUserDefaults().URLForKey("secring")!
@@ -50,7 +51,7 @@ class SMileCrypto: NSObject {
             self.documentDirectory = paths[0]
         }
 		
-		// fetch key from coreData and load them to ObjectivePGP
+		// fetch keys from coreData
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
 		if let appDelegate = appDel {
 			self.managedObjectContext = appDelegate.managedObjectContext!
@@ -60,20 +61,7 @@ class SMileCrypto: NSObject {
             } catch _ {
                 self.keysInCoreData = nil
             }
-			if self.keysInCoreData != nil {
-				if self.keysInCoreData!.count > 0 {
-					for _ in self.keysInCoreData! {
-//						pgp.importKeysFromData(key.keyData, allowDuplicates: false)
-					}
-				} else {
-					self.keysInCoreData = nil
-				}
-			}
-			
 		}
-		
-		
-	
 	}
 	
 	// MARK: - Decryption
@@ -232,240 +220,75 @@ class SMileCrypto: NSObject {
 	
 	- parameter keyfile::	the URL of the keyfile to be imported.
 	
-	- returns: true if import was successful.
+	- returns: true if import was successful or key already exists in CoreData.
 	*/
 	func importKey(keyfile: NSURL) -> Bool {
-        return false
-//		let resultPublic: Bool?
-//		let resultSecret: Bool?
-////		var exportError: NSError?
-//		if let fileContent = try? String(contentsOfFile: keyfile.path!, encoding: NSUTF8StringEncoding) {
-//			// extract and import public key block
-//			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil {
-//				let beginRange = fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----")
-//				let endRange = fileContent.rangeOfString("-----END PGP PUBLIC KEY BLOCK-----")
-//				if beginRange != nil && endRange != nil {
-////					let pubKeyBlock = fileContent.substringWithRange(Range<String.Index>(start: beginRange!.startIndex, end: endRange!.endIndex))
-//				//	NSLog("pubKeyBlock: \n" + pubKeyBlock)
-//				//	NSLog("fileContent: \n" + fileContent)
-////					var keyData: NSData = pubKeyBlock.dataUsingEncoding(NSUTF8StringEncoding)!
-////					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
-////					resultPublic = importedOjbects.count > 0
-//					// DEBUG
-//					if resultPublic != nil {
-//						NSLog("Public key imported")
-//					}
-//
-//				}
-//			
-//			}
-//			// extract and import private key block
-//			if fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----") != nil {
-//				let beginRange = fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----")
-//				let endRange = fileContent.rangeOfString("-----END PGP PRIVATE KEY BLOCK-----")
-//				if beginRange != nil && endRange != nil {
-////					let secKeyBlock = fileContent.substringWithRange(Range<String.Index>(start: beginRange!.startIndex, end: endRange!.endIndex))
-//				//	NSLog("secKeyBlock: " + secKeyBlock)
-////					var keyData: NSData = secKeyBlock.dataUsingEncoding(NSUTF8StringEncoding)!
-////					var importedOjbects = pgp.importKeysFromData(keyData, allowDuplicates: false)
-////					resultSecret = importedOjbects.count > 0
-//					// DEBUG
-//					if resultSecret != nil {
-//						NSLog("Secret key imported")
-//					}
-//				}
-//			}
-//			
-//			if fileContent.rangeOfString("pkcs7-mime") != nil {
-//				// TODO
-//				// do smime stuff
-//			}
-//			
-//		}
-//
-//		self.printAllPublicKeys(true)
-//		self.printAllSecretKeys(true)
-//		
-//		
-//		
-////		let keyFetchRequest = NSFetchRequest(entityName: "Key")
-////		self.keysInCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest) as? [Key]
-//		
-///*		// save new pubkeys to core data
-//		var pubKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Public)
-//		for anyPubkey in pubKeys {
-//			let pubkey = anyPubkey as! PGPKey
-//			// check if pubkey already exists in core data
-//			var isPresent: Bool = false
-//			if self.keysInCoreData != nil {
-//				if self.keysInCoreData!.count > 0 {
-//					for key in self.keysInCoreData! {
-//						if key.isPublicKey {
-//							if key.keyID == pubkey.keyID.longKeyString {
-//								isPresent = true
-//								break
-//							}
-//						}
-//					}
-//				}
-//				
-//			}
-//			if isPresent == false {
-//				// save new pubkey to core data
-//				var success = self.saveKeyToCoreData(pubkey)
-//				if success {
-//					var keyFetchRequest = NSFetchRequest(entityName: "Key")
-//					var error: NSError?
-//					self.keysInCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
-//				}
-//			}
-//		}
-//		
-//		// save new seckeys to core data
-//		var secKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Secret)
-//		for anySecKey in secKeys {
-//			let secKey = anySecKey as! PGPKey
-//			// check if seckey already exists in core data
-//			var isPresent: Bool = false
-//			if self.keysInCoreData != nil {
-//				if self.keysInCoreData!.count > 0 {
-//					for key in self.keysInCoreData! {
-//						if key.isSecretKey {
-//							if key.keyID == secKey.keyID.longKeyString {
-//								isPresent = true
-//								break
-//							}
-//						}
-//					}
-//				}
-//				
-//			}
-//			if isPresent == false {
-//				// save new seckey to core data
-//				var success = self.saveKeyToCoreData(secKey)
-//				if success {
-//					var keyFetchRequest = NSFetchRequest(entityName: "Key")
-//					var error: NSError?
-//					self.keysInCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
-//				}
-//			}
-//			
-//		}
-//*/
-///*
-//		if self.keysInCoreData != nil {
-//			if self.keysInCoreData!.count > 0 {
-//				for key in self.keysInCoreData! {
-//					self.printPGPKeyFull(key) // DEBUG
-//				}
-//			}
-//		}
-//*/		
-///*
-//		// self delete dublicates because it is not working with private keys
-//		// TODO #######
-//		var pubKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Public)
-//		var secKeys: NSArray = pgp.getKeysOfType(PGPKeyType.Secret)
-//		var pubKeysArray: NSArray = [PGPKey]()
-//		var secKeysArray: NSArray = [PGPKey]()
-//		
-//		var uniqueSecKeys: NSSet = NSSet(array: secKeys as! [PGPKey])
-//		secKeys = uniqueSecKeys.allObjects as AnyObject as! NSArray
-//		
-//		var allKeys = NSArray(array: pubKeys.arrayByAddingObjectsFromArray(secKeys as [AnyObject]))
-//		pgp.keys = allKeys as [AnyObject]
-//
-//		//##########
-//		
-//
-//		self.fileManager.createFileAtPath(self.pubringURL.path!, contents: nil, attributes: nil)
-//		self.fileManager.createFileAtPath(self.secringURL.path!, contents: nil, attributes: nil)
-//		
-//		pgp.exportKeysOfType(PGPKeyType.Public, toFile: self.pubringURL.path!, error: &exportError)
-//		pgp.exportKeysOfType(PGPKeyType.RawValue, toFile: self.secringURL.path!, error: &exportError)
-//		if exportError != nil {
-//			NSLog("Error: \(exportError?.domain)")
-//		} else {
-//			//NSLog("Export of imported keys to ringfile successful")
-//		}
-//*/
-//		if resultPublic != nil && resultSecret != nil {
-//			return resultSecret! && resultPublic!
-//		} else if resultPublic != nil && resultSecret == nil {
-//			return resultPublic!
-//		} else if resultPublic == nil && resultSecret != nil {
-//			return resultSecret!
-//		} else {
-//			return false
-//		}
-	}
+		if let keyData = NSData(contentsOfURL: keyfile) {
+			
+			if let fileContent = try? String(contentsOfFile: keyfile.path!, encoding: NSUTF8StringEncoding) {
+				// keyfile is ppg key
+				if fileContent.rangeOfString(self.pubKeyBlockString) != nil || fileContent.rangeOfString(self.secKeyBlockString) != nil {
+					let importedKey = pgp.importPGPKeyFromArmouredFile(keyData)
+					let keyForCoreData = self.getKeyFromPGPKey(importedKey, keyFileData: keyData)
+					
+					// check if keyForCoreData already exists in CoreData
+					if self.keysInCoreData != nil {
+						for key in self.keysInCoreData! {
+							if key.keyID == keyForCoreData.keyID {
+								return true
+							}
+						}
+					}
+					// keyforCoreData is a new key -> save to core data
+					if !self.saveKeyToCoreData(keyForCoreData) {
+						return false
+					}
+				}
+				
+				// keyfile is smime file
+				if fileContent.rangeOfString(self.smimeFileString) != nil {
+					// TODO
+					// do smime stuff
+				}
+			}
+			
+		}
+		self.printAllPublicKeys()
+		self.printAllSecretKeys()
+		NSLog("Key imported")
+		return true
+}
 	
 	// MARK: - DEBUG
 	
 	/**
-	Print all public keys
-	
-	- parameter fromActiveInstance::	true: all public keys from pgp instance.
-							    false: all public keys from core data.
-	
+	Print all public keys from core data
 	*/
-	func printAllPublicKeys(fromActiveInstance: Bool) {
-/*		var pubKeyStrings: [String] = [String]()
-		if fromActiveInstance {
-			var pubkeys = pgp.getKeysOfType(PGPKeyType.Public) as! [PGPKey]
-			for key in pubkeys {
-				pubKeyStrings.append(key.keyID.shortKeyString)
-			}
-			println("Public Keys: " + ",".join(pubKeyStrings))
-		} else {
-			var keyFetchRequest = NSFetchRequest(entityName: "Key")
-			var error: NSError?
-			var fetchedKeysFromCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
-			if error != nil {
-				NSLog("Public Key fetchRequest: \(error?.localizedDescription)")
-			} else {
-				for key in fetchedKeysFromCoreData! {
-					if key.isPublicKey {
-						pubKeyStrings.append(key.keyID)
-					}
+	func printAllPublicKeys() {
+		var pubKeyStrings: [String] = [String]()
+		if self.keysInCoreData != nil {
+			for key in self.keysInCoreData! {
+				if key.isPublicKey {
+					pubKeyStrings.append(key.keyID)
 				}
 			}
-			println("Public Keys: " + ",".join(pubKeyStrings))
 		}
-*/
+		print("Public Keys: " + (pubKeyStrings).joinWithSeparator(","))
 	}
 	
 	/**
-	Print all secret keys
-	
-	- parameter fromActiveInstance::	true: all secret keys from pgp instance.
-	false: all secret keys from core data.
-	
+	Print all secret keys from core data
 	*/
-	func printAllSecretKeys(fromActiveInstance: Bool) {
-/*		var secKeyStrings: [String] = [String]()
-		if fromActiveInstance {
-			var seckeys = pgp.getKeysOfType(PGPKeyType.Secret) as! [PGPKey]
-			for key in seckeys {
-				secKeyStrings.append(key.keyID.shortKeyString)
-			}
-			println("Secret Keys: " + ",".join(secKeyStrings))
-		} else {
-			var keyFetchRequest = NSFetchRequest(entityName: "Key")
-			var error: NSError?
-			var fetchedKeysFromCoreData = managedObjectContext!.executeFetchRequest(keyFetchRequest, error: &error) as? [Key]
-			if error != nil {
-				NSLog("Secret Key fetchRequest: \(error?.localizedDescription)")
-			} else {
-				for key in fetchedKeysFromCoreData! {
-					if key.isSecretKey {
-						secKeyStrings.append(key.keyID)
-					}
+	func printAllSecretKeys() {
+		var secKeyStrings: [String] = [String]()
+		if self.keysInCoreData != nil {
+			for key in self.keysInCoreData! {
+				if key.isSecretKey {
+					secKeyStrings.append(key.keyID)
 				}
 			}
-			println("Secret Keys: " + ",".join(secKeyStrings))
 		}
-*/
+		print("Public Keys: " + (secKeyStrings).joinWithSeparator(","))
 	}
 	
 	func printPGPKeyFull(key: Key) -> Void {
@@ -498,37 +321,44 @@ class SMileCrypto: NSObject {
 	
 
 	// MARK: - CoreData
-/*	func getKeyFromPGPKey(pgpKey: PGPKey) -> Key {
-		var newKey = Key()
-		newKey.userIDprimary = (pgpKey.users.firstObject as! PGPUser).userID
-		newKey.emailAddressPrimary = ""
-		newKey.keyID = pgpKey.keyID.longKeyString
-		newKey.isSecretKey = pgpKey.type == PGPKeyType.Secret
-		newKey.isPublicKey = pgpKey.type == PGPKeyType.Public
+	func getKeyFromPGPKey(pgpKey: PGPKey, keyFileData: NSData) -> KeyItem {
+		let calendar = NSCalendar.currentCalendar()
+		let newKey = KeyItem()
+		let userIDextract = self.extractNameAndMailAddressFromUserID(pgpKey.getUserID())
+		newKey.userIDprimary = userIDextract.name
+		newKey.emailAddressPrimary = userIDextract.mailAddress
+		newKey.keyID = pgpKey.getKeyID()
+		newKey.isSecretKey = pgpKey.isPrivate
+		newKey.isPublicKey = true
 		newKey.keyType = "PGP"
-		newKey.created = (pgpKey.primaryKeyPacket as! PGPPublicKeyPacket).createDate
-		newKey.validThru = NSDate(timeInterval: Double((pgpKey.primaryKeyPacket as! PGPPublicKeyPacket).V3validityPeriod), sinceDate: newKey.created)
-		newKey.keyLength = (pgpKey.primaryKeyPacket as! PGPPublicKeyPacket).keySize
-		newKey.algorithm = self.getAlgorithmString(Int((pgpKey.primaryKeyPacket as! PGPPublicKeyPacket).publicKeyAlgorithm.rawValue))
-		newKey.fingerprint = (pgpKey.primaryKeyPacket as! PGPPublicKeyPacket).fingerprint.description
+		newKey.created = pgpKey.getCreationDate()
+		
+		if let validDate = calendar.dateByAddingUnit(.Day, value: Int(pgpKey.getTimeInDaysTillExpiration()), toDate: NSDate(), options: []) {
+			newKey.validThru = validDate
+		} else {
+			newKey.validThru = pgpKey.getCreationDate()
+		}
+		
+		newKey.keyLength = 2048
+		newKey.algorithm = self.getAlgorithmString(Int(pgpKey.getKeyAlgorithm()))
+		newKey.fingerprint = pgpKey.getKeyID()
 		newKey.trust = TrustType.Unknown.rawValue
 		
-		var userIDs: [UserID] = [UserID]()
-		for var i = 0; i < pgpKey.users.count; i++ {
-			var userID = UserID()
-			userID.name = (pgpKey.users.objectAtIndex(i) as! PGPUser).userID
-			userID.toKey = newKey
-			userID.emailAddress = ""
+		var userIDs: [UserIdItem] = [UserIdItem]()
+	//	for var i = 0; i < pgpKey.users.count; i++ {
+			let userID = UserIdItem()
+			userID.name = userIDextract.name
+			userID.emailAddress = userIDextract.mailAddress
 			userID.comment = ""
 			userIDs.append(userID)
-		}
+	//	}
 		newKey.userIDs = NSSet(array: userIDs)
 		newKey.subKeys = NSSet()
-		newKey.keyData = pgp.exportKey(pgpKey, armored: true)
+		newKey.keyData = keyFileData
 		
 		return newKey
 	}
-*/
+
 	
 	private func getAlgorithmString(value: Int) -> String {
 		switch value {
@@ -545,54 +375,53 @@ class SMileCrypto: NSObject {
 		}
 	}
 	
-	private func saveKeyToCoreData(keyToSave: PGPKey) -> Bool {
-//		let error: NSError?
-/*		if self.managedObjectContext != nil {
-			var newKeyEntry = NSEntityDescription.insertNewObjectForEntityForName("Key", inManagedObjectContext: self.managedObjectContext!) as! Key
+	private func saveKeyToCoreData(keyToSave: KeyItem) -> Bool {
+		if self.managedObjectContext != nil {
+			let newKeyEntry = NSEntityDescription.insertNewObjectForEntityForName("Key", inManagedObjectContext: self.managedObjectContext!) as! Key
 			
-			var (name, address) = self.extractNameAndMailAddressFromUserID((keyToSave.users.firstObject as! PGPUser).userID)
-			
-			newKeyEntry.setValue(name, forKey: "userIDprimary")
-			newKeyEntry.setValue(address, forKey: "emailAddressPrimary")
-			newKeyEntry.setValue(keyToSave.keyID.longKeyString, forKey: "keyID")
-			newKeyEntry.setValue((keyToSave.type == PGPKeyType.Secret), forKey: "isSecretKey")
-			newKeyEntry.setValue((keyToSave.type == PGPKeyType.Public), forKey: "isPublicKey")
-			newKeyEntry.setValue("PGP", forKey: "keyType")
-			newKeyEntry.setValue((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).createDate, forKey: "created")
-			newKeyEntry.setValue(NSDate(timeInterval: Double((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).V3validityPeriod), sinceDate: (keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).createDate), forKey: "validThru")
-			newKeyEntry.setValue((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).keySize, forKey: "keyLength")
-			newKeyEntry.setValue(self.getAlgorithmString(Int((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).publicKeyAlgorithm.rawValue)), forKey: "algorithm")
-			newKeyEntry.setValue((keyToSave.primaryKeyPacket as! PGPPublicKeyPacket).fingerprint.description, forKey: "fingerprint")
-			newKeyEntry.setValue(TrustType.Unknown.rawValue, forKey: "trust")
-			newKeyEntry.setValue(pgp.exportKey(keyToSave, armored: true), forKey: "keyData")
-			newKeyEntry.setValue(NSSet(), forKey: "subKeys")
+			newKeyEntry.setValue(keyToSave.userIDprimary, forKey: "userIDprimary")
+			newKeyEntry.setValue(keyToSave.emailAddressPrimary, forKey: "emailAddressPrimary")
+			newKeyEntry.setValue(keyToSave.keyID, forKey: "keyID")
+			newKeyEntry.setValue(keyToSave.isSecretKey, forKey: "isSecretKey")
+			newKeyEntry.setValue(keyToSave.isPublicKey, forKey: "isPublicKey")
+			newKeyEntry.setValue(keyToSave.keyType, forKey: "keyType")
+			newKeyEntry.setValue(keyToSave.created, forKey: "created")
+			newKeyEntry.setValue(keyToSave.validThru, forKey: "validThru")
+			newKeyEntry.setValue(keyToSave.keyLength, forKey: "keyLength")
+			newKeyEntry.setValue(keyToSave.algorithm, forKey: "algorithm")
+			newKeyEntry.setValue(keyToSave.fingerprint, forKey: "fingerprint")
+			newKeyEntry.setValue(keyToSave.trust, forKey: "trust")
+			newKeyEntry.setValue(keyToSave.keyData, forKey: "keyData")
+			newKeyEntry.setValue(keyToSave.subKeys, forKey: "subKeys")
 
 			var userIDs: [UserID] = [UserID]()
-			for var i = 0; i < keyToSave.users.count; i++ {
-				var newUserIDEntry = NSEntityDescription.insertNewObjectForEntityForName("UserID", inManagedObjectContext: self.managedObjectContext!) as! UserID
-				var (subName, subAddress) = self.extractNameAndMailAddressFromUserID((keyToSave.users.objectAtIndex(i) as! PGPUser).userID)
-				newUserIDEntry.setValue(subName, forKey: "name")
-				newUserIDEntry.setValue(subAddress, forKey: "emailAddress")
-				newUserIDEntry.setValue("", forKey: "comment")
+			for item in keyToSave.userIDs {
+				let userID = item as! UserIdItem
+				let newUserIDEntry = NSEntityDescription.insertNewObjectForEntityForName("UserID", inManagedObjectContext: self.managedObjectContext!) as! UserID
+				
+				newUserIDEntry.setValue(userID.name, forKey: "name")
+				newUserIDEntry.setValue(userID.emailAddress, forKey: "emailAddress")
+				newUserIDEntry.setValue(userID.comment, forKey: "comment")
 				newUserIDEntry.setValue(newKeyEntry, forKey: "toKey")
 				userIDs.append(newUserIDEntry)
 			}
 			newKeyEntry.setValue(NSSet(array: userIDs), forKey: "userIDs")
 			
-			
-			self.managedObjectContext!.save(&error)
+			// all set up -> save to core data
+			do {
+				
+				try self.managedObjectContext!.save()
+				
+			} catch let error as NSError {
+				NSLog("Error saving to CoreData: \(error), \(error.userInfo)")
+				return false
+			}
 		}
-			
-*/
-//		if error != nil {
-//			NSLog("Error saving to CoreData: \(error?.localizedDescription)")
-//			return false
-//		} else {
-//			return true
-//		}
+		
         return true
 	}
 
+	// MARK: - Utility
 	/**
 	Get name and address from userID String
 	
