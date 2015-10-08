@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
-		self.createRingFiles()
+	//	self.createRingFiles()
         self.initCoreDataTestEntries()
 		self.printKeys()
 	//	self.cryptoTest()
@@ -493,13 +493,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func printKeys() -> Void {
 		//WARNING: DELETE BEFORE RELEASE
 		let crypto = SMileCrypto()
-		print("KEYS IN PGP INSTANCE")
-		crypto.printAllPublicKeys(true)
-		crypto.printAllSecretKeys(true)
 		print("######################")
 		print("KEYS IN CORE DATA")
-		crypto.printAllPublicKeys(false)
-		crypto.printAllSecretKeys(false)
+		crypto.printAllPublicKeys()
+		crypto.printAllSecretKeys()
 		print("######################")
 	}
 	
