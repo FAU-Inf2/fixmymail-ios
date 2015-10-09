@@ -119,23 +119,64 @@ class SMileCrypto: NSObject {
 		- parameter passphrase::	the passphrase to unlock the private key.
 		- parameter encryptionType::	PGP or SMIME
 	
-		- returns: The Error or nil if decrypt was successful
-				  and Decrytped Data or nil if error occured.
+		- returns:	The Error or nil if decrypt was successful
+					and Decrytped Data or nil if error occured.
+					If Error is not nil the error may contain the KeyID (error!.userInfo["KeyID"])
  	*/
 	func decryptData(data: NSData, passphrase: String, encryptionType: String) -> (error: NSError?, decryptedData: NSData?) {
-//		let error: NSError?
-//		let decryptedData: NSData?
-//		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
-////			decryptedData = self.pgp.decryptData(data, passphrase: passphrase, error: &error)
-//			
-//		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
-//			// TODO
-//			// Do smime stuff
-//		}
-//		
-//		
-////		return (error, decryptedData)
-        return (nil, nil)
+		var error: NSError?
+		var decryptedData: NSData?
+		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+			if let decryptKeyID = pgp.getKeyIDFromArmoredPGPMessage(data) {
+				var keyInCoreData: Key?
+				if self.keysInCoreData != nil {
+					for key in self.keysInCoreData! {
+						if key.keyID == decryptKeyID {
+							keyInCoreData = key
+							break
+						}
+					}
+				}
+				// key found
+				if keyInCoreData != nil {
+					if let pgpKey = pgp.importPGPKeyFromArmouredFile(keyInCoreData!.keyData) {
+						decryptedData = pgp.decryptPGPMessageWithKey(pgpKey, fromArmouredFile: keyInCoreData!.keyData, withPassphrase: passphrase)
+						if decryptedData  == nil {
+							var errorDetail = [String: String]()
+							errorDetail[NSLocalizedDescriptionKey] = "Decrypt failed for key " + keyInCoreData!.keyID
+							errorDetail["KeyID"] = keyInCoreData!.keyID
+							error = NSError(domain: "SMileCrypto", code: 106, userInfo: errorDetail)
+							
+						}
+						
+						
+						// everything went ok at this point
+						
+					} else {
+						var errorDetail = [String: String]()
+						errorDetail[NSLocalizedDescriptionKey] = "No valid PGPKey returned from SMilePGP Instance!"
+						error = NSError(domain: "SMileCrypto", code: 102, userInfo: errorDetail)
+					}
+					
+				} else {
+					// no key found
+					var errorDetail = [String: String]()
+					errorDetail[NSLocalizedDescriptionKey] = "No matching key in CoreData found!"
+					error = NSError(domain: "SMileCrypto", code: 100, userInfo: errorDetail)
+				}
+				
+			} else {
+				var errorDetail = [String: String]()
+				errorDetail[NSLocalizedDescriptionKey] = "KeyID could not be extracted from armored PGP message!"
+				error = NSError(domain: "SMileCrypto", code: 105, userInfo: errorDetail)
+			}
+		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+			// TODO
+			// Do smime stuff
+		}
+		
+		
+		return (error, decryptedData)
 	}
 	
 	// MARK: - Encryption
@@ -322,8 +363,6 @@ class SMileCrypto: NSObject {
 			}
 			
 		}
-		self.printAllPublicKeys()
-		self.printAllSecretKeys()
 		NSLog("Key imported")
 		return true
 }
