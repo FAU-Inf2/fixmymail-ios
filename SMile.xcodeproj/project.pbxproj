@@ -219,6 +219,8 @@
 		AD789DA21B319BC30001719E /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD789DA01B319BC30001719E /* AboutUsViewController.swift */; };
 		AD789DA31B319BC30001719E /* AboutUsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD789DA11B319BC30001719E /* AboutUsViewController.xib */; };
 		AD789DA51B31A4420001719E /* AboutUs.html in Resources */ = {isa = PBXBuildFile; fileRef = AD789DA41B31A4420001719E /* AboutUs.html */; };
+		AD81C2F21BC8402300B2F04D /* Lock_black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD81C2F01BC8402300B2F04D /* Lock_black@2x.png */; settings = {ASSET_TAGS = (); }; };
+		AD81C2F31BC8402300B2F04D /* Lock_open_black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD81C2F11BC8402300B2F04D /* Lock_open_black@2x.png */; settings = {ASSET_TAGS = (); }; };
 		AD8540161B186083003F9C92 /* PreferenceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */; };
 		AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */; };
 		AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */; };
@@ -509,6 +511,8 @@
 		AD789DA01B319BC30001719E /* AboutUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutUsViewController.swift; sourceTree = "<group>"; };
 		AD789DA11B319BC30001719E /* AboutUsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutUsViewController.xib; sourceTree = "<group>"; };
 		AD789DA41B31A4420001719E /* AboutUs.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutUs.html; sourceTree = "<group>"; };
+		AD81C2F01BC8402300B2F04D /* Lock_black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_black@2x.png"; sourceTree = "<group>"; };
+		AD81C2F11BC8402300B2F04D /* Lock_open_black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_open_black@2x.png"; sourceTree = "<group>"; };
 		AD8540141B186083003F9C92 /* PreferenceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewController.swift; sourceTree = "<group>"; };
 		AD8540151B186083003F9C92 /* PreferenceTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewController.xib; sourceTree = "<group>"; };
 		AD8540181B18673F003F9C92 /* PreferenceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -954,6 +958,8 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AD81C2F01BC8402300B2F04D /* Lock_black@2x.png */,
+				AD81C2F11BC8402300B2F04D /* Lock_open_black@2x.png */,
 				AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */,
 				AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */,
 				AD3D6F381BB05BE200127466 /* smile_tcom_icon.png */,
@@ -1142,6 +1148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D69ECE01B83AB9A0082EF5C /* page_white_text@2x.png in Resources */,
+				AD81C2F21BC8402300B2F04D /* Lock_black@2x.png in Resources */,
 				3D69ECB11B83AB9A0082EF5C /* page_white_acrobat_import.png in Resources */,
 				3D69ECC91B83AB9A0082EF5C /* page_white_gear.png in Resources */,
 				3D0FFD691B09E7E100C4F8F6 /* SidebarTableViewController.xib in Resources */,
@@ -1261,6 +1268,7 @@
 				3D69ECC11B83AB9A0082EF5C /* page_white_dvd.png in Resources */,
 				ADEF085A1B8205B9008AC0D0 /* green_indicator.png in Resources */,
 				3D69ECAC1B83AB9A0082EF5C /* package@2x.png in Resources */,
+				AD81C2F31BC8402300B2F04D /* Lock_open_black@2x.png in Resources */,
 				3D69ECEA1B83AB9A0082EF5C /* pages@2x.png in Resources */,
 				ADD135CC1B15B56300A9B31A /* KeyItemTableViewCell.xib in Resources */,
 				AD51963D1BADB358009468C4 /* Calendar-64_black.png in Resources */,
