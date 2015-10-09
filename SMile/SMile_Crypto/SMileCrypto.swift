@@ -19,8 +19,6 @@ class SMileCrypto: NSObject {
 	
 	private var pgp: SMilePGP
 	private var fileManager: NSFileManager
-	private var pubringURL: NSURL
-	private var secringURL: NSURL
 	private var documentDirectory: String
 	private var keysInCoreData: [Key]?
 	private var managedObjectContext: NSManagedObjectContext?
@@ -39,8 +37,6 @@ class SMileCrypto: NSObject {
 	override init() {
 		self.pgp = SMilePGP()
 		self.fileManager = NSFileManager.defaultManager()
-		self.pubringURL = NSUserDefaults.standardUserDefaults().URLForKey("pubring")!
-		self.secringURL = NSUserDefaults.standardUserDefaults().URLForKey("secring")!
 		
 		// get documentDirectory
 		self.documentDirectory = ""
