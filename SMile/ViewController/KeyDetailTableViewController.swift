@@ -152,7 +152,7 @@ class KeyDetailTableViewController: UITableViewController {
 			self.keyInfoContentStrings.append(self.keyItem!.validThru.toLongDateString())
 			
 			self.keyInfoLabelStrings.append("Key Length:")
-			let keylength = Int(self.keyItem!.keyLength) * 8
+			let keylength = Int(self.keyItem!.keyLength)
 			self.keyInfoContentStrings.append(keylength.description)
 			
 			self.keyInfoLabelStrings.append("Algorithm:")

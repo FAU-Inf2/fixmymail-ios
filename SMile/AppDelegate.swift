@@ -480,7 +480,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 defaults.setURL(NSURL(fileURLWithPath: pubringPath), forKey: "pubring")
                 defaults.setURL(secringPath, forKey: "secring")
                 defaults.setBool(true, forKey: "RingfilesCreated")
-                
+				
                 // DEBUG
                 //NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
                 //NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
@@ -504,7 +504,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		//WARNING: DELETE BEFORE RELEASE
 		let crypto = SMileCrypto()
-		let fileReadError: NSError? = nil
+	//	crypto.importKey()
+		if let data = "Hallihallo PGP".dataUsingEncoding(NSUTF8StringEncoding) {
+			let encryptedData = crypto.encryptData(data, keyIdentifier: "C917202C D4907952", encryptionType: "PGP")
+			if encryptedData.encryptedData != nil {
+				print(String(data: encryptedData.encryptedData!, encoding: NSUTF8StringEncoding))
+			}
+
+			
+		}
+		
+		
+		
+/*		let fileReadError: NSError? = nil
 		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
 		var pw = ""
 		if path != nil {
@@ -538,6 +550,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				
 			}
 		}
+*/
 	}
 
 }
