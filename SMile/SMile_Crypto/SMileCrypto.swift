@@ -33,7 +33,7 @@ class SMileCrypto: NSObject {
 		case Ultimately = 5
 	}
 	
-	
+    
 	
 	
 	override init() {
@@ -678,5 +678,8 @@ class SMileCrypto: NSObject {
 		return (name, address)
 	}
 	
-
+    func getKeysFromCoreData() -> [Key]? {
+        return self.keysInCoreData
+    }
+    
 }

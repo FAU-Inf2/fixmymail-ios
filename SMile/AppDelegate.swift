@@ -504,7 +504,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		//WARNING: DELETE BEFORE RELEASE
 		let crypto = SMileCrypto()
-	//	crypto.importKey()
+        //let path = NSBundle.mainBundle().pathForResource("encTestKey", ofType: "asc")
+        //let keyfile = NSURL(fileURLWithPath: path!)
+		//crypto.importKey(keyfile)
 		if let data = "Hallihallo PGP".dataUsingEncoding(NSUTF8StringEncoding) {
 			let encryptedData = crypto.encryptData(data, keyIdentifier: "C917202C D4907952", encryptionType: "PGP")
 			if encryptedData.encryptedData != nil {

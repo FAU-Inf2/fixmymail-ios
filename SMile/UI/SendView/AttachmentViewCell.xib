@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -11,22 +11,25 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pR0-CE-pds" id="rvL-gC-W4P">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bc9-W0-35u">
                         <rect key="frame" x="27" y="11" width="285" height="21"/>
+                        <animations/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zsv-w2-XI0">
                         <rect key="frame" x="0.0" y="8" width="28" height="28"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="28" id="4kA-JJ-qsI"/>
                         </constraints>
                     </imageView>
                 </subviews>
+                <animations/>
                 <constraints>
                     <constraint firstItem="bc9-W0-35u" firstAttribute="centerY" secondItem="rvL-gC-W4P" secondAttribute="centerY" id="BP5-sT-Idx"/>
                     <constraint firstItem="Zsv-w2-XI0" firstAttribute="top" secondItem="rvL-gC-W4P" secondAttribute="topMargin" id="LiW-RD-e2t"/>
@@ -37,6 +40,7 @@
                     <constraint firstItem="Zsv-w2-XI0" firstAttribute="leading" secondItem="rvL-gC-W4P" secondAttribute="leadingMargin" constant="-8" id="xhN-Xk-GBd"/>
                 </constraints>
             </tableViewCellContentView>
+            <animations/>
             <connections>
                 <outlet property="imageViewPreview" destination="Zsv-w2-XI0" id="iOz-1C-aPn"/>
                 <outlet property="labelFilesAttached" destination="bc9-W0-35u" id="QD6-Bc-1M7"/>

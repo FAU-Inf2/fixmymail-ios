@@ -91,7 +91,19 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         let parser = MCOMessageParser(data: self.email.data)
         let attachments: [MCOAttachment] = parser.attachments() as! [MCOAttachment]
         for attachment in attachments {
-            self.attachmentVC.attachFile(attachment.filename, data: attachment.data, mimetype: attachment.mimeType)
+            var filename: String
+            var mimeType: String
+            if attachment.filename == nil {
+                filename = "noname"
+            } else {
+                filename = attachment.filename
+            }
+            if attachment.mimeType == nil {
+                mimeType = ""
+            } else {
+                mimeType = attachment.mimeType
+            }
+            self.attachmentVC.attachFile(filename, data: attachment.data, mimetype: mimeType)
         }
     }
     

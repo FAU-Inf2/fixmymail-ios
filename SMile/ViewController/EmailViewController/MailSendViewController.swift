@@ -15,12 +15,17 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var scrollView: UIScrollView!
     var emailAddressPicker: UIPickerView!
     var attachmentView: AttachmentsViewController! = AttachmentsViewController(nibName: "AttachmentsViewController", bundle: nil)
+    var buttonEncrypted: UIButton = UIButton(type: UIButtonType.Custom)
+    var crypto = SMileCrypto()
     
     var initialTextViewHeight: CGFloat = 0
     var initialTableViewHeight: CGFloat = 0
     
     var tableViewIsExpanded: Bool = false
     var backspacePressed: Bool = false
+    var presentationmode: Bool = false
+    var shouldEncryptMessage: Bool = false
+    var canEncryptMessage: Bool = false
     
     var recipients: NSMutableArray = NSMutableArray()
     var ccRecipients: NSMutableArray = NSMutableArray()
@@ -32,8 +37,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
     var allAccounts: [EmailAccount]!
     
     var isResponder: AnyObject? = nil
-	
-	var contactStore = CNContactStore()
+    
+    var contactStore = CNContactStore()
     
     //MARK: - Initialisation
     override func viewDidLoad() {
@@ -56,7 +61,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.sendTableView.registerNib(UINib(nibName: "AttachmentViewCell", bundle: nil), forCellReuseIdentifier: "AttachmentViewCell")
         self.sendTableView.scrollEnabled = false
         for constraint in self.sendTableView.constraints {
-            let cons = constraint 
+            let cons = constraint
             if cons.firstAttribute == NSLayoutAttribute.Height {
                 self.initialTableViewHeight = cons.constant
                 if !tableViewIsExpanded {
@@ -74,20 +79,20 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         self.addSignature()
     }
     
-	override func viewDidAppear(animated: Bool) {
-		if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
-			if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
-				if let mimetype = (UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension {
-					self.attachFile(fileName, data: data, mimetype: mimetype)
-					(UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
-					(UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
-					(UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension = nil
-				}
-			}
-		}
-		self.sendTableView.reloadData()
-	}
-	
+    override func viewDidAppear(animated: Bool) {
+        if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
+            if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
+                if let mimetype = (UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension {
+                    self.attachFile(fileName, data: data, mimetype: mimetype)
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = nil
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = nil
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension = nil
+                }
+            }
+        }
+        self.sendTableView.reloadData()
+    }
+    
     func initPickerView() {
         self.emailAddressPicker = UIPickerView()
         self.emailAddressPicker.delegate = self
@@ -158,6 +163,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 0: // Cell for To
             let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
             
+            cell.textField.removeTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
+            
             var recipientsAsString: String = ""
             var count = 1
             for recipient in self.recipients {
@@ -180,6 +187,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             if self.tableViewIsExpanded { // Cell for CC
                 let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 
+                cell.textField.removeTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
+                
                 var ccRecipientsAsString: String = ""
                 var count = 1
                 for ccRecipient in self.ccRecipients {
@@ -200,6 +209,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             } else { // Cell for closed CC/BCC/From
                 let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
                 
+                cell.textField.removeTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
+                
                 self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Cc/Bcc, From:", textFieldTextColor: UIColor.grayColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.account.emailAddress, textFieldTag: 4, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: nil)
                 
                 return cell
@@ -207,6 +218,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 2:
             if self.tableViewIsExpanded { // Cell for BCC
                 let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+                
+                cell.textField.removeTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
                 
                 var bccRecipientsAsString: String = ""
                 var count = 1
@@ -227,15 +240,28 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                 return cell
             } else { // Cell for Subject
                 let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-				
-				// encrypt sign
-				let buttonImage: UIImage = UIImage(named: "Lock_open_grey@2x.png")!
-				let  buttonEncrypted: UIButton = UIButton(type: UIButtonType.Custom)
-				buttonEncrypted.frame = CGRectMake(0, 0, 22, 28)
-				buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
-				buttonEncrypted.backgroundColor = UIColor.clearColor()
                 
-                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonEncrypted)
+                cell.textField.removeTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
+                
+                // encrypt sign
+                let buttonImage: UIImage
+                if self.canEncryptMessage {
+                    if self.shouldEncryptMessage {
+                        buttonImage = UIImage(named: "Lock_blue@2x.png")!
+                    } else {
+                        buttonImage = UIImage(named: "Lock_open_black@2x.png")!
+                    }
+                } else {
+                    buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
+                }
+                let button: UIButton = UIButton(type: UIButtonType.Custom)
+                button.frame = CGRectMake(0, 0, 22, 28)
+                button.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+                button.backgroundColor = UIColor.clearColor()
+                button.addTarget(self, action: "toggleShouldEncryptWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
+                self.buttonEncrypted = button
+                
+                self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: button)
                 
                 cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
                 
@@ -244,6 +270,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         case 3:
             if self.tableViewIsExpanded { // Cell for From
                 let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
+                
+                cell.textField.removeTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
                 
                 self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "From:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: UIColor.clearColor(), textFieldText: self.account.emailAddress, textFieldTag: 3, textFieldDelegate: self, textFieldInputView: self.emailAddressPicker, cellAccessoryView: nil)
                 
@@ -264,26 +292,38 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             
         case 4: // Cell for Subject
             let cell = tableView.dequeueReusableCellWithIdentifier("SendViewCellWithLabelAndTextField", forIndexPath: indexPath) as! SendViewCellWithLabelAndTextField
-			
-			// encrypt sign
-			let buttonImage: UIImage = UIImage(named: "Lock_open_grey@2x.png")!
-			let  buttonEncrypted: UIButton = UIButton(type: UIButtonType.Custom)
-			buttonEncrypted.frame = CGRectMake(0, 0, 22, 28)
-			buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
-			buttonEncrypted.backgroundColor = UIColor.clearColor()
-			
-				
-            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: buttonEncrypted)
+            
+            cell.textField.removeTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
+            
+            // encrypt sign
+            let buttonImage: UIImage
+            if self.canEncryptMessage {
+                if self.shouldEncryptMessage {
+                    buttonImage = UIImage(named: "Lock_blue@2x.png")!
+                } else {
+                    buttonImage = UIImage(named: "Lock_open_black@2x.png")!
+                }
+            } else {
+                buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
+            }
+            let button: UIButton = UIButton(type: UIButtonType.Custom)
+            button.frame = CGRectMake(0, 0, 22, 28)
+            button.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+            button.backgroundColor = UIColor.clearColor()
+            button.addTarget(self, action: "toggleShouldEncryptWithSender:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.buttonEncrypted = button
+            
+            self.initSendViewCellWithLabelAndTextFieldWithCell(cell, labelColor: UIColor.grayColor(), labelText: "Subject:", textFieldTextColor: UIColor.blackColor(), textFieldTintColor: self.view.tintColor, textFieldText: self.subject, textFieldTag: 5, textFieldDelegate: self, textFieldInputView: nil, cellAccessoryView: button)
             
             cell.textField.addTarget(self, action: "updateSubjectAndTitleWithSender:", forControlEvents: UIControlEvents.EditingChanged)
-			
-			// Encrypt sign
-		/*	let encryptSign: UIButton = UIButton(type: UIButtonType.RoundedRect)
-			encryptSign.frame = CGRectMake(0, 0, 25, 25)
-			encryptSign.imageView?.image = UIImage(named: "x_icon")
-			cell.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton
-			cell.accessoryView = encryptSign
-         */
+            
+            // Encrypt sign
+            /*	let encryptSign: UIButton = UIButton(type: UIButtonType.RoundedRect)
+            encryptSign.frame = CGRectMake(0, 0, 25, 25)
+            encryptSign.imageView?.image = UIImage(named: "x_icon")
+            cell.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton
+            cell.accessoryView = encryptSign
+            */
             return cell
         case 5: // Cell for attachments
             let cell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
@@ -309,7 +349,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             if tableViewIsExpanded && self.shouldContractTableView() {
                 tableViewIsExpanded = false
                 for constraint in tableView.constraints {
-                    let cons = constraint 
+                    let cons = constraint
                     if cons.firstAttribute == NSLayoutAttribute.Height {
                         cons.constant = 180
                         break
@@ -322,15 +362,16 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             if !tableViewIsExpanded {
                 tableViewIsExpanded = true
                 for constraint in tableView.constraints {
-                    let cons = constraint 
+                    let cons = constraint
                     if cons.firstAttribute == NSLayoutAttribute.Height {
                         cons.constant = self.initialTableViewHeight
                         break
                     }
                 }
                 tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+            } else {
+                selectIndexPath = indexPath
             }
-            selectIndexPath = indexPath
         case 2: // Cell for BCC or Subject
             selectIndexPath = indexPath
         case 3: // Cell for From or Attachments
@@ -344,7 +385,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             if self.shouldContractTableView() {
                 tableViewIsExpanded = false
                 for constraint in tableView.constraints {
-                    let cons = constraint 
+                    let cons = constraint
                     if cons.firstAttribute == NSLayoutAttribute.Height {
                         cons.constant = 180
                         break
@@ -402,7 +443,7 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         if tableViewIsExpanded && self.shouldContractTableView() {
             tableViewIsExpanded = false
             for constraint in self.sendTableView.constraints {
-                let cons = constraint 
+                let cons = constraint
                 if cons.firstAttribute == NSLayoutAttribute.Height {
                     cons.constant = 180
                     break
@@ -421,11 +462,11 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         // Resize the textView if needed
         let newSize = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.max))
         for constraint in textView.constraints {
-            let cons = constraint 
+            let cons = constraint
             if cons.firstAttribute == NSLayoutAttribute.Height && newSize.height > cons.constant {
                 cons.constant = newSize.height
                 for scrollConstraint in self.scrollView.constraints {
-                    let scrollCons = scrollConstraint 
+                    let scrollCons = scrollConstraint
                     if scrollCons.firstAttribute == NSLayoutAttribute.Height {
                         scrollCons.constant = self.sendTableView.frame.height + newSize.height + textView.font!.lineHeight
                         break
@@ -464,6 +505,31 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             for recipient in self.recipients {
                 NSLog("recipient: %@", recipient.mailbox)
             }
+            // check if encryption is possible
+            self.canEncryptMessage = false
+            if self.recipients.count == 1 && self.ccRecipients.count == 0 && self.bccRecipients.count == 0 {
+                if let keys = self.crypto.getKeysFromCoreData() {
+                    for key in keys {
+                        for userID in key.userIDs {
+                            if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
+                                self.canEncryptMessage = true
+                            }
+                        }
+                    }
+                }
+            }
+            let buttonImage: UIImage
+            if self.canEncryptMessage {
+                if self.shouldEncryptMessage {
+                    buttonImage = UIImage(named: "Lock_blue@2x.png")!
+                } else {
+                    buttonImage = UIImage(named: "Lock_open_black@2x.png")!
+                }
+            } else {
+                buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
+            }
+            self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+            //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         case 1:
             self.ccRecipients.removeAllObjects()
             var ccRecipientsAsString = textField.text
@@ -473,6 +539,31 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                     self.ccRecipients.addObject(MCOAddress(mailbox: recipient))
                 }
             }
+            // check if encryption is possible
+            self.canEncryptMessage = false
+            if self.recipients.count == 1 && self.ccRecipients.count == 0 && self.bccRecipients.count == 0 {
+                if let keys = self.crypto.getKeysFromCoreData() {
+                    for key in keys {
+                        for userID in key.userIDs {
+                            if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
+                                self.canEncryptMessage = true
+                            }
+                        }
+                    }
+                }
+            }
+            let buttonImage: UIImage
+            if self.canEncryptMessage {
+                if self.shouldEncryptMessage {
+                    buttonImage = UIImage(named: "Lock_blue@2x.png")!
+                } else {
+                    buttonImage = UIImage(named: "Lock_open_black@2x.png")!
+                }
+            } else {
+                buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
+            }
+            self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+            //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         case 2:
             self.bccRecipients.removeAllObjects()
             var bccRecipientsAsString = textField.text
@@ -482,6 +573,31 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                     self.bccRecipients.addObject(MCOAddress(mailbox: recipient))
                 }
             }
+            // check if encryption is possible
+            self.canEncryptMessage = false
+            if self.recipients.count == 1 && self.ccRecipients.count == 0 && self.bccRecipients.count == 0 {
+                if let keys = self.crypto.getKeysFromCoreData() {
+                    for key in keys {
+                        for userID in key.userIDs {
+                            if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
+                                self.canEncryptMessage = true
+                            }
+                        }
+                    }
+                }
+            }
+            let buttonImage: UIImage
+            if self.canEncryptMessage {
+                if self.shouldEncryptMessage {
+                    buttonImage = UIImage(named: "Lock_blue@2x.png")!
+                } else {
+                    buttonImage = UIImage(named: "Lock_open_black@2x.png")!
+                }
+            } else {
+                buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
+            }
+            self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+            //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         case 3:
             textField.userInteractionEnabled = true
         default:
@@ -628,6 +744,20 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
+    func toggleShouldEncryptWithSender(sender: AnyObject) {
+        if self.canEncryptMessage {
+            self.shouldEncryptMessage = !self.shouldEncryptMessage
+            let buttonImage: UIImage
+            if self.shouldEncryptMessage {
+                buttonImage = UIImage(named: "Lock_blue@2x.png")!
+            } else {
+                buttonImage = UIImage(named: "Lock_open_black@2x.png")!
+            }
+            self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+            //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+    }
+    
     //MARK: - Build and send E-Mail
     func attachFile(filename: String, data: NSData, mimetype: String) {
         self.attachmentView.attachFile(filename, data: data, mimetype: mimetype)
@@ -650,7 +780,32 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             NSLog("%@\n\n", fileName as! String)
             builder.addAttachment(MCOAttachment(data: attachment as! NSData, filename: fileName as! String))
         }
-        
+        if self.shouldEncryptMessage && self.canEncryptMessage {
+            var keyToEncrypt: Key? = nil
+            if let keys = self.crypto.getKeysFromCoreData() {
+                for key in keys {
+                    for userID in key.userIDs {
+                        if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
+                            keyToEncrypt = key
+                            break
+                        }
+                    }
+                    if keyToEncrypt != nil {
+                        break
+                    }
+                }
+            }
+            if let key = keyToEncrypt {
+                var encryptedData: NSData?
+                var error: NSError?
+                (error, encryptedData) = self.crypto.encryptData(builder.dataForEncryption(), keyIdentifier: key.keyID, encryptionType: "pgp")
+                if error != nil {
+                    // error
+                } else {
+                    return builder.openPGPEncryptedMessageDataWithEncryptedData(encryptedData!)
+                }
+            }
+        }
         return builder.data()
     }
     
@@ -665,12 +820,12 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         session.port = UInt32(self.account.smtpPort.unsignedIntegerValue)
         session.username = self.account.username
         let dictionary =  Locksmith.loadDataForUserAccount(self.account.emailAddress)
-//        if error == nil {
-//            session.password = dictionary?.valueForKey("Password:") as! String
-//        } else {
-//            NSLog("%@", error!.description)
-//            return
-//        }
+        //        if error == nil {
+        //            session.password = dictionary?.valueForKey("Password:") as! String
+        //        } else {
+        //            NSLog("%@", error!.description)
+        //            return
+        //        }
         if dictionary != nil {
             session.password = dictionary!["Password:"] as! String
         } else {
@@ -730,88 +885,70 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
-	func keyboardWillHide(notification: NSNotification) {
-		let contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, 0.0, 0.0)
-		
-		self.scrollView.contentInset = contentInsets
-		self.scrollView.scrollIndicatorInsets = contentInsets
-		
-	}
-	
-    //MARK: - Methods to show Addressbook
-	
-	func checkContactAccess() -> Bool {
-		switch CNContactStore.authorizationStatusForEntityType(.Contacts) {
-		case .Authorized:
-			return true
-		default:
-			return false
-		}
-		
-	}
-	
-    func openPeoplePickerWithSender(sender:AnyObject!) {
-		if self.checkContactAccess() {
-			let picker = CNContactPickerViewController()
-			picker.delegate = self
-			picker.predicateForEnablingContact = NSPredicate(format: "emailAddresses.@count > 0")
-			picker.displayedPropertyKeys = [CNContactEmailAddressesKey]
-			//		picker.predicateForSelectionOfProperty = NSPredicate(format: "key == 'emailAddresses'")
-			
-			
-			// deprecated to iOS 9
-			/*      let picker = ABPeoplePickerNavigationController()
-			picker.peoplePickerDelegate = self
-			picker.displayedProperties = [Int(kABPersonEmailProperty)]
-			picker.predicateForEnablingPerson = NSPredicate(format: "emailAddresses.@count > 0")
-			picker.predicateForSelectionOfPerson = NSPredicate(value:false)
-			picker.predicateForSelectionOfProperty = NSPredicate(value:true)
-   */
-			switch (sender as! UIButton).tag {
-			case 0: picker.title = "To:"
-			case 1: picker.title = "Cc:"
-			case 2: picker.title = "Bcc:"
-			default: picker.title = ""
-			}
-			self.presentViewController(picker, animated:true, completion:nil)
-		} else {
-			let alert: UIAlertController = UIAlertController(title: "Access denied!", message: "No permission to access your contacts. Please go to iOS settings > privacy > contacts and allow SMile", preferredStyle: UIAlertControllerStyle.Alert)
-			alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { action in
-			}))
-			self.presentViewController(alert, animated: true, completion: nil)
-		}
-	
+    func keyboardWillHide(notification: NSNotification) {
+        let contentInsets = UIEdgeInsetsMake(self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height, 0.0, 0.0, 0.0)
+        
+        self.scrollView.contentInset = contentInsets
+        self.scrollView.scrollIndicatorInsets = contentInsets
+        
     }
-	
-	func contactPicker(picker: CNContactPickerViewController, didSelectContactProperty contactProperty: CNContactProperty) {
-		let contact = contactProperty.contact
-			var email = ""
-			for mailaddress in contact.emailAddresses {
-				if mailaddress.identifier == contactProperty.identifier! {
-					email = mailaddress.value as! String
-				}
-			}
-			let address = MCOAddress(mailbox: email)
-			
-			switch picker.title! {
-			case "To:": self.recipients.addObject(address)
-			case "Cc:": self.ccRecipients.addObject(address)
-			case "Bcc:": self.bccRecipients.addObject(address)
-			default: break
-			}
-		
-		self.sendTableView.reloadData()
-	}
-/*	// deprecated to iOS 9
-    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController, didSelectPerson person: ABRecordRef, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
-        print("person and property")
-        let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
-        let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
-        let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
-        print(email)
+    
+    //MARK: - Methods to show Addressbook
+    
+    func checkContactAccess() -> Bool {
+        switch CNContactStore.authorizationStatusForEntityType(.Contacts) {
+        case .Authorized:
+            return true
+        default:
+            return false
+        }
+        
+    }
+    
+    func openPeoplePickerWithSender(sender:AnyObject!) {
+        if self.checkContactAccess() {
+            let picker = CNContactPickerViewController()
+            picker.delegate = self
+            picker.predicateForEnablingContact = NSPredicate(format: "emailAddresses.@count > 0")
+            picker.displayedPropertyKeys = [CNContactEmailAddressesKey]
+            //		picker.predicateForSelectionOfProperty = NSPredicate(format: "key == 'emailAddresses'")
+            
+            
+            // deprecated to iOS 9
+            /*      let picker = ABPeoplePickerNavigationController()
+            picker.peoplePickerDelegate = self
+            picker.displayedProperties = [Int(kABPersonEmailProperty)]
+            picker.predicateForEnablingPerson = NSPredicate(format: "emailAddresses.@count > 0")
+            picker.predicateForSelectionOfPerson = NSPredicate(value:false)
+            picker.predicateForSelectionOfProperty = NSPredicate(value:true)
+            */
+            switch (sender as! UIButton).tag {
+            case 0: picker.title = "To:"
+            case 1: picker.title = "Cc:"
+            case 2: picker.title = "Bcc:"
+            default: picker.title = ""
+            }
+            self.presentViewController(picker, animated:true, completion:nil)
+        } else {
+            let alert: UIAlertController = UIAlertController(title: "Access denied!", message: "No permission to access your contacts. Please go to iOS settings > privacy > contacts and allow SMile", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { action in
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    func contactPicker(picker: CNContactPickerViewController, didSelectContactProperty contactProperty: CNContactProperty) {
+        let contact = contactProperty.contact
+        var email = ""
+        for mailaddress in contact.emailAddresses {
+            if mailaddress.identifier == contactProperty.identifier! {
+                email = mailaddress.value as! String
+            }
+        }
         let address = MCOAddress(mailbox: email)
         
-        switch peoplePicker.title! {
+        switch picker.title! {
         case "To:": self.recipients.addObject(address)
         case "Cc:": self.ccRecipients.addObject(address)
         case "Bcc:": self.bccRecipients.addObject(address)
@@ -820,5 +957,23 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         
         self.sendTableView.reloadData()
     }
-*/
+    /*	// deprecated to iOS 9
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController, didSelectPerson person: ABRecordRef, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
+    print("person and property")
+    let emails:ABMultiValue = ABRecordCopyValue(person, property).takeRetainedValue()
+    let ix = ABMultiValueGetIndexForIdentifier(emails, identifier)
+    let email = ABMultiValueCopyValueAtIndex(emails, ix).takeRetainedValue() as! String
+    print(email)
+    let address = MCOAddress(mailbox: email)
+    
+    switch peoplePicker.title! {
+    case "To:": self.recipients.addObject(address)
+    case "Cc:": self.ccRecipients.addObject(address)
+    case "Bcc:": self.bccRecipients.addObject(address)
+    default: break
+    }
+    
+    self.sendTableView.reloadData()
+    }
+    */
 }
