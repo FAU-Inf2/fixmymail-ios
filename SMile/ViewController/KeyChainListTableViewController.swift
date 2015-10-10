@@ -205,6 +205,41 @@ class KeyChainListTableViewController: UITableViewController {
 	}
 	
 	
+	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+		switch editingStyle {
+		case .Delete:
+			let key = self.keyList[indexPath.row]
+			// save data to CoreData (respectively deleting data from CoreData)
+			let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+			let context: NSManagedObjectContext = appDel.managedObjectContext!
+			let fetchRequest = NSFetchRequest(entityName: "Key")
+			fetchRequest.predicate = NSPredicate(format: "userIDprimary = %@", key.userIDprimary)
+			fetchRequest.predicate = NSPredicate(format: "emailAddressPrimary = %@", key.emailAddressPrimary)
+			
+			if let fetchResults = (try? appDel.managedObjectContext!.executeFetchRequest(fetchRequest)) as? [NSManagedObject] {
+				if fetchResults.count != 0{
+					
+					let managedObject = fetchResults[0]
+					context.deleteObject(managedObject)
+				}
+				
+				do {
+					try context.save()
+				} catch let error as NSError {
+					NSLog("Key \(key.keyID) was not deleted, error: \(error.localizedDescription)")
+					return
+				}
+				
+				// key deleted from core data -> delete from tableview
+				self.keyList.removeAtIndex(indexPath.row)
+				self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+			}
+		default:
+			return
+		}
+	}
+	
+	
 	private func loadInitialData() {
 		
 		let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
@@ -242,8 +277,6 @@ class KeyChainListTableViewController: UITableViewController {
 			}
 			
 			self.keyList = secKeys + pubKeys
-			
-			
 		}
 	}
 	
