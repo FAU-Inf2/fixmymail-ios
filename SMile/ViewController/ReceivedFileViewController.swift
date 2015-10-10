@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import CoreData
+import Locksmith
 
 class ReceivedFileViewController: UIViewController {
 	@IBOutlet weak var image: UIImageView!
@@ -38,10 +39,10 @@ class ReceivedFileViewController: UIViewController {
 		let decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
 		let encryptButton: UIBarButtonItem = UIBarButtonItem(title: "Encrypt file", style: .Plain, target: self, action: "encryptTapped:")
 		// file is a .asc or .gpg file
-		if self.fileIsKeyfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
+		if self.fileIsPGPfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
 			if self.isPGPKey(self.url!) == true {
 				navItem.rightBarButtonItems = [importButton]
-			} else {
+			} else if self.isPGPArmoredMessage(self.url!) == true {
 				navItem.rightBarButtonItems = [decryptButton]
 			}
 			
@@ -114,17 +115,93 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		// DEBUG ###########
-		let fileReadError: NSError? = nil
-		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
-		var pw = ""
-		if path != nil {
-			pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
+		//		// DEBUG ###########
+		//		let fileReadError: NSError? = nil
+		//		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
+		//		var pw = ""
+		//		if path != nil {
+		//			pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
+		//		}
+		//
+		//		if fileReadError == nil {
+		//		// ##################
+		var passphrase: String?
+		if let encryptedData = NSData(contentsOfURL: self.url!) {
+			if let key = crypto.getKeyforEncryptedMessage(encryptedData) {
+				if let dictionary = Locksmith.loadDataForUserAccount(key.keyID) {
+					passphrase = dictionary["PassPhrase"] as? String
+				} else {
+					// ask the user for passphrase
+					var inputTextField: UITextField?
+					let passphrasePrompt = UIAlertController(title: "Enter Passphrase", message: "Please enter the passphrase for key: \(key.keyID)", preferredStyle: .Alert)
+					passphrasePrompt.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+					passphrasePrompt.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+						passphrase = inputTextField!.text
+						if passphrase != nil {
+							let (error, decryptedFile) = self.crypto.decryptFile(self.url!, passphrase: passphrase!, encryptionType: "PGP")
+							if decryptedFile != nil && error == nil {
+								let button = sender as! UIBarButtonItem
+								button.enabled = false
+								do {
+									try self.fileManager!.removeItemAtURL(self.url!)
+								} catch _ {
+								}
+								self.url = decryptedFile!
+								self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
+								self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
+								self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+								
+							} else {
+								if error != nil {
+									NSLog("Decrytpion Error: \(error?.localizedDescription)")
+								}
+							}
+						}
+					}))
+					passphrasePrompt.addAction(UIAlertAction(title: "OK and Save Passphrase", style: .Default, handler: {(action) -> Void in
+						passphrase = inputTextField!.text
+						if passphrase != nil {
+							let (error, decryptedFile) = self.crypto.decryptFile(self.url!, passphrase: passphrase!, encryptionType: "PGP")
+							if decryptedFile != nil && error == nil {
+								let button = sender as! UIBarButtonItem
+								button.enabled = false
+								do {
+									try self.fileManager!.removeItemAtURL(self.url!)
+								} catch _ {
+								}
+								self.url = decryptedFile!
+								self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
+								self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
+								self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+								
+							} else {
+								if error != nil {
+									NSLog("Decrytpion Error: \(error?.localizedDescription)")
+								}
+							}
+						}
+						do {
+							try Locksmith.deleteDataForUserAccount(key.keyID)
+						} catch _ {}
+						do {
+							try Locksmith.saveData(["PassPhrase": passphrase!], forUserAccount: key.keyID)
+						} catch let error as NSError {
+							NSLog("Locksmith: \(error.localizedDescription)")
+						}
+					}))
+					passphrasePrompt.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+						textField.placeholder = "Passphrase"
+						textField.secureTextEntry = true
+						inputTextField = textField
+					})
+					presentViewController(passphrasePrompt, animated: true, completion: nil)
+				}
+			}
+			
 		}
 		
-		if fileReadError == nil {
-		// ##################
-			let (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: pw, encryptionType: "PGP")
+		if passphrase != nil {
+			let (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: passphrase!, encryptionType: "PGP")
 			if decryptedFile != nil && error == nil {
 				let button = sender as! UIBarButtonItem
 				button.enabled = false
@@ -188,7 +265,7 @@ class ReceivedFileViewController: UIViewController {
 			
 	}
 	
-	func fileIsKeyfile(filename: String) -> Bool {
+	func fileIsPGPfile(filename: String) -> Bool {
 		if filename.rangeOfString(".asc") != nil || filename.rangeOfString(".gpg") != nil {
 			return true
 		} else {
@@ -200,6 +277,16 @@ class ReceivedFileViewController: UIViewController {
 		if let fileContent = try? String(contentsOfFile: fileUrl.path!, encoding: NSUTF8StringEncoding) {
 			if fileContent.rangeOfString("-----BEGIN PGP PUBLIC KEY BLOCK-----") != nil
 				|| fileContent.rangeOfString("-----BEGIN PGP PRIVATE KEY BLOCK-----") != nil {
+				return true
+			}
+		}
+		
+		return false
+	}
+	
+	func isPGPArmoredMessage(fileUrl: NSURL) -> Bool {
+		if let fileContent = try? String(contentsOfFile: fileUrl.path!, encoding: NSUTF8StringEncoding) {
+			if fileContent.rangeOfString("-----BEGIN PGP MESSAGE-----") != nil {
 				return true
 			}
 		}

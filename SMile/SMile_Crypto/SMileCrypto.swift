@@ -149,6 +149,15 @@ class SMileCrypto: NSObject {
 						if key.keyID == decryptKeyID {
 							keyInCoreData = key
 							break
+						} else {
+							for item in key.subKeys {
+								let subkey = item as! SubKey
+								if subkey.subKeyID == decryptKeyID {
+									keyInCoreData = key
+									break
+								}
+								
+							}
 						}
 					}
 				}
@@ -285,6 +294,15 @@ class SMileCrypto: NSObject {
 					if key.keyID == keyIdentifier {
 						keyInCoreData = key
 						break
+					} else {
+						for item in key.subKeys {
+							let subkey = item as! SubKey
+							if subkey.subKeyID == keyIdentifier {
+								keyInCoreData = key
+								break
+							}
+							
+						}
 					}
 				}
 			}
@@ -400,6 +418,40 @@ class SMileCrypto: NSObject {
 		NSLog("Key imported")
 		return true
 }
+	
+	// MARK: - Info
+	
+	/**
+	Get the Key a encrypted message was encrypted with.
+	
+	- parameter encryptedData:	The encrypted message.
+	
+	- returns: The Key or nil if none found.
+	*/
+	func getKeyforEncryptedMessage(encryptedData: NSData) -> Key? {
+		var keyInCoreData: Key?
+		
+		if let keyID = pgp.getKeyIDFromArmoredPGPMessage(encryptedData) {
+			if self.keysInCoreData != nil {
+				for key in self.keysInCoreData! {
+					if key.keyID == keyID {
+						keyInCoreData = key
+						break
+					} else {
+						for item in key.subKeys {
+							let subkey = item as! SubKey
+							if subkey.subKeyID == keyID {
+								keyInCoreData = key
+								break
+							}
+							
+						}
+					}
+				}
+			}
+		}
+		return keyInCoreData
+	}
 	
 	// MARK: - DEBUG
 	
