@@ -527,10 +527,16 @@ class SMileCrypto: NSObject {
 		newKey.keyType = "PGP"
 		newKey.created = pgpKey.getCreationDate()
 		
-		if let validDate = calendar.dateByAddingUnit(.Day, value: Int(pgpKey.getTimeInDaysTillExpiration()), toDate: NSDate(), options: []) {
-			newKey.validThru = validDate
+		// because the expiration time interval is optional in RFC4880 we will use this magic date to indicate that the key won't expire. :-P
+		if Int(pgpKey.getTimeInDaysTillExpiration()) == 0 {
+			newKey.validThru = NSDate(dateString: "9999-01-01")
 		} else {
-			newKey.validThru = pgpKey.getCreationDate()
+			
+			if let validDate = calendar.dateByAddingUnit(.Day, value: Int(pgpKey.getTimeInDaysTillExpiration()), toDate: pgpKey.getCreationDate(), options: []) {
+				newKey.validThru = validDate
+			} else {
+				newKey.validThru = pgpKey.getCreationDate()
+			}
 		}
 		
 		newKey.keyLength = Int(pgpKey.getKeyLength())

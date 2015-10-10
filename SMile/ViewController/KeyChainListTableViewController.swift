@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Foundation
 
 class KeyChainListTableViewController: UITableViewController {
 	
@@ -167,8 +168,10 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Set the valid thru bar
 		let currentDate = NSDate()
-		if keyItem.validThru.year() >= currentDate.year() {
-			if (keyItem.validThru.month() + (keyItem.validThru.year() - currentDate.year()) * monthsInYear) >= (currentDate.month() + monthsForFullValidity) {
+		let calendar = NSCalendar.currentCalendar()
+		if keyItem.validThru > currentDate {
+			if let sixMonthsAhead = calendar.dateByAddingUnit(.Month, value: 6, toDate: currentDate, options: []) {
+			if keyItem.validThru > sixMonthsAhead {
 				cell.validIndicator1.image = UIImage(named: "green_indicator.png")
 				cell.validIndicator2.image = UIImage(named: "green_indicator.png")
 				cell.validIndicator3.image = UIImage(named: "green_indicator.png")
@@ -181,6 +184,7 @@ class KeyChainListTableViewController: UITableViewController {
 				cell.validIndicator3.image = UIImage(named: "yellow_indicator.png")
 				cell.validIndicator4.image = UIImage(named: "gray_indicator.png")
 				cell.validIndicator5.image = UIImage(named: "gray_indicator.png")
+			}
 			}
 			
 		} else {
