@@ -199,27 +199,6 @@ class ReceivedFileViewController: UIViewController {
 			}
 			
 		}
-		
-		if passphrase != nil {
-			let (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: passphrase!, encryptionType: "PGP")
-			if decryptedFile != nil && error == nil {
-				let button = sender as! UIBarButtonItem
-				button.enabled = false
-				do {
-					try self.fileManager!.removeItemAtURL(self.url!)
-				} catch _ {
-				}
-				self.url = decryptedFile!
-				self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
-				self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
-				self.file = self.fileManager!.contentsAtPath(self.url!.path!)
-				
-			} else {
-				if error != nil {
-					NSLog("Decrytpion Error: \(error?.localizedDescription)")
-				}
-			}
-		}
 	}
 	
 	@IBAction func encryptTapped(sender: AnyObject) -> Void {
