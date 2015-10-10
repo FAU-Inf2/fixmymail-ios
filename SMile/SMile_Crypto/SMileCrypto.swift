@@ -70,46 +70,61 @@ class SMileCrypto: NSObject {
 	- parameter passphrase::	the passphrase to unlock the private key.
 	- parameter encryptionType::	PGP or SMIME
 	
-	- returns: The Error or nil if decrypt was successful.
-			  Decrytped File at URL or nil if error occured.
+	- returns:	The Error or nil if decrypt was successful.
+				Decrytped File at URL or nil if error occured.
+				If Error is not nil the error may contain the KeyID (error!.userInfo["KeyID"])
 	*/
 	func decryptFile(encryptedFile: NSURL, passphrase: String, encryptionType: String) -> (error: NSError?, decryptedFile: NSURL?) {
-//		var error: NSError?
-//		var decryptedFile: NSURL?
-//		var encryptedData: NSData?
-//		let decryptedData: NSData?
-//		
-//		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory)
-//        copyItem = copyItem.URLByAppendingPathComponent(self.fileManager.displayNameAtPath(encryptedFile.path!))
-//		
-//		do {
-//			try self.fileManager.copyItemAtURL(encryptedFile, toURL: copyItem)
-//		} catch let error1 as NSError {
-//			error = error1
-//		}
-//		if error == nil {
-//			if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
-//				encryptedData = NSData(contentsOfURL: copyItem)
-//				if encryptedData != nil {
-//	//				decryptedData = self.pgp.decryptData(encryptedData!, passphrase: passphrase, error: &error)
-//					if decryptedData != nil && error == nil {
-//						// cut of .asc or .gpg to get the original extention
-//						// for files not conforming to encrypted filenames like test.pdf.asc we have to implement some magic number checking
-//						let newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
-//						if self.fileManager.createFileAtPath(newFilePath, contents: decryptedData, attributes: nil) == true {
-//							decryptedFile = NSURL(fileURLWithPath: newFilePath)
-//						}
-//					}
-//				}
-//			} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
-//				// TODO
-//				// Do smime stuff
-//			}
-//
-//			
-//		}
-//		return (error, decryptedFile)
-        return (nil, nil)
+		var error: NSError?
+		var decryptedFile: NSURL?
+		var encryptedData: NSData?
+		
+		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory)
+        copyItem = copyItem.URLByAppendingPathComponent(self.fileManager.displayNameAtPath(encryptedFile.path!))
+		
+		do {
+			try self.fileManager.copyItemAtURL(encryptedFile, toURL: copyItem)
+		} catch let error1 as NSError {
+			error = error1
+		}
+		if error == nil {
+			if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+				encryptedData = NSData(contentsOfURL: copyItem)
+				if encryptedData != nil {
+					let decryptedPacket = self.decryptData(encryptedData!, passphrase: passphrase, encryptionType: "PGP")
+					if decryptedPacket.error != nil {
+						error = decryptedPacket.error
+					} else {
+						// cut of .asc or .gpg to get the original extention
+						// for files not conforming to encrypted filenames like test.pdf.asc we have to implement some magic number checking
+						let newFilePath: String = (copyItem.path! as NSString).substringToIndex((copyItem.path! as NSString).length - 4)
+						if self.fileManager.createFileAtPath(newFilePath, contents: decryptedPacket.decryptedData, attributes: nil) == true {
+							decryptedFile = NSURL(fileURLWithPath: newFilePath)
+							
+							// everything went ok here!
+							
+						} else {
+							var errorDetail = [String: String]()
+							errorDetail[NSLocalizedDescriptionKey] = "File could not be created!"
+							error = NSError(domain: "SMileCrypto", code: 108, userInfo: errorDetail)
+						}
+					}
+				} else {
+					var errorDetail = [String: String]()
+					errorDetail[NSLocalizedDescriptionKey] = "File could not be read!"
+					error = NSError(domain: "SMileCrypto", code: 107, userInfo: errorDetail)
+				}
+			} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+				// TODO
+				// Do smime stuff
+				var errorDetail = [String: String]()
+				errorDetail[NSLocalizedDescriptionKey] = "SMIME not implemented yet!"
+				error = NSError(domain: "SMileCrypto", code: 107, userInfo: errorDetail)
+			}
+
+			
+		}
+		return (error, decryptedFile)
 	}
 	
 	/**
@@ -134,6 +149,15 @@ class SMileCrypto: NSObject {
 						if key.keyID == decryptKeyID {
 							keyInCoreData = key
 							break
+						} else {
+							for item in key.subKeys {
+								let subkey = item as! SubKey
+								if subkey.subKeyID == decryptKeyID {
+									keyInCoreData = key
+									break
+								}
+								
+							}
 						}
 					}
 				}
@@ -173,6 +197,9 @@ class SMileCrypto: NSObject {
 		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
 			// TODO
 			// Do smime stuff
+			var errorDetail = [String: String]()
+			errorDetail[NSLocalizedDescriptionKey] = "SMIME not implemented yet!"
+			error = NSError(domain: "SMileCrypto", code: 107, userInfo: errorDetail)
 		}
 		
 		
@@ -184,7 +211,7 @@ class SMileCrypto: NSObject {
 	Encrypt File
 	
 	- parameter file::	the file to be encrypted.
-	- parameter keyIdentifier::	the key ID full or short.
+	- parameter keyIdentifier::	the key ID.
 	- parameter encryptionType::	PGP or SMIME
 	
 	- returns: The Error or nil if encrypt was successful
@@ -194,36 +221,54 @@ class SMileCrypto: NSObject {
 		var error: NSError?
 		var encryptedFile: NSURL?
 		
-		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
-			if let dataToEncrypt = NSData(contentsOfURL: file) {
-				let encryptedPacket = self.encryptData(dataToEncrypt, keyIdentifier: keyIdentifier, encryptionType: encryptionType)
-				if encryptedPacket.error != nil {
-					error = encryptedPacket.error
-				} else {
-					// create file
-					let newFilePath: String = file.path! + ".asc"
-					if self.fileManager.createFileAtPath(newFilePath, contents: encryptedPacket.encryptedData, attributes: nil) == true {
-						encryptedFile = NSURL(fileURLWithPath: newFilePath)
+		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory)
+		copyItem = copyItem.URLByAppendingPathComponent(self.fileManager.displayNameAtPath(file.path!))
+		
+		do {
+			try self.fileManager.copyItemAtURL(file, toURL: copyItem)
+		} catch let error1 as NSError {
+			error = error1
+		}
+		if error == nil {
+			if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+				if let dataToEncrypt = NSData(contentsOfURL: copyItem) {
+					let encryptedPacket = self.encryptData(dataToEncrypt, keyIdentifier: keyIdentifier, encryptionType: encryptionType)
+					if encryptedPacket.error != nil {
+						error = encryptedPacket.error
 					} else {
-						var errorDetail = [String: String]()
-						errorDetail[NSLocalizedDescriptionKey] = "File creation error!"
-						error = NSError(domain: "SMileCrypto", code: 105, userInfo: errorDetail)
+						// create file
+						let newFilePath: String = copyItem.path! + ".asc"
+						if self.fileManager.createFileAtPath(newFilePath, contents: encryptedPacket.encryptedData, attributes: nil) == true {
+							encryptedFile = NSURL(fileURLWithPath: newFilePath)
+						} else {
+							var errorDetail = [String: String]()
+							errorDetail[NSLocalizedDescriptionKey] = "File creation error!"
+							error = NSError(domain: "SMileCrypto", code: 105, userInfo: errorDetail)
+						}
 					}
+				} else {
+					// file error
+					var errorDetail = [String: String]()
+					errorDetail[NSLocalizedDescriptionKey] = "No file found"
+					error = NSError(domain: "SMileCrypto", code: 104, userInfo: errorDetail)
 				}
-			} else {
-				// file error
+				
+				
+			} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+				// TODO
+				// Do smime stuff
 				var errorDetail = [String: String]()
-				errorDetail[NSLocalizedDescriptionKey] = "No file found"
-				error = NSError(domain: "SMileCrypto", code: 104, userInfo: errorDetail)
+				errorDetail[NSLocalizedDescriptionKey] = "SMIME not implemented yet!"
+				error = NSError(domain: "SMileCrypto", code: 107, userInfo: errorDetail)
 			}
 			
+			do {
+			 try self.fileManager.removeItemAtURL(copyItem)
+			} catch let error2 as NSError {
+				NSLog("Removing file \(copyItem.path!) did not succeed! Error: \(error2.localizedDescription)")
+			}
 			
-		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
-			// TODO
-			// Do smime stuff
 		}
-		
-		
 		return (error, encryptedFile)
 	}
 	
@@ -232,7 +277,7 @@ class SMileCrypto: NSObject {
 	Encrypt Data
 	
 	- parameter data::	the data to be encrypted.
-	- parameter keyIdentifier::	the key ID full or short.
+	- parameter keyIdentifier::	the key ID.
 	- parameter encryptionType::	PGP or SMIME
 	
 	- returns: The Error or nil if encrypt was successful
@@ -249,6 +294,15 @@ class SMileCrypto: NSObject {
 					if key.keyID == keyIdentifier {
 						keyInCoreData = key
 						break
+					} else {
+						for item in key.subKeys {
+							let subkey = item as! SubKey
+							if subkey.subKeyID == keyIdentifier {
+								keyInCoreData = key
+								break
+							}
+							
+						}
 					}
 				}
 			}
@@ -279,6 +333,9 @@ class SMileCrypto: NSObject {
 		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
 			// TODO
 			// Do smime stuff
+			var errorDetail = [String: String]()
+			errorDetail[NSLocalizedDescriptionKey] = "SMIME not implemented yet!"
+			error = NSError(domain: "SMileCrypto", code: 107, userInfo: errorDetail)
 		}
 		
 		return (error, encryptedData)
@@ -293,11 +350,6 @@ class SMileCrypto: NSObject {
 	- returns: true if import was successful or key already exists in CoreData.
 	*/
 	func importKey(keyfile: NSURL) -> Bool {
-/*		// TESTING -> REMOVE!!! ###############
-		
-		let path = NSBundle.mainBundle().pathForResource("encTestKey", ofType: "asc")
-		let keyfile = NSURL(fileURLWithPath: path!)
-*/		// ##################
 		if let keyData = NSData(contentsOfURL: keyfile) {
 			var extractedKeyData: NSData?
 			var keyForCoreData: KeyItem?
@@ -366,6 +418,40 @@ class SMileCrypto: NSObject {
 		NSLog("Key imported")
 		return true
 }
+	
+	// MARK: - Info
+	
+	/**
+	Get the Key a encrypted message was encrypted with.
+	
+	- parameter encryptedData:	The encrypted message.
+	
+	- returns: The Key or nil if none found.
+	*/
+	func getKeyforEncryptedMessage(encryptedData: NSData) -> Key? {
+		var keyInCoreData: Key?
+		
+		if let keyID = pgp.getKeyIDFromArmoredPGPMessage(encryptedData) {
+			if self.keysInCoreData != nil {
+				for key in self.keysInCoreData! {
+					if key.keyID == keyID {
+						keyInCoreData = key
+						break
+					} else {
+						for item in key.subKeys {
+							let subkey = item as! SubKey
+							if subkey.subKeyID == keyID {
+								keyInCoreData = key
+								break
+							}
+							
+						}
+					}
+				}
+			}
+		}
+		return keyInCoreData
+	}
 	
 	// MARK: - DEBUG
 	
@@ -441,10 +527,16 @@ class SMileCrypto: NSObject {
 		newKey.keyType = "PGP"
 		newKey.created = pgpKey.getCreationDate()
 		
-		if let validDate = calendar.dateByAddingUnit(.Day, value: Int(pgpKey.getTimeInDaysTillExpiration()), toDate: NSDate(), options: []) {
-			newKey.validThru = validDate
+		// because the expiration time interval is optional in RFC4880 we will use this magic date to indicate that the key won't expire. :-P
+		if Int(pgpKey.getTimeInDaysTillExpiration()) == 0 {
+			newKey.validThru = NSDate(dateString: "9999-01-01")
 		} else {
-			newKey.validThru = pgpKey.getCreationDate()
+			
+			if let validDate = calendar.dateByAddingUnit(.Day, value: Int(pgpKey.getTimeInDaysTillExpiration()), toDate: pgpKey.getCreationDate(), options: []) {
+				newKey.validThru = validDate
+			} else {
+				newKey.validThru = pgpKey.getCreationDate()
+			}
 		}
 		
 		newKey.keyLength = Int(pgpKey.getKeyLength())

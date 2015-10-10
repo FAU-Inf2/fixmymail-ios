@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Foundation
 
 class KeyChainListTableViewController: UITableViewController {
 	
@@ -167,8 +168,10 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Set the valid thru bar
 		let currentDate = NSDate()
-		if keyItem.validThru.year() >= currentDate.year() {
-			if (keyItem.validThru.month() + (keyItem.validThru.year() - currentDate.year()) * monthsInYear) >= (currentDate.month() + monthsForFullValidity) {
+		let calendar = NSCalendar.currentCalendar()
+		if keyItem.validThru > currentDate {
+			if let sixMonthsAhead = calendar.dateByAddingUnit(.Month, value: 6, toDate: currentDate, options: []) {
+			if keyItem.validThru > sixMonthsAhead {
 				cell.validIndicator1.image = UIImage(named: "green_indicator.png")
 				cell.validIndicator2.image = UIImage(named: "green_indicator.png")
 				cell.validIndicator3.image = UIImage(named: "green_indicator.png")
@@ -181,6 +184,7 @@ class KeyChainListTableViewController: UITableViewController {
 				cell.validIndicator3.image = UIImage(named: "yellow_indicator.png")
 				cell.validIndicator4.image = UIImage(named: "gray_indicator.png")
 				cell.validIndicator5.image = UIImage(named: "gray_indicator.png")
+			}
 			}
 			
 		} else {
@@ -202,6 +206,41 @@ class KeyChainListTableViewController: UITableViewController {
 		self.navigationController?.pushViewController(self.keyDetailVC!, animated: true)
 		
 		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+	}
+	
+	
+	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+		switch editingStyle {
+		case .Delete:
+			let key = self.keyList[indexPath.row]
+			// save data to CoreData (respectively deleting data from CoreData)
+			let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+			let context: NSManagedObjectContext = appDel.managedObjectContext!
+			let fetchRequest = NSFetchRequest(entityName: "Key")
+			fetchRequest.predicate = NSPredicate(format: "userIDprimary = %@", key.userIDprimary)
+			fetchRequest.predicate = NSPredicate(format: "emailAddressPrimary = %@", key.emailAddressPrimary)
+			
+			if let fetchResults = (try? appDel.managedObjectContext!.executeFetchRequest(fetchRequest)) as? [NSManagedObject] {
+				if fetchResults.count != 0{
+					
+					let managedObject = fetchResults[0]
+					context.deleteObject(managedObject)
+				}
+				
+				do {
+					try context.save()
+				} catch let error as NSError {
+					NSLog("Key \(key.keyID) was not deleted, error: \(error.localizedDescription)")
+					return
+				}
+				
+				// key deleted from core data -> delete from tableview
+				self.keyList.removeAtIndex(indexPath.row)
+				self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+			}
+		default:
+			return
+		}
 	}
 	
 	
@@ -242,8 +281,6 @@ class KeyChainListTableViewController: UITableViewController {
 			}
 			
 			self.keyList = secKeys + pubKeys
-			
-			
 		}
 	}
 	
