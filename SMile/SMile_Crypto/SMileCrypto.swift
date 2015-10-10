@@ -194,36 +194,51 @@ class SMileCrypto: NSObject {
 		var error: NSError?
 		var encryptedFile: NSURL?
 		
-		if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
-			if let dataToEncrypt = NSData(contentsOfURL: file) {
-				let encryptedPacket = self.encryptData(dataToEncrypt, keyIdentifier: keyIdentifier, encryptionType: encryptionType)
-				if encryptedPacket.error != nil {
-					error = encryptedPacket.error
-				} else {
-					// create file
-					let newFilePath: String = file.path! + ".asc"
-					if self.fileManager.createFileAtPath(newFilePath, contents: encryptedPacket.encryptedData, attributes: nil) == true {
-						encryptedFile = NSURL(fileURLWithPath: newFilePath)
+		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory)
+		copyItem = copyItem.URLByAppendingPathComponent(self.fileManager.displayNameAtPath(file.path!))
+		
+		do {
+			try self.fileManager.copyItemAtURL(file, toURL: copyItem)
+		} catch let error1 as NSError {
+			error = error1
+		}
+		if error == nil {
+			if encryptionType.lowercaseString == "pgp" || encryptionType.lowercaseString == "gpg" {
+				if let dataToEncrypt = NSData(contentsOfURL: copyItem) {
+					let encryptedPacket = self.encryptData(dataToEncrypt, keyIdentifier: keyIdentifier, encryptionType: encryptionType)
+					if encryptedPacket.error != nil {
+						error = encryptedPacket.error
 					} else {
-						var errorDetail = [String: String]()
-						errorDetail[NSLocalizedDescriptionKey] = "File creation error!"
-						error = NSError(domain: "SMileCrypto", code: 105, userInfo: errorDetail)
+						// create file
+						let newFilePath: String = copyItem.path! + ".asc"
+						if self.fileManager.createFileAtPath(newFilePath, contents: encryptedPacket.encryptedData, attributes: nil) == true {
+							encryptedFile = NSURL(fileURLWithPath: newFilePath)
+						} else {
+							var errorDetail = [String: String]()
+							errorDetail[NSLocalizedDescriptionKey] = "File creation error!"
+							error = NSError(domain: "SMileCrypto", code: 105, userInfo: errorDetail)
+						}
 					}
+				} else {
+					// file error
+					var errorDetail = [String: String]()
+					errorDetail[NSLocalizedDescriptionKey] = "No file found"
+					error = NSError(domain: "SMileCrypto", code: 104, userInfo: errorDetail)
 				}
-			} else {
-				// file error
-				var errorDetail = [String: String]()
-				errorDetail[NSLocalizedDescriptionKey] = "No file found"
-				error = NSError(domain: "SMileCrypto", code: 104, userInfo: errorDetail)
+				
+				
+			} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
+				// TODO
+				// Do smime stuff
 			}
 			
+			do {
+			 try self.fileManager.removeItemAtURL(copyItem)
+			} catch let error2 as NSError {
+				NSLog("Removing file \(copyItem.path!) did not succeed! Error: \(error2.localizedDescription)")
+			}
 			
-		} else if encryptionType.lowercaseString == "smime" || encryptionType.lowercaseString == "s/mime" {
-			// TODO
-			// Do smime stuff
 		}
-		
-		
 		return (error, encryptedFile)
 	}
 	
@@ -293,11 +308,6 @@ class SMileCrypto: NSObject {
 	- returns: true if import was successful or key already exists in CoreData.
 	*/
 	func importKey(keyfile: NSURL) -> Bool {
-/*		// TESTING -> REMOVE!!! ###############
-		
-		var path = NSBundle.mainBundle().pathForResource("D4907952", ofType: "asc")
-		var keyfile = NSURL(fileURLWithPath: path!)
-*/		// ##################
 		if let keyData = NSData(contentsOfURL: keyfile) {
 			var extractedKeyData: NSData?
 			var keyForCoreData: KeyItem?
