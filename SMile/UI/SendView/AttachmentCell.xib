@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -11,11 +11,12 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="68M-9R-MDU" id="A7h-Fc-RqR">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ci7-Gy-XSy">
                         <rect key="frame" x="8" y="5" width="40" height="40"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="MJ5-Db-lda"/>
                             <constraint firstAttribute="width" constant="40" id="pLu-KO-Oh6"/>
@@ -23,6 +24,7 @@
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6rE-wQ-SxD">
                         <rect key="frame" x="59" y="8" width="165" height="21"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="165" id="0IH-fH-H9T"/>
                         </constraints>
@@ -32,11 +34,13 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hB-aA-rCv">
                         <rect key="frame" x="232" y="20" width="80" height="21"/>
+                        <animations/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <animations/>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="1hB-aA-rCv" secondAttribute="bottom" constant="0.5" id="7hi-Aa-9V1"/>
                     <constraint firstAttribute="bottomMargin" secondItem="6rE-wQ-SxD" secondAttribute="bottom" constant="12.5" id="GEI-wR-tfW"/>
@@ -50,6 +54,7 @@
                     <constraint firstItem="Ci7-Gy-XSy" firstAttribute="top" secondItem="A7h-Fc-RqR" secondAttribute="topMargin" constant="-3" id="yBM-BQ-BWp"/>
                 </constraints>
             </tableViewCellContentView>
+            <animations/>
             <connections>
                 <outlet property="imageViewPreview" destination="Ci7-Gy-XSy" id="s1h-a9-gPL"/>
                 <outlet property="labelFileSize" destination="1hB-aA-rCv" id="xPY-II-uC0"/>

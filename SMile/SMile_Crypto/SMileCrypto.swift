@@ -33,7 +33,7 @@ class SMileCrypto: NSObject {
 		case Ultimately = 5
 	}
 	
-	
+    
 	
 	
 	override init() {
@@ -295,8 +295,8 @@ class SMileCrypto: NSObject {
 	func importKey(keyfile: NSURL) -> Bool {
 /*		// TESTING -> REMOVE!!! ###############
 		
-		var path = NSBundle.mainBundle().pathForResource("D4907952", ofType: "asc")
-		var keyfile = NSURL(fileURLWithPath: path!)
+		let path = NSBundle.mainBundle().pathForResource("encTestKey", ofType: "asc")
+		let keyfile = NSURL(fileURLWithPath: path!)
 */		// ##################
 		if let keyData = NSData(contentsOfURL: keyfile) {
 			var extractedKeyData: NSData?
@@ -586,5 +586,8 @@ class SMileCrypto: NSObject {
 		return (name, address)
 	}
 	
-
+    func getKeysFromCoreData() -> [Key]? {
+        return self.keysInCoreData
+    }
+    
 }
