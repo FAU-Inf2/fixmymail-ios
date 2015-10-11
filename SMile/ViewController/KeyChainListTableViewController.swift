@@ -13,6 +13,7 @@ import Foundation
 class KeyChainListTableViewController: UITableViewController {
 	
 	weak var delegate: ContentViewControllerProtocol?
+	weak var receivedFileDelegate: ReceivedFileViewControllerProtocol?
 	var keyDetailVC: KeyDetailTableViewController?
 	var keyList = [Key]()
 	var keysFromCoreData = [Key]()
@@ -22,6 +23,8 @@ class KeyChainListTableViewController: UITableViewController {
 	let myOpacityFULL: CGFloat = 1.0
 	let monthsInYear: Int = 12
 	let monthsForFullValidity: Int = 6
+	
+	var isInKeySelectionMode: Bool = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -37,11 +40,16 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 		//self.navigationItem.rightBarButtonItem = self.editButtonItem()
-		
-		let menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+		if self.isInKeySelectionMode {
+			self.navigationItem.title = "Select a Key"
+			let cancelItem: UIBarButtonItem = UIBarButtonItem(title: "  Cancel", style: .Plain, target: self, action: "cancelTapped:")
+			self.navigationItem.leftBarButtonItem = cancelItem
+		} else {
+		let menuItem: UIBarButtonItem = UIBarButtonItem(title: "  Menu", style: .Plain, target: self, action: "menuTapped:")
 		self.navigationItem.title = "KeyChain"
 		self.navigationItem.leftBarButtonItem = menuItem
 		self.navigationItem.rightBarButtonItem = self.editButtonItem()
+		}
 		
 	}
 	
@@ -201,11 +209,18 @@ class KeyChainListTableViewController: UITableViewController {
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		let keyItem = self.keyList[indexPath.row]
-		self.keyDetailVC = KeyDetailTableViewController(nibName: "KeyDetailTableViewController", bundle: nil)
-		self.keyDetailVC?.keyItem = keyItem
-		self.navigationController?.pushViewController(self.keyDetailVC!, animated: true)
-		
-		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		if self.isInKeySelectionMode {
+			self.isInKeySelectionMode = false
+			self.receivedFileDelegate?.didFinishWithKeySelection(keyItem)
+			self.cancelTapped(self)
+			
+		} else {
+			self.keyDetailVC = KeyDetailTableViewController(nibName: "KeyDetailTableViewController", bundle: nil)
+			self.keyDetailVC?.keyItem = keyItem
+			self.navigationController?.pushViewController(self.keyDetailVC!, animated: true)
+			
+			tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		}
 	}
 	
 	
@@ -284,6 +299,9 @@ class KeyChainListTableViewController: UITableViewController {
 		}
 	}
 	
+	@IBAction func cancelTapped(sender: AnyObject) {
+		self.dismissViewControllerAnimated(true, completion: nil)
+	}
 	
 	@IBAction func menuTapped(sender: AnyObject) {
 		self.delegate?.toggleLeftPanel()

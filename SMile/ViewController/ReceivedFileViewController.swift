@@ -11,9 +11,16 @@ import Foundation
 import CoreData
 import Locksmith
 
+@objc
+protocol ReceivedFileViewControllerProtocol {
+	func didFinishWithKeySelection(selectedKey: Key) -> Void
+}
+
 class ReceivedFileViewController: UIViewController {
 	@IBOutlet weak var image: UIImageView!
 	@IBOutlet weak var label: UILabel!
+	
+	weak var delegate: ReceivedFileViewControllerProtocol?
 //	@IBOutlet weak var navigationBar: UINavigationBar!
 //	@IBOutlet weak var toolbar: UIToolbar!
 	var url: NSURL?
@@ -201,10 +208,18 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func encryptTapped(sender: AnyObject) -> Void {
-		let (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+		let keyChainVC = KeyChainListTableViewController(nibName: "KeyChainListTableViewController", bundle: nil)
+		keyChainVC.isInKeySelectionMode = true
+		keyChainVC.receivedFileDelegate = self
+		let navbar = UINavigationController.init(rootViewController: keyChainVC)
+		self.navigationController?.presentViewController(navbar, animated: true, completion: nil)
+		
+	}
+	// called after a key was selected in KeyChainListTableViewController
+	func encrypt(keyForEncrypt: Key) {
+		let (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: keyForEncrypt.keyID, encryptionType: "PGP")
 		if encryptedFile != nil && error == nil {
-			let button = sender as! UIBarButtonItem
-			button.enabled = false
+			self.navigationItem.rightBarButtonItem?.enabled = false
 			do {
 				try self.fileManager!.removeItemAtURL(self.url!)
 			} catch _ {
@@ -219,7 +234,6 @@ class ReceivedFileViewController: UIViewController {
 				NSLog("Encryption Error: \(error?.localizedDescription)")
 			}
 		}
-		
 	}
 	
 	
@@ -282,4 +296,14 @@ class ReceivedFileViewController: UIViewController {
 			dispatch_get_main_queue(), closure)
 	}
 	
+}
+
+extension ReceivedFileViewController: ReceivedFileViewControllerProtocol {
+	
+	func didFinishWithKeySelection(selectedKey: Key) -> Void {
+		print("Got the key: \(selectedKey.keyID)")
+		self.encrypt(selectedKey)
+	
+	}
+
 }
