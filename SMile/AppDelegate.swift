@@ -435,7 +435,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func registerUserDefaults() -> Void {
         NSUserDefaults.standardUserDefaults().registerDefaults(["standardAccount" : "",
-            "loadPictures" : true, "previewLines" : 1])
+			"loadPictures" : true, "previewLines" : 1, "autoEncrypt" : true, "autoEncryptSelf" : true])
     }
 	
 	//MARK: - AirDrop Support and received file

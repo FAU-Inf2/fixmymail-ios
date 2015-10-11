@@ -137,6 +137,9 @@ class PreferenceTableViewController: UITableViewController {
 		case "About Us":
 			let aboutUsVC = AboutUsViewController(nibName: actionItem.viewController, bundle: nil)
 			self.navigationController?.pushViewController(aboutUsVC, animated: true)
+		case "KeyChain":
+			let prefKeyChainVC = PrefKeyChainTableViewController(nibName: actionItem.viewController, bundle: nil)
+			self.navigationController?.pushViewController(prefKeyChainVC, animated: true)
 		case "Clear temporary files":
 			if self.deleteAllTempFiles() {
 				let cell = self.tableView.cellForRowAtIndexPath(indexPath) as! PreferenceTableViewCell
@@ -156,7 +159,7 @@ class PreferenceTableViewController: UITableViewController {
 		
 		let item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", emailAddress: nil, icon: nil)
 		let item2 = ActionItem(Name: "REMIND ME!", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
-		let item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", emailAddress: nil, icon: nil)
+		let item3 = ActionItem(Name: "KeyChain", viewController: "PrefKeyChainTableViewController", emailAddress: nil, icon: nil)
 		let item4 = ActionItem(Name: "About Us", viewController: "AboutUsViewController", emailAddress: nil, icon: nil)
 		let item5 = ActionItem(Name: "Feedback", viewController: "FeedbackViewController", emailAddress: nil, icon: nil)
 		let item6 = ActionItem(Name: "Clear temporary files", viewController: "", emailAddress: nil, icon: nil)

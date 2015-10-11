@@ -194,6 +194,8 @@
 		AD44E0381B1B528400751FFA /* fau-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD44E0371B1B528400751FFA /* fau-logo.png */; };
 		AD4742F91B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */; };
 		AD4742FA1B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */; };
+		AD4A2EBB1BCA900F00C0ECD0 /* PrefKeyChainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4A2EB91BCA900F00C0ECD0 /* PrefKeyChainTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		AD4A2EBC1BCA900F00C0ECD0 /* PrefKeyChainTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4A2EBA1BCA900F00C0ECD0 /* PrefKeyChainTableViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		AD4B413F1B233EC500EF09FC /* AuthConTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */; };
 		AD4B41401B233EC500EF09FC /* AuthConTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */; };
 		AD4B41471B2342FD00EF09FC /* AuthConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */; };
@@ -486,6 +488,8 @@
 		AD4742F61B984E9000A2A1BC /* SMile v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v3.xcdatamodel"; sourceTree = "<group>"; };
 		AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefDownloadMailDurationTableViewController.swift; sourceTree = "<group>"; };
 		AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefDownloadMailDurationTableViewController.xib; sourceTree = "<group>"; };
+		AD4A2EB91BCA900F00C0ECD0 /* PrefKeyChainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefKeyChainTableViewController.swift; sourceTree = "<group>"; };
+		AD4A2EBA1BCA900F00C0ECD0 /* PrefKeyChainTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefKeyChainTableViewController.xib; sourceTree = "<group>"; };
 		AD4B413D1B233EC500EF09FC /* AuthConTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewController.swift; sourceTree = "<group>"; };
 		AD4B413E1B233EC500EF09FC /* AuthConTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthConTableViewController.xib; sourceTree = "<group>"; };
 		AD4B41451B2342FD00EF09FC /* AuthConTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthConTableViewCell.swift; sourceTree = "<group>"; };
@@ -936,6 +940,8 @@
 				AD5292621B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib */,
 				AD4742F71B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift */,
 				AD4742F81B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib */,
+				AD4A2EB91BCA900F00C0ECD0 /* PrefKeyChainTableViewController.swift */,
+				AD4A2EBA1BCA900F00C0ECD0 /* PrefKeyChainTableViewController.xib */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1159,6 +1165,7 @@
 				8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */,
 				3D69ECE71B83AB9A0082EF5C /* page_white_word.png in Resources */,
 				3D69ECCA1B83AB9A0082EF5C /* page_white_gear@2x.png in Resources */,
+				AD4A2EBC1BCA900F00C0ECD0 /* PrefKeyChainTableViewController.xib in Resources */,
 				AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
 				3D69ECC61B83AB9A0082EF5C /* page_white_film@2x.png in Resources */,
@@ -1410,6 +1417,7 @@
 				AD4742F91B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.swift in Sources */,
 				AD85401A1B18673F003F9C92 /* PreferenceTableViewCell.swift in Sources */,
 				ADE5F5021BAB5FAE0093CFBB /* SessionPreferenceObject.swift in Sources */,
+				AD4A2EBB1BCA900F00C0ECD0 /* PrefKeyChainTableViewController.swift in Sources */,
 				AD5292631B68F0C400A719CB /* PrefFolderSelectionTableViewController.swift in Sources */,
 				AD4E57DA1B7F781000E8C521 /* UserIdItem.swift in Sources */,
 				3D21286E1B2DF57100C9FC4C /* Email.swift in Sources */,
