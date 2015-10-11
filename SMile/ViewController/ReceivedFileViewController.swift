@@ -14,8 +14,8 @@ import Locksmith
 class ReceivedFileViewController: UIViewController {
 	@IBOutlet weak var image: UIImageView!
 	@IBOutlet weak var label: UILabel!
-	@IBOutlet weak var navigationBar: UINavigationBar!
-	@IBOutlet weak var toolbar: UIToolbar!
+//	@IBOutlet weak var navigationBar: UINavigationBar!
+//	@IBOutlet weak var toolbar: UIToolbar!
 	var url: NSURL?
 	var file: NSData?
 	var fileManager: NSFileManager?
@@ -33,7 +33,6 @@ class ReceivedFileViewController: UIViewController {
 		
         // Do any additional setup after loading the view.
 		// set navigationbar
-		let navItem: UINavigationItem = UINavigationItem(title: "Received File")
 		let cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		let importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
 		let decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
@@ -41,23 +40,23 @@ class ReceivedFileViewController: UIViewController {
 		// file is a .asc or .gpg file
 		if self.fileIsPGPfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
 			if self.isPGPKey(self.url!) == true {
-				navItem.rightBarButtonItems = [importButton]
+				self.navigationItem.rightBarButtonItems = [importButton]
 			} else if self.isPGPArmoredMessage(self.url!) == true {
-				navItem.rightBarButtonItems = [decryptButton]
+				self.navigationItem.rightBarButtonItems = [decryptButton]
 			}
 			
 		} else {
 			// other files
-			navItem.rightBarButtonItems = [encryptButton]
+			self.navigationItem.rightBarButtonItems = [encryptButton]
 		}
-		navItem.leftBarButtonItems = [cancelItem]
-		navigationBar.items = [navItem]
+		self.navigationItem.leftBarButtonItems = [cancelItem]
 		
 		// set toolbar
 		let composeButton: UIBarButtonItem = UIBarButtonItem(title: "Attach to Email", style: .Plain,  target: self, action: "showEmptyMailSendView:")
 		let actionButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "actionTapped:")
 		let items = [actionButton, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
-		self.toolbar.setItems(items, animated: false)
+		self.navigationController?.visibleViewController!.setToolbarItems(items, animated: true)
+		self.navigationController?.setToolbarHidden(false, animated: true)
 		
 		// set view content
 		self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
@@ -79,7 +78,7 @@ class ReceivedFileViewController: UIViewController {
         (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = self.fileManager!.displayNameAtPath(self.url!.path!)
         (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = file
 	(UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension = self.fileManager!.displayNameAtPath(self.url!.pathExtension!)
-        cancelTapped(self)
+        self.cancelTapped(self)
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {
@@ -88,7 +87,7 @@ class ReceivedFileViewController: UIViewController {
 			NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
 		} catch _ {
 		}
-		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+		self.navigationController?.popViewControllerAnimated(true)
 	}
 	
 	@IBAction func importTapped(sender: AnyObject) -> Void {
@@ -105,7 +104,7 @@ class ReceivedFileViewController: UIViewController {
 					NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
 				} catch _ {
 				}
-				self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+				self.cancelTapped(self)
 			}
 		} else {
 			self.label.text = "Sorry, something went wrong!"
