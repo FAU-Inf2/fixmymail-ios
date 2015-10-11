@@ -8,8 +8,11 @@
 
 import UIKit
 import CoreData
+import Foundation
 
 class KeyDetailTableViewController: UITableViewController {
+	
+	let magicDate: NSDate = NSDate(dateString: "9999-01-01")
 	
 	var keyItem: Key?
 	var keyInfoLabelStrings: [String] = [String]()
@@ -149,10 +152,13 @@ class KeyDetailTableViewController: UITableViewController {
 			self.keyInfoContentStrings.append(self.keyItem!.created.toLongDateString())
 			
 			self.keyInfoLabelStrings.append("Valid Thru:")
-			self.keyInfoContentStrings.append(self.keyItem!.validThru.toLongDateString())
-			
+			if self.keyItem!.validThru == self.magicDate {
+				self.keyInfoContentStrings.append("does not expire")
+			} else {
+				self.keyInfoContentStrings.append(self.keyItem!.validThru.toLongDateString())
+			}
 			self.keyInfoLabelStrings.append("Key Length:")
-			let keylength = Int(self.keyItem!.keyLength) * 8
+			let keylength = Int(self.keyItem!.keyLength)
 			self.keyInfoContentStrings.append(keylength.description)
 			
 			self.keyInfoLabelStrings.append("Algorithm:")

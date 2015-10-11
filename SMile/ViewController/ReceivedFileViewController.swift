@@ -9,12 +9,20 @@
 import UIKit
 import Foundation
 import CoreData
+import Locksmith
+
+@objc
+protocol ReceivedFileViewControllerProtocol {
+	func didFinishWithKeySelection(selectedKey: Key) -> Void
+}
 
 class ReceivedFileViewController: UIViewController {
 	@IBOutlet weak var image: UIImageView!
 	@IBOutlet weak var label: UILabel!
-	@IBOutlet weak var navigationBar: UINavigationBar!
-	@IBOutlet weak var toolbar: UIToolbar!
+	
+	weak var delegate: ReceivedFileViewControllerProtocol?
+//	@IBOutlet weak var navigationBar: UINavigationBar!
+//	@IBOutlet weak var toolbar: UIToolbar!
 	var url: NSURL?
 	var file: NSData?
 	var fileManager: NSFileManager?
@@ -32,31 +40,30 @@ class ReceivedFileViewController: UIViewController {
 		
         // Do any additional setup after loading the view.
 		// set navigationbar
-		let navItem: UINavigationItem = UINavigationItem(title: "Received File")
 		let cancelItem: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancelTapped:")
 		let importButton: UIBarButtonItem = UIBarButtonItem(title: "Import key", style: .Plain, target: self, action: "importTapped:")
 		let decryptButton: UIBarButtonItem = UIBarButtonItem(title: "Decrypt file", style: .Plain, target: self, action: "decryptTapped:")
 		let encryptButton: UIBarButtonItem = UIBarButtonItem(title: "Encrypt file", style: .Plain, target: self, action: "encryptTapped:")
 		// file is a .asc or .gpg file
-		if self.fileIsKeyfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
+		if self.fileIsPGPfile(self.fileManager!.displayNameAtPath(self.url!.path!)) == true {
 			if self.isPGPKey(self.url!) == true {
-				navItem.rightBarButtonItems = [importButton]
-			} else {
-				navItem.rightBarButtonItems = [decryptButton]
+				self.navigationItem.rightBarButtonItems = [importButton]
+			} else if self.isPGPArmoredMessage(self.url!) == true {
+				self.navigationItem.rightBarButtonItems = [decryptButton]
 			}
 			
 		} else {
 			// other files
-			navItem.rightBarButtonItems = [encryptButton]
+			self.navigationItem.rightBarButtonItems = [encryptButton]
 		}
-		navItem.leftBarButtonItems = [cancelItem]
-		navigationBar.items = [navItem]
+		self.navigationItem.leftBarButtonItems = [cancelItem]
 		
 		// set toolbar
 		let composeButton: UIBarButtonItem = UIBarButtonItem(title: "Attach to Email", style: .Plain,  target: self, action: "showEmptyMailSendView:")
 		let actionButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "actionTapped:")
 		let items = [actionButton, UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), composeButton]
-		self.toolbar.setItems(items, animated: false)
+		self.navigationController?.visibleViewController!.setToolbarItems(items, animated: true)
+		self.navigationController?.setToolbarHidden(false, animated: true)
 		
 		// set view content
 		self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
@@ -78,7 +85,7 @@ class ReceivedFileViewController: UIViewController {
         (UIApplication.sharedApplication().delegate as! AppDelegate).fileName = self.fileManager!.displayNameAtPath(self.url!.path!)
         (UIApplication.sharedApplication().delegate as! AppDelegate).fileData = file
 	(UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension = self.fileManager!.displayNameAtPath(self.url!.pathExtension!)
-        cancelTapped(self)
+        self.cancelTapped(self)
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {
@@ -87,7 +94,7 @@ class ReceivedFileViewController: UIViewController {
 			NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
 		} catch _ {
 		}
-		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+		self.navigationController?.popViewControllerAnimated(true)
 	}
 	
 	@IBAction func importTapped(sender: AnyObject) -> Void {
@@ -104,7 +111,7 @@ class ReceivedFileViewController: UIViewController {
 					NSLog("File : " + self.fileManager!.displayNameAtPath(self.url!.path!) + " deleted")
 				} catch _ {
 				}
-				self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+				self.cancelTapped(self)
 			}
 		} else {
 			self.label.text = "Sorry, something went wrong!"
@@ -114,42 +121,105 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		// DEBUG ###########
-		let fileReadError: NSError? = nil
-		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
-		var pw = ""
-		if path != nil {
-			pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-		}
-		
-		if fileReadError == nil {
-		// ##################
-			let (error, decryptedFile) = crypto.decryptFile(self.url!, passphrase: pw, encryptionType: "PGP")
-			if decryptedFile != nil && error == nil {
-				let button = sender as! UIBarButtonItem
-				button.enabled = false
-				do {
-					try self.fileManager!.removeItemAtURL(self.url!)
-				} catch _ {
-				}
-				self.url = decryptedFile!
-				self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
-				self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
-				self.file = self.fileManager!.contentsAtPath(self.url!.path!)
-				
-			} else {
-				if error != nil {
-					NSLog("Decrytpion Error: \(error?.localizedDescription)")
+		//		// DEBUG ###########
+		//		let fileReadError: NSError? = nil
+		//		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
+		//		var pw = ""
+		//		if path != nil {
+		//			pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
+		//		}
+		//
+		//		if fileReadError == nil {
+		//		// ##################
+		var passphrase: String?
+		if let encryptedData = NSData(contentsOfURL: self.url!) {
+			if let key = crypto.getKeyforEncryptedMessage(encryptedData) {
+				if let dictionary = Locksmith.loadDataForUserAccount(key.keyID) {
+					passphrase = dictionary["PassPhrase"] as? String
+				} else {
+					// ask the user for passphrase
+					var inputTextField: UITextField?
+					let passphrasePrompt = UIAlertController(title: "Enter Passphrase", message: "Please enter the passphrase for key: \(key.keyID)", preferredStyle: .Alert)
+					passphrasePrompt.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+					passphrasePrompt.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+						passphrase = inputTextField!.text
+						if passphrase != nil {
+							let (error, decryptedFile) = self.crypto.decryptFile(self.url!, passphrase: passphrase!, encryptionType: "PGP")
+							if decryptedFile != nil && error == nil {
+								let button = sender as! UIBarButtonItem
+								button.enabled = false
+								do {
+									try self.fileManager!.removeItemAtURL(self.url!)
+								} catch _ {
+								}
+								self.url = decryptedFile!
+								self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
+								self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
+								self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+								
+							} else {
+								if error != nil {
+									NSLog("Decrytpion Error: \(error?.localizedDescription)")
+								}
+							}
+						}
+					}))
+					passphrasePrompt.addAction(UIAlertAction(title: "OK and Save Passphrase", style: .Default, handler: {(action) -> Void in
+						passphrase = inputTextField!.text
+						if passphrase != nil {
+							let (error, decryptedFile) = self.crypto.decryptFile(self.url!, passphrase: passphrase!, encryptionType: "PGP")
+							if decryptedFile != nil && error == nil {
+								let button = sender as! UIBarButtonItem
+								button.enabled = false
+								do {
+									try self.fileManager!.removeItemAtURL(self.url!)
+								} catch _ {
+								}
+								self.url = decryptedFile!
+								self.label.text = self.fileManager!.displayNameAtPath(self.url!.path!)
+								self.image.image = self.getUImageFromFilename(self.fileManager!.displayNameAtPath(self.url!.path!))
+								self.file = self.fileManager!.contentsAtPath(self.url!.path!)
+								
+							} else {
+								if error != nil {
+									NSLog("Decrytpion Error: \(error?.localizedDescription)")
+								}
+							}
+						}
+						do {
+							try Locksmith.deleteDataForUserAccount(key.keyID)
+						} catch _ {}
+						do {
+							try Locksmith.saveData(["PassPhrase": passphrase!], forUserAccount: key.keyID)
+						} catch let error as NSError {
+							NSLog("Locksmith: \(error.localizedDescription)")
+						}
+					}))
+					passphrasePrompt.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+						textField.placeholder = "Passphrase"
+						textField.secureTextEntry = true
+						inputTextField = textField
+					})
+					presentViewController(passphrasePrompt, animated: true, completion: nil)
 				}
 			}
+			
 		}
 	}
 	
 	@IBAction func encryptTapped(sender: AnyObject) -> Void {
-		let (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: "42486EB9", encryptionType: "PGP")
+		let keyChainVC = KeyChainListTableViewController(nibName: "KeyChainListTableViewController", bundle: nil)
+		keyChainVC.isInKeySelectionMode = true
+		keyChainVC.receivedFileDelegate = self
+		let navbar = UINavigationController.init(rootViewController: keyChainVC)
+		self.navigationController?.presentViewController(navbar, animated: true, completion: nil)
+		
+	}
+	// called after a key was selected in KeyChainListTableViewController
+	func encrypt(keyForEncrypt: Key) {
+		let (error, encryptedFile) = crypto.encryptFile(self.url!, keyIdentifier: keyForEncrypt.keyID, encryptionType: "PGP")
 		if encryptedFile != nil && error == nil {
-			let button = sender as! UIBarButtonItem
-			button.enabled = false
+			self.navigationItem.rightBarButtonItem?.enabled = false
 			do {
 				try self.fileManager!.removeItemAtURL(self.url!)
 			} catch _ {
@@ -164,7 +234,6 @@ class ReceivedFileViewController: UIViewController {
 				NSLog("Encryption Error: \(error?.localizedDescription)")
 			}
 		}
-		
 	}
 	
 	
@@ -188,7 +257,7 @@ class ReceivedFileViewController: UIViewController {
 			
 	}
 	
-	func fileIsKeyfile(filename: String) -> Bool {
+	func fileIsPGPfile(filename: String) -> Bool {
 		if filename.rangeOfString(".asc") != nil || filename.rangeOfString(".gpg") != nil {
 			return true
 		} else {
@@ -207,6 +276,16 @@ class ReceivedFileViewController: UIViewController {
 		return false
 	}
 	
+	func isPGPArmoredMessage(fileUrl: NSURL) -> Bool {
+		if let fileContent = try? String(contentsOfFile: fileUrl.path!, encoding: NSUTF8StringEncoding) {
+			if fileContent.rangeOfString("-----BEGIN PGP MESSAGE-----") != nil {
+				return true
+			}
+		}
+		
+		return false
+	}
+	
 	// delay block for seconds
 	func delay(delay:Double, closure:()->()) {
 		dispatch_after(
@@ -217,4 +296,14 @@ class ReceivedFileViewController: UIViewController {
 			dispatch_get_main_queue(), closure)
 	}
 	
+}
+
+extension ReceivedFileViewController: ReceivedFileViewControllerProtocol {
+	
+	func didFinishWithKeySelection(selectedKey: Key) -> Void {
+		print("Got the key: \(selectedKey.keyID)")
+		self.encrypt(selectedKey)
+	
+	}
+
 }

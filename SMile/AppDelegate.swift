@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var fileName: String?
     var fileData: NSData?
 	var fileExtension: String?
+	
+	// needed if file is received
+	var receivedFile: NSURL?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -435,15 +438,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "loadPictures" : true, "previewLines" : 1])
     }
 	
-	//MARK: - AirDrop Support
+	//MARK: - AirDrop Support and received file
 		
-	func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+	func application(app: UIApplication, openURL url: NSURL, options: [String: AnyObject]) -> Bool {
 		let fileManager = NSFileManager.defaultManager()
 		if fileManager.fileExistsAtPath(url.path!) == true {
 			NSLog("File exists. File path: " + url.path!)
-			let receivedFileVC = ReceivedFileViewController(nibName: "ReceivedFileViewController", bundle: nil)
-			receivedFileVC.url = url
-			self.window?.rootViewController?.presentViewController(receivedFileVC, animated: true, completion: nil)
+//			let receivedFileVC = ReceivedFileViewController(nibName: "ReceivedFileViewController", bundle: nil)
+//			receivedFileVC.url = url
+//			self.window?.rootViewController?.presentViewController(receivedFileVC, animated: true, completion: nil)
+			self.receivedFile = url
+			let rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+			self.window?.rootViewController = rootViewController
+			
 			
 			return true
 		} else {
@@ -480,7 +487,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 defaults.setURL(NSURL(fileURLWithPath: pubringPath), forKey: "pubring")
                 defaults.setURL(secringPath, forKey: "secring")
                 defaults.setBool(true, forKey: "RingfilesCreated")
-                
+				
                 // DEBUG
                 //NSLog("pubring: " + NSURL(fileURLWithPath: pubringPath)!.path!)
                 //NSLog("secring: " + NSURL(fileURLWithPath: secringPath)!.path!)
@@ -504,7 +511,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		//WARNING: DELETE BEFORE RELEASE
 		let crypto = SMileCrypto()
-		let fileReadError: NSError? = nil
+        //let path = NSBundle.mainBundle().pathForResource("encTestKey", ofType: "asc")
+        //let keyfile = NSURL(fileURLWithPath: path!)
+		//crypto.importKey(keyfile)
+		if let data = "Hallihallo PGP".dataUsingEncoding(NSUTF8StringEncoding) {
+			let encryptedData = crypto.encryptData(data, keyIdentifier: "C917202C D4907952", encryptionType: "PGP")
+			if encryptedData.encryptedData != nil {
+				print(String(data: encryptedData.encryptedData!, encoding: NSUTF8StringEncoding))
+			}
+
+			
+		}
+		
+		
+		
+/*		let fileReadError: NSError? = nil
 		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
 		var pw = ""
 		if path != nil {
@@ -538,6 +559,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				
 			}
 		}
+*/
 	}
 
 }

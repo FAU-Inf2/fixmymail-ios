@@ -8,10 +8,12 @@
 
 import UIKit
 import CoreData
+import Foundation
 
 class KeyChainListTableViewController: UITableViewController {
 	
 	weak var delegate: ContentViewControllerProtocol?
+	weak var receivedFileDelegate: ReceivedFileViewControllerProtocol?
 	var keyDetailVC: KeyDetailTableViewController?
 	var keyList = [Key]()
 	var keysFromCoreData = [Key]()
@@ -21,6 +23,8 @@ class KeyChainListTableViewController: UITableViewController {
 	let myOpacityFULL: CGFloat = 1.0
 	let monthsInYear: Int = 12
 	let monthsForFullValidity: Int = 6
+	
+	var isInKeySelectionMode: Bool = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -36,11 +40,16 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 		//self.navigationItem.rightBarButtonItem = self.editButtonItem()
-		
-		let menuItem: UIBarButtonItem = UIBarButtonItem(title: "   Menu", style: .Plain, target: self, action: "menuTapped:")
+		if self.isInKeySelectionMode {
+			self.navigationItem.title = "Select a Key"
+			let cancelItem: UIBarButtonItem = UIBarButtonItem(title: "  Cancel", style: .Plain, target: self, action: "cancelTapped:")
+			self.navigationItem.leftBarButtonItem = cancelItem
+		} else {
+		let menuItem: UIBarButtonItem = UIBarButtonItem(title: "  Menu", style: .Plain, target: self, action: "menuTapped:")
 		self.navigationItem.title = "KeyChain"
 		self.navigationItem.leftBarButtonItem = menuItem
 		self.navigationItem.rightBarButtonItem = self.editButtonItem()
+		}
 		
 	}
 	
@@ -167,8 +176,10 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Set the valid thru bar
 		let currentDate = NSDate()
-		if keyItem.validThru.year() >= currentDate.year() {
-			if (keyItem.validThru.month() + (keyItem.validThru.year() - currentDate.year()) * monthsInYear) >= (currentDate.month() + monthsForFullValidity) {
+		let calendar = NSCalendar.currentCalendar()
+		if keyItem.validThru > currentDate {
+			if let sixMonthsAhead = calendar.dateByAddingUnit(.Month, value: 6, toDate: currentDate, options: []) {
+			if keyItem.validThru > sixMonthsAhead {
 				cell.validIndicator1.image = UIImage(named: "green_indicator.png")
 				cell.validIndicator2.image = UIImage(named: "green_indicator.png")
 				cell.validIndicator3.image = UIImage(named: "green_indicator.png")
@@ -181,6 +192,7 @@ class KeyChainListTableViewController: UITableViewController {
 				cell.validIndicator3.image = UIImage(named: "yellow_indicator.png")
 				cell.validIndicator4.image = UIImage(named: "gray_indicator.png")
 				cell.validIndicator5.image = UIImage(named: "gray_indicator.png")
+			}
 			}
 			
 		} else {
@@ -197,11 +209,53 @@ class KeyChainListTableViewController: UITableViewController {
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		let keyItem = self.keyList[indexPath.row]
-		self.keyDetailVC = KeyDetailTableViewController(nibName: "KeyDetailTableViewController", bundle: nil)
-		self.keyDetailVC?.keyItem = keyItem
-		self.navigationController?.pushViewController(self.keyDetailVC!, animated: true)
-		
-		tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		if self.isInKeySelectionMode {
+			self.isInKeySelectionMode = false
+			self.receivedFileDelegate?.didFinishWithKeySelection(keyItem)
+			self.cancelTapped(self)
+			
+		} else {
+			self.keyDetailVC = KeyDetailTableViewController(nibName: "KeyDetailTableViewController", bundle: nil)
+			self.keyDetailVC?.keyItem = keyItem
+			self.navigationController?.pushViewController(self.keyDetailVC!, animated: true)
+			
+			tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		}
+	}
+	
+	
+	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+		switch editingStyle {
+		case .Delete:
+			let key = self.keyList[indexPath.row]
+			// save data to CoreData (respectively deleting data from CoreData)
+			let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+			let context: NSManagedObjectContext = appDel.managedObjectContext!
+			let fetchRequest = NSFetchRequest(entityName: "Key")
+			fetchRequest.predicate = NSPredicate(format: "userIDprimary = %@", key.userIDprimary)
+			fetchRequest.predicate = NSPredicate(format: "emailAddressPrimary = %@", key.emailAddressPrimary)
+			
+			if let fetchResults = (try? appDel.managedObjectContext!.executeFetchRequest(fetchRequest)) as? [NSManagedObject] {
+				if fetchResults.count != 0{
+					
+					let managedObject = fetchResults[0]
+					context.deleteObject(managedObject)
+				}
+				
+				do {
+					try context.save()
+				} catch let error as NSError {
+					NSLog("Key \(key.keyID) was not deleted, error: \(error.localizedDescription)")
+					return
+				}
+				
+				// key deleted from core data -> delete from tableview
+				self.keyList.removeAtIndex(indexPath.row)
+				self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+			}
+		default:
+			return
+		}
 	}
 	
 	
@@ -242,11 +296,12 @@ class KeyChainListTableViewController: UITableViewController {
 			}
 			
 			self.keyList = secKeys + pubKeys
-			
-			
 		}
 	}
 	
+	@IBAction func cancelTapped(sender: AnyObject) {
+		self.dismissViewControllerAnimated(true, completion: nil)
+	}
 	
 	@IBAction func menuTapped(sender: AnyObject) {
 		self.delegate?.toggleLeftPanel()

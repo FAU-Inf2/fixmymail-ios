@@ -145,6 +145,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+		// attachments
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
 				if let mimetype = (UIApplication.sharedApplication().delegate as! AppDelegate).fileExtension {
@@ -190,6 +191,14 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
 				}
             }
         }
+		
+		// received file
+		if let receivedFile = (UIApplication.sharedApplication().delegate as! AppDelegate).receivedFile {
+			let receivedFileVC = ReceivedFileViewController(nibName: "ReceivedFileViewController", bundle: nil)
+			receivedFileVC.url = receivedFile
+			(UIApplication.sharedApplication().delegate as! AppDelegate).receivedFile = nil
+			self.navigationController?.pushViewController(receivedFileVC, animated: true)
+		}
 
     }
 	
