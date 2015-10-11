@@ -89,11 +89,13 @@ class RemindMe{
                 exists = true
             }
         }
-        /*if(exists == false){
+        print(exists)
+        if(exists == false){
             jsonstring = "{\"allRemindMes\":[]}"
             uploadJsonMail(Account)
             print("Json created")
-        }*/
+            saveCoreDataChanges()
+        }
     }
 
     
@@ -124,14 +126,10 @@ class RemindMe{
                 var json2 = json["allRemindMes"].arrayValue
                 let now = NSDate().timeIntervalSince1970
                 let remindTimeTimestamp = remindTime.timeIntervalSince1970
-                print("message id bevor")
-                print(email.mcomessage.header!.messageID)
                 moveEmailToFolder(email, destFolder: folderRemind)
                 //updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
                 let header : MCOMessageHeader = email.mcomessage.header
                 let messageId = header.messageID
-                print("message id nachher")
-                print(messageId)
                 let newjson = JSON(["folderId": NSNull(), "id": NSNull(), "lastModified": now, "messageId": messageId, "remindInterval": NSNull(), "remindTime": remindTimeTimestamp, "seen": NSNull(), "title": email.title, "uid": NSNull(), "reference": NSNull()])
                 
                 //Add newjson to json2
@@ -142,6 +140,9 @@ class RemindMe{
                 
                 //delete old json email
                 deleteEmail(jsonmail!)
+                saveCoreDataChanges()
+                updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
+                
             }
         }
     }
@@ -177,6 +178,7 @@ class RemindMe{
 //
     func buildEmail() -> NSData {
         let builder = MCOMessageBuilder()
+        print(jsonstring!)
         
         builder.header.subject = "Internal from Smile"
         builder.textBody = jsonstring
@@ -205,7 +207,7 @@ class RemindMe{
         //self.checkIfJSONEmailExists(toAccount)
         let currentMaxUID = getMaxUID(toAccount, folderToQuery: folderStorage!)
         saveCoreDataChanges()
-        //updateLocalEmail(toAccount, folderToQuery: folderStorage)
+        updateLocalEmail(toAccount, folderToQuery: folderStorage!)
         fetchEmails(toAccount, folderToQuery: folderStorage!, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
         for mail in toAccount.emails {
             if mail.folder == folderStorage {
@@ -225,7 +227,6 @@ class RemindMe{
             let components = NSDateComponents()
             components.hour = NSTimeZone.localTimeZone().secondsFromGMT/3600 //zeitzone reinrechnen
             now = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: now, options: [])!
-            print(now)
             for result in json["allRemindMes"].arrayValue {
                 
                 //RemindMe Datum mit akutellem Datum vergleichen
@@ -247,17 +248,13 @@ class RemindMe{
                     print("push email")
                     
                     let id = result["messageId"].stringValue
-                    print(id)
                     if let upcomingEmail = returnEmailWithSpecificID(toAccount, folder: folderRemind!, id: id){
                         print("file found")
-                        //let upcomingEmail:Email = returnEmailWithSpecificID(toAccount, folder: folderRemind!, id: id)!
-                        addFlagToEmail(upcomingEmail, flag: MCOMessageFlag.Flagged) //Flag auf unseen setzten bzw. vielleicht auf remind
-                        var inboxfolder = getFolderPathWithMCOIMAPFolderFlag(toAccount, folderFlag: MCOIMAPFolderFlag.Inbox)
-                        inboxfolder = "Posteingang"
-                        print(inboxfolder)
+                        removeFlagFromEmail(upcomingEmail, flag: MCOMessageFlag.Seen)//Flag auf unseen setzten bzw. vielleicht auf remind
+                        addFlagToEmail(upcomingEmail, flag: MCOMessageFlag.Flagged)
+                        let inboxfolder = "INBOX"
                         moveEmailToFolder(upcomingEmail, destFolder: inboxfolder)
                         somethingChanged = true
-                        print("entry deleted1")
                     }
                 }
                 else{
@@ -274,15 +271,13 @@ class RemindMe{
                     print("time in future")
                 }
             }
-            //print("pushed")
             if( somethingChanged == true){
-                print("new json")
                 json["allRemindMes"] = JSON(cleanarray)
                 jsonstring = json.rawString()!
                 uploadJsonMail(jsonmail!.toAccount)
-                print("json updated")
                 deleteEmail(jsonmail!)
-                print("old json deleted2")
+                saveCoreDataChanges()
+                updateLocalEmail(toAccount, folderToQuery: folderStorage!)
             }
         }
     }
@@ -294,8 +289,6 @@ class RemindMe{
             if mail.folder == folder {
                 let header : MCOMessageHeader = (mail as! Email).mcomessage.header
                 let messageId = header.messageID
-                print(messageId)
-                print(header.subject)
                 if messageId == id { //schauen ob id der mail die selbe ist wie der der remindEmail
                     return (mail as? Email)
                 }

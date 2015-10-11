@@ -43,6 +43,9 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="orangedot.png" translatesAutoresizingMaskIntoConstraints="NO" id="PfK-Jt-N8Q">
+                        <rect key="frame" x="4" y="13" width="9" height="9"/>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="rMk-Lq-lDu" secondAttribute="trailing" id="CHg-Hl-m9o"/>
@@ -66,6 +69,7 @@
                 <outlet property="mailBody" destination="aLa-ps-40v" id="Mqp-1b-wgT"/>
                 <outlet property="mailFrom" destination="YlV-f1-Pw4" id="sts-UJ-afU"/>
                 <outlet property="mailSubject" destination="KWe-ro-R86" id="owz-4x-KSz"/>
+                <outlet property="reminddot" destination="PfK-Jt-N8Q" id="tIb-7n-Smf"/>
                 <outlet property="unseendot" destination="caB-mD-B5R" id="YxJ-RS-fjw"/>
             </connections>
             <point key="canvasLocation" x="-366" y="403.5"/>
@@ -73,5 +77,6 @@
     </objects>
     <resources>
         <image name="bluedot.png" width="9" height="9"/>
+        <image name="orangedot.png" width="9" height="9"/>
     </resources>
 </document>
