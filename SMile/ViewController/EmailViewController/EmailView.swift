@@ -363,10 +363,10 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         } else {
             var htmlContent: String?
             if self.email.plainText.containsString("-----BEGIN PGP MESSAGE-----") {
-                if let key = self.smileCrypto.getKeyforEncryptedMessage(self.email.data) {
+                if let key = self.smileCrypto.getKeyforEncryptedMessage(self.email.plainText.dataUsingEncoding(NSUTF8StringEncoding)!) {
                     let passphrase = self.askPassphraseForKey(key)
                     if passphrase != nil {
-                        let decrpytedValues = self.smileCrypto.decryptData(self.email.data, passphrase: passphrase!, encryptionType: "PGP")
+                        let decrpytedValues = self.smileCrypto.decryptData(self.email.plainText.dataUsingEncoding(NSUTF8StringEncoding)!, passphrase: passphrase!, encryptionType: "PGP")
                         if decrpytedValues.error != nil {
                             if decrpytedValues.decryptedData != nil {
                                 let decryptedString = String(data: decrpytedValues.decryptedData!, encoding: NSUTF8StringEncoding)
