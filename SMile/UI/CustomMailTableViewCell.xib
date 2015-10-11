@@ -46,6 +46,9 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="orangedot.png" translatesAutoresizingMaskIntoConstraints="NO" id="PfK-Jt-N8Q">
                         <rect key="frame" x="4" y="13" width="9" height="9"/>
                     </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="attachment_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="xNu-B8-Z78">
+                        <rect key="frame" x="-1" y="46" width="19" height="18"/>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="rMk-Lq-lDu" secondAttribute="trailing" id="CHg-Hl-m9o"/>
@@ -65,6 +68,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="attachmentIcon" destination="xNu-B8-Z78" id="iDO-7O-Nh6"/>
                 <outlet property="dateLabel" destination="rMk-Lq-lDu" id="7pv-zE-WKg"/>
                 <outlet property="mailBody" destination="aLa-ps-40v" id="Mqp-1b-wgT"/>
                 <outlet property="mailFrom" destination="YlV-f1-Pw4" id="sts-UJ-afU"/>
@@ -76,6 +80,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="attachment_icon.png" width="256" height="256"/>
         <image name="bluedot.png" width="9" height="9"/>
         <image name="orangedot.png" width="9" height="9"/>
     </resources>

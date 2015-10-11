@@ -85,7 +85,7 @@ class RemindMe{
         updateLocalEmail(Account, folderToQuery: folderStorage!)
         fetchEmails(Account, folderToQuery: folderStorage!, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
         for mail in Account.emails {
-            if mail.folder == folderStorage {
+            if (mail as! Email).folder == folderStorage {
                 exists = true
             }
         }

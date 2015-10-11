@@ -107,7 +107,7 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             for account in accs {
                 let downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
                 for mail in account.emails {
-                    if mail.folder == folderToQuery {
+                    if (mail as! Email).folder == folderToQuery {
                         if let dMD = downloadMailDuration {
                             if ((mail as! Email).mcomessage as! MCOIMAPMessage).header.receivedDate.laterDate(dMD) == dMD {
                                 continue
@@ -334,6 +334,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             mailcell.reminddot.hidden = true
         } else {
             mailcell.reminddot.hidden = false
+        }
+        
+        if (mail.mcomessage as! MCOIMAPMessage).attachments().count > 0 {
+            mailcell.attachmentIcon.hidden = false
+        }else {
+            mailcell.attachmentIcon.hidden = true
         }
         
         return mailcell

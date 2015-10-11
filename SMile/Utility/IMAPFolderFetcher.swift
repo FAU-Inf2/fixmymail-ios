@@ -28,15 +28,6 @@ class IMAPFolderFetcher: NSObject {
                 session.hostname = acc.imapHostname
                 session.port = UInt32(acc.imapPort.unsignedIntegerValue)
                 session.username = acc.username
-                
-                //                    let (dictionary, error) = Locksmith.loadDataForUserAccount(acc.emailAddress)
-                //                    if error == nil {
-                //                        session.password = dictionary?.valueForKey("Password:") as! String
-                //                    } else {
-                //                        NSLog("%@", error!.description)
-                //                        completion(account: nil, folders: nil, sucess: false, newFolders: false)
-                //                        return
-                //                    }
                 let dict = Locksmith.loadDataForUserAccount(acc.emailAddress)
                 if dict != nil {
                     session.password = dict!["Password:"] as! String
@@ -68,11 +59,6 @@ class IMAPFolderFetcher: NSObject {
                             print("Coredataerror while fetching imapfolders!")
                             completion(account: acc, folders: nil, sucess: false, newFolders: newFolders)
                         }
-                        //                            var results = self.managedContext.executeFetchRequest(request) as [ImapFolder]?
-                        //                            if error != nil {
-                        //                                print(e!.userInfo)
-                        //                                completion(account: acc, folders: nil, sucess: false, newFolders: newFolders)
-                        //                            }
                         let foldercount: Int!
                         if let res = results {
                             foldercount = res.count
