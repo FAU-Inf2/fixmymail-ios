@@ -35,6 +35,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var emailViewDelegate: EmailViewDelegate?
     var plainHTMLContent: String!
     var attachmentVC: AttachmentsViewController!
+    let smileCrypto = SMileCrypto()
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -355,6 +356,10 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                 self.loadingSpinner.stopAnimating()
             })
         } else {
+            if self.email.plainText.containsString("-----BEGIN PGP MESSAGE-----") {
+                
+            }
+            //TODO: Check if email
             let messageParser: MCOMessageParser = MCOMessageParser(data: self.email.data)
             var htmlContent: String? = messageParser.htmlRenderingWithDelegate(self.htmlRenderBridge) as String?
             
