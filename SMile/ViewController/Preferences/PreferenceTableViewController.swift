@@ -31,7 +31,7 @@ class PreferenceTableViewController: UITableViewController {
 		self.navigationItem.title = "Preferences"
 		self.navigationItem.leftBarButtonItem = menuItem
 		
-		self.sections = ["", "", ""]
+		self.sections = ["", "", "", ""]
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -117,6 +117,10 @@ class PreferenceTableViewController: UITableViewController {
 		let cellItem: ActionItem = self.rows[indexPath.section][indexPath.row] as! ActionItem
 		cell.menuLabel.text = cellItem.cellName
 		
+		if cellItem.cellName == "Clear temporary files" {
+			cell.menuLabel.textColor = UIColor.redColor()
+		}
+		
         return cell
     }
 	
@@ -133,6 +137,15 @@ class PreferenceTableViewController: UITableViewController {
 		case "About Us":
 			let aboutUsVC = AboutUsViewController(nibName: actionItem.viewController, bundle: nil)
 			self.navigationController?.pushViewController(aboutUsVC, animated: true)
+		case "KeyChain":
+			let prefKeyChainVC = PrefKeyChainTableViewController(nibName: actionItem.viewController, bundle: nil)
+			self.navigationController?.pushViewController(prefKeyChainVC, animated: true)
+		case "Clear temporary files":
+			if self.deleteAllTempFiles() {
+				let cell = self.tableView.cellForRowAtIndexPath(indexPath) as! PreferenceTableViewCell
+				cell.menuLabel.textColor = UIColor.grayColor()
+				cell.userInteractionEnabled = false
+			}
 		default:
 			break
 		}
@@ -146,9 +159,10 @@ class PreferenceTableViewController: UITableViewController {
 		
 		let item1 = ActionItem(Name: "Accounts", viewController: "PreferenceAccountListTableViewController", emailAddress: nil, icon: nil)
 		let item2 = ActionItem(Name: "REMIND ME!", viewController: "TODO_Pref", emailAddress: nil, icon: nil)
-		let item3 = ActionItem(Name: "KeyChain", viewController: "KeyChain_Pref", emailAddress: nil, icon: nil)
+		let item3 = ActionItem(Name: "KeyChain", viewController: "PrefKeyChainTableViewController", emailAddress: nil, icon: nil)
 		let item4 = ActionItem(Name: "About Us", viewController: "AboutUsViewController", emailAddress: nil, icon: nil)
 		let item5 = ActionItem(Name: "Feedback", viewController: "FeedbackViewController", emailAddress: nil, icon: nil)
+		let item6 = ActionItem(Name: "Clear temporary files", viewController: "", emailAddress: nil, icon: nil)
 		
 		self.otherItem.append(item4)
 		self.otherItem.append(item5)
@@ -157,9 +171,60 @@ class PreferenceTableViewController: UITableViewController {
 		self.preferenceCellItem.append(item3)
 		
 		self.rows.append(preferenceCellItem)
-		self.rows.append([])
 		self.rows.append(otherItem)
+		self.rows.append([])
+		self.rows.append([item6])
 		
+	}
+	
+	func deleteAllTempFiles() -> Bool {
+		let fileManager = NSFileManager.defaultManager()
+		var documentDirectory = ""
+		let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
+		let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
+		let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+		if paths.count > 0 {
+			documentDirectory = paths[0]
+		}
+		// contents of document directory
+		var directoryContents: [String] = [String]()
+		do {
+			directoryContents = try fileManager.contentsOfDirectoryAtPath(documentDirectory)
+		} catch _ {
+			return false
+		}
+		
+		for path in directoryContents {
+			if path == "Inbox" {
+				// contents of Inbox directory
+				let inboxPath = (documentDirectory as NSString).stringByAppendingPathComponent(path)
+				var inboxContents: [String] = [String]()
+				do {
+					inboxContents = try fileManager.contentsOfDirectoryAtPath(inboxPath)
+				} catch _ {
+					break
+				}
+				// delete files in Inbox directory
+				for pathInInbox in inboxContents {
+					let filePath = (inboxPath as NSString).stringByAppendingPathComponent(pathInInbox)
+					do {
+						try fileManager.removeItemAtPath(filePath)
+					} catch _ {
+					}
+				}
+				continue
+			}
+			
+			// delete files in document directory
+			if path.rangeOfString("SMile.sqlite") == nil {
+				let filePath = (documentDirectory as NSString).stringByAppendingPathComponent(path)
+				do {
+					try fileManager.removeItemAtPath(filePath)
+				} catch _ {
+				}
+			}
+		}
+		return true
 	}
 	
 	@IBAction func menuTapped(sender: AnyObject) -> Void {

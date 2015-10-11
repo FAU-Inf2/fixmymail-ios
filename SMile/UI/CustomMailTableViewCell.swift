@@ -22,6 +22,7 @@ class CustomMailTableViewCell: UITableViewCell {
     @IBOutlet var mailBody: UILabel!
 	@IBOutlet var unseendot: UIImageView!
     @IBOutlet weak var reminddot: UIImageView!
+    @IBOutlet weak var attachmentIcon: UIImageView!
     
     var mail: Email!
     var delegate: TableViewCellDelegate?

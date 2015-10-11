@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
+		self.deleteAllTempFiles()
 	//	self.createRingFiles()
         self.initCoreDataTestEntries()
 		self.printKeys()
@@ -435,7 +436,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func registerUserDefaults() -> Void {
         NSUserDefaults.standardUserDefaults().registerDefaults(["standardAccount" : "",
-            "loadPictures" : true, "previewLines" : 1])
+			"loadPictures" : true, "previewLines" : 1, "autoEncrypt" : true, "autoEncryptSelf" : true])
     }
 	
 	//MARK: - AirDrop Support and received file
@@ -457,6 +458,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return false
 		}
 		
+	}
+	
+	// MARK: - Setup
+	
+	func deleteAllTempFiles() {
+		let fileManager = NSFileManager.defaultManager()
+		var documentDirectory = ""
+		let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
+		let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
+		let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+		if paths.count > 0 {
+			documentDirectory = paths[0]
+		}
+		// contents of document directory
+		var directoryContents: [String] = [String]()
+		do {
+			directoryContents = try fileManager.contentsOfDirectoryAtPath(documentDirectory)
+		} catch _ {
+		}
+		
+		for path in directoryContents {
+			if path == "Inbox" {
+				// contents of Inbox directory
+				let inboxPath = (documentDirectory as NSString).stringByAppendingPathComponent(path)
+				var inboxContents: [String] = [String]()
+				do {
+					inboxContents = try fileManager.contentsOfDirectoryAtPath(inboxPath)
+				} catch _ {
+					break
+				}
+				// delete files in Inbox directory
+				for pathInInbox in inboxContents {
+					let filePath = (inboxPath as NSString).stringByAppendingPathComponent(pathInInbox)
+					do {
+						try fileManager.removeItemAtPath(filePath)
+					} catch _ {
+					}
+				}
+				continue
+			}
+			
+			// delete files in document directory
+			if path.rangeOfString("SMile.sqlite") == nil {
+				let filePath = (documentDirectory as NSString).stringByAppendingPathComponent(path)
+				do {
+					try fileManager.removeItemAtPath(filePath)
+				} catch _ {
+				}
+			}
+		}
 	}
 	
 	// MARK: - Create GPG ring files
