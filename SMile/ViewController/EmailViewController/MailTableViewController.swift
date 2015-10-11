@@ -323,8 +323,17 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen{
             mailcell.unseendot.hidden = true
+            mailcell.reminddot.hidden = true
         } else {
             mailcell.unseendot.hidden = false
+            mailcell.reminddot.hidden = true
+        }
+        
+        
+        if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Flagged) == MCOMessageFlag.Flagged && (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen{
+            mailcell.reminddot.hidden = true
+        } else {
+            mailcell.reminddot.hidden = false
         }
         
         return mailcell
