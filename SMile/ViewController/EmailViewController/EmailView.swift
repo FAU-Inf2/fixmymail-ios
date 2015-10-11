@@ -11,6 +11,8 @@ import UIKit
 protocol EmailViewDelegate: NSObjectProtocol {
     func handleMailtoWithRecipients(recipients: [String], andSubject subject: String, andHTMLString html: String) -> Void
     func presentAttachmentVC(attachmentVC: AttachmentsViewController) -> Void
+    func askPassphraseForKey(key: Key) -> String?
+    func presentInformationAlertController(alertController: UIAlertController) -> Void
 }
 
 class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, HTMLRenderBridgeDelegate, UIWebViewDelegate {
@@ -35,7 +37,8 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var emailViewDelegate: EmailViewDelegate?
     var plainHTMLContent: String!
     var attachmentVC: AttachmentsViewController!
-    let smileCrypto = SMileCrypto()
+    private let smileCrypto = SMileCrypto()
+    private var keyPassphrases = [Key : String]()
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -87,6 +90,8 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     }
     
     private func createAndFillAttachmentVC() -> Void {
+        
+        //TODO: Check if attachment is decrypted and decrpyt it if possible
         self.attachmentVC = AttachmentsViewController(nibName: "AttachmentsViewController", bundle: nil)
         self.attachmentVC.isViewAttachment = true
         let parser = MCOMessageParser(data: self.email.data)
@@ -356,13 +361,34 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                 self.loadingSpinner.stopAnimating()
             })
         } else {
+            var htmlContent: String?
             if self.email.plainText.containsString("-----BEGIN PGP MESSAGE-----") {
-                
+                if let key = self.smileCrypto.getKeyforEncryptedMessage(self.email.data) {
+                    let passphrase = self.askPassphraseForKey(key)
+                    if passphrase != nil {
+                        let decrpytedValues = self.smileCrypto.decryptData(self.email.data, passphrase: passphrase!, encryptionType: "PGP")
+                        if decrpytedValues.error != nil {
+                            if decrpytedValues.decryptedData != nil {
+                                let decryptedString = String(data: decrpytedValues.decryptedData!, encoding: NSUTF8StringEncoding)
+                                htmlContent = decryptedString != nil ? decryptedString : ""
+                            }
+                        } else {
+                            print(decrpytedValues.error?.description)
+                        }
+                    }
+                } else {
+                    let alert = UIAlertController(title: "Information", message: "There is no key to decrypt the message", preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
+                    if (self.emailViewDelegate?.respondsToSelector("presentInformationAlertController:") != nil) {
+                        self.emailViewDelegate?.presentInformationAlertController(alert)
+                    }
+                }
+            } else {
+                //TODO: Check if an email attachment is the pgp encrpyted message
+                let messageParser: MCOMessageParser = MCOMessageParser(data: self.email.data)
+                htmlContent = messageParser.htmlRenderingWithDelegate(self.htmlRenderBridge) as String?
             }
-            //TODO: Check if email
-            let messageParser: MCOMessageParser = MCOMessageParser(data: self.email.data)
-            var htmlContent: String? = messageParser.htmlRenderingWithDelegate(self.htmlRenderBridge) as String?
-            
+                
             if htmlContent == nil {
                 self.messageContent = ""
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -489,7 +515,22 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         
     }
     
+    //MARK: - Decrypt Helper Operations
     
+    func askPassphraseForKey(key: Key) -> String? {
+        if self.keyPassphrases[key] != nil {
+            return self.keyPassphrases[key]
+        } else {
+            if (self.emailViewDelegate?.respondsToSelector("askPassphraseForKey:") != nil) {
+                let passphrase = self.emailViewDelegate?.askPassphraseForKey(key)
+                if passphrase != nil {
+                    self.keyPassphrases[key] = passphrase!
+                }
+                return passphrase
+            }
+        }
+        return nil
+    }
     
 }
 
