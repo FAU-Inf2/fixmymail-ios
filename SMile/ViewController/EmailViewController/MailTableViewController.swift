@@ -336,6 +336,12 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             mailcell.reminddot.hidden = false
         }
         
+        if (mail.mcomessage as! MCOIMAPMessage).attachments().count > 0 {
+            mailcell.attachmentIcon.hidden = false
+        }else {
+            mailcell.attachmentIcon.hidden = true
+        }
+        
         return mailcell
     }
     
