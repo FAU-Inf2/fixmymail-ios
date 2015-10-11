@@ -128,6 +128,7 @@ class SMileCrypto: NSObject {
 		do {
 			try self.fileManager.removeItemAtURL(copyItem)
 		} catch _ {
+			print("Could not delete copyItem")
 		}
 		
 		return (error, decryptedFile)
@@ -170,7 +171,7 @@ class SMileCrypto: NSObject {
 				// key found
 				if keyInCoreData != nil {
 					if let pgpKey = pgp.importPGPKeyFromArmouredFile(keyInCoreData!.keyData) {
-						decryptedData = pgp.decryptPGPMessageWithKey(pgpKey, fromArmouredFile: keyInCoreData!.keyData, withPassphrase: passphrase)
+						decryptedData = pgp.decryptPGPMessageWithKey(pgpKey, fromArmouredFile: data, withPassphrase: passphrase)
 						if decryptedData  == nil {
 							var errorDetail = [String: String]()
 							errorDetail[NSLocalizedDescriptionKey] = "Decrypt failed for key " + keyInCoreData!.keyID
