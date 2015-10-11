@@ -63,6 +63,9 @@ class PrefKeyChainTableViewController: UITableViewController {
 			if cellString == "Auto encrypt self" {
 				cell.activateSwitch.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
 				cell.activateSwitch.on = defaults.boolForKey("autoEncryptSelf")
+				// deactivate until supported by SMilePGP
+				cell.userInteractionEnabled = false
+				cell.label.textColor = UIColor.grayColor()
 			}
 			return cell
 		} else {
