@@ -489,7 +489,7 @@ class SMileCrypto: NSObject {
 				}
 			}
 		}
-		print("Public Keys: " + (secKeyStrings).joinWithSeparator(","))
+		print("Secret Keys: " + (secKeyStrings).joinWithSeparator(","))
 	}
 	
 	func printPGPKeyFull(key: Key) -> Void {
