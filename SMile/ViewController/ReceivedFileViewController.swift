@@ -136,7 +136,7 @@ class ReceivedFileViewController: UIViewController {
 			if let key = crypto.getKeyforEncryptedMessage(encryptedData) {
 				if let dictionary = Locksmith.loadDataForUserAccount(key.keyID) {
 					passphrase = dictionary["PassPhrase"] as? String
-				} else {
+				}
 					// ask the user for passphrase
 					var inputTextField: UITextField?
 					let passphrasePrompt = UIAlertController(title: "Enter Passphrase", message: "Please enter the passphrase for key: \(key.keyID)", preferredStyle: .Alert)
@@ -160,6 +160,7 @@ class ReceivedFileViewController: UIViewController {
 							} else {
 								if error != nil {
 									NSLog("Decrytpion Error: \(error?.localizedDescription)")
+									self.decryptTapped(sender)
 								}
 							}
 						}
@@ -167,6 +168,17 @@ class ReceivedFileViewController: UIViewController {
 					passphrasePrompt.addAction(UIAlertAction(title: "OK and Save Passphrase", style: .Default, handler: {(action) -> Void in
 						passphrase = inputTextField!.text
 						if passphrase != nil {
+							
+							do {
+								try Locksmith.deleteDataForUserAccount(key.keyID)
+							} catch _ {}
+							do {
+								try Locksmith.saveData(["PassPhrase": passphrase!], forUserAccount: key.keyID)
+							} catch let error as NSError {
+								NSLog("Locksmith: \(error.localizedDescription)")
+							}
+							
+							
 							let (error, decryptedFile) = self.crypto.decryptFile(self.url!, passphrase: passphrase!, encryptionType: "PGP")
 							if decryptedFile != nil && error == nil {
 								let button = sender as! UIBarButtonItem
@@ -183,25 +195,22 @@ class ReceivedFileViewController: UIViewController {
 							} else {
 								if error != nil {
 									NSLog("Decrytpion Error: \(error?.localizedDescription)")
+									self.decryptTapped(sender)
 								}
 							}
-						}
-						do {
-							try Locksmith.deleteDataForUserAccount(key.keyID)
-						} catch _ {}
-						do {
-							try Locksmith.saveData(["PassPhrase": passphrase!], forUserAccount: key.keyID)
-						} catch let error as NSError {
-							NSLog("Locksmith: \(error.localizedDescription)")
 						}
 					}))
 					passphrasePrompt.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
 						textField.placeholder = "Passphrase"
 						textField.secureTextEntry = true
+						if passphrase != nil {
+							textField.text = passphrase
+						}
 						inputTextField = textField
+						
 					})
 					presentViewController(passphrasePrompt, animated: true, completion: nil)
-				}
+				
 			}
 			
 		}

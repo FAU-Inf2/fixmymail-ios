@@ -124,6 +124,12 @@ class SMileCrypto: NSObject {
 
 			
 		}
+		
+		do {
+			try self.fileManager.removeItemAtURL(copyItem)
+		} catch _ {
+		}
+		
 		return (error, decryptedFile)
 	}
 	
@@ -261,14 +267,14 @@ class SMileCrypto: NSObject {
 				errorDetail[NSLocalizedDescriptionKey] = "SMIME not implemented yet!"
 				error = NSError(domain: "SMileCrypto", code: 107, userInfo: errorDetail)
 			}
-			
-			do {
-			 try self.fileManager.removeItemAtURL(copyItem)
-			} catch let error2 as NSError {
-				NSLog("Removing file \(copyItem.path!) did not succeed! Error: \(error2.localizedDescription)")
-			}
-			
 		}
+		
+		
+		do {
+			try self.fileManager.removeItemAtURL(copyItem)
+		} catch _ {
+		}
+		
 		return (error, encryptedFile)
 	}
 	
