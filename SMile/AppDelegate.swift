@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
-		self.deleteAllTempFiles()
+	//	self.deleteAllTempFiles()
 	//	self.createRingFiles()
         self.initCoreDataTestEntries()
 		self.printKeys()

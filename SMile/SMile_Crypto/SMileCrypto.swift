@@ -82,6 +82,12 @@ class SMileCrypto: NSObject {
 		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory)
         copyItem = copyItem.URLByAppendingPathComponent(self.fileManager.displayNameAtPath(encryptedFile.path!))
 		
+		// delete possible left file
+		do {
+			try self.fileManager.removeItemAtURL(copyItem)
+		} catch _ {
+		}
+		
 		do {
 			try self.fileManager.copyItemAtURL(encryptedFile, toURL: copyItem)
 		} catch let error1 as NSError {
@@ -231,6 +237,12 @@ class SMileCrypto: NSObject {
 		var copyItem: NSURL = NSURL(fileURLWithPath: self.documentDirectory)
 		copyItem = copyItem.URLByAppendingPathComponent(self.fileManager.displayNameAtPath(file.path!))
 		
+		// delete possible left file
+		do {
+			try self.fileManager.removeItemAtURL(copyItem)
+		} catch _ {
+		}
+		
 		do {
 			try self.fileManager.copyItemAtURL(file, toURL: copyItem)
 		} catch let error1 as NSError {
@@ -374,12 +386,12 @@ class SMileCrypto: NSObject {
 								extractedKeyData = privateKeyBlock.dataUsingEncoding(NSUTF8StringEncoding)
 							}
 					}
-					
+					// sec key
 					if extractedKeyData != nil {
 						let importedKey = pgp.importPGPKeyFromArmouredFile(extractedKeyData!)
 						if importedKey == nil { return false }
 						keyForCoreData = self.getKeyFromPGPKey(importedKey!, keyFileData: extractedKeyData!)
-						
+					//pub key
 					} else {
 						let importedKey = pgp.importPGPKeyFromArmouredFile(keyData)
 						if importedKey == nil { return false }

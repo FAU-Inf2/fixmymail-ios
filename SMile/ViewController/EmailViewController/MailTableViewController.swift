@@ -83,7 +83,8 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
             object: nil)
         
         imapSynchronize()
-    }
+		
+}
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -196,7 +197,6 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
 		if let receivedFile = (UIApplication.sharedApplication().delegate as! AppDelegate).receivedFile {
 			let receivedFileVC = ReceivedFileViewController(nibName: "ReceivedFileViewController", bundle: nil)
 			receivedFileVC.url = receivedFile
-			(UIApplication.sharedApplication().delegate as! AppDelegate).receivedFile = nil
 			self.navigationController?.pushViewController(receivedFileVC, animated: true)
 		}
 

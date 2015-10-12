@@ -25,7 +25,7 @@ class RemindMe{
 //
 //Check if Folder RemindMe and SmileStorage exists and if not create them
 //
-    func checkIfFolderExist(account:EmailAccount){
+    func checkIfFolderExist(account:EmailAccount) -> Bool {
         var remind:Bool = false
         var storage:Bool = false
         for folder in account.folders{
@@ -45,6 +45,7 @@ class RemindMe{
                 imapsession = try getSession(account)
             }catch _ {
                 print ( "Error while trying to create RemindMe and SmileStorage Folder")
+				return false
             }
             if remind == false{
                 let appendMsgOp = imapsession.createFolderOperation("RemindMe")
@@ -69,6 +70,8 @@ class RemindMe{
                 folderStorage = "SmileStorage"
             }
         }
+		
+		return true
     }
     
     
@@ -227,7 +230,10 @@ class RemindMe{
 //
     func downlaodJsonAndCheckForUpcomingReminds(toAccount: EmailAccount){ // ich gehe davon aus das SmileStorage vorhanden ist weil ich es vorher ja abgeprüft habe und notfalls erstellt habe
         var somethingChanged:Bool = false
-        self.checkIfFolderExist(toAccount)
+		if self.checkIfFolderExist(toAccount) == false {
+			 print("Remind folder could not be created")
+			return
+		}
         //self.checkIfJSONEmailExists(toAccount)
         let currentMaxUID = getMaxUID(toAccount, folderToQuery: folderStorage!)
         saveCoreDataChanges()
