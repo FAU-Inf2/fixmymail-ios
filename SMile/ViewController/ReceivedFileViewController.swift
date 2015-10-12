@@ -33,6 +33,9 @@ class ReceivedFileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		// remove received file reference
+		(UIApplication.sharedApplication().delegate as! AppDelegate).receivedFile = nil
+		
 		// load file
 		self.fileManager = NSFileManager.defaultManager()
 		self.file = self.fileManager!.contentsAtPath(self.url!.path!)
