@@ -367,7 +367,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                     let passphrase = self.askPassphraseForKey(key)
                     if passphrase != nil {
                         let decrpytedValues = self.smileCrypto.decryptData(self.email.plainText.dataUsingEncoding(NSUTF8StringEncoding)!, passphrase: passphrase!, encryptionType: "PGP")
-                        if decrpytedValues.error != nil {
+                        if decrpytedValues.error == nil {
                             if decrpytedValues.decryptedData != nil {
                                 let decryptedString = String(data: decrpytedValues.decryptedData!, encoding: NSUTF8StringEncoding)
                                 htmlContent = decryptedString != nil ? decryptedString : ""
