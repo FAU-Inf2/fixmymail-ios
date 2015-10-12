@@ -15,7 +15,6 @@ class KeyChainListTableViewController: UITableViewController {
 	weak var delegate: ContentViewControllerProtocol?
 	weak var receivedFileDelegate: ReceivedFileViewControllerProtocol?
 	var keyDetailVC: KeyDetailTableViewController?
-	var keyList = [Key]()
 	var keysFromCoreData = [Key]()
 	var managedObjectContext: NSManagedObjectContext?
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
@@ -123,7 +122,7 @@ class KeyChainListTableViewController: UITableViewController {
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// #warning Incomplete method implementation.
 		// Return the number of rows in the section.
-		return self.keyList.count
+		return self.keysFromCoreData.count
 	}
 	
 	
@@ -133,7 +132,7 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Configure the cell...
 		
-		let keyItem = self.keyList[indexPath.row]
+		let keyItem = self.keysFromCoreData[indexPath.row]
 		
 		// Fill data to labels
 		cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
@@ -208,7 +207,7 @@ class KeyChainListTableViewController: UITableViewController {
 	}
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		let keyItem = self.keyList[indexPath.row]
+		let keyItem = self.keysFromCoreData[indexPath.row]
 		if self.isInKeySelectionMode {
 			self.isInKeySelectionMode = false
 			self.receivedFileDelegate?.didFinishWithKeySelection(keyItem)
@@ -227,7 +226,7 @@ class KeyChainListTableViewController: UITableViewController {
 	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 		switch editingStyle {
 		case .Delete:
-			let key = self.keyList[indexPath.row]
+			let key = self.keysFromCoreData[indexPath.row]
 			// save data to CoreData (respectively deleting data from CoreData)
 			let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
 			let context: NSManagedObjectContext = appDel.managedObjectContext!
@@ -250,7 +249,7 @@ class KeyChainListTableViewController: UITableViewController {
 				}
 				
 				// key deleted from core data -> delete from tableview
-				self.keyList.removeAtIndex(indexPath.row)
+				self.keysFromCoreData.removeAtIndex(indexPath.row)
 				self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
 			}
 		default:
@@ -273,29 +272,7 @@ class KeyChainListTableViewController: UITableViewController {
                 print("Error while trying to fetch keys")
             }
 			
-			// check if sec and pub key with same keyID
-			var secKeys = [Key]()
-			var pubKeys = [Key]()
-			for key in self.keysFromCoreData {
-				if key.isPublicKey {
-					pubKeys.append(key)
-				}
-				if key.isSecretKey {
-					secKeys.append(key)
-				}
-			}
 			
-			for seckey in secKeys {
-				for var i = 0; i < pubKeys.count; i++ {
-					let pubkey = pubKeys[i]
-					if seckey.keyID == pubkey.keyID {
-						seckey.isPublicKey = true
-						pubKeys.removeAtIndex(i)
-					}
-				}
-			}
-			
-			self.keyList = secKeys + pubKeys
 		}
 	}
 	
