@@ -25,7 +25,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cj4-DW-c3d" userLabel="label">
-                    <rect key="frame" x="175" y="438" width="250" height="21"/>
+                    <rect key="frame" x="8" y="438" width="584" height="21"/>
                     <animations/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.074509803921568626" green="0.29019607843137257" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
@@ -35,10 +35,10 @@
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="3vx-p5-GL0" firstAttribute="trailing" secondItem="cj4-DW-c3d" secondAttribute="trailing" id="ILi-hk-AEG"/>
+                <constraint firstItem="3vx-p5-GL0" firstAttribute="trailing" secondItem="cj4-DW-c3d" secondAttribute="trailing" constant="-167" id="ILi-hk-AEG"/>
                 <constraint firstItem="3vx-p5-GL0" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="K86-s7-aGp"/>
                 <constraint firstItem="cj4-DW-c3d" firstAttribute="top" secondItem="3vx-p5-GL0" secondAttribute="bottom" constant="13" id="Obf-uA-BdN"/>
-                <constraint firstItem="cj4-DW-c3d" firstAttribute="leading" secondItem="3vx-p5-GL0" secondAttribute="leading" id="dMa-JC-n1I"/>
+                <constraint firstItem="cj4-DW-c3d" firstAttribute="leading" secondItem="3vx-p5-GL0" secondAttribute="leading" constant="-167" id="dMa-JC-n1I"/>
                 <constraint firstItem="3vx-p5-GL0" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="lTs-Qc-bTt"/>
             </constraints>
         </view>

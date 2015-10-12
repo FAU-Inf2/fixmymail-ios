@@ -121,16 +121,6 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		//		// DEBUG ###########
-		//		let fileReadError: NSError? = nil
-		//		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
-		//		var pw = ""
-		//		if path != nil {
-		//			pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-		//		}
-		//
-		//		if fileReadError == nil {
-		//		// ##################
 		var passphrase: String?
 		if let encryptedData = NSData(contentsOfURL: self.url!) {
 			if let key = crypto.getKeyforEncryptedMessage(encryptedData) {
