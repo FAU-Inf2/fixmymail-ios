@@ -281,8 +281,7 @@ class SidebarTableViewController: UITableViewController {
                 if self.containsActionItem(newActionItem, inActionItemArray: self.rows[1] as! [ActionItem]) == false {
                     sectionItems.append(newActionItem)
                 } else {
-                    let indexOfObject = sectionItems.indexOf(newActionItem)
-                    sectionItems.removeAtIndex(indexOfObject!)
+                    sectionItems = self.removeActionItemFromArrayWithActionItem(newActionItem, withActionItemArray: sectionItems)
                     sectionItems.append(newActionItem)
                 }
                 sectionItems = sectionItems.sort { $0.cellName < $1.cellName }
@@ -449,6 +448,18 @@ class SidebarTableViewController: UITableViewController {
             }
         }
         return false
+    }
+    
+    private func removeActionItemFromArrayWithActionItem(actionItem: ActionItem, var withActionItemArray acArray: [ActionItem]) -> [ActionItem] {
+        for var i = 0; i < acArray.count; i++ {
+            let item = acArray[i]
+            if actionItem.cellName == item.cellName && actionItem.viewController == item.viewController &&
+                actionItem.emailAccount == item.emailAccount && actionItem.cellIcon == item.cellIcon {
+                    acArray.removeAtIndex(i)
+                    break
+            }
+        }
+        return acArray
     }
     
     private func addItemToParentItemWithItem(childItem: ActionItem, andParentItemName parentName: String) -> Bool {

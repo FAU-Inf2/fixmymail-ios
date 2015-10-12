@@ -33,6 +33,9 @@ class ReceivedFileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		// remove received file reference
+		(UIApplication.sharedApplication().delegate as! AppDelegate).receivedFile = nil
+		
 		// load file
 		self.fileManager = NSFileManager.defaultManager()
 		self.file = self.fileManager!.contentsAtPath(self.url!.path!)
@@ -121,16 +124,6 @@ class ReceivedFileViewController: UIViewController {
 	}
 	
 	@IBAction func decryptTapped(sender: AnyObject) -> Void {
-		//		// DEBUG ###########
-		//		let fileReadError: NSError? = nil
-		//		let path = NSBundle.mainBundle().pathForResource("PassPhrase", ofType: "txt")
-		//		var pw = ""
-		//		if path != nil {
-		//			pw = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-		//		}
-		//
-		//		if fileReadError == nil {
-		//		// ##################
 		var passphrase: String?
 		if let encryptedData = NSData(contentsOfURL: self.url!) {
 			if let key = crypto.getKeyforEncryptedMessage(encryptedData) {

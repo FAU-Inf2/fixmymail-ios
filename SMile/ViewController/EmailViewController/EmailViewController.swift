@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Locksmith
 
 class EmailViewController: UIViewController, EmailViewDelegate {
 
@@ -16,6 +17,7 @@ class EmailViewController: UIViewController, EmailViewDelegate {
     var session: MCOIMAPSession!
     var emailView: EmailView!
     var containerView: UIView!
+    private let smileCrypto = SMileCrypto()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -203,6 +205,68 @@ class EmailViewController: UIViewController, EmailViewDelegate {
         mailSendVC.textBody = msgContent
         
         self.navigationController?.pushViewController(mailSendVC, animated: true)
+    }
+    
+    func askPassphraseForKey(key: Key) -> String? {
+        var passphrase: String?
+        var inputTextField: UITextField?
+        let semaphore = dispatch_semaphore_create(0)
+        let passphrasePrompt = UIAlertController(title: "Enter Passphrase", message: "Please enter the passphrase for key: \(key.keyID)", preferredStyle: .Alert)
+        
+        passphrasePrompt.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) -> Void in
+            dispatch_semaphore_signal(semaphore)
+        }))
+        
+        passphrasePrompt.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+            if inputTextField!.text != nil {
+                passphrase = inputTextField!.text
+            }
+            dispatch_semaphore_signal(semaphore)
+        }))
+        
+        passphrasePrompt.addAction(UIAlertAction(title: "OK and Save Passphrase", style: .Default, handler: {(action) -> Void in
+            if inputTextField!.text != nil {
+                passphrase = inputTextField!.text
+            }
+            do {
+                try Locksmith.deleteDataForUserAccount(key.keyID)
+            } catch _ {}
+            do {
+                try Locksmith.saveData(["PassPhrase": passphrase!], forUserAccount: key.keyID)
+            } catch let error as NSError {
+                NSLog("Locksmith: \(error.localizedDescription)")
+            }
+            dispatch_semaphore_signal(semaphore)
+        }))
+        
+        passphrasePrompt.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+            textField.placeholder = "Passphrase"
+            textField.secureTextEntry = true
+            inputTextField = textField
+        })
+        
+        presentViewController(passphrasePrompt, animated: true, completion: nil)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        return passphrase
+    }
+    
+    func getUImageFromFilename(filename: String) -> UIImage? {
+        var fileimage: UIImage?
+        switch filename {
+        case let s where s.rangeOfString(".asc") != nil:
+            fileimage = UIImage(named: "keyicon.png")
+            // add more cases for different document types
+        case let s where s.rangeOfString(".gpg") != nil:
+            fileimage = UIImage(named: "fileicon_lock.png")
+        default:
+            fileimage = UIImage(named: "fileicon_standard.png")
+        }
+        return fileimage
+        
+    }
+    
+    func presentInformationAlertController(alertController: UIAlertController) {
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
 }
