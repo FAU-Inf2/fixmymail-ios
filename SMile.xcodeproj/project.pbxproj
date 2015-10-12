@@ -146,6 +146,8 @@
 		AD85401B1B18673F003F9C92 /* PreferenceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */; };
 		AD85401D1B186A7C003F9C92 /* ActionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD85401C1B186A7C003F9C92 /* ActionItem.swift */; };
 		AD87443B1B6A42B500257AA5 /* SMileCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */; };
+		AD8AE1F01BCC2E6B006C1D2C /* Lock_green.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8AE1EE1BCC2E6B006C1D2C /* Lock_green.png */; settings = {ASSET_TAGS = (); }; };
+		AD8AE1F11BCC2E6B006C1D2C /* Lock_open_red.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8AE1EF1BCC2E6B006C1D2C /* Lock_open_red.png */; settings = {ASSET_TAGS = (); }; };
 		AD8D474D1BC2CF38005B0F52 /* Lock_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */; settings = {ASSET_TAGS = (); }; };
 		AD8D474E1BC2CF38005B0F52 /* Lock_open_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */; settings = {ASSET_TAGS = (); }; };
 		AD97A0CC1B7DE7250068E542 /* UserID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD97A0CB1B7DE7250068E542 /* UserID.swift */; };
@@ -343,6 +345,8 @@
 		AD8540191B18673F003F9C92 /* PreferenceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceTableViewCell.xib; sourceTree = "<group>"; };
 		AD85401C1B186A7C003F9C92 /* ActionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItem.swift; sourceTree = "<group>"; };
 		AD87443A1B6A42B500257AA5 /* SMileCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SMileCrypto.swift; sourceTree = "<group>"; };
+		AD8AE1EE1BCC2E6B006C1D2C /* Lock_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lock_green.png; sourceTree = "<group>"; };
+		AD8AE1EF1BCC2E6B006C1D2C /* Lock_open_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lock_open_red.png; sourceTree = "<group>"; };
 		AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_blue@2x.png"; sourceTree = "<group>"; };
 		AD8D474B1BC2CF38005B0F52 /* Lock_open_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lock_open_grey@2x.png"; sourceTree = "<group>"; };
 		AD97A0CA1B7DE1390068E542 /* SMile v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SMile v2.xcdatamodel"; sourceTree = "<group>"; };
@@ -670,6 +674,8 @@
 		AD1255DA1B1A2207005EA5CE /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AD8AE1EE1BCC2E6B006C1D2C /* Lock_green.png */,
+				AD8AE1EF1BCC2E6B006C1D2C /* Lock_open_red.png */,
 				AD81C2F01BC8402300B2F04D /* Lock_black@2x.png */,
 				AD81C2F11BC8402300B2F04D /* Lock_open_black@2x.png */,
 				AD8D474A1BC2CF38005B0F52 /* Lock_blue@2x.png */,
@@ -867,6 +873,7 @@
 				8EAB86DD1B9786190051532F /* AttachmentViewCell.xib in Resources */,
 				AD4B41481B2342FD00EF09FC /* AuthConTableViewCell.xib in Resources */,
 				AD44E0221B1AFE0300751FFA /* smile-gray.png in Resources */,
+				AD8AE1F01BCC2E6B006C1D2C /* Lock_green.png in Resources */,
 				AD4742FA1B985ABA00A2A1BC /* PrefDownloadMailDurationTableViewController.xib in Resources */,
 				ADEF086A1B826819008AC0D0 /* KeyDetailTableViewCell.xib in Resources */,
 				ADE6739E1B7365B400C920B0 /* Checkmark-icon.png in Resources */,
@@ -920,6 +927,7 @@
 				8E50152B1B95A23E00A69702 /* AttachmentCell.xib in Resources */,
 				AD44E02A1B1B017900751FFA /* webde.png in Resources */,
 				A98D034C1B99F4ED0029A880 /* Plus 1 Month-64.png in Resources */,
+				AD8AE1F11BCC2E6B006C1D2C /* Lock_open_red.png in Resources */,
 				AD8540171B186083003F9C92 /* PreferenceTableViewController.xib in Resources */,
 				AD5292641B68F0C400A719CB /* PrefFolderSelectionTableViewController.xib in Resources */,
 				AD44E0271B1B017900751FFA /* outlook.png in Resources */,
