@@ -537,6 +537,7 @@
 				2A2A175FE96269B32B7F3D98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			wrapsLines = 0;
 		};
 		3DF253A81AF7611D00B99BC8 /* Products */ = {
 			isa = PBXGroup;

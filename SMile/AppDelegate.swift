@@ -27,9 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// needed if file is received
 	var receivedFile: NSURL?
 
+    var allAccounts: [EmailAccount] = [EmailAccount]()
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+        UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
 		self.deleteAllTempFiles()
@@ -38,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		self.printKeys()
 	//	self.cryptoTest()
 			
+        
         return true
     }
 
@@ -47,8 +50,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
+        print("background")
+        GetCoreDataAccounts()
+        imapsynchronize()
+        self.saveContext()
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    }
+    func imapsynchronize(){
+        let folderToQuery: String = "INBOX"
+        let remind:RemindMe = RemindMe()
+        for account: EmailAccount in allAccounts {
+            remind.downlaodJsonAndCheckForUpcomingReminds(account)
+            let currentMaxUID = getMaxUID(account, folderToQuery: folderToQuery)
+            updateLocalEmail(account, folderToQuery: folderToQuery)
+            fetchEmails(account, folderToQuery: folderToQuery, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
+        }
+    }
+    
+    func GetCoreDataAccounts(){
+        let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
+        if let appDelegate = appDel {
+            managedObjectContext = appDelegate.managedObjectContext
+            let emailAccountsFetchRequest = NSFetchRequest(entityName: "EmailAccount")
+            var acc: [EmailAccount]?
+            do {
+                acc = try managedObjectContext!.executeFetchRequest(emailAccountsFetchRequest) as? [EmailAccount]
+            } catch {
+                print("CoreData fetch error!")
+            }
+            
+            if let account = acc {
+                for emailAcc: EmailAccount in account {
+                    allAccounts.append(emailAcc)
+                }
+            }
+            
+        }
     }
 
     func applicationWillEnterForeground(application: UIApplication) {

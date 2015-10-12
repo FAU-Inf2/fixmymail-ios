@@ -120,28 +120,52 @@ class RemindMe{
             
         else{
             //add new json entry
+            let alreadyReminding:Bool = false
             let dataFromString = jsonmail!.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
             if dataFromString != nil {
                 var json = JSON(data: dataFromString!)
-                var json2 = json["allRemindMes"].arrayValue
-                let now = NSDate().timeIntervalSince1970
-                let remindTimeTimestamp = remindTime.timeIntervalSince1970
-                moveEmailToFolder(email, destFolder: folderRemind)
-                //updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
-                let header : MCOMessageHeader = email.mcomessage.header
-                let messageId = header.messageID
-                let newjson = JSON(["folderId": NSNull(), "id": NSNull(), "lastModified": now, "messageId": messageId, "remindInterval": NSNull(), "remindTime": remindTimeTimestamp, "seen": NSNull(), "title": email.title, "uid": NSNull(), "reference": NSNull()])
+                let i = json["allRemindMes"].count
+                var j = 0
+                while j<i{
+                    let result = json["allRemindMes"].arrayObject
+                    print(result)
+                    /*if(result["messageId"].string! == email.mcomessage.header!.messageID){
+                        result["remindTime"] = remindTime
+                        result["lastModified"] = NSDate().timeIntervalSince1970
+                        alreadyReminding = true
+                        print (json)
+                    }*/
+                    j = j+1
+                }
+                if alreadyReminding == false{
+                    var json2 = json["allRemindMes"].arrayValue
+                    let now = NSDate().timeIntervalSince1970
+                    var header = email.mcomessage.header!
+                    header.receivedDate = remindTime
+                    updateLocalEmail(email.toAccount, folderToQuery: folderRemind!)
+                    saveCoreDataChanges()
+                    print(header.receivedDate)
+                    
+                    let remindTimeTimestamp = remindTime.timeIntervalSince1970
+                    moveEmailToFolder(email, destFolder: folderRemind)
+                    //
+                    header = email.mcomessage.header!
+                    let messageId = header.messageID
+                    let newjson = JSON(["folderId": NSNull(), "id": NSNull(), "lastModified": now, "messageId": messageId, "remindInterval": NSNull(), "remindTime": remindTimeTimestamp, "seen": NSNull(), "title": email.title, "uid": NSNull(), "reference": NSNull()])
                 
-                //Add newjson to json2
-                json2.append(newjson)
-                json["allRemindMes"] = JSON(json2)
-                jsonstring = json.rawString()!
-                uploadJsonMail(email.toAccount)
+                    //Add newjson to json2
+                    json2.append(newjson)
+                    json["allRemindMes"] = JSON(json2)
+                   }
+                    jsonstring = json.rawString()!
+                    
                 
-                //delete old json email
-                deleteEmail(jsonmail!)
-                saveCoreDataChanges()
-                updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
+                    //delete old json email
+                    deleteEmail(jsonmail!)
+                    uploadJsonMail(email.toAccount)
+                    saveCoreDataChanges()
+                    //updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
+                
                 
             }
         }
@@ -254,28 +278,30 @@ class RemindMe{
                         addFlagToEmail(upcomingEmail, flag: MCOMessageFlag.Flagged)
                         let inboxfolder = "INBOX"
                         moveEmailToFolder(upcomingEmail, destFolder: inboxfolder)
-                        somethingChanged = true
+                        
                     }
+                    somethingChanged = true
                 }
                 else{
                     //Do nothing. Its not time yet
-                    /*let id = result["messageId"].stringValue
+                    let id = result["messageId"].stringValue
                     if(returnEmailWithSpecificID(toAccount, folder: folderRemind!, id: id) != nil){
-                        //cleanarray..
+                        print("file found")
+                        cleanarray.append(result)
                     }
                     else{
                         somethingChanged = true
                         print("entry deleted3")
-                    }*/
-                    cleanarray.append(result)
+                    }
+                    
                     print("time in future")
                 }
             }
             if( somethingChanged == true){
                 json["allRemindMes"] = JSON(cleanarray)
                 jsonstring = json.rawString()!
-                uploadJsonMail(jsonmail!.toAccount)
                 deleteEmail(jsonmail!)
+                uploadJsonMail(toAccount)
                 saveCoreDataChanges()
                 updateLocalEmail(toAccount, folderToQuery: folderStorage!)
             }

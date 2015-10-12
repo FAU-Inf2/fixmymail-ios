@@ -330,11 +330,11 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
         
         
-        if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Flagged) == MCOMessageFlag.Flagged && (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen{
+        /*if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Flagged) == MCOMessageFlag.Flagged && (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen{
             mailcell.reminddot.hidden = true
         } else {
             mailcell.reminddot.hidden = false
-        }
+        }*/
         
         if (mail.mcomessage as! MCOIMAPMessage).attachments().count > 0 {
             mailcell.attachmentIcon.hidden = false

@@ -526,6 +526,7 @@ class SMileCrypto: NSObject {
 		let calendar = NSCalendar.currentCalendar()
 		let newKey = KeyItem()
 		let userIDextract = self.extractNameAndMailAddressFromUserID(pgpKey.getUserIDs().objectAtIndex(0) as! String)
+        
 		newKey.userIDprimary = userIDextract.name
 		newKey.emailAddressPrimary = userIDextract.mailAddress
 		newKey.keyID = pgpKey.getKeyID()
