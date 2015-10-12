@@ -210,14 +210,18 @@ class EmailViewController: UIViewController, EmailViewDelegate {
     func askPassphraseForKey(key: Key) -> String? {
         var passphrase: String?
         var inputTextField: UITextField?
+        let semaphore = dispatch_semaphore_create(0)
         let passphrasePrompt = UIAlertController(title: "Enter Passphrase", message: "Please enter the passphrase for key: \(key.keyID)", preferredStyle: .Alert)
         
-        passphrasePrompt.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        passphrasePrompt.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) -> Void in
+            dispatch_semaphore_signal(semaphore)
+        }))
         
         passphrasePrompt.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
             if inputTextField!.text != nil {
                 passphrase = inputTextField!.text
             }
+            dispatch_semaphore_signal(semaphore)
         }))
         
         passphrasePrompt.addAction(UIAlertAction(title: "OK and Save Passphrase", style: .Default, handler: {(action) -> Void in
@@ -232,6 +236,7 @@ class EmailViewController: UIViewController, EmailViewDelegate {
             } catch let error as NSError {
                 NSLog("Locksmith: \(error.localizedDescription)")
             }
+            dispatch_semaphore_signal(semaphore)
         }))
         
         passphrasePrompt.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
@@ -239,8 +244,9 @@ class EmailViewController: UIViewController, EmailViewDelegate {
             textField.secureTextEntry = true
             inputTextField = textField
         })
-        presentViewController(passphrasePrompt, animated: true, completion: nil)
         
+        presentViewController(passphrasePrompt, animated: true, completion: nil)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         return passphrase
     }
     
