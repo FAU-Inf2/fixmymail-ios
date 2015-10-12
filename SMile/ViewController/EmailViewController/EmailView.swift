@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Locksmith
 
 protocol EmailViewDelegate: NSObjectProtocol {
     func handleMailtoWithRecipients(recipients: [String], andSubject subject: String, andHTMLString html: String) -> Void
@@ -39,6 +40,8 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     var attachmentVC: AttachmentsViewController!
     private let smileCrypto = SMileCrypto()
     private var keyPassphrases = [Key : String]()
+    private var accessoryButton: UIButton?
+    private var decrypted: Bool = false
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -249,6 +252,9 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             senderInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return senderInfoCell
         } else if indexPath.row == 1 {
+            
+            self.message.header.extraHeaderValueForName("")
+            
             let subjectInfoCell: SubjectInfoTableViewCell = tableView.dequeueReusableCellWithIdentifier("subjectInfoCell", forIndexPath: indexPath) as! SubjectInfoTableViewCell
             
             let subjectLabelString = self.messageHeaderInfo["subject"] != nil ? self.messageHeaderInfo["subject"]! : ""
@@ -256,7 +262,9 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             
             subjectInfoCell.dateLabel.text = self.messageHeaderInfo["date"]
             
-            subjectInfoCell.accessoryType = .None
+            if self.accessoryButton != nil {
+                subjectInfoCell.accessoryView = self.accessoryButton!
+            }
             subjectInfoCell.selectionStyle = UITableViewCellSelectionStyle.None
             return subjectInfoCell
         } else {
@@ -364,20 +372,29 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             var htmlContent: String?
             if self.email.plainText.containsString("-----BEGIN PGP MESSAGE-----") {
                 if let key = self.smileCrypto.getKeyforEncryptedMessage(self.email.plainText.dataUsingEncoding(NSUTF8StringEncoding)!) {
-                    let passphrase = self.askPassphraseForKey(key)
+                    var passphrase: String?
+                    if (Locksmith.loadDataForUserAccount(key.keyID) != nil && Locksmith.loadDataForUserAccount(key.keyID)!["PassPhrase"] != nil) {
+                        passphrase = Locksmith.loadDataForUserAccount(key.keyID)!["PassPhrase"] as! String?
+                    } else {
+                        passphrase = self.askPassphraseForKey(key)
+                    }
                     if passphrase != nil {
+                        self.setIconForDecrypt()
                         let decrpytedValues = self.smileCrypto.decryptData(self.email.plainText.dataUsingEncoding(NSUTF8StringEncoding)!, passphrase: passphrase!, encryptionType: "PGP")
                         if decrpytedValues.error == nil {
+                            self.decrypted = true
                             if decrpytedValues.decryptedData != nil {
-                                let decryptedString = String(data: decrpytedValues.decryptedData!, encoding: NSUTF8StringEncoding)
-                                htmlContent = decryptedString != nil ? decryptedString : ""
+                                let messageBuilder = MCOMessageBuilder()
+                                messageBuilder.textBody = String(data: decrpytedValues.decryptedData!, encoding: NSUTF8StringEncoding)
+                                let messageParser: MCOMessageParser = MCOMessageParser(data: decrpytedValues.decryptedData!)
+                                htmlContent = messageParser.htmlRenderingWithDelegate(self.htmlRenderBridge) as String?
                             }
                         } else {
                             print(decrpytedValues.error?.description)
                         }
                     }
                 } else {
-                    let alert = UIAlertController(title: "Information", message: "There is no key to decrypt the message", preferredStyle: .Alert)
+                    let alert = UIAlertController(title: "Information", message: "There is no key to decrypt this message", preferredStyle: .Alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
                     if (self.emailViewDelegate?.respondsToSelector("presentInformationAlertController:") != nil) {
                         self.emailViewDelegate?.presentInformationAlertController(alert)
@@ -419,6 +436,9 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                 self.webView.loadHTMLString(htmlString, baseURL: nil)
                 self.loadingSpinner.hidden = true
                 self.loadingSpinner.stopAnimating()
+                if self.decrypted == true {
+                    self.setIconForDecrypt()
+                }
             })
         }
     }
@@ -530,6 +550,18 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             }
         }
         return nil
+    }
+    
+    func setIconForDecrypt() -> Void {
+        let buttonImage: UIImage = UIImage(named: "Lock_black@2x.png")!
+        let button: UIButton = UIButton(type: UIButtonType.Custom)
+        button.frame = CGRectMake(0, 0, 22, 28)
+        button.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+        button.backgroundColor = UIColor.clearColor()
+        button.addTarget(self, action: nil, forControlEvents: UIControlEvents.TouchUpInside)
+        
+        self.accessoryButton = button
+        self.embededHeaderView.reloadData()
     }
     
 }
