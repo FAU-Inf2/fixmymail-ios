@@ -10,18 +10,20 @@ import UIKit
 import CoreData
 import Foundation
 
-class KeyChainListTableViewController: UITableViewController {
+class KeyChainListTableViewController: UITableViewController, UISearchBarDelegate, UISearchResultsUpdating {
 	
 	weak var delegate: ContentViewControllerProtocol?
 	weak var receivedFileDelegate: ReceivedFileViewControllerProtocol?
 	var keyDetailVC: KeyDetailTableViewController?
 	var keysFromCoreData = [Key]()
 	var managedObjectContext: NSManagedObjectContext?
+	var searchController: UISearchController!
 	var myGrayColer = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
 	let myOpacity: CGFloat = 0.1
 	let myOpacityFULL: CGFloat = 1.0
 	let monthsInYear: Int = 12
 	let monthsForFullValidity: Int = 6
+	var filteredKeys = [Key]()
 	
 	var isInKeySelectionMode: Bool = false
 	
@@ -30,6 +32,20 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		//Load some KeyItems
 		loadInitialData()
+		
+		
+		
+		//init SearchController
+		definesPresentationContext = true
+		self.searchController = UISearchController(searchResultsController: nil)
+		self.searchController.searchResultsUpdater = self
+		self.searchController.dimsBackgroundDuringPresentation = false
+		self.searchController.searchBar.sizeToFit()
+		self.tableView.tableHeaderView = self.searchController.searchBar
+		//self.searchController.searchBar.scopeButtonTitles = ["Everywhere", "Sender", "Subject", "Body"]
+		self.searchController.searchBar.delegate = self
+
+		
 		
 		
 		tableView.registerNib(UINib(nibName: "KeyItemTableViewCell", bundle: nil),forCellReuseIdentifier:"ListPrototypCell")
@@ -122,7 +138,11 @@ class KeyChainListTableViewController: UITableViewController {
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// #warning Incomplete method implementation.
 		// Return the number of rows in the section.
-		return self.keysFromCoreData.count
+		if self.searchController.active {
+			return self.filteredKeys.count
+		} else {
+			return self.keysFromCoreData.count
+		}
 	}
 	
 	
@@ -132,7 +152,12 @@ class KeyChainListTableViewController: UITableViewController {
 		
 		// Configure the cell...
 		
-		let keyItem = self.keysFromCoreData[indexPath.row]
+		var keyItem: Key
+		if self.searchController.active {
+			keyItem = self.filteredKeys[indexPath.row]
+		}else {
+			keyItem = self.keysFromCoreData[indexPath.row]
+		}
 		
 		// Fill data to labels
 		cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
@@ -207,10 +232,20 @@ class KeyChainListTableViewController: UITableViewController {
 	}
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		let keyItem = self.keysFromCoreData[indexPath.row]
+		var keyItem: Key
+		if self.searchController.active {
+			keyItem = self.filteredKeys[indexPath.row]
+		} else {
+			keyItem = self.keysFromCoreData[indexPath.row]
+		}
 		if self.isInKeySelectionMode {
 			self.isInKeySelectionMode = false
 			self.receivedFileDelegate?.didFinishWithKeySelection(keyItem)
+		
+			if self.searchController.active {
+				self.searchController.active = false
+			}
+			
 			self.cancelTapped(self)
 			
 		} else {
@@ -285,5 +320,44 @@ class KeyChainListTableViewController: UITableViewController {
 	@IBAction func menuTapped(sender: AnyObject) {
 		self.delegate?.toggleLeftPanel()
 	}
+	
+	//MARK: - Searchfunction
+	func updateSearchResultsForSearchController(searchController: UISearchController) {
+		self.filteredKeys.removeAll(keepCapacity: false)
+		
+		for key in self.keysFromCoreData {
+			// search in userIDs
+			for item in key.userIDs {
+				let userID = item as! UserID
+				if userID.name.lowercaseString.rangeOfString(searchController.searchBar.text!.lowercaseString) != nil {
+					if self.filteredKeys.contains(userID.toKey) == false {
+						self.filteredKeys.append(userID.toKey)
+					}
+				}
+			}
+			// search the primary keyID
+			if key.keyID.lowercaseString.rangeOfString(searchController.searchBar.text!.lowercaseString) != nil {
+				if self.filteredKeys.contains(key) == false {
+					self.filteredKeys.append(key)
+				}
+			}
+			// search subkeyIDs
+			for item in key.subKeys {
+				let subkey = item as! SubKey
+				if subkey.subKeyID.lowercaseString.rangeOfString(searchController.searchBar.text!.lowercaseString) != nil {
+					if self.filteredKeys.contains(subkey.toKey) == false {
+						self.filteredKeys.append(subkey.toKey)
+					}
+				}
+			}
+		}
+		
+		self.tableView.reloadData()
+	}
+	
+	func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+		updateSearchResultsForSearchController(searchController)
+	}
+
 }
 
