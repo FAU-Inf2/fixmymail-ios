@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import AssetsLibrary
+//import Photos
 
 class AttachmentsViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate {
     
@@ -179,6 +180,7 @@ class AttachmentsViewController : UIViewController, UIImagePickerControllerDeleg
         attachmentActionSheet.addAction(cancelAction)
         attachmentActionSheet.addAction(takePhotoAction)
         attachmentActionSheet.addAction(choosePhotoAction)
+        self.presentViewController(attachmentActionSheet, animated: true, completion: nil)
     }
     
     func backToRootView(sender: AnyObject) {
