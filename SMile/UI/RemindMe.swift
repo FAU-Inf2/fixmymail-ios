@@ -96,7 +96,7 @@ class RemindMe{
         if(exists == false){
             jsonstring = "{\"allRemindMes\":[]}"
             uploadJsonMail(Account)
-            print("Json created")
+            print("new")
             saveCoreDataChanges()
         }
     }
@@ -123,37 +123,39 @@ class RemindMe{
             
         else{
             //add new json entry
-            let alreadyReminding:Bool = false
+            var alreadyReminding:Bool = false
+            let now = NSDate().timeIntervalSince1970
+            var header = email.mcomessage.header!
+            header = email.mcomessage.header!
+            let messageId = header.messageID
+            
+            let remindTimeTimestamp = remindTime.timeIntervalSince1970
+            
             let dataFromString = jsonmail!.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
             if dataFromString != nil {
                 var json = JSON(data: dataFromString!)
-                let i = json["allRemindMes"].count
-                var j = 0
-                while j<i{
-                    let result = json["allRemindMes"].arrayObject
-                    print(result)
-                    /*if(result["messageId"].string! == email.mcomessage.header!.messageID){
-                        result["remindTime"] = remindTime
-                        result["lastModified"] = NSDate().timeIntervalSince1970
+                var json2 = json["allRemindMes"].arrayValue
+                 for result in json["allRemindMes"].arrayValue {
+                    if result["messageId"].string! == email.mcomessage.header!.messageID{
+                        let newjson = JSON(["folderId": result["folderId"].doubleValue, "id": result["id"].doubleValue, "lastModified": now, "messageId": messageId, "remindInterval": result["remindInterval"].stringValue, "remindTime": remindTimeTimestamp, "seen": NSNull(), "title": email.title, "uid": NSNull(), "reference": NSNull()])
+                        json2.removeAtIndex(json["allRemindMes"].arrayValue.indexOf(result)!)
+                        json2.append(newjson)
+                        json["allRemindMes"] = JSON(json2)
+                        print("duplicate found")
                         alreadyReminding = true
-                        print (json)
-                    }*/
-                    j = j+1
+                    }
                 }
+                
+                
                 if alreadyReminding == false{
-                    var json2 = json["allRemindMes"].arrayValue
-                    let now = NSDate().timeIntervalSince1970
-                    var header = email.mcomessage.header!
+                    
                     header.receivedDate = remindTime
                     updateLocalEmail(email.toAccount, folderToQuery: folderRemind!)
                     saveCoreDataChanges()
-                    print(header.receivedDate)
                     
-                    let remindTimeTimestamp = remindTime.timeIntervalSince1970
                     moveEmailToFolder(email, destFolder: folderRemind)
                     //
-                    header = email.mcomessage.header!
-                    let messageId = header.messageID
+                    
                     let newjson = JSON(["folderId": NSNull(), "id": NSNull(), "lastModified": now, "messageId": messageId, "remindInterval": NSNull(), "remindTime": remindTimeTimestamp, "seen": NSNull(), "title": email.title, "uid": NSNull(), "reference": NSNull()])
                 
                     //Add newjson to json2
@@ -167,7 +169,7 @@ class RemindMe{
                     deleteEmail(jsonmail!)
                     uploadJsonMail(email.toAccount)
                     saveCoreDataChanges()
-                    //updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
+                    updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
                 
                 
             }
@@ -178,7 +180,7 @@ class RemindMe{
 //upload new jsonmail to folder
 //
     func uploadJsonMail(Account:EmailAccount){
-        print("new json created")
+        print("json created")
         saveCoreDataChanges()
         var imapSession: MCOIMAPSession!
         do {
@@ -239,6 +241,7 @@ class RemindMe{
         saveCoreDataChanges()
         updateLocalEmail(toAccount, folderToQuery: folderStorage!)
         fetchEmails(toAccount, folderToQuery: folderStorage!, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
+        
         for mail in toAccount.emails {
             if mail.folder == folderStorage {
                 jsonmail = mail as? Email
