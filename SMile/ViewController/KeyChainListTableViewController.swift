@@ -272,7 +272,9 @@ class KeyChainListTableViewController: UITableViewController {
                 print("Error while trying to fetch keys")
             }
 			
-			
+			self.keysFromCoreData.sortInPlace({ (key1, key2) -> Bool in
+				return key1.userIDprimary < key2.userIDprimary
+			})
 		}
 	}
 	
