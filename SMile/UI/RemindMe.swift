@@ -111,11 +111,11 @@ class RemindMe{
         //Get current JsonMail from SmileStorage Folder
         //saveCoreDataChanges()
         let currentMaxUID = getMaxUID(email.toAccount, folderToQuery: folderStorage!)
-        var time1 = email.toAccount.emails
+        //var time1 = email.toAccount.emails
         updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
         fetchEmails(email.toAccount, folderToQuery: folderStorage!, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
         saveCoreDataChanges()
-        var time2 = email.toAccount.emails
+        //var time2 = email.toAccount.emails
         for mail in email.toAccount.emails {
             if mail.folder == folderStorage {
                 jsonmail = mail as? Email
@@ -128,12 +128,13 @@ class RemindMe{
         else{
             //add new json entry
             var alreadyReminding:Bool = false
-            let now = NSDate().timeIntervalSince1970
+            let now = time_t(NSDate().timeIntervalSince1970)
             var header = email.mcomessage.header!
             header = email.mcomessage.header!
             let messageId = header.messageID
             
-            let remindTimeTimestamp = remindTime.timeIntervalSince1970
+            let remindTimeTimestamp = time_t(remindTime.timeIntervalSince1970)
+            print(remindTimeTimestamp)
             
             let dataFromString = jsonmail!.plainText.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
             if dataFromString != nil {
@@ -269,7 +270,8 @@ class RemindMe{
                 
                 //RemindMe Datum mit akutellem Datum vergleichen
                 let time = result["remindTime"].doubleValue
-                var theDate = NSDate(timeIntervalSince1970: time)
+                var theDate =  NSDate(timeIntervalSince1970: time)
+                
             
                 if theDate.year()>10000{
                     let time = result["remindTime"].stringValue
