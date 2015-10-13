@@ -505,31 +505,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             for recipient in self.recipients {
                 NSLog("recipient: %@", recipient.mailbox)
             }
-            // check if encryption is possible
-            self.canEncryptMessage = false
-            if self.recipients.count == 1 && self.ccRecipients.count == 0 && self.bccRecipients.count == 0 {
-                if let keys = self.crypto.getKeysFromCoreData() {
-                    for key in keys {
-                        for userID in key.userIDs {
-                            if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
-                                self.canEncryptMessage = true
-                            }
-                        }
-                    }
-                }
-            }
-            let buttonImage: UIImage
-            if self.canEncryptMessage {
-                if self.shouldEncryptMessage {
-                    buttonImage = UIImage(named: "Lock_blue@2x.png")!
-                } else {
-                    buttonImage = UIImage(named: "Lock_open_black@2x.png")!
-                }
-            } else {
-                buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
-            }
-            self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
-            //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         case 1:
             self.ccRecipients.removeAllObjects()
             var ccRecipientsAsString = textField.text
@@ -539,31 +514,6 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                     self.ccRecipients.addObject(MCOAddress(mailbox: recipient))
                 }
             }
-            // check if encryption is possible
-            self.canEncryptMessage = false
-            if self.recipients.count == 1 && self.ccRecipients.count == 0 && self.bccRecipients.count == 0 {
-                if let keys = self.crypto.getKeysFromCoreData() {
-                    for key in keys {
-                        for userID in key.userIDs {
-                            if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
-                                self.canEncryptMessage = true
-                            }
-                        }
-                    }
-                }
-            }
-            let buttonImage: UIImage
-            if self.canEncryptMessage {
-                if self.shouldEncryptMessage {
-                    buttonImage = UIImage(named: "Lock_blue@2x.png")!
-                } else {
-                    buttonImage = UIImage(named: "Lock_open_black@2x.png")!
-                }
-            } else {
-                buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
-            }
-            self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
-            //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         case 2:
             self.bccRecipients.removeAllObjects()
             var bccRecipientsAsString = textField.text
@@ -573,36 +523,12 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
                     self.bccRecipients.addObject(MCOAddress(mailbox: recipient))
                 }
             }
-            // check if encryption is possible
-            self.canEncryptMessage = false
-            if self.recipients.count == 1 && self.ccRecipients.count == 0 && self.bccRecipients.count == 0 {
-                if let keys = self.crypto.getKeysFromCoreData() {
-                    for key in keys {
-                        for userID in key.userIDs {
-                            if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
-                                self.canEncryptMessage = true
-                            }
-                        }
-                    }
-                }
-            }
-            let buttonImage: UIImage
-            if self.canEncryptMessage {
-                if self.shouldEncryptMessage {
-                    buttonImage = UIImage(named: "Lock_blue@2x.png")!
-                } else {
-                    buttonImage = UIImage(named: "Lock_open_black@2x.png")!
-                }
-            } else {
-                buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
-            }
-            self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
-            //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         case 3:
             textField.userInteractionEnabled = true
         default:
             break
         }
+        self.checkForEncryption()
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -756,6 +682,38 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
             self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
             //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
         }
+    }
+    
+    func checkForEncryption() {
+        // check if encryption is possible
+        self.canEncryptMessage = false
+        if self.recipients.count == 1 && self.ccRecipients.count == 0 && self.bccRecipients.count == 0 {
+            if let keys = self.crypto.getKeysFromCoreData() {
+                for key in keys {
+                    for userID in key.userIDs {
+                        if (userID as! UserID).emailAddress == self.recipients.objectAtIndex(0).mailbox {
+                            self.canEncryptMessage = true
+                            break
+                        }
+                        if self.canEncryptMessage {
+                            break
+                        }
+                    }
+                }
+            }
+        }
+        let buttonImage: UIImage
+        if self.canEncryptMessage {
+            if self.shouldEncryptMessage {
+                buttonImage = UIImage(named: "Lock_blue@2x.png")!
+            } else {
+                buttonImage = UIImage(named: "Lock_open_black@2x.png")!
+            }
+        } else {
+            buttonImage = UIImage(named: "Lock_open_grey@2x.png")!
+        }
+        self.buttonEncrypted.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
+        //self.sendTableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
     }
     
     //MARK: - Build and send E-Mail
@@ -956,6 +914,8 @@ class MailSendViewController: UIViewController, UIImagePickerControllerDelegate,
         }
         
         self.sendTableView.reloadData()
+        
+        self.checkForEncryption()
     }
     /*	// deprecated to iOS 9
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController, didSelectPerson person: ABRecordRef, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
