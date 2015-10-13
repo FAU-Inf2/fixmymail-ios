@@ -31,7 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
+        
+        UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(900)
+        UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
+        
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
 	//	self.deleteAllTempFiles()
@@ -43,6 +46,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        print("background")
+        
+        completionHandler(UIBackgroundFetchResult.NewData)
+        
+        GetCoreDataAccounts()
+        imapsynchronize()
+        let count = countnewEmails()
+        let notific:UILocalNotification = UILocalNotification()
+        notific.applicationIconBadgeNumber = count
+        UIApplication.sharedApplication().scheduleLocalNotification(notific)
+        self.saveContext()
+        
+    }
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -50,10 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
-        print("background")
-        GetCoreDataAccounts()
-        imapsynchronize()
-        self.saveContext()
+       
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
@@ -61,6 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let folderToQuery: String = "INBOX"
         let remind:RemindMe = RemindMe()
         for account: EmailAccount in allAccounts {
+            print(account.realName)
             remind.downlaodJsonAndCheckForUpcomingReminds(account)
             let currentMaxUID = getMaxUID(account, folderToQuery: folderToQuery)
             updateLocalEmail(account, folderToQuery: folderToQuery)
@@ -68,7 +84,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func countnewEmails()-> Int{
+        var count:Int = 0
+        for account in allAccounts {
+            let downloadMailDuration: NSDate? = getDateFromPreferencesDurationString(account.downloadMailDuration)
+            for mail in account.emails {
+                if (mail as! Email).folder == "INBOX" {
+                    if let dMD = downloadMailDuration {
+                        if ((mail as! Email).mcomessage as! MCOIMAPMessage).header.receivedDate.laterDate(dMD) == dMD {
+                            continue
+                        }
+                    }
+                    if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen{
+                        count = count+1
+                    }
+                }
+            }
+        }
+        return count
+    }
+    
+    
     func GetCoreDataAccounts(){
+        allAccounts.removeAll()
         let appDel: AppDelegate? = UIApplication.sharedApplication().delegate as? AppDelegate
         if let appDelegate = appDel {
             managedObjectContext = appDelegate.managedObjectContext
@@ -87,6 +125,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
         }
+        print("anzahl account")
+        print(allAccounts.count)
     }
 
     func applicationWillEnterForeground(application: UIApplication) {

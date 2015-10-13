@@ -21,6 +21,7 @@ class RemindMe{
     var jsonstring:String?
     var folderStorage:String?
     var folderRemind:String?
+    var lastUpdated:NSDate?
     
 //
 //Check if Folder RemindMe and SmileStorage exists and if not create them
@@ -108,10 +109,13 @@ class RemindMe{
     func setJSONforUpcomingRemind(email:Email, remindTime: NSDate){
         jsonmail = email
         //Get current JsonMail from SmileStorage Folder
-        saveCoreDataChanges()
+        //saveCoreDataChanges()
         let currentMaxUID = getMaxUID(email.toAccount, folderToQuery: folderStorage!)
+        var time1 = email.toAccount.emails
         updateLocalEmail(email.toAccount, folderToQuery: folderStorage!)
         fetchEmails(email.toAccount, folderToQuery: folderStorage!, uidRange: MCOIndexSet(range: MCORangeMake(UInt64(currentMaxUID+1), UINT64_MAX-UInt64(currentMaxUID+2))))
+        saveCoreDataChanges()
+        var time2 = email.toAccount.emails
         for mail in email.toAccount.emails {
             if mail.folder == folderStorage {
                 jsonmail = mail as? Email
@@ -181,7 +185,8 @@ class RemindMe{
 //
     func uploadJsonMail(Account:EmailAccount){
         print("json created")
-        saveCoreDataChanges()
+        lastUpdated = NSDate()
+        
         var imapSession: MCOIMAPSession!
         do {
             imapSession = try getSession(Account)
@@ -189,7 +194,7 @@ class RemindMe{
             print("Error while trying to move email to drafts folder")
             return
         }
-                
+        
         let appendMsgOp = imapSession.appendMessageOperationWithFolder(folderStorage, messageData: self.buildEmail(), flags: [MCOMessageFlag.Seen])
         appendMsgOp.start({ (error, uid) -> Void in
             if error != nil {
