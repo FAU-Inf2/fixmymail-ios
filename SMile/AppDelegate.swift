@@ -28,19 +28,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	var receivedFile: NSURL?
 
     var allAccounts: [EmailAccount] = [EmailAccount]()
+    var newEmails: Int = 0
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
         UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(900)
-        UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
+        UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [UIUserNotificationType.Badge, UIUserNotificationType.Alert], categories: nil))
         
         //WARNING: This method is only for adding dummy entries to CoreData!!!*/
         self.registerUserDefaults()
 	//	self.deleteAllTempFiles()
 	//	self.createRingFiles()
-        self.initCoreDataTestEntries()
-		self.printKeys()
+    //    self.initCoreDataTestEntries()
+	//	self.printKeys()
 	//	self.cryptoTest()
 			
         
@@ -57,6 +58,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let count = countnewEmails()
         let notific:UILocalNotification = UILocalNotification()
         notific.applicationIconBadgeNumber = count
+        if(newEmails<=count){
+            notific.alertBody = "You have new Emails"
+            notific.fireDate = NSDate(timeIntervalSince1970: 1)
+        }
         UIApplication.sharedApplication().scheduleLocalNotification(notific)
         self.saveContext()
         
@@ -95,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             continue
                         }
                     }
-                    if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen{
+                    if !((mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen){
                         count = count+1
                     }
                 }

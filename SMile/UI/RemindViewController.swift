@@ -144,6 +144,7 @@ class RemindViewController: UIViewController, UICollectionViewDelegateFlowLayout
             datePicker.datePickerMode = UIDatePickerMode.DateAndTime
             datePicker.minimumDate = NSDate()
             datePicker.date = NSDate()
+            datePicker.minuteInterval = 15
         default:
             NSLog("other")
             break

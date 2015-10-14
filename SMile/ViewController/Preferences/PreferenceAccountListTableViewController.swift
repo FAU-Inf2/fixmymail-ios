@@ -42,8 +42,8 @@ class PreferenceAccountListTableViewController: UITableViewController, UITextFie
 		
 		
 		//DELETE before release
-		let buttonInfo: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Bookmarks, target: self, action: "showPasswordView")
-		self.navigationItem.rightBarButtonItem = buttonInfo
+		//let buttonInfo: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Bookmarks, target: self, action: "showPasswordView")
+		//self.navigationItem.rightBarButtonItem = buttonInfo
 
     }
     
