@@ -36,7 +36,7 @@
                         <outlet property="delegate" destination="-1" id="Pyi-54-aP5"/>
                     </connections>
                 </collectionView>
-                <datePicker contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" translatesAutoresizingMaskIntoConstraints="NO" id="C9z-ij-Qv0">
+                <datePicker contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="C9z-ij-Qv0">
                     <rect key="frame" x="0.0" y="244" width="600" height="162"/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <date key="date" timeIntervalSinceReferenceDate="463854585.513201">
