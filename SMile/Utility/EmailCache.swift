@@ -8,14 +8,19 @@
 
 import UIKit
 
+struct MailContent {
+    var cachedHTML: String
+    var wasDecrypted: Bool
+}
+
 class EmailCache: NSObject {
     
     static let sharedInstance = EmailCache()
-    var emailContentCache = [String: String]()
+    var emailContentCache = [String: MailContent]()
     var imapPartCache = [String: NSData]()
    
     
-    func getHTMLStringWithUniqueEmailID(emailId: String) -> String? {
+    func getHTMLStringWithUniqueEmailID(emailId: String) -> MailContent? {
         if self.emailContentCache[emailId] != nil {
             return self.emailContentCache[emailId]
         } else {
