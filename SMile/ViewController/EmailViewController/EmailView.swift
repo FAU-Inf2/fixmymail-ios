@@ -126,7 +126,9 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                     } else {
                         mimeType = attachment.mimeType
                     }
-                    self.attachmentVC.attachFile(filename, data: attachment.data, mimetype: mimeType)
+                    if self.attachmentVC.attachments.valueForKey(filename) == nil {
+                        self.attachmentVC.attachFile(filename, data: attachment.data, mimetype: mimeType)
+                    }
                 }
             }
         }
@@ -334,7 +336,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             let attachmentCell: AttachmentViewCell = tableView.dequeueReusableCellWithIdentifier("AttachmentViewCell", forIndexPath: indexPath) as! AttachmentViewCell
             attachmentCell.imageViewPreview.image = UIImage(named: "attachment_icon@2x.png")!
             attachmentCell.imageViewPreview.image = UIImage(CGImage: attachmentCell.imageViewPreview.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Up)
-            attachmentCell.labelFilesAttached.text = "\t \(self.message.attachments().count) files attached"
+            attachmentCell.labelFilesAttached.text = "\t \(self.attachmentVC.attachments.count) files attached"
             attachmentCell.labelFilesAttached.textColor = UIColor.grayColor()
             
             attachmentCell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
@@ -450,6 +452,9 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             if htmlContent == nil {
                 self.messageContent = ""
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if self.decrypted == true {
+                        self.setIconForDecrypt(self.decryptedSucessful)
+                    }
                     self.webView.loadHTMLString("", baseURL: nil)
                     self.loadingSpinner.hidden = true
                     self.loadingSpinner.stopAnimating()
@@ -469,14 +474,16 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         
         htmlString += "<html><head><script src=\"\(jsURL!.absoluteString)\"></script><style type='text/css'>body{ font-family: 'Helvetica Neue', Helvetica, Arial; margin:0; padding:30px;font-size: 50.0px;}\\hr {border: 0; height: 1px; background-color: #bdc3c7;}\\.show { display: none;}.hide:target + .show { display: inline;} .hide:target { display: none;} .content { display: none;} .hide:target ~ .content { display:inline;}\\</style></head><body><div style=\"font-family: Helvetica;font-size: 50.0px;\">\(htmlContent)</div></body><iframe src='x-mailcore-msgviewloaded:' style='width: 0px; height: 0px; border: none;'></iframe></html>"
         
-        EmailCache.sharedInstance.emailContentCache["\(self.message.uid)"] = MailContent(cachedHTML: htmlString, wasDecrypted: self.decrypted, sucessfulDecrypted: self.decryptedSucessful)
+        if (self.decrypted == false && self.decryptedSucessful == true) || (self.decrypted == true && self.decryptedSucessful == true) {
+            EmailCache.sharedInstance.emailContentCache["\(self.message.uid)"] = MailContent(cachedHTML: htmlString, wasDecrypted: self.decrypted, sucessfulDecrypted: self.decryptedSucessful)
+        }
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.webView.loadHTMLString(htmlString, baseURL: nil)
             self.loadingSpinner.hidden = true
             self.loadingSpinner.stopAnimating()
             if self.decrypted == true {
-                self.setIconForDecrypt(true)
+                self.setIconForDecrypt(self.decryptedSucessful)
             }
         })
     }
@@ -624,10 +631,20 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                         let messageParser: MCOMessageParser = MCOMessageParser(data: decrpytedValues.decryptedData!)
                         htmlContent = messageParser.htmlRenderingWithDelegate(self.htmlRenderBridge) as String?
                         self.createAndFillAttachmentVC(messageParser)
+                    } else {
+                        self.decrypted = true
+                        self.decryptedSucessful = false
+                        htmlContent = email.plainText
                     }
                 } else {
                     print(decrpytedValues.error?.description)
+                    self.decrypted = true
+                    self.decryptedSucessful = false
                 }
+            } else {
+                self.decrypted = true
+                self.decryptedSucessful = false
+                htmlContent = email.plainText
             }
         } else {
             let alert = UIAlertController(title: "Information", message: "There is no key to decrypt this message", preferredStyle: .Alert)
