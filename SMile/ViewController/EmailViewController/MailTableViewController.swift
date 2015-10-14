@@ -223,18 +223,19 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     //MARK: - Searchfunction
     func updateSearchResultsForSearchController(searchController: UISearchController) {
+		self.endEditing()
         self.filterdEmails.removeAll(keepCapacity: false)
         var searchPredicate: NSPredicate!
         
         switch searchController.searchBar.selectedScopeButtonIndex {
         case 0: //everywhere
-            searchPredicate = NSPredicate(format: "sender CONTAINS[c] %@ || title CONTAINS[c] %@ || plainText CONTAINS[c] %@", searchController.searchBar.text!, searchController.searchBar.text!, searchController.searchBar.text!)
+            searchPredicate = NSPredicate(format: "sender.lowercaseString CONTAINS[c] %@ || title.lowercaseString CONTAINS[c] %@ || plainText.lowercaseString CONTAINS[c] %@", searchController.searchBar.text!.lowercaseString, searchController.searchBar.text!.lowercaseString, searchController.searchBar.text!.lowercaseString)
         case 1: //sender
-            searchPredicate = NSPredicate(format: "sender CONTAINS[c] %@", searchController.searchBar.text!)
+            searchPredicate = NSPredicate(format: "sender.lowercaseString CONTAINS[c] %@", searchController.searchBar.text!.lowercaseString)
         case 2: //subject
-            searchPredicate = NSPredicate(format: "title CONTAINS[c] %@", searchController.searchBar.text!)
+            searchPredicate = NSPredicate(format: "title.lowercaseString CONTAINS[c] %@", searchController.searchBar.text!.lowercaseString)
         case 3: //body
-            searchPredicate = NSPredicate(format: "plainText CONTAINS[c] %@", searchController.searchBar.text!)
+            searchPredicate = NSPredicate(format: "plainText.lowercaseString CONTAINS[c] %@", searchController.searchBar.text!.lowercaseString)
         default: break
         }
         
