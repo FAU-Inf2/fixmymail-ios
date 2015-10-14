@@ -434,6 +434,14 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 		
 	}
 	
+	func setValueThatAppHasRunOnce() {
+		// app runs for the first time
+		let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+		if(!defaults.boolForKey("AppHasRunOnce")) {
+			defaults.setBool(true, forKey: "AppHasRunOnce")
+		}
+	}
+	
 	@IBAction func expertTapped(sender: AnyObject) -> Void {
 		self.isSimpleWizard = !self.isSimpleWizard
 		self.loadAccountDetails()
@@ -441,6 +449,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 	}
 	
 	@IBAction func cancelTapped(sender: AnyObject) -> Void {
+		self.setValueThatAppHasRunOnce()
 		self.navigationController?.popViewControllerAnimated(true)
 	}
 	
@@ -542,6 +551,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 					alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
 						self.isActivated = false
 						self.saveEntriesToCoreData()
+						self.setValueThatAppHasRunOnce()
 						self.navigationController?.popViewControllerAnimated(true)
 					}))
 					
@@ -575,6 +585,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							alert.addAction(UIAlertAction(title: "Save anyway!", style: .Cancel, handler: { action in
 								self.isActivated = false
 								self.saveEntriesToCoreData()
+								self.setValueThatAppHasRunOnce()
 								self.navigationController?.popViewControllerAnimated(true)
 							}))
 							
@@ -616,6 +627,7 @@ class PreferenceEditAccountTableViewController: UITableViewController, UITextFie
 							
 							
 							self.delay(1.0) {
+								self.setValueThatAppHasRunOnce()
 								self.navigationController?.popViewControllerAnimated(true)
 							}
 						}

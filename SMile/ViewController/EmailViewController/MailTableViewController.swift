@@ -146,6 +146,19 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+		// first start of the app -> show account creation
+		let defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+		if(!defaults.boolForKey("AppHasRunOnce")) {
+			let newAccountActionItem = ActionItem(Name: "Add New Account", viewController: "PreferenceAccountView", emailAddress: "Add New Account", icon: UIImage(named: "ios7-plus.png"))
+			let newAccountVC = PreferenceEditAccountTableViewController(nibName:"PreferenceEditAccountTableViewController", bundle: nil)
+			newAccountVC.emailAcc = nil
+			newAccountVC.actionItem = newAccountActionItem
+			self.navigationController?.pushViewController(newAccountVC, animated: true)
+			return
+		}
+		
+		
+		
 		// attachments
         if let fileName = (UIApplication.sharedApplication().delegate as! AppDelegate).fileName {
             if let data = (UIApplication.sharedApplication().delegate as! AppDelegate).fileData {
