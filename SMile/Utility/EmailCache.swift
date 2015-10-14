@@ -11,6 +11,7 @@ import UIKit
 struct MailContent {
     var cachedHTML: String
     var wasDecrypted: Bool
+    var sucessfulDecrypted: Bool
 }
 
 class EmailCache: NSObject {

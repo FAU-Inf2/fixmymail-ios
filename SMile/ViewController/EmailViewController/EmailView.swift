@@ -42,6 +42,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     private var keyPassphrases = [Key : String]()
     private var accessoryButton: UIButton?
     private var decrypted: Bool = false
+    private var decryptedSucessful: Bool = true
     
     
     init(frame: CGRect, message: MCOIMAPMessage, email: Email) {
@@ -142,7 +143,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         self.toStringHeight = self.messageHeaderInfo["to"] != nil ? self.heightForView(self.messageHeaderInfo["to"]!, font: standardFont, width: width): 0.0
         self.fromStringHeight = self.messageHeaderInfo["from"]!.heightForWith(width, usingFont: boldFont)
         self.cellSenderHeight = 8.0 + 2.0 + 2.0 + 8.0 + self.ccStringHeight + self.toStringHeight + self.fromStringHeight
-        if self.message.attachments().count > 0 {
+        if self.message.attachments().count > 0 && self.checkIfAttachmentsAreNotPGPMessages() == true {
             self.cellAttachmentHeight = 44.0
         } else {
             self.cellAttachmentHeight = 0.0
@@ -166,6 +167,52 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         self.calculationView.backgroundColor = UIColor.clearColor()
         self.addSubview(self.calculationView)
         self.sendSubviewToBack(self.calculationView)
+    }
+    
+    private func checkIfAttachmentsAreNotPGPMessages() -> Bool {
+        let parser = MCOMessageParser(data: self.email.data)
+        let attachments: [MCOAttachment] = parser.attachments() as! [MCOAttachment]
+        var hasAttachments = attachments.count > 0 ? true : false
+        for attachment in attachments {
+            if attachment.mimeType == "application/pgp-encrypted" {
+                continue
+            } else {
+                let attachmentString =  String(data: attachment.data, encoding: NSUTF8StringEncoding)
+                if attachmentString?.containsString("-----BEGIN PGP MESSAGE-----") == true {
+                    if let key = self.smileCrypto.getKeyforEncryptedMessage(attachment.data) {
+                        var passphrase: String?
+                        if (Locksmith.loadDataForUserAccount(key.keyID) != nil && Locksmith.loadDataForUserAccount(key.keyID)!["PassPhrase"] != nil) {
+                            passphrase = Locksmith.loadDataForUserAccount(key.keyID)!["PassPhrase"] as! String?
+                        } else {
+                            passphrase = self.askPassphraseForKey(key)
+                        }
+                        if passphrase != nil {
+                            let decrpytedValues = self.smileCrypto.decryptData(attachment.data, passphrase: passphrase!, encryptionType: "PGP")
+                            if decrpytedValues.error == nil {
+                                self.decrypted = true
+                                if decrpytedValues.decryptedData != nil {
+                                    let messageParser: MCOMessageParser = MCOMessageParser(data: decrpytedValues.decryptedData!)
+                                    if messageParser.attachments().count > 0 {
+                                        hasAttachments = true
+                                        self.createAndFillAttachmentVC(messageParser)
+                                    } else {
+                                        hasAttachments = false
+                                    }
+                                }
+                            } else {
+                                print(decrpytedValues.error?.description)
+                                hasAttachments = false
+                            }
+                        } else {
+                            hasAttachments = false
+                        }
+                    } else {
+                        hasAttachments = false
+                    }
+                }
+            }
+        }
+        return hasAttachments
     }
     
     
@@ -382,7 +429,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.webView.loadHTMLString(htmlContent!.cachedHTML, baseURL: nil)
                 if htmlContent!.wasDecrypted == true {
-                    self.setIconForDecrypt()
+                    self.setIconForDecrypt(htmlContent!.sucessfulDecrypted)
                 }
                 self.loadingSpinner.hidden = true
                 self.loadingSpinner.stopAnimating()
@@ -422,15 +469,14 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         
         htmlString += "<html><head><script src=\"\(jsURL!.absoluteString)\"></script><style type='text/css'>body{ font-family: 'Helvetica Neue', Helvetica, Arial; margin:0; padding:30px;font-size: 50.0px;}\\hr {border: 0; height: 1px; background-color: #bdc3c7;}\\.show { display: none;}.hide:target + .show { display: inline;} .hide:target { display: none;} .content { display: none;} .hide:target ~ .content { display:inline;}\\</style></head><body><div style=\"font-family: Helvetica;font-size: 50.0px;\">\(htmlContent)</div></body><iframe src='x-mailcore-msgviewloaded:' style='width: 0px; height: 0px; border: none;'></iframe></html>"
         
-        //TODO: Comment in
-//        EmailCache.sharedInstance.emailContentCache["\(self.message.uid)"] = MailContent(cachedHTML: htmlString, wasDecrypted: decrypted)
+        EmailCache.sharedInstance.emailContentCache["\(self.message.uid)"] = MailContent(cachedHTML: htmlString, wasDecrypted: self.decrypted, sucessfulDecrypted: self.decryptedSucessful)
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.webView.loadHTMLString(htmlString, baseURL: nil)
             self.loadingSpinner.hidden = true
             self.loadingSpinner.stopAnimating()
             if self.decrypted == true {
-                self.setIconForDecrypt()
+                self.setIconForDecrypt(true)
             }
         })
     }
@@ -544,8 +590,13 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
         return nil
     }
     
-    private func setIconForDecrypt() -> Void {
-        let buttonImage: UIImage = UIImage(named: "Lock_black@2x.png")!
+    private func setIconForDecrypt(sucess: Bool) -> Void {
+        var buttonImage: UIImage!
+        if sucess == true {
+            buttonImage = UIImage(named: "Lock_green.png")!
+        } else {
+            buttonImage = UIImage(named: "Lock_open_red.png")!
+        }
         let button: UIButton = UIButton(type: UIButtonType.Custom)
         button.frame = CGRectMake(0, 0, 22, 28)
         button.setBackgroundImage(buttonImage, forState: UIControlState.Normal)
@@ -558,6 +609,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
     
     private func getDecryptedHTMLContent(data: NSData) -> String? {
         var htmlContent: String?
+        self.decrypted = true
         if let key = self.smileCrypto.getKeyforEncryptedMessage(data) {
             var passphrase: String?
             if (Locksmith.loadDataForUserAccount(key.keyID) != nil && Locksmith.loadDataForUserAccount(key.keyID)!["PassPhrase"] != nil) {
@@ -566,10 +618,8 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
                 passphrase = self.askPassphraseForKey(key)
             }
             if passphrase != nil {
-                self.setIconForDecrypt()
                 let decrpytedValues = self.smileCrypto.decryptData(data, passphrase: passphrase!, encryptionType: "PGP")
                 if decrpytedValues.error == nil {
-                    self.decrypted = true
                     if decrpytedValues.decryptedData != nil {
                         let messageParser: MCOMessageParser = MCOMessageParser(data: decrpytedValues.decryptedData!)
                         htmlContent = messageParser.htmlRenderingWithDelegate(self.htmlRenderBridge) as String?
@@ -585,6 +635,7 @@ class EmailView: UIView, UIScrollViewDelegate, UITableViewDelegate, UITableViewD
             if (self.emailViewDelegate?.respondsToSelector("presentInformationAlertController:") != nil) {
                 self.emailViewDelegate?.presentInformationAlertController(alert)
             }
+            self.decryptedSucessful = false
             htmlContent = email.plainText
             self.createAndFillAttachmentVC(MCOMessageParser(data: email.data))
         }
