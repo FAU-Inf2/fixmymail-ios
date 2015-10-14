@@ -95,9 +95,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             continue
                         }
                     }
-                    if (mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen{
+                    if !((mail.mcomessage as! MCOIMAPMessage).flags.intersect(MCOMessageFlag.Seen) == MCOMessageFlag.Seen) {
                         count = count+1
-                    }
+					}
                 }
             }
         }
