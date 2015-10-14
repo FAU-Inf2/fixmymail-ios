@@ -279,7 +279,9 @@ class MailTableViewController: UIViewController, NSFetchedResultsControllerDeleg
                                 self.insertEmailToArray(email)
                             }
                         } else { //All
-                            self.insertEmailToArray(email)
+							if email.folder == folderToQuery {
+                            	self.insertEmailToArray(email)
+							}
                         }
                     }
                 }
